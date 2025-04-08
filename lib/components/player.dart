@@ -12,7 +12,7 @@ class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler {
   String character;
 
-  Player({position, this.character = 'Ninja Frog'}) : super(position: position);
+  Player({super.position, this.character = 'Ninja Frog'});
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double stepTime = 0.05;
