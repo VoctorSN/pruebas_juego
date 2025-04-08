@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
 enum PlayerState { idle, running }
@@ -11,7 +12,7 @@ class Player extends SpriteAnimationGroupComponent
     with HasGameRef<PixelAdventure>, KeyboardHandler {
   String character;
 
-  Player({position, required this.character}) : super(position: position);
+  Player({position, this.character = 'Ninja Frog'}) : super(position: position);
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   final double stepTime = 0.05;
@@ -39,7 +40,15 @@ class Player extends SpriteAnimationGroupComponent
         || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD)
         || keysPressed.contains(LogicalKeyboardKey.arrowRight);
-
+    if(isLeftKeyPressed && isRightKeyPressed){
+      playerDirection = PlayerDirection.idle;
+    } else if (isLeftKeyPressed){
+      playerDirection = PlayerDirection.left;
+    } else if (isRightKeyPressed){
+      playerDirection = PlayerDirection.right;
+    } else{
+      playerDirection = PlayerDirection.idle;
+    }
     return super.onKeyEvent(event, keysPressed);
   }
 
@@ -80,7 +89,7 @@ class Player extends SpriteAnimationGroupComponent
         current = PlayerState.running;
         break;
       case PlayerDirection.right:
-        if (isFacingRight){
+        if (!isFacingRight){
           flipHorizontallyAroundCenter();
           isFacingRight = true;
         }
