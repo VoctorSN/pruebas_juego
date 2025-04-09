@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flame/components/Fruit.dart';
 import 'package:flutter_flame/components/collision_block.dart';
-import 'package:flutter_flame/components/player_hitbox.dart';
+import 'package:flutter_flame/components/custom_hitbox.dart';
 import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
 enum PlayerState { idle, running, jumping, falling }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler {
+    with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   String character;
 
   Player({super.position, this.character = 'Ninja Frog'});
@@ -33,16 +33,22 @@ class Player extends SpriteAnimationGroupComponent
   bool isOnGround = false;
   bool hasJumped = false;
   List<CollisionBlock> collisionBlocks = [];
-  PlayerHitbox hitbox = PlayerHitbox(
-      offsetX: 10, offsetY: 4, width: 14, height: 28);
+  CustomHitbox hitbox = CustomHitbox(
+    offsetX: 10,
+    offsetY: 4,
+    width: 14,
+    height: 28,
+  );
 
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-    add(RectangleHitbox(
-      position: Vector2(hitbox.offsetX, hitbox.offsetY),
-          size: Vector2(hitbox.width, hitbox.height),
-    ));
+    add(
+      RectangleHitbox(
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height),
+      ),
+    );
     return super.onLoad();
   }
 
@@ -61,18 +67,24 @@ class Player extends SpriteAnimationGroupComponent
     horizontalMovement = 0;
     final isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     final isRightKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowRight);
+        keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
     hasJumped =
         keysPressed.contains(LogicalKeyboardKey.space) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowUp);
+        keysPressed.contains(LogicalKeyboardKey.arrowUp);
 
     return super.onKeyEvent(event, keysPressed);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Fruit) other.collidedWithPlayer();
+    super.onCollision(intersectionPoints, other);
   }
 
   void _loadAllAnimations() {
@@ -108,7 +120,7 @@ class Player extends SpriteAnimationGroupComponent
     if (hasJumped && isOnGround) {
       _playerJump(dt);
     }
-//si no quieres saltar en el aire
+    //si no quieres saltar en el aire
     //if(velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
@@ -172,6 +184,7 @@ class Player extends SpriteAnimationGroupComponent
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
+            break;
           }
         }
       } else {
@@ -180,14 +193,15 @@ class Player extends SpriteAnimationGroupComponent
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
+            break;
           }
           if (velocity.y < 0) {
             velocity.y = 0;
             position.y = block.y + block.height - hitbox.offsetY;
+            break;
           }
         }
       }
     }
   }
-
 }
