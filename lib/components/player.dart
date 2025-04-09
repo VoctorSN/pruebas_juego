@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flame/components/Fruit.dart';
+import 'package:flutter_flame/components/fruit.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/custom_hitbox.dart';
 import 'package:flutter_flame/components/utils.dart';
