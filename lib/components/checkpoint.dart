@@ -9,8 +9,6 @@ class Checkpoint extends SpriteAnimationComponent
     with HasGameRef<PixelAdventure>, CollisionCallbacks {
   Checkpoint({super.position, super.size});
 
-  bool hasReached = false;
-
   @override
   FutureOr<void> onLoad() {
     add(
@@ -35,13 +33,12 @@ class Checkpoint extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Player && !hasReached) _reachedCheckpoint();
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Player) _reachedCheckpoint();
+    super.onCollisionStart(intersectionPoints, other);
   }
 
-  void _reachedCheckpoint() {
-    hasReached = true;
+  void _reachedCheckpoint() async{
 
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(
@@ -55,10 +52,8 @@ class Checkpoint extends SpriteAnimationComponent
       ),
     );
 
-    const flagAnimationDuration = Duration(
-      milliseconds: 1300,
-    ); // 1300 = 50 * 26
-    Future.delayed(flagAnimationDuration, () {
+    await animationTicker?.completed;
+    animationTicker?.reset();
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache(
           'Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)(64x64).png',
@@ -69,6 +64,5 @@ class Checkpoint extends SpriteAnimationComponent
           textureSize: Vector2.all(64),
         ),
       );
-    });
   }
 }

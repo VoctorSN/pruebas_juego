@@ -54,6 +54,8 @@ class Player extends SpriteAnimationGroupComponent
     width: 14,
     height: 28,
   );
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
 
   @override
   FutureOr<void> onLoad() {
@@ -70,12 +72,16 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    if (!gotHit && !hasReached) {
-      _updatePlayerState();
-      _updatePlayerMovement(dt);
-      _checkHorizontalCollisions();
-      _applyGravity(dt);
-      _checkVerticalCollisions();
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime) {
+      if (!gotHit && !hasReached) {
+        _updatePlayerState();
+        _updatePlayerMovement(fixedDeltaTime);
+        _checkHorizontalCollisions();
+        _applyGravity(fixedDeltaTime);
+        _checkVerticalCollisions();
+      }
+      accumulatedTime -= fixedDeltaTime;
     }
 
     super.update(dt);
@@ -86,28 +92,31 @@ class Player extends SpriteAnimationGroupComponent
     horizontalMovement = 0;
     final isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     final isRightKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowRight);
+        keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
     hasJumped =
         keysPressed.contains(LogicalKeyboardKey.space) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowUp);
+        keysPressed.contains(LogicalKeyboardKey.arrowUp);
 
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     if (!hasReached) {
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
       if (other is Checkpoint && !hasReached) _reachedCheckpoint();
     }
-    super.onCollision(intersectionPoints, other);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   void _loadAllAnimations() {
@@ -115,7 +124,7 @@ class Player extends SpriteAnimationGroupComponent
     runningAnimation = _spriteAnimation('Run', 12);
     jumpingAnimation = _spriteAnimation('Jump', 1);
     fallingAnimation = _spriteAnimation('Fall', 1);
-    hitAnimation = _spriteAnimation('Hit', 7);
+    hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     desappearingAnimation = _specialspriteAnimation('Desappearing', 7);
 
@@ -152,6 +161,7 @@ class Player extends SpriteAnimationGroupComponent
         amount: amount,
         stepTime: stepTime,
         textureSize: Vector2.all(96),
+        loop: false,
       ),
     );
   }
@@ -245,25 +255,24 @@ class Player extends SpriteAnimationGroupComponent
     }
   }
 
-  void _respawn() {
-    //3500 7*50
-    const hitDuration = Duration(milliseconds: 350);
+  void _respawn() async {
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
-    Future.delayed(hitDuration, () {
-      scale.x = 1;
-      position = statringPosition - Vector2.all(32); // 32 = 96-64
-      current = PlayerState.appearing;
-      // usamos hitDirection porque coinciden los tiempos
-      // de la animacion de morir y la de reaparecer
-      Future.delayed(hitDuration, () {
-        velocity = Vector2.zero();
-        position = statringPosition;
-        _updatePlayerState();
+
+    await animationTicker?.completed;
+    animationTicker?.reset();
+    scale.x = 1;
+    position = statringPosition - Vector2.all(32); // 32 = 96-64
+    current = PlayerState.appearing;
+
+    await animationTicker?.completed;
+    animationTicker?.reset();
+
+    velocity = Vector2.zero();
+    position = statringPosition;
+    _updatePlayerState();
         Future.delayed(inmobileDuration, () => gotHit = false);
-      });
-    });
   }
 
   void _reachedCheckpoint() {

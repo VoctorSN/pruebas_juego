@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
+//ACTUALMENTE ESTA EN DES USO POR LA UTILIZACION DE PARALLAX
 class BackgroundTile extends SpriteComponent with HasGameRef<PixelAdventure>{
     final String color;
     BackgroundTile({super.position, this.color = 'Gray'});
