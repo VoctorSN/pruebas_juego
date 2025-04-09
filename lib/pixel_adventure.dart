@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -12,31 +11,51 @@ class PixelAdventure extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
-  late final CameraComponent cam;
+  late CameraComponent cam;
   Player player = Player(character: 'Mask Dude');
   late JoystickComponent joystick;
   bool showJoystick = false;
+  List<String> levelNames = ['Level-01', 'Level-02'];
+  int currentLevelIndex = 0;
 
   @override
   FutureOr<void> onLoad() async {
     // Carga todas las imagenes al caché
     await images.loadAllImages();
 
-    final world = Level(levelName: 'Level-01', player: player);
-
-    cam = CameraComponent.withFixedResolution(
-      world: world,
-      width: 640,
-      height: 360,
-    );
-    cam.viewfinder.anchor = Anchor.topLeft;
-    addAll([cam, world]);
+    _loadLevel();
 
     if (showJoystick) {
       addJoystick();
     }
 
     return super.onLoad();
+  }
+
+  void loadNextLevel() {
+    if (currentLevelIndex < levelNames.length) {
+      currentLevelIndex++;
+      _loadLevel();
+    } else {
+      //Game Finished
+    }
+  }
+
+  void _loadLevel() {
+    Future.delayed(const Duration(seconds: 1), () {
+      final world = Level(
+        levelName: levelNames[currentLevelIndex],
+        player: player,
+      );
+
+      cam = CameraComponent.withFixedResolution(
+        world: world,
+        width: 640,
+        height: 360,
+      );
+      cam.viewfinder.anchor = Anchor.topLeft;
+      addAll([cam, world]);
+    });
   }
 
   @override
@@ -65,12 +84,14 @@ class PixelAdventure extends FlameGame
         player.horizontalMovement = -1;
         break;
       case JoystickDirection.upLeft:
+        player.hasJumped = true;
         player.horizontalMovement = -1;
         break;
       case JoystickDirection.downLeft:
         player.horizontalMovement = -1;
         break;
       case JoystickDirection.upRight:
+        player.hasJumped = true;
         player.horizontalMovement = 1;
         break;
       case JoystickDirection.downRight:
@@ -79,6 +100,8 @@ class PixelAdventure extends FlameGame
       case JoystickDirection.right:
         player.horizontalMovement = 1;
         break;
+      case JoystickDirection.up:
+        player.hasJumped = true;
       default:
         player.horizontalMovement = 0;
         break;
