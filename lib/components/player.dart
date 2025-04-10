@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
 import 'package:flutter_flame/components/fallingBlock.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_flame/components/custom_hitbox.dart';
 import 'package:flutter_flame/components/saw.dart';
 import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:flutter_flame/components/chicken.dart';
 
 enum PlayerState {
   idle,
@@ -122,6 +122,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
       if (other is Checkpoint && !hasReached) _reachedCheckpoint();
+      if (other is Chicken) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -324,5 +325,9 @@ class Player extends SpriteAnimationGroupComponent
 
     const waitToChangeDuration = Duration(seconds: 3);
     Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
+  }
+
+  void collidedWithEnemy() {
+    _respawn();
   }
 }

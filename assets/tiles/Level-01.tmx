@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="58">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -79,13 +79,6 @@
   <object id="39" name="Kiwi" type="Fruit" x="208" y="112" width="32" height="32"/>
   <object id="38" name="Apple" type="Fruit" x="224" y="128" width="32" height="32"/>
   <object id="32" name="Orange" type="Fruit" x="192" y="128" width="32" height="32"/>
-  <object id="45" type="Saw" x="272" y="304" width="32" height="32">
-   <properties>
-    <property name="isVertical" type="bool" value="false"/>
-    <property name="offNeg" type="float" value="7"/>
-    <property name="offPos" type="float" value="7"/>
-   </properties>
-  </object>
   <object id="46" type="Saw" x="272" y="192" width="32" height="32">
    <properties>
     <property name="isVertical" type="bool" value="true"/>
@@ -94,5 +87,11 @@
    </properties>
   </object>
   <object id="49" type="Checkpoint" x="48" y="96" width="64" height="64"/>
+  <object id="57" name="Chicken" type="Chicken" x="336" y="288" width="32" height="32">
+   <properties>
+    <property name="offNeg" type="float" value="12"/>
+    <property name="offPos" type="float" value="4"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

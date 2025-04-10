@@ -34,7 +34,6 @@
         },
         "Level-03.tmx": {
             "expandedObjectLayers": [
-                2,
                 3
             ],
             "scale": 1.9979687499999998,
@@ -70,7 +69,7 @@
         "Level-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "bool",
+    "property.type": "float",
     "recentFiles": [
         "Pixel Adventure.tsx",
         "Level-01.tmx",

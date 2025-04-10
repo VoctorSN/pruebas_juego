@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 

@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_flame/components/chicken.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
 import 'package:flutter_flame/components/fallingBlock.dart';
 import 'package:flutter_flame/components/fruit.dart';
@@ -96,6 +97,15 @@ class Level extends World with HasGameRef<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(checkpoint);
+            break;
+            case 'Chicken':
+            final chicken = Chicken(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+            );
+            add(chicken);
             break;
           default:
         }
