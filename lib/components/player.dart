@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
 import 'package:flutter_flame/components/fallingBlock.dart';
@@ -236,11 +237,16 @@ class Player extends SpriteAnimationGroupComponent
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
-            velocity.y = 0;
-            position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
+            velocity.y = 0;
             if (block is FallingBlock && !block.isFalling) {
+              position.y = block.position.y - hitbox.height - hitbox.offsetY;
+              if (block.isFalling) {
+                position.y += block.fallingVelocity.y * fixedDeltaTime;
+              }
               block.collisionWithPlayer();
+            } else {
+              position.y = block.y - hitbox.height - hitbox.offsetY;
             }
             break;
           }

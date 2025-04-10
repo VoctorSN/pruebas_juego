@@ -1,10 +1,11 @@
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
-class FallingBlock extends CollisionBlock with CollisionCallbacks, HasGameRef<PixelAdventure> {
+class FallingBlock extends CollisionBlock
+    with CollisionCallbacks, HasGameRef<PixelAdventure> {
   int fallingDuration;
   late SpriteAnimationComponent sprite = SpriteAnimationComponent();
 
@@ -17,44 +18,69 @@ class FallingBlock extends CollisionBlock with CollisionCallbacks, HasGameRef<Pi
        super(position: position);
 
   final Vector2 initialPosition;
-  Vector2 fallingVelocity = Vector2(0, 100); // Velocidad inicial (solo en Y)
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
+  Vector2 fallingVelocity = Vector2(0, 50); // Velocidad inicial (solo en Y)
   bool isFalling = false;
   bool hasCollided = false;
+
+  get animacionCaida {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Traps/Falling Platforms/Off.png'),
+      SpriteAnimationData.sequenced(
+        amount: 1,
+        stepTime: 1,
+        textureSize: Vector2(32, 10),
+      ),
+    );
+  }
+
+  get animacionEstatica {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Traps/Falling Platforms/On (32x10).png'),
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 1,
+        textureSize: Vector2(32, 10),
+      ),
+    );
+  }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     // Carga el sprite de la plataforma
-    sprite.animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('Traps/Falling Platforms/On (32x10).png'),
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 1,
-        textureSize: Vector2(32,10),
-      ),
-    );
+    sprite.animation = animacionEstatica;
     add(sprite);
   }
 
   @override
   void update(double dt) {
-    if (isFalling) {
-      position += fallingVelocity * dt; // Actualiza la posición según la velocidad
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime) {
+      if (isFalling) {
+        position +=
+            fallingVelocity * dt; // Actualiza la posición según la velocidad
+      }
+      accumulatedTime -= fixedDeltaTime;
     }
+
     super.update(dt);
   }
 
   void _startFalling() {
     isFalling = true;
+    sprite.animation = animacionCaida;
   }
 
   void _stopFalling() {
     isFalling = false; // Detiene el movimiento
     position = initialPosition;
+    sprite.animation = animacionEstatica;
   }
 
   void collisionWithPlayer() {
-    if(hasCollided){
+    if (hasCollided) {
       return;
     }
     hasCollided = true;
@@ -63,6 +89,5 @@ class FallingBlock extends CollisionBlock with CollisionCallbacks, HasGameRef<Pi
       _stopFalling();
       hasCollided = false;
     });
-
   }
 }
