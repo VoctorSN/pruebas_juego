@@ -40,6 +40,7 @@ class Chicken extends SpriteAnimationGroupComponent
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
     _loadAllAnimations();
     _calculateRange();
+    _loadAudio();
     return super.onLoad();
   }
 
@@ -128,5 +129,9 @@ class Chicken extends SpriteAnimationGroupComponent
     } else {
       player.collidedWithEnemy();
     }
+  }
+
+  void _loadAudio() async {
+    await FlameAudio.audioCache.load('bounce.wav');
   }
 }

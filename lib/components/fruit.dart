@@ -33,6 +33,7 @@ class Fruit extends SpriteAnimationComponent
         textureSize: Vector2.all(32),
       ),
     );
+    _loadAudio();
     return super.onLoad();
   }
 
@@ -53,5 +54,9 @@ class Fruit extends SpriteAnimationComponent
       await animationTicker?.completed;
       removeFromParent();
     }
+  }
+
+  void _loadAudio() async {
+    await FlameAudio.audioCache.load('collect_fruit.wav');
   }
 }

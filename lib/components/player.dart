@@ -63,9 +63,12 @@ class Player extends SpriteAnimationGroupComponent
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
 
+  bool isRespawning = false;
+
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
+    _loadAudio();
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(
@@ -287,11 +290,14 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
+    if (isRespawning) {
+      return;
+    }
+    isRespawning = true;
     if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
-
 
     await _animationRespawn();
 
@@ -303,6 +309,7 @@ class Player extends SpriteAnimationGroupComponent
     Future.delayed(inmobileDuration, () => gotHit = false);
     _jumpForce = 260;
     moveSpeed = 100;
+    isRespawning = false;
   }
 
   Future<void> _animationRespawn() async {
@@ -317,7 +324,9 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _reachedCheckpoint(Checkpoint other) async {
-    if (!other.isAbled){return;}
+    if (!other.isAbled) {
+      return;
+    }
     if (game.playSounds) {
       FlameAudio.play('disappear.wav', volume: game.soundVolume);
     }
@@ -340,5 +349,11 @@ class Player extends SpriteAnimationGroupComponent
 
   void collidedWithEnemy() {
     _respawn();
+  }
+
+  void _loadAudio() async {
+    await FlameAudio.audioCache.load('hit.wav');
+    await FlameAudio.audioCache.load('disappear.wav');
+    await FlameAudio.audioCache.load('jump.wav');
   }
 }
