@@ -5,6 +5,7 @@ import 'package:flame/parallax.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
+import 'package:flutter_flame/components/fallingBlock.dart';
 import 'package:flutter_flame/components/fruit.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/player.dart';
@@ -51,7 +52,8 @@ class Level extends World with HasGameRef<PixelAdventure> {
         fill: LayerFill.none,
       );
 
-      add(ParallaxComponent(parallax: parallax)..priority = -1);
+      add(ParallaxComponent(parallax: parallax)
+        ..priority = -1);
     }
   }
 
@@ -87,7 +89,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(saw);
             break;
-          case'Checkpoint':
+          case 'Checkpoint':
             final checkpoint = Checkpoint(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
@@ -106,10 +108,30 @@ class Level extends World with HasGameRef<PixelAdventure> {
       for (final collision in collisionsLayer.objects) {
         switch (collision.class_) {
           case 'Platform':
+            if (collision.properties.getValue('falls')) {
+              final fallingPlatform = FallingBlock(
+                  position: Vector2(collision.x, collision.y),
+                  size: Vector2(collision.width, collision.height),
+                  isPlatform: true,
+                  fallingDuration:collision.properties.getValue('fallingDurationMillSec'),
+              );
+              collisionBlocks.add(fallingPlatform);
+              add(fallingPlatform);
+              break;
+            }
             final platform = CollisionBlock(
               position: Vector2(collision.x, collision.y),
               size: Vector2(collision.width, collision.height),
               isPlatform: true,
+            );
+            collisionBlocks.add(platform);
+            add(platform);
+            break;
+          case 'Sand':
+            final platform = CollisionBlock(
+              position: Vector2(collision.x, collision.y),
+              size: Vector2(collision.width, collision.height),
+              isSand: true,
             );
             collisionBlocks.add(platform);
             add(platform);

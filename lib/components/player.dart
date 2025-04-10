@@ -4,6 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
+import 'package:flutter_flame/components/fallingBlock.dart';
 import 'package:flutter_flame/components/fruit.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/custom_hitbox.dart';
@@ -37,7 +38,7 @@ class Player extends SpriteAnimationGroupComponent
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
-  final double _jumpForce = 260;
+  double _jumpForce = 260;
   final double _terminalVelocity = 300;
   double moveSpeed = 100;
   bool hasReached = false;
@@ -45,6 +46,7 @@ class Player extends SpriteAnimationGroupComponent
   Vector2 statringPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
   bool isOnGround = false;
+  bool isOnSand = false;
   bool hasJumped = false;
   bool gotHit = false;
   List<CollisionBlock> collisionBlocks = [];
@@ -75,6 +77,9 @@ class Player extends SpriteAnimationGroupComponent
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
       if (!gotHit && !hasReached) {
+        if (isOnSand) {
+          priority = -1;
+        }
         _updatePlayerState();
         _updatePlayerMovement(fixedDeltaTime);
         _checkHorizontalCollisions();
@@ -234,8 +239,21 @@ class Player extends SpriteAnimationGroupComponent
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
+            if (block is FallingBlock && !block.isFalling) {
+              block.collisionWithPlayer();
+            }
             break;
           }
+        }
+      } else if (block.isSand) {
+        if (checkCollision(this, block)) {
+          if (velocity.y > 0) {
+            velocity.y = 0;
+            moveSpeed = 0;
+            _jumpForce = 0;
+          }
+          isOnSand = true;
+          break;
         }
       } else {
         if (checkCollision(this, block)) {
@@ -272,7 +290,9 @@ class Player extends SpriteAnimationGroupComponent
     velocity = Vector2.zero();
     position = statringPosition;
     _updatePlayerState();
-        Future.delayed(inmobileDuration, () => gotHit = false);
+    Future.delayed(inmobileDuration, () => gotHit = false);
+    _jumpForce = 260;
+    moveSpeed = 100;
   }
 
   void _reachedCheckpoint() {
