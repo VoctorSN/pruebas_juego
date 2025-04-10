@@ -4,7 +4,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flame/components/Trampoline.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
 import 'package:flutter_flame/components/chicken.dart';
 import 'package:flutter_flame/components/collision_block.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_flame/components/custom_hitbox.dart';
 import 'package:flutter_flame/components/fallingBlock.dart';
 import 'package:flutter_flame/components/fruit.dart';
 import 'package:flutter_flame/components/saw.dart';
+import 'package:flutter_flame/components/trampoline.dart';
 import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
@@ -33,18 +33,19 @@ class Player extends SpriteAnimationGroupComponent
 
   Player({super.position, this.character = 'Ninja Frog'});
 
-  late final SpriteAnimation idleAnimation;
-  late final SpriteAnimation runningAnimation;
-  late final SpriteAnimation jumpingAnimation;
-  late final SpriteAnimation fallingAnimation;
-  late final SpriteAnimation hitAnimation;
-  late final SpriteAnimation appearingAnimation;
-  late final SpriteAnimation desappearingAnimation;
+  late SpriteAnimation idleAnimation;
+  late SpriteAnimation runningAnimation;
+  late SpriteAnimation jumpingAnimation;
+  late SpriteAnimation fallingAnimation;
+  late SpriteAnimation hitAnimation;
+  late SpriteAnimation appearingAnimation;
+  late SpriteAnimation desappearingAnimation;
   final double stepTime = 0.05;
 
   final double _gravity = 9.8;
   double _jumpForce = 260;
-  final double _terminalVelocity = 500;
+  final double _maximunVelocity = 1000;
+  final double _terminalVelocity = 300;
   double moveSpeed = 100;
   bool hasReached = false;
   double horizontalMovement = 0;
@@ -240,7 +241,7 @@ class Player extends SpriteAnimationGroupComponent
 
   void _applyGravity(double dt) {
     velocity.y += _gravity;
-    velocity.y = velocity.y.clamp(-_jumpForce, _terminalVelocity);
+    velocity.y = velocity.y.clamp(-_maximunVelocity, _terminalVelocity);
     position.y += velocity.y * dt;
   }
 
@@ -358,4 +359,11 @@ class Player extends SpriteAnimationGroupComponent
     await FlameAudio.audioCache.load('disappear.wav');
     await FlameAudio.audioCache.load('jump.wav');
   }
+
+  void updateCharacter(String newCharacter) {
+  character = newCharacter;
+
+  // Recargar las animaciones del personaje
+  _loadAllAnimations();
+}
 }

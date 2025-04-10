@@ -13,13 +13,13 @@ import 'package:flutter_flame/components/player.dart';
 import 'package:flutter_flame/components/saw.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
-import 'Trampoline.dart';
+import 'trampoline.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {
   final Player player;
   final String levelName;
 
-  Level({required this.levelName, required this.player});
+  Level({required this.levelName, required this.player,});
 
   late TiledComponent level;
   List<CollisionBlock> collisionBlocks = [];
@@ -59,7 +59,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
   void respawnObjects() {
     removeWhere(
-      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken,
+      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken|| component is Trampoline,
     );
     _spawningObjects();
   }
