@@ -17,8 +17,10 @@ class PixelAdventure extends FlameGame
   Player player = Player(character: 'Mask Dude');
   late JoystickComponent joystick;
   bool showControls = Platform.isAndroid || Platform.isIOS;
-  List<String> levelNames = ['Level-03','Level-01', 'Level-02'];
+  List<String> levelNames = ['Level-01','Level-02', 'Level-03',];
   int currentLevelIndex = 0;
+  bool playSounds = true;
+  double soundVolume = 1.0;
 
   @override
   FutureOr<void> onLoad() async {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
@@ -183,6 +184,8 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
+    if (game.playSounds) FlameAudio.play('jump.wav', volume: game.soundVolume);
+
     velocity.y = -_jumpForce;
     position.y += velocity.y * dt;
     isOnGround = false;
@@ -280,6 +283,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
+    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -301,7 +305,10 @@ class Player extends SpriteAnimationGroupComponent
     moveSpeed = 100;
   }
 
-  void _reachedCheckpoint() {
+  void _reachedCheckpoint() async {
+    if (game.playSounds) {
+      FlameAudio.play('disappear.wav', volume: game.soundVolume);
+    }
     hasReached = true;
     if (scale.x > 0) {
       position = position - Vector2.all(32);
@@ -310,15 +317,12 @@ class Player extends SpriteAnimationGroupComponent
     }
     current = PlayerState.desappearing;
 
-    const reachedCheckpointDuration = Duration(milliseconds: 350);
-    Future.delayed(reachedCheckpointDuration, () {
-      hasReached = false;
-      position = Vector2.all(-640);
+    await animationTicker?.completed;
+    animationTicker?.reset();
+    hasReached = false;
+    position = Vector2.all(-640);
 
-      const waitToChangeDuration = Duration(seconds: 3);
-      Future.delayed(waitToChangeDuration, () {
-        game.loadNextLevel();
-      });
-    });
+    const waitToChangeDuration = Duration(seconds: 3);
+    Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
   }
 }
