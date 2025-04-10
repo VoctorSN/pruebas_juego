@@ -14,6 +14,8 @@ import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 import 'package:flutter_flame/components/chicken.dart';
 
+import 'level.dart';
+
 enum PlayerState {
   idle,
   running,
@@ -71,6 +73,7 @@ class Player extends SpriteAnimationGroupComponent
         size: Vector2(hitbox.width, hitbox.height),
       ),
     );
+    _animationRespawn();
     return super.onLoad();
   }
 
@@ -121,7 +124,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!hasReached) {
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
-      if (other is Checkpoint && !hasReached) _reachedCheckpoint();
+      if (other is Checkpoint && !hasReached) _reachedCheckpoint(other);
       if (other is Chicken) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
@@ -289,14 +292,10 @@ class Player extends SpriteAnimationGroupComponent
     gotHit = true;
     current = PlayerState.hit;
 
-    await animationTicker?.completed;
-    animationTicker?.reset();
-    scale.x = 1;
-    position = statringPosition - Vector2.all(32); // 32 = 96-64
-    current = PlayerState.appearing;
 
-    await animationTicker?.completed;
-    animationTicker?.reset();
+    await _animationRespawn();
+
+    gameRef.children.query<Level>().first.respawnObjects();
 
     velocity = Vector2.zero();
     position = statringPosition;
@@ -306,7 +305,19 @@ class Player extends SpriteAnimationGroupComponent
     moveSpeed = 100;
   }
 
-  void _reachedCheckpoint() async {
+  Future<void> _animationRespawn() async {
+    await animationTicker?.completed;
+    animationTicker?.reset();
+    scale.x = 1;
+    position = statringPosition - Vector2.all(32); // 32 = 96-64
+    current = PlayerState.appearing;
+
+    await animationTicker?.completed;
+    animationTicker?.reset();
+  }
+
+  void _reachedCheckpoint(Checkpoint other) async {
+    if (!other.isAbled){return;}
     if (game.playSounds) {
       FlameAudio.play('disappear.wav', volume: game.soundVolume);
     }

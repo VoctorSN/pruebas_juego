@@ -29,7 +29,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
     add(level);
 
     _addParallaxBackground();
-    _spawningObject();
+    _spawningObjects();
     _addCollisions();
 
     return super.onLoad();
@@ -53,12 +53,22 @@ class Level extends World with HasGameRef<PixelAdventure> {
         fill: LayerFill.none,
       );
 
-      add(ParallaxComponent(parallax: parallax)
-        ..priority = -1);
+      add(ParallaxComponent(parallax: parallax)..priority = -1);
     }
   }
 
-  void _spawningObject() {
+  void respawnObjects() {
+    removeWhere(
+      (component) =>
+          component is Fruit ||
+          component is Saw ||
+          component is Checkpoint ||
+          component is Chicken,
+    );
+    _spawningObjects();
+  }
+
+  void _spawningObjects() {
     final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('SpawnPoints');
     if (spawnPointsLayer != null) {
       for (final spawnPoint in spawnPointsLayer.objects) {
@@ -98,7 +108,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(checkpoint);
             break;
-            case 'Chicken':
+          case 'Chicken':
             final chicken = Chicken(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
@@ -121,10 +131,12 @@ class Level extends World with HasGameRef<PixelAdventure> {
           case 'Platform':
             if (collision.properties.getValue('falls')) {
               final fallingPlatform = FallingBlock(
-                  position: Vector2(collision.x, collision.y),
-                  size: Vector2(collision.width, collision.height),
-                  isPlatform: true,
-                  fallingDuration:collision.properties.getValue('fallingDurationMillSec'),
+                position: Vector2(collision.x, collision.y),
+                size: Vector2(collision.width, collision.height),
+                isPlatform: true,
+                fallingDuration: collision.properties.getValue(
+                  'fallingDurationMillSec',
+                ),
               );
               collisionBlocks.add(fallingPlatform);
               add(fallingPlatform);
@@ -158,5 +170,13 @@ class Level extends World with HasGameRef<PixelAdventure> {
       }
     }
     player.collisionBlocks = collisionBlocks;
+  }
+
+  bool checkpointEnabled(){
+    return !_hasFruits();
+  }
+
+  bool _hasFruits() {
+    return children.any((component) => component is Fruit);
   }
 }
