@@ -24,6 +24,7 @@ class Checkpoint extends SpriteAnimationComponent
         collisionType: CollisionType.passive,
       ),
     );
+    priority = -1;
 
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache(

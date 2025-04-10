@@ -4,14 +4,16 @@ import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_flame/components/chicken.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
+import 'package:flutter_flame/components/chicken.dart';
+import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/fallingBlock.dart';
 import 'package:flutter_flame/components/fruit.dart';
-import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/player.dart';
 import 'package:flutter_flame/components/saw.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
+
+import 'Trampoline.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {
   final Player player;
@@ -39,9 +41,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
     final backgroundLayer = level.tileMap.getLayer('Background');
 
     if (backgroundLayer != null) {
-      final backgroundColor = backgroundLayer.properties.getValue(
-        'BackgroundColor',
-      );
+      final backgroundColor = backgroundLayer.properties.getValue('BackgroundColor');
       final color = backgroundColor ?? 'Gray';
       final parallax = await game.loadParallax(
         [
@@ -59,11 +59,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
   void respawnObjects() {
     removeWhere(
-      (component) =>
-          component is Fruit ||
-          component is Saw ||
-          component is Checkpoint ||
-          component is Chicken,
+      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken,
     );
     _spawningObjects();
   }
@@ -117,6 +113,14 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(chicken);
             break;
+          case 'Trampoline':
+            final trampoline = Trampoline(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              powerBounce: spawnPoint.properties.getValue('powerBounce'),
+            );
+            add(trampoline);
+            break;
           default:
         }
       }
@@ -134,9 +138,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
                 position: Vector2(collision.x, collision.y),
                 size: Vector2(collision.width, collision.height),
                 isPlatform: true,
-                fallingDuration: collision.properties.getValue(
-                  'fallingDurationMillSec',
-                ),
+                fallingDuration: collision.properties.getValue('fallingDurationMillSec'),
               );
               collisionBlocks.add(fallingPlatform);
               add(fallingPlatform);
@@ -172,7 +174,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
     player.collisionBlocks = collisionBlocks;
   }
 
-  bool checkpointEnabled(){
+  bool checkpointEnabled() {
     return !_hasFruits();
   }
 

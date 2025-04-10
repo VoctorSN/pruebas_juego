@@ -4,15 +4,16 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flame/components/Trampoline.dart';
 import 'package:flutter_flame/components/checkpoint.dart';
-import 'package:flutter_flame/components/fallingBlock.dart';
-import 'package:flutter_flame/components/fruit.dart';
+import 'package:flutter_flame/components/chicken.dart';
 import 'package:flutter_flame/components/collision_block.dart';
 import 'package:flutter_flame/components/custom_hitbox.dart';
+import 'package:flutter_flame/components/fallingBlock.dart';
+import 'package:flutter_flame/components/fruit.dart';
 import 'package:flutter_flame/components/saw.dart';
 import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
-import 'package:flutter_flame/components/chicken.dart';
 
 import 'level.dart';
 
@@ -43,7 +44,7 @@ class Player extends SpriteAnimationGroupComponent
 
   final double _gravity = 9.8;
   double _jumpForce = 260;
-  final double _terminalVelocity = 300;
+  final double _terminalVelocity = 500;
   double moveSpeed = 100;
   bool hasReached = false;
   double horizontalMovement = 0;
@@ -129,6 +130,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Saw) _respawn();
       if (other is Checkpoint && !hasReached) _reachedCheckpoint(other);
       if (other is Chicken) other.collidedWithPlayer();
+      if (other is Trampoline) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
