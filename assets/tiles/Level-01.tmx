@@ -90,8 +90,8 @@
   <object id="49" type="Checkpoint" x="48" y="96" width="64" height="64"/>
   <object id="57" name="Chicken" type="Chicken" x="336" y="272" width="32" height="32">
    <properties>
-    <property name="offNeg" type="float" value="12"/>
-    <property name="offPos" type="float" value="4"/>
+    <property name="offNeg" type="float" value="11.75"/>
+    <property name="offPos" type="float" value="3.75"/>
    </properties>
   </object>
   <object id="61" name="Trampoline" type="Trampoline" x="48" y="244" width="28" height="28">

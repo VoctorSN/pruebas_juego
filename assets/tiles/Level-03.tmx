@@ -166,7 +166,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="3" name="Collisions" visible="0">
+ <objectgroup id="3" name="Collisions">
   <object id="7" x="16" y="16" width="16" height="336"/>
   <object id="8" x="32" y="16" width="592" height="16"/>
   <object id="9" x="608" y="32" width="16" height="320"/>

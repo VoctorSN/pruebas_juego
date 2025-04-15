@@ -70,6 +70,7 @@ flutter:
     - assets/images/Items/Fruits/
     - assets/images/Items/Checkpoints/Checkpoint/
     - assets/images/Traps/Saw/
+    - assets/images/Traps/Rock Head/
     - assets/images/Traps/Falling Platforms/
     - assets/images/Main Characters/
     - assets/images/Terrain/

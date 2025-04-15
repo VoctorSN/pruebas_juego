@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -12,7 +11,8 @@ import 'package:flutter_flame/components/spawnpoints/levelContent/fruit.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 import 'package:flutter_flame/components/spawnpoints/traps/saw.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
-
+import 'background_tile.dart';
+import 'blocks/moving_block.dart';
 import 'blocks/trampoline.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {
@@ -30,31 +30,11 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
     add(level);
 
-    _addParallaxBackground();
+    _scrollingBackground();
     _spawningObjects();
     _addCollisions();
 
     return super.onLoad();
-  }
-
-  Future<void> _addParallaxBackground() async {
-    final backgroundLayer = level.tileMap.getLayer('Background');
-
-    if (backgroundLayer != null) {
-      final backgroundColor = backgroundLayer.properties.getValue('BackgroundColor');
-      final color = backgroundColor ?? 'Gray';
-      final parallax = await game.loadParallax(
-        [
-          ParallaxImageData('Background/$color.png'),
-          // o el color que necesites
-        ],
-        baseVelocity: Vector2(0, -40), // scroll vertical
-        repeat: ImageRepeat.repeat,
-        fill: LayerFill.none,
-      );
-
-      add(ParallaxComponent(parallax: parallax)..priority = -1);
-    }
   }
 
   void respawnObjects() {
@@ -121,7 +101,17 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(trampoline);
             break;
+        /*case 'Rockhead':
+            final rockhead = Rockhead(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+            );
+            add(rockhead);
+            break;*/
           default:
+
         }
       }
     }
@@ -161,6 +151,16 @@ class Level extends World with HasGameRef<PixelAdventure> {
             collisionBlocks.add(platform);
             add(platform);
             break;
+          case 'movingBlock':
+            final movingBlock = MovingBlock(
+              position: Vector2(collision.x, collision.y),
+              size: Vector2(collision.width, collision.height),
+              offNeg: collision.properties.getValue('offNeg'),
+              offPos: collision.properties.getValue('offPos'),
+            );
+            collisionBlocks.add(movingBlock);
+            add(movingBlock);
+            break;
           default:
             final block = CollisionBlock(
               position: Vector2(collision.x, collision.y),
@@ -180,5 +180,19 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
   bool _hasFruits() {
     return children.any((component) => component is Fruit);
+  }
+
+  void _scrollingBackground() {
+    final backgroundLayer = level.tileMap.getLayer('Background');
+    if (backgroundLayer != null) {
+      final backgroundColor = backgroundLayer.properties.getValue(
+        'BackgroundColor',
+      );
+      final backgroundTile = BackgroundTile(
+        color: backgroundColor ?? 'Gray',
+        position: Vector2(0, 0),
+      );
+      add(backgroundTile);
+    }
   }
 }
