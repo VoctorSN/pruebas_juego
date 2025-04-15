@@ -5,8 +5,9 @@ import 'package:flutter_flame/pixel_adventure.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-class MovingBlock extends CollisionBlock
-    with CollisionCallbacks, HasGameRef<PixelAdventure> {
+import '../custom_hitbox.dart';
+
+class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
   // Constructor y atributos
   MovingBlock({super.position, super.size, this.offNeg = 0, this.offPos = 0});
@@ -17,6 +18,12 @@ class MovingBlock extends CollisionBlock
   late final SpriteComponent spriteComponent;
   Sprite get idleSprite =>
       Sprite(game.images.fromCache('Traps/Rock Head/Idle.png'));
+  CustomHitbox hitbox = CustomHitbox(
+    offsetX: 5,
+    offsetY: 5,
+    width: 38,
+    height: 38,
+  );
 
   // Lógica de movimiento
   late final Player player;
@@ -24,8 +31,13 @@ class MovingBlock extends CollisionBlock
   double pushSpeed = 50.0;
   int pushDirection = 0;
 
+  // Lógica de colisión
+  bool isPlayerInline = false;
+  bool isBlockOnLeft = false;
+  bool isBlockOnRight = false;
+
   @override
-  FutureOr<void> onLoad() async {
+  Future<void> onLoad() async {
     await super.onLoad();
     priority = 1;
     debugMode = true;
@@ -34,7 +46,11 @@ class MovingBlock extends CollisionBlock
     initialX = position.x;
 
     add(
-      RectangleHitbox()..collisionType = CollisionType.passive,
+      RectangleHitbox(
+        collisionType: CollisionType.active,
+        position: Vector2(hitbox.offsetX, hitbox.offsetY),
+        size: Vector2(hitbox.width, hitbox.height),
+      )
     );
 
     spriteComponent = SpriteComponent(
@@ -46,26 +62,13 @@ class MovingBlock extends CollisionBlock
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
 
-    if (other is Player) {
-      // Detectar colisión con el jugador
-      final playerMid = other.position.x + other.size.x / 2;
-      final blockMid = position.x + size.x / 2;
+    if (other is Player) _collisionPlayer(other);
 
-      final bool isPlayerOnBlock = player.y + player.height > position.y && player.y < position.y + size.y;
+    if (other is CollisionBlock) _collisionBlock(other);
 
-      // Determinar la dirección del empuje
-      if (playerMid < blockMid && isPlayerOnBlock) {
-        pushDirection = 1; // Empujar hacia la derecha
-      } else if (playerMid > blockMid && isPlayerOnBlock) {
-        pushDirection = -1; // Empujar hacia la izquierda
-      }
-    } else{
-      // Si no es el jugador, detener el movimiento
-      print("Colisión detectada con otro CollisionBlock");
-    }
-    super.onCollision(intersectionPoints, other);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
@@ -81,12 +84,75 @@ class MovingBlock extends CollisionBlock
     super.update(dt);
 
     if (pushDirection != 0) {
-      final movement = pushSpeed * dt * pushDirection;
-      final newX = position.x + movement;
+      position.x = position.x + pushDirection * pushSpeed * dt;
+    }
+  }
 
+  void _movingBlockCollision(CollisionBlock other) {
+    // Verificamos si el otro bloque está completamente debajo del bloque actual
+    final bool isFloor = other.position.y <= position.y + size.y - 1;
 
-        position.x = newX;
+    // Si está alineado horizontalmente pero no está por debajo, es colisión lateral
+    if (!isFloor) {
+      if (other.position.x < position.x) {
+        // Tiene un bloque a la izquierda
+        isBlockOnLeft = true;
+      }
+      if (other.position.x > position.x) {
+        // Tiene un bloque a la derecha
+        isBlockOnRight = true;
+      }
+      pushDirection = 0;
+    }
+  }
 
+  void _playerCollision(Player other) {
+    final playerMid = other.position.x + other.size.x / 2;
+    final blockMid = position.x + size.x / 2;
+
+    isPlayerInline = player.y + player.height > position.y && player.y < position.y + size.y;
+
+    if (playerMid < blockMid && isPlayerInline && !isBlockOnRight) {
+      // Mueve el bloque a la derecha por lo que deja de tener el bloque a la izquierda
+      pushDirection = 1;
+      isBlockOnLeft = false;
+    } else if (playerMid > blockMid && isPlayerInline && !isBlockOnLeft) {
+      // Mueve el bloque a la izquierda por lo q deja de tener el bloque a la derecha
+      pushDirection = -1;
+      isBlockOnRight = false;
+    }
+  }
+
+  void _collisionPlayer(Player other) {
+    final playerMid = other.position.x + other.size.x / 2;
+    final blockMid = position.x + size.x / 2;
+
+    final bool isPlayerOnBlock = player.y + player.height > position.y && player.y < position.y + size.y;
+
+    if (playerMid < blockMid && isPlayerOnBlock && !isBlockOnRight) {
+      pushDirection = 1;
+      isBlockOnLeft = false;
+    } else if (playerMid > blockMid && isPlayerOnBlock && !isBlockOnLeft) {
+      pushDirection = -1;
+      isBlockOnRight = false;
+    }
+  }
+
+  void _collisionBlock(CollisionBlock other) {
+    // Verificamos si el otro bloque está completamente debajo del bloque actual
+    final bool isFloor = other.position.y >= position.y + size.y - 1;
+
+    // Si está alineado horizontalmente pero no está por debajo, es colisión lateral
+    if (!isFloor) {
+      if (other.position.x < position.x) {
+        // Tiene un bloque a la izquierda
+        isBlockOnLeft = true;
+      }
+      if (other.position.x > position.x) {
+        // Tiene un bloque a la derecha
+        isBlockOnRight = true;
+      }
+      pushDirection = 0;
     }
   }
 }

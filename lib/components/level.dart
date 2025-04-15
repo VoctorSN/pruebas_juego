@@ -155,8 +155,6 @@ class Level extends World with HasGameRef<PixelAdventure> {
             final movingBlock = MovingBlock(
               position: Vector2(collision.x, collision.y),
               size: Vector2(collision.width, collision.height),
-              offNeg: collision.properties.getValue('offNeg'),
-              offPos: collision.properties.getValue('offPos'),
             );
             collisionBlocks.add(movingBlock);
             add(movingBlock);

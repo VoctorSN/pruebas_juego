@@ -71,7 +71,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="2" name="SpawnPoints">
+ <objectgroup id="2" name="SpawnPoints" visible="0">
   <object id="5" name="Player" type="Player" x="128" y="224" width="27" height="30"/>
   <object id="34" name="Apple" type="Fruit" x="336" y="128" width="32" height="32"/>
   <object id="35" name="Apple" type="Fruit" x="368" y="128" width="32" height="32"/>
@@ -94,7 +94,7 @@
     <property name="offPos" type="float" value="3.75"/>
    </properties>
   </object>
-  <object id="61" name="Trampoline" type="Trampoline" x="48" y="244" width="28" height="28">
+  <object id="61" name="Trampoline" type="Trampoline" x="48" y="242.667" width="28" height="28">
    <properties>
     <property name="powerBounce" type="float" value="350"/>
    </properties>

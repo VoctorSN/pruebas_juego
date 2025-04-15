@@ -25,6 +25,13 @@ class JumpButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCal
   }
 
   @override
+  void onGameResize(Vector2 gameSize) {
+    super.onGameResize(gameSize);
+    // Actualiza la posición del botón en función del tamaño de la ventana
+    position = Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     game.player.hasJumped = true;
     super.onTapDown(event);
