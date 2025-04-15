@@ -4,17 +4,22 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter_flame/components/blocks/collision_block.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
+
+import '../../level.dart';
+import '../../utils.dart';
 
 enum ChickenState { idle, run, hit }
 
 class Chicken extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure> {
+    with CollisionCallbacks, HasGameRef<PixelAdventure> {
   final double offNeg;
   final double offPos;
+  final List<CollisionBlock> collisionBlocks;
 
-  Chicken({super.position, super.size, this.offPos = 0, this.offNeg = 0});
+  Chicken({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks});
 
   static const stepTime = 0.05;
   static const tileSize = 16;
@@ -49,6 +54,7 @@ class Chicken extends SpriteAnimationGroupComponent
     if (!gotStomped) {
       _movement(dt);
       _updateState();
+      _checkHorizontalCollisions();
     }
     super.update(dt);
   }
@@ -65,6 +71,23 @@ class Chicken extends SpriteAnimationGroupComponent
     };
 
     current = ChickenState.idle;
+  }
+
+  void _checkHorizontalCollisions() {
+    for (final block in collisionBlocks) {
+      if (!block.isPlatform) {
+        if (checkCollisionChicken(this, block)) {
+          if (velocity.x > 0) {
+            velocity.x = 0;
+            position.x = block.x;
+          }
+          if (velocity.x < 0) {
+            velocity.x = 0;
+            position.x = block.x + block.width;
+          }
+        }
+      }
+    }
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {

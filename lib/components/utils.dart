@@ -1,3 +1,4 @@
+import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 
 bool checkCollision(Player player, block) {
@@ -17,9 +18,29 @@ bool checkCollision(Player player, block) {
   final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
 
   return(
-    fixedY < blockY + blockHeight &&
-      playerY + playerHeight > blockY &&
-      fixedX < blockX + blockWidth &&
-      fixedX + playerWidth > blockX
+      fixedY < blockY + blockHeight &&
+          playerY + playerHeight > blockY &&
+          fixedX < blockX + blockWidth &&
+          fixedX + playerWidth > blockX
+  );
+}
+
+bool checkCollisionChicken(Chicken chicken, block) {
+
+  final playerX = chicken.position.x;
+  final playerY = chicken.position.y;
+  final playerWidth = chicken.width;
+  final playerHeight = chicken.height;
+
+  final blockX = block.x;
+  final blockY = block.y;
+  final blockWidth = block.width;
+  final blockHeight = block.height;
+
+  return(
+      playerY < blockY + blockHeight &&
+          playerY + playerHeight > blockY &&
+          playerX < blockX + blockWidth &&
+          playerX + playerWidth > blockX
   );
 }

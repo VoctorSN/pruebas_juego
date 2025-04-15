@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_flame/components/blocks/collision_block.dart';
+import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 import 'package:flame/collisions.dart';
@@ -26,6 +27,12 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   bool isBlockOnLeft = false;
   bool isBlockOnRight = false;
 
+  // Lógica de gravedad
+  final double _gravity = 1;
+  final double _maximunVelocity = 1000;
+  final double _terminalVelocity = 300;
+  Vector2 velocity = Vector2.zero();
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -35,8 +42,8 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
     add(
       RectangleHitbox(
-        position: Vector2(0, 0),
-        size: Vector2(size.x, size.y),
+        position: Vector2.zero(),
+        size: size,
         collisionType: CollisionType.active,
       ),
     );
@@ -56,6 +63,8 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
     if (other is CollisionBlock) _collisionBlock(other);
 
+    if (other is Chicken) _collisionChicken(other);
+
     super.onCollisionStart(intersectionPoints, other);
   }
 
@@ -71,9 +80,16 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   void update(double dt) {
     super.update(dt);
 
-    if (pushDirection != 0) {
-      position.x = position.x + pushDirection * pushSpeed * dt;
-    }
+    if (pushDirection != 0) position.x = position.x + pushDirection * pushSpeed * dt;
+
+    //if(!isOnGround) _applyGravity(dt);
+
+  }
+
+  void _applyGravity(double dt) {
+    velocity.y += _gravity;
+    velocity.y = velocity.y.clamp(-_maximunVelocity, _terminalVelocity);
+    position.y += velocity.y * dt;
   }
 
   void _collisionPlayer(Player other) {
@@ -107,5 +123,9 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
       }
       pushDirection = 0;
     }
+  }
+
+  void _collisionChicken(Chicken other) {
+    print("Collision with Chicken");
   }
 }

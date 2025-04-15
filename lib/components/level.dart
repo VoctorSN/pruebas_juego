@@ -31,8 +31,8 @@ class Level extends World with HasGameRef<PixelAdventure> {
     add(level);
 
     _scrollingBackground();
-    _spawningObjects();
     _addCollisions();
+    _spawningObjects();
 
     return super.onLoad();
   }
@@ -90,6 +90,7 @@ class Level extends World with HasGameRef<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
               offNeg: spawnPoint.properties.getValue('offNeg'),
               offPos: spawnPoint.properties.getValue('offPos'),
+              collisionBlocks: collisionBlocks
             );
             add(chicken);
             break;
