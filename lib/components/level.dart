@@ -4,16 +4,16 @@ import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_flame/components/checkpoint.dart';
-import 'package:flutter_flame/components/chicken.dart';
-import 'package:flutter_flame/components/collision_block.dart';
-import 'package:flutter_flame/components/fallingBlock.dart';
-import 'package:flutter_flame/components/fruit.dart';
-import 'package:flutter_flame/components/player.dart';
-import 'package:flutter_flame/components/saw.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/checkpoint.dart';
+import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
+import 'package:flutter_flame/components/blocks/collision_block.dart';
+import 'package:flutter_flame/components/blocks/fallingBlock.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/fruit.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
+import 'package:flutter_flame/components/spawnpoints/traps/saw.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
-import 'trampoline.dart';
+import 'blocks/trampoline.dart';
 
 class Level extends World with HasGameRef<PixelAdventure> {
   final Player player;

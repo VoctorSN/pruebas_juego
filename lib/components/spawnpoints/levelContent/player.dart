@@ -4,18 +4,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flame/components/checkpoint.dart';
-import 'package:flutter_flame/components/chicken.dart';
-import 'package:flutter_flame/components/collision_block.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/checkpoint.dart';
+import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
+import 'package:flutter_flame/components/blocks/collision_block.dart';
 import 'package:flutter_flame/components/custom_hitbox.dart';
-import 'package:flutter_flame/components/fallingBlock.dart';
-import 'package:flutter_flame/components/fruit.dart';
-import 'package:flutter_flame/components/saw.dart';
-import 'package:flutter_flame/components/trampoline.dart';
+import 'package:flutter_flame/components/blocks/fallingBlock.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/fruit.dart';
+import 'package:flutter_flame/components/spawnpoints/traps/saw.dart';
+import 'package:flutter_flame/components/blocks/trampoline.dart';
 import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
-import 'level.dart';
+import '../../level.dart';
 
 enum PlayerState {
   idle,

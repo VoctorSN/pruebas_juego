@@ -1,4 +1,4 @@
-import 'package:flutter_flame/components/player.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 
 bool checkCollision(Player player, block) {
   final hitbox = player.hitbox;
