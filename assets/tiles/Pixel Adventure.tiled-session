@@ -3,44 +3,45 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Level-03.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "Level-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.28,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 315.234375,
-                "y": 271.09375
+                "x": 314.66666666666663,
+                "y": 197.66666666666663
             }
         },
         "Level-02.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.28,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 361.328125,
-                "y": 301.5625
+                "x": 312.66666666666663,
+                "y": 172.33333333333337
             }
         },
         "Level-03.tmx": {
             "expandedObjectLayers": [
                 3
             ],
-            "scale": 1.99,
+            "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 237.43718592964822,
-                "y": 158.79396984924622
+                "x": 302,
+                "y": 154.33333333333337
             }
         },
         "Pixel Adventure.tsx": {
@@ -63,18 +64,14 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "Pixel Adventure.tsx",
-        "Level-01.tmx",
-        "Level-02.tmx",
-        "Level-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "Pixel Adventure.tsx",
-        "Level-01.tmx",
         "Level-02.tmx",
         "Level-03.tmx",
+        "Level-01.tmx",
+        "Pixel Adventure.tsx",
         "level_01.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",

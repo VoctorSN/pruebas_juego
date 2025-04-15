@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -13,6 +14,7 @@ class PixelAdventure extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   @override
   Color backgroundColor() => const Color(0xFF211F30);
+
   late CameraComponent cam;
   final List<String> characters = ['Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
   int currentCharacterIndex = 0;
@@ -27,6 +29,9 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
+
+    showControls = Platform.isIOS || Platform.isAndroid;
+
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
@@ -34,11 +39,16 @@ class PixelAdventure extends FlameGame
     _loadLevel();
 
     if (showControls) {
-      addJoystick();
-      add(JumpButton());
+      if (!children.any((component) => component is JoystickComponent)) {
+        addJoystick();
+      }
+      if (!children.any((component) => component is JumpButton)) {
+        add(JumpButton());
+      }
     }
-    add(ChangePlayerSkinButton(buttonImage: 'LeftArrow', toRight: true, marginVertical: 550, marginHorizontal: 200, changeCharacter: changeCharacter));
-    add(ChangePlayerSkinButton(buttonImage: 'RightArrow', toRight: true, marginVertical: 550, marginHorizontal: 50, changeCharacter: changeCharacter));
+
+    add(ChangePlayerSkinButton(buttonImage: 'LeftArrow', toRight: true, marginVertical: 50, marginHorizontal: 150, changeCharacter: changeCharacter));
+    add(ChangePlayerSkinButton(buttonImage: 'RightArrow', toRight: true, marginVertical: 50, marginHorizontal: 250, changeCharacter: changeCharacter));
     return super.onLoad();
   }
 
@@ -49,24 +59,25 @@ class PixelAdventure extends FlameGame
       _loadLevel();
     } else {
       //Game Finished
+      currentLevelIndex = 0;
+      _loadLevel();
     }
   }
 
   void _loadLevel() {
-    Future.delayed(const Duration(seconds: 1), () {
-      level = Level(
-        levelName: levelNames[currentLevelIndex],
-        player: player,
-      );
+    level = Level(
+      levelName: levelNames[currentLevelIndex],
+      player: player,
+    );
 
-      cam = CameraComponent.withFixedResolution(
-        world: level,
-        width: 640,
-        height: 360,
-      );
-      cam.viewfinder.anchor = Anchor.topLeft;
-      addAll([cam, level]);
-    });
+    cam = CameraComponent.withFixedResolution(
+      world: level,
+      width: 640,
+      height: 360,
+    );
+    cam.priority = 10;
+    cam.viewfinder.anchor = Anchor.topLeft;
+    addAll([cam, level]);
   }
 
   @override
@@ -79,13 +90,17 @@ class PixelAdventure extends FlameGame
 
   void addJoystick() {
     joystick = JoystickComponent(
-      priority: 10,
-      knob: SpriteComponent(sprite: Sprite(images.fromCache('HUD/Knob.png'))),
-      background: SpriteComponent(
-        sprite: Sprite(images.fromCache('HUD/Joystick.png')),
-      ),
-      knobRadius: 36,
-      margin: const EdgeInsets.only(left: 32, bottom: 32),
+        priority: 15,
+        knob: SpriteComponent(
+          sprite: Sprite(images.fromCache('HUD/Knob.png')),
+          size: Vector2.all(50),
+        ),
+        knobRadius: 40,
+        background: SpriteComponent(
+          sprite: Sprite(images.fromCache('HUD/Joystick.png')),
+          size: Vector2.all(100),
+        ),
+        margin: const EdgeInsets.only(left: 32, bottom: 32)
     );
     add(joystick);
   }
