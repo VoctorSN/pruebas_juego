@@ -68,6 +68,7 @@ flutter:
     - assets/images/Terrain/
     - assets/images/HUD/
     - assets/images/Items/Fruits/
+    - assets/images/Items/Boxes/Box2/
     - assets/images/Items/Checkpoints/Checkpoint/
     - assets/images/Traps/Saw/
     - assets/images/Traps/Rock Head/
