@@ -6,12 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/checkpoint.dart';
 import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
 import 'package:flutter_flame/components/blocks/collision_block.dart';
-import 'package:flutter_flame/components/blocks/fallingBlock.dart';
+import 'package:flutter_flame/components/blocks/falling_block.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/fruit.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 import 'package:flutter_flame/components/spawnpoints/traps/saw.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 import 'background_tile.dart';
+import 'blocks/alterning_block.dart';
 import 'blocks/moving_block.dart';
 import 'blocks/trampoline.dart';
 
@@ -102,15 +103,6 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             add(trampoline);
             break;
-        /*case 'Rockhead':
-            final rockhead = Rockhead(
-              position: Vector2(spawnPoint.x, spawnPoint.y),
-              size: Vector2(spawnPoint.width, spawnPoint.height),
-              offNeg: spawnPoint.properties.getValue('offNeg'),
-              offPos: spawnPoint.properties.getValue('offPos'),
-            );
-            add(rockhead);
-            break;*/
           default:
 
         }
@@ -159,6 +151,15 @@ class Level extends World with HasGameRef<PixelAdventure> {
             );
             collisionBlocks.add(movingBlock);
             add(movingBlock);
+            break;
+          case 'alterningBlock':
+            final alterningBlock = AlternatingBlock(
+              isRed: collision.properties.getValue('isRed'),
+              position: Vector2(collision.x, collision.y),
+              size: Vector2(collision.width, collision.height),
+            );
+            collisionBlocks.add(alterningBlock);
+            add(alterningBlock);
             break;
           default:
             final block = CollisionBlock(

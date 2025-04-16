@@ -4,11 +4,12 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flame/components/blocks/alterning_block.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/checkpoint.dart';
 import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
 import 'package:flutter_flame/components/blocks/collision_block.dart';
 import 'package:flutter_flame/components/custom_hitbox.dart';
-import 'package:flutter_flame/components/blocks/fallingBlock.dart';
+import 'package:flutter_flame/components/blocks/falling_block.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/fruit.dart';
 import 'package:flutter_flame/components/spawnpoints/traps/saw.dart';
 import 'package:flutter_flame/components/blocks/trampoline.dart';
@@ -224,6 +225,11 @@ class Player extends SpriteAnimationGroupComponent
 
   void _checkHorizontalCollisions() {
     for (final block in collisionBlocks) {
+      if(block is AlternatingBlock) {
+        if (!block.isActive) {
+          continue;
+        }
+      }
       if (!block.isPlatform) {
         if (checkCollision(this, block)) {
           if (velocity.x > 0) {
@@ -247,6 +253,11 @@ class Player extends SpriteAnimationGroupComponent
 
   void _checkVerticalCollisions() {
     for (final block in collisionBlocks) {
+      if(block is AlternatingBlock) {
+        if (!block.isActive) {
+          continue;
+        }
+      }
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
