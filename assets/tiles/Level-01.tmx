@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="71">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="82">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -71,7 +71,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="2" name="SpawnPoints" visible="0">
+ <objectgroup id="2" name="SpawnPoints">
   <object id="5" name="Player" type="Player" x="128" y="224" width="27" height="30"/>
   <object id="34" name="Apple" type="Fruit" x="336" y="128" width="32" height="32"/>
   <object id="35" name="Apple" type="Fruit" x="368" y="128" width="32" height="32"/>
@@ -99,5 +99,9 @@
     <property name="powerBounce" type="float" value="350"/>
    </properties>
   </object>
+  <object id="78" type="deathZone" x="0" y="0" width="640" height="16"/>
+  <object id="79" type="deathZone" x="0" y="352" width="640" height="16"/>
+  <object id="80" type="deathZone" x="0" y="16" width="16" height="336"/>
+  <object id="81" type="deathZone" x="624" y="16" width="16" height="336"/>
  </objectgroup>
 </map>

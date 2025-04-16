@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flame/components/buttons/changePlayerSkinButton.dart';
-import 'package:flutter_flame/components/buttons/jump_button.dart';
-import 'package:flutter_flame/components/level.dart';
-import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
+import 'package:flutter_flame/components/game/level.dart';
+import 'components/HUD/buttons/changePlayerSkinButton.dart';
+import 'components/HUD/buttons/jump_button.dart';
+import 'components/game/spawnpoints/levelContent/player.dart';
 
 class PixelAdventure extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
