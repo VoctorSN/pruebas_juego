@@ -1,5 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
+import 'package:flutter_flame/components/utils.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 import 'collision_block.dart';
 
@@ -31,6 +33,13 @@ class AlternatingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
     await super.onLoad();
 
     _loadSprites();
+
+    hitbox = RectangleHitbox(
+      size: Vector2(size.x, size.y),
+      position: Vector2.zero(),
+    );
+
+    add(hitbox);
 
     spriteComponent = SpriteComponent(
       sprite: blockActive,
@@ -86,5 +95,15 @@ class AlternatingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   void update(double dt) {
     super.update(dt);
     if (_timerStarted) _timer.update(dt);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Player) {
+      if (isActive && isPlayerInsideBlock(other, hitbox)) {
+        movePlayerNextToBlock(other, hitbox);
+      }
+    }
+    super.onCollision(intersectionPoints, other);
   }
 }

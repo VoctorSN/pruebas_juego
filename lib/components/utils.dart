@@ -1,3 +1,4 @@
+import 'package:flame/collisions.dart';
 import 'package:flutter_flame/components/spawnpoints/enemies/chicken.dart';
 import 'package:flutter_flame/components/spawnpoints/levelContent/player.dart';
 
@@ -43,4 +44,64 @@ bool checkCollisionChicken(Chicken chicken, block) {
           playerX < blockX + blockWidth &&
           playerX + playerWidth > blockX
   );
+}
+
+bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {
+  final playerHitbox = player.hitbox;
+
+  // Calcular la posición del hitbox en función de la dirección
+  final baseX = player.position.x + playerHitbox.offsetX;
+  final adjustedPlayerLeft = player.scale.x < 0
+      ? baseX - (playerHitbox.offsetX * 2) - playerHitbox.width
+      : baseX;
+  final adjustedPlayerRight = adjustedPlayerLeft + playerHitbox.width;
+
+  final playerTop = player.position.y + playerHitbox.offsetY;
+  final playerBottom = playerTop + playerHitbox.height;
+
+  final blockLeft = blockHitbox.absolutePosition.x;
+  final blockRight = blockLeft + blockHitbox.size.x;
+  final blockTop = blockHitbox.absolutePosition.y;
+  final blockBottom = blockTop + blockHitbox.size.y;
+
+  // Calcular la superposición horizontal
+  final horizontalOverlap = (adjustedPlayerRight > blockLeft && adjustedPlayerLeft < blockRight);
+
+  // Calcular la superposición vertical
+  final verticalOverlap = (playerBottom > blockTop && playerTop < blockBottom);
+
+  // Devolver true solo si hay superposición horizontal y vertical
+  return horizontalOverlap && verticalOverlap;
+}
+
+
+void movePlayerNextToBlock(Player player, RectangleHitbox blockHitbox) {
+  final playerHitbox = player.hitbox;
+
+  // Calcular la posición del hitbox en función de la dirección
+  final baseX = player.position.x + playerHitbox.offsetX;
+  final adjustedPlayerLeft = player.scale.x < 0
+      ? baseX - (playerHitbox.offsetX * 2) - playerHitbox.width
+      : baseX;
+  final adjustedPlayerRight = adjustedPlayerLeft + playerHitbox.width;
+
+  final playerTop = player.position.y + playerHitbox.offsetY;
+  final playerBottom = playerTop + playerHitbox.height;
+
+  final blockLeft = blockHitbox.absolutePosition.x;
+  final blockRight = blockLeft + blockHitbox.size.x;
+  final blockTop = blockHitbox.absolutePosition.y;
+  final blockBottom = blockTop + blockHitbox.size.y;
+
+  if (adjustedPlayerRight > blockLeft && adjustedPlayerLeft < blockRight) {
+    if (playerBottom > blockTop && playerTop < blockBottom) {
+      if (player.scale.x < 0) {
+        // Player is facing left
+        player.position.x = blockRight + (playerHitbox.offsetX * 2) + 4;
+      } else {
+        // Player is facing right
+        player.position.x = blockLeft - (playerHitbox.offsetX * 2) - 4;
+      }
+    }
+  }
 }

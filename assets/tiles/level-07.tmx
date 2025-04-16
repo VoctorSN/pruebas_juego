@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="68">
+ <tileset firstgid="1" source="Pixel Adventure.tsx"/>
+ <layer id="1" name="Background" width="40" height="23">
+  <data encoding="csv">
+24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,
+24,135,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,134,133,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,95,96,96,96,96,96,96,96,96,96,97,111,24,
+24,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,118,118,118,118,118,118,118,118,118,119,111,24,
+112,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,118,118,118,118,118,118,118,118,118,119,111,24,
+112,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,118,118,118,118,118,118,118,118,118,119,111,24,
+112,113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,0,0,16,0,0,0,0,117,118,118,118,118,118,118,118,118,118,119,111,24,
+112,113,95,96,96,96,96,96,96,96,97,0,0,0,0,0,0,0,60,0,0,0,60,0,0,0,0,117,118,118,118,118,118,118,118,118,118,119,111,24,
+112,113,117,118,118,118,118,118,118,118,120,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,121,118,118,118,118,118,118,118,118,118,119,111,24,
+24,113,139,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,140,141,111,24,
+24,91,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,89,24,
+24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24
+</data>
+ </layer>
+ <objectgroup id="2" name="Collisions" visible="0">
+  <object id="1" x="16" y="16" width="608" height="16"/>
+  <object id="2" x="608" y="32" width="16" height="320"/>
+  <object id="3" x="16" y="336" width="592" height="16"/>
+  <object id="4" x="16" y="32" width="16" height="304"/>
+  <object id="6" x="32" y="288" width="144" height="48"/>
+  <object id="7" x="176" y="304" width="256" height="32"/>
+  <object id="8" x="432" y="208" width="176" height="128"/>
+  <object id="10" type="alterningBlock" x="224" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="11" type="alterningBlock" x="208" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="12" type="alterningBlock" x="192" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="13" type="alterningBlock" x="352" y="208" width="16" height="16" rotation="-90">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="14" type="alterningBlock" x="368" y="208" width="16" height="16" rotation="-90">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="15" type="alterningBlock" x="384" y="208" width="16" height="16" rotation="-90">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="16" type="alterningBlock" x="320" y="288" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="17" type="alterningBlock" x="320" y="272" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="18" type="alterningBlock" x="304" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="19" type="alterningBlock" x="272" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="20" type="alterningBlock" x="288" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="21" type="alterningBlock" x="464" y="176" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="22" type="alterningBlock" x="464" y="192" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="23" type="alterningBlock" x="464" y="160" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="24" type="alterningBlock" x="464" y="144" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="25" type="alterningBlock" x="384" y="272" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="36" type="alterningBlock" x="112" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="37" type="alterningBlock" x="128" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="38" type="alterningBlock" x="144" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="40" type="alterningBlock" x="96" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="43" type="alterningBlock" x="80" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="45" type="alterningBlock" x="64" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="46" type="alterningBlock" x="48" y="240" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="62" x="352" y="272" width="16" height="32"/>
+  <object id="63" x="288" y="272" width="16" height="32"/>
+ </objectgroup>
+ <objectgroup id="3" name="SpawnPoints">
+  <object id="32" name="Player" type="Player" x="80" y="256" width="30.3304" height="29.7471"/>
+  <object id="33" type="Checkpoint" x="528" y="144" width="64" height="64"/>
+  <object id="64" type="deathZone" x="0" y="0" width="640" height="16"/>
+  <object id="65" type="deathZone" x="0" y="352" width="640" height="16"/>
+  <object id="66" type="deathZone" x="624" y="16" width="16" height="336"/>
+  <object id="67" type="deathZone" x="0" y="16" width="16" height="336"/>
+ </objectgroup>
+</map>
