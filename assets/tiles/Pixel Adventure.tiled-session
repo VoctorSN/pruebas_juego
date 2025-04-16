@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Level-01.tmx",
+    "activeFile": "Menu.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -37,16 +37,15 @@
             "scaleInDock": 1
         },
         "Level-01.tmx": {
-            "expandedObjectLayers": [
-                3,
-                2
-            ],
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 314.33333333333337,
-                "y": 197.33333333333334
+                "x": 310.33333333333326,
+                "y": 195.66666666666666
             }
+        },
+        "Level-01.tmx#Pixel Adventure": {
+            "scaleInDock": 1
         },
         "Level-02.tmx": {
             "expandedObjectLayers": [
@@ -124,7 +123,26 @@
                 "y": 183.84093567251463
             }
         },
+        "Menu.tmx": {
+            "scale": 1.674375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.4180664427026,
+                "y": 184.24785367674508
+            }
+        },
         "Pixel Adventure.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Text (White) (8x10).tsx": {
+            "scaleInDock": 1
+        },
+        "Tile_01.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tileset_menu.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
@@ -185,30 +203,32 @@
             }
         }
     },
-    "last.imagePath": "/Users/pumpun17/Documents/FlutterFlame/flutter_flame/assets/images/Terrain",
+    "last.imagePath": "/Users/pumpundixital/IdeaProjects/pruebas_juego/assets/images/GUI/Interface",
     "map.height": 23,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "Level-01.tmx"
+        "Level-01.tmx",
+        "Tileset_menu.tsx",
+        "Menu.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "Level-01.tmx",
+        "Tileset_menu.tsx",
+        "Menu.tmx",
+        "Pixel Adventure.tsx",
+        "Tile_01.tsx",
         "Level-02.tmx",
         "Level-03.tmx",
         "level-04.tmx",
         "level-05.tmx",
         "level-07.tmx",
         "level-06.tmx",
-        "Level-06-MAL.tmx",
-        "Level-05-MAL.tmx",
-        "Level-04-MAL.tmx",
-        "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-03.tmx",
-        "Level-06.tmx"
+        "Level-06-MAL.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -37,6 +37,7 @@ dependencies:
   flame: ^1.27.0
   flame_tiled: ^3.0.0
   flame_audio: ^2.0.5
+  syncfusion_flutter_sliders: ^29.1.38
 
 
 dev_dependencies:
@@ -66,7 +67,7 @@ flutter:
     - assets/audio/
     - assets/tiles/
     - assets/images/Terrain/
-    - assets/images/HUD/
+    - assets/images/GUI/HUD/
     - assets/images/Items/Fruits/
     - assets/images/Items/Boxes/Box2/
     - assets/images/Items/Checkpoints/Checkpoint/

@@ -4,9 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_flame/components/HUD/buttons/open_menu_button.dart';
+import 'package:flutter_flame/components/HUD/widgets/pause_menu.dart';
 import 'package:flutter_flame/components/game/level.dart';
 import 'components/HUD/buttons/changePlayerSkinButton.dart';
 import 'components/HUD/buttons/jump_button.dart';
+import 'components/HUD/buttons/toggle_sound_button.dart';
+import 'components/HUD/widgets/settings_menu.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
 class PixelAdventure extends FlameGame
@@ -22,7 +26,7 @@ class PixelAdventure extends FlameGame
   late JoystickComponent joystick;
   bool showControls = false;
   static const List<String> levelNames = ['Level-01', 'Level-02', 'Level-03', 'Level-04', 'Level-05', 'Level-06', 'Level-07'];
-  int currentLevelIndex = 6;
+  int currentLevelIndex = 5;
   bool playSounds = true;
   double soundVolume = 1.0;
 
@@ -34,6 +38,14 @@ class PixelAdventure extends FlameGame
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
+
+    overlays.addEntry(
+      PauseMenu.id, (context, game) => PauseMenu(this),
+    );
+
+    overlays.addEntry(
+      SettingsMenu.id, (context, game)=> SettingsMenu(this),
+    );
 
     _loadLevel();
 
@@ -48,6 +60,8 @@ class PixelAdventure extends FlameGame
 
     add(ChangePlayerSkinButton(buttonImage: 'LeftArrow', toRight: true, marginVertical: 50, marginHorizontal: 150, changeCharacter: changeCharacter));
     add(ChangePlayerSkinButton(buttonImage: 'RightArrow', toRight: true, marginVertical: 50, marginHorizontal: 250, changeCharacter: changeCharacter));
+    add(ToggleSoundButton(buttonImageOn: 'soundOnButton', buttonImageOff: 'soundOffButton'));
+    add(OpenMenuButton(button: 'menuButton'));
     return super.onLoad();
   }
 
@@ -91,12 +105,12 @@ class PixelAdventure extends FlameGame
     joystick = JoystickComponent(
         priority: 15,
         knob: SpriteComponent(
-          sprite: Sprite(images.fromCache('HUD/Knob.png')),
+          sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
           size: Vector2.all(50),
         ),
         knobRadius: 40,
         background: SpriteComponent(
-          sprite: Sprite(images.fromCache('HUD/Joystick.png')),
+          sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
           size: Vector2.all(100),
         ),
         margin: const EdgeInsets.only(left: 32, bottom: 32)
@@ -137,5 +151,10 @@ class PixelAdventure extends FlameGame
       currentCharacterIndex = 0;
     }
     level.player.updateCharacter(characters[currentCharacterIndex]);
+  }
+
+  void pauseGame() {
+    overlays.add(PauseMenu.id);
+    pauseEngine();
   }
 }

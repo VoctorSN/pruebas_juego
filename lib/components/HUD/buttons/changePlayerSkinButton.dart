@@ -29,7 +29,7 @@ class ChangePlayerSkinButton extends SpriteComponent with HasGameRef<PixelAdvent
   @override
   FutureOr<void> onLoad() {
     priority = 100;
-    sprite = Sprite(game.images.fromCache('HUD/$buttonImage.png'));
+    sprite = Sprite(game.images.fromCache('GUI/HUD/$buttonImage.png'));
     position = Vector2(game.size.x - marginHorizontal - buttonSize, game.size.y - marginVertical - buttonSize);
     return super.onLoad();
   }

@@ -15,8 +15,6 @@ class DeathZone extends PositionComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-
-    debugMode = true;
     add(RectangleHitbox()
       ..collisionType = CollisionType.active
       ..position = position
