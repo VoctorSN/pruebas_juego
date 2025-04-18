@@ -25,7 +25,7 @@ class PixelAdventure extends FlameGame
   late Level level;
   late JoystickComponent joystick;
   bool showControls = false;
-  static const List<String> levelNames = ['Level-01', 'Level-02', 'Level-03', 'Level-04', 'Level-05', 'Level-06', 'Level-07'];
+  static const List<String> levelNames = ['level-01', 'level-02', 'level-03', 'level-04', 'level-05', 'level-06', 'level-07'];
   int currentLevelIndex = 5;
   bool playSounds = true;
   double soundVolume = 1.0;

@@ -13,18 +13,16 @@ class OpenMenuButton extends SpriteComponent with HasGameRef<PixelAdventure>, Ta
   FutureOr<void> onLoad() {
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/$button.png'));
-    position = Vector2(game.size.x - 60 - buttonSize, game.size.y - 10 - buttonSize);
+    position = Vector2(game.size.x - 10 - buttonSize, 10); // Ajuste para la esquina superior derecha
     return super.onLoad();
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-
     // Pausar el motor del juego
     gameRef.pauseEngine();
     gameRef.pauseGame();
 
     super.onTapDown(event);
   }
-
 }
