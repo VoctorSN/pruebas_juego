@@ -58,8 +58,7 @@ class PixelAdventure extends FlameGame
       }
     }
 
-    add(ChangePlayerSkinButton(buttonImage: 'LeftArrow', toRight: true, marginVertical: 50, marginHorizontal: 150, changeCharacter: changeCharacter));
-    add(ChangePlayerSkinButton(buttonImage: 'RightArrow', toRight: true, marginVertical: 50, marginHorizontal: 250, changeCharacter: changeCharacter));
+    add(ChangePlayerSkinButton(changeCharacter: changeCharacter));
     add(ToggleSoundButton(buttonImageOn: 'soundOnButton', buttonImageOff: 'soundOffButton'));
     add(OpenMenuButton(button: 'menuButton'));
     return super.onLoad();
@@ -145,7 +144,6 @@ class PixelAdventure extends FlameGame
   }
 
   void changeCharacter() {
-    print('cambiando personaje: ${level.player.character}');
     currentCharacterIndex++;
     if(currentCharacterIndex >= characters.length){
       currentCharacterIndex = 0;
