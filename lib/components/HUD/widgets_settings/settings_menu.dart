@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flame/components/HUD/widgets_settings/pause_menu.dart';
-import 'package:flutter_flame/components/HUD/widgets_settings/resize_joystick.dart';
+import 'package:flutter_flame/components/HUD/widgets_settings/resize_HUD.dart';
 import 'package:flutter_flame/components/HUD/widgets_settings/volume_controller_widget.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
@@ -50,7 +50,7 @@ class SettingsMenu extends StatelessWidget {
 
                   ToggleVolumeWidget(game: game),
 
-                  ResizeJoystick(game: game),
+                  ResizeHUD(game: game),
 
                   ElevatedButton(
                     onPressed: () {

@@ -10,6 +10,7 @@ import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/toggle_sound_button.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
+import 'components/HUD/widgets_settings/resize_HUD.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
@@ -36,7 +37,7 @@ class PixelAdventure extends FlameGame
   // Lógica para gestionar el joystick y su tamaño
   late JoystickComponent joystick;
   bool showControls = false;
-  double joystickSize = 50;
+  double hudSize = 50; // Esto  también sirve para cambiar el tamaño del resto de botones
 
   @override
   FutureOr<void> onLoad() async {
@@ -48,6 +49,7 @@ class PixelAdventure extends FlameGame
     // Detectar el SO y cargar los controles, se añade el if porque al cerrar y abrir la aplicación desaparecía el botón de salto
     //showControls = Platform.isIOS || Platform.isAndroid;
     showControls = true;
+    print("Me he vuelto a cargar :)");
 
     if (showControls) {
       if (!children.any((component) => component is JoystickComponent)) {
@@ -118,12 +120,12 @@ class PixelAdventure extends FlameGame
         priority: 15,
         knob: SpriteComponent(
           sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
-          size: Vector2.all(joystickSize),
+          size: Vector2.all(hudSize),
         ),
         knobRadius: 40,
         background: SpriteComponent(
           sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
-          size: Vector2.all(joystickSize*2),
+          size: Vector2.all(hudSize*2),
         ),
         margin: const EdgeInsets.only(left: 32, bottom: 32)
     );

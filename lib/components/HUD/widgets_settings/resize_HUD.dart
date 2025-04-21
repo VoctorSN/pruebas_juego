@@ -3,22 +3,22 @@ import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
 import 'number_slider.dart';
 
-class ResizeJoystick extends StatefulWidget {
+class ResizeHUD extends StatefulWidget {
 
   final PixelAdventure game;
-  const ResizeJoystick({super.key, required this.game});
+  const ResizeHUD({super.key, required this.game});
 
   @override
-  State<ResizeJoystick> createState() {
-    return _ResizeJoystickState(game: game);
+  State<ResizeHUD> createState() {
+    return _ResizeHUDState(game: game);
   }
 
 }
 
-class _ResizeJoystickState extends State<ResizeJoystick> {
+class _ResizeHUDState extends State<ResizeHUD> {
 
   final PixelAdventure game;
-  _ResizeJoystickState({required this.game});
+  _ResizeHUDState({required this.game});
 
   bool isMuted = false;
   double value = 0.0;
@@ -39,16 +39,16 @@ class _ResizeJoystickState extends State<ResizeJoystick> {
   @override
   Widget build(BuildContext context) {
 
-    value = game.soundVolume * 50;
+    value = game.hudSize;
 
     return Row(children: [
-      Text('Joystick Size'),
+      Text('HUD Size'),
       NumberSlider(game: game, value: value, onChanged: onChanged),
       IconButton(
         onPressed: () {
           setState(() {
             game.showControls = !game.showControls;
-            isVisible = !isVisible;
+            isVisible = game.showControls;
           });
         },
         icon: eyeImage,
@@ -60,11 +60,13 @@ class _ResizeJoystickState extends State<ResizeJoystick> {
 
     // Lógica para redimensionar el joystick teniendo en cuenta si está visible o no
 
-    // usar game.joystickSize
-
     if(!game.playSounds){
       return null;
     }
+
+    game.hudSize = value;
+    game.joystick.removeFromParent();
+    game.addJoystick();
 
     return value;
   }
