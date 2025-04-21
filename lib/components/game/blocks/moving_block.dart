@@ -28,7 +28,7 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   bool isBlockOnRight = false;
 
   // Lógica de gravedad
-  final double _gravity = 9.8;
+  final double _gravity = 1;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   Vector2 velocity = Vector2.zero();
@@ -71,8 +71,20 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is Player) {
-      pushDirection = 0; // Detener el movimiento al terminar la colisión
+    if (other is Player) pushDirection = 0; // Detener el movimiento al terminar la colisión
+    if (other is CollisionBlock && other is !MovingBlock) {
+      if (other.position.x < position.x) {
+        print("fin bloque izquierda");
+        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
+        return;
+      }
+      if (other.position.x > position.x) {
+        print("fin bloque derecha");
+        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
+        return;
+      }
+      print("cayendo");
+      isOnGround = true; // Resetear el estado de suelo al salir de la colisión
     }
     super.onCollisionEnd(other);
   }
@@ -115,11 +127,15 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
     // Si está alineado horizontalmente pero no está por debajo, es colisión lateral
     if (!isFloor) {
       if (other.position.x < position.x) {
+        print("Collision with block on left");
         // Tiene un bloque a la izquierda
+        isOnGround = true;
         isBlockOnLeft = true;
       }
       if (other.position.x > position.x) {
+        print("Collision with block on right");
         // Tiene un bloque a la derecha
+        isOnGround = true;
         isBlockOnRight = true;
       }
       pushDirection = 0;

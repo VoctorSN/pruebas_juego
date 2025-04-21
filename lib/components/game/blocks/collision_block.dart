@@ -4,12 +4,14 @@ import 'package:flame/collisions.dart';
 class CollisionBlock extends PositionComponent with CollisionCallbacks {
   bool isPlatform;
   bool isSand;
+  bool isMovingBlock;
 
   CollisionBlock({
     super.position,
     super.size,
     this.isSand = false,
     this.isPlatform = false,
+    this.isMovingBlock = false,
   });
 
   @override

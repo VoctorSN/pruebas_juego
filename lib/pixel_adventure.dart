@@ -113,11 +113,11 @@ class PixelAdventure extends FlameGame
     )) {
       component.removeFromParent();
     }
-    addAllButtons();  // No reasignamos buttonSize, solo agregamos los botones.
+    addAllButtons();
   }
 
   void addAllButtons() {
-    // Aquí actualizamos el tamaño de los botones en el mismo momento en que los añadimos
+    // TODO Actualizar las posiciones de los botones
     changeSkinButton.size = Vector2.all(hudSize);
     soundButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);

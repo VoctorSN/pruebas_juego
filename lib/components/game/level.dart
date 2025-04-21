@@ -39,9 +39,13 @@ class Level extends World with HasGameRef<PixelAdventure> {
 
   void respawnObjects() {
     removeWhere(
-      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken|| component is Trampoline,
+      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken|| component is Trampoline || component is DeathZone
     );
     _spawningObjects();
+
+    collisionBlocks.forEach((block) => remove(block));
+    collisionBlocks.clear();
+    _addCollisions();
   }
 
   void _spawningObjects() {
