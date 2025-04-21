@@ -22,6 +22,7 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
   _ToggleVolumeWidgetState({required this.game});
 
   bool isMuted = false;
+  double value = 0.0;
 
   Image get volumeImage {
     return game.playSounds
@@ -37,8 +38,11 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    value = game.soundVolume * 50;
+
     return Row(children: [
-      NumberSlider(game: game),
+      NumberSlider(game: game, value: value, onChanged: onChanged),
       IconButton(
       onPressed: () {
         setState(() {
@@ -48,5 +52,14 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
       icon: volumeImage,
     )
     ]);
+  }
+
+  double? onChanged(dynamic value) {
+      if(!game.playSounds){
+        return null;
+      }
+
+      game.soundVolume = value/50;
+      return value;
   }
 }
