@@ -78,7 +78,7 @@ class AlternatingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
   void _startTimer() {
     _timerStarted = true;
-    _timer = Timer(14, repeat: true, onTick: () {
+    _timer = Timer(20, repeat: true, onTick: () {
       isRedActive = !isRedActive;
       for (final block in _instances) {
         block._updateSprite();

@@ -25,8 +25,9 @@ class PixelAdventure extends FlameGame
   late Level level;
   late JoystickComponent joystick;
   bool showControls = false;
-  static const List<String> levelNames = ['level-01', 'level-02', 'level-03', 'level-04', 'level-05', 'level-06', 'level-07'];
-  int currentLevelIndex = 5;
+  // se ha borrado el lvl 3 pq da error
+  static const List<String> levelNames = ['level-01', 'level-02', 'level-04', 'level-05', 'level-06', 'level-07'];
+  int currentLevelIndex = 2;
   bool playSounds = true;
   double soundVolume = 1.0;
 

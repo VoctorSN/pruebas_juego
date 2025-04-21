@@ -27,6 +27,20 @@ class ToggleSoundButton extends SpriteComponent
   }
 
   @override
+  void update(double dt) {
+    if (game.playSounds) {
+      sprite = Sprite(game.images.fromCache(
+        'GUI/HUD/$buttonImageOn.png',
+      ));
+    } else {
+      sprite = Sprite(game.images.fromCache(
+        'GUI/HUD/$buttonImageOff.png',
+      ));
+    }
+    super.update(dt);
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     game.playSounds = !game.playSounds;
     sprite = Sprite(game.images.fromCache(

@@ -12,7 +12,7 @@ class NumberSlider extends StatefulWidget {
   @override
   _NumberSliderState createState()  {
     final sound = game.soundVolume * 50;
-    return _NumberSliderState(game:game,soundVolume: sound, isSliderEnabled: isSliderEnabled);
+    return _NumberSliderState(game:game,soundVolume: sound);
   }
 }
 
@@ -20,9 +20,8 @@ class _NumberSliderState extends State<NumberSlider> {
 
   final PixelAdventure game;
   double soundVolume;
-  bool isSliderEnabled;
 
-  _NumberSliderState({required this.game, required this.soundVolume, this.isSliderEnabled = true});
+  _NumberSliderState({required this.game, required this.soundVolume});
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +32,15 @@ class _NumberSliderState extends State<NumberSlider> {
             max: 100.0,
             value: soundVolume,
             interval: 50,
-            activeColor: isSliderEnabled ? Colors.purple : Colors.grey,
+            activeColor: game.playSounds ? Colors.purple : Colors.grey,
             showTicks: true,
-            showLabels: true,
+            showLabels: false,
             enableTooltip: true,
             minorTicksPerInterval: 1,
             stepSize: 5,
             onChanged: (dynamic value) {
               setState(() {
-                if(!isSliderEnabled){
+                if(!game.playSounds){
                   return;
                 }
                 soundVolume = value;
