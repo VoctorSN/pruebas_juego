@@ -10,7 +10,6 @@ import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/toggle_sound_button.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
-import 'components/HUD/widgets_settings/resize_HUD.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
@@ -20,6 +19,7 @@ class PixelAdventure extends FlameGame
         DragCallbacks,
         HasCollisionDetection,
         TapCallbacks {
+
   // Lógica para cargar el nivel y el personaje
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -49,26 +49,44 @@ class PixelAdventure extends FlameGame
   bool playSounds = true;
   double soundVolume = 1.0;
 
-  // Lógica para gestionar el joystick y su tamaño
+  // Lógica para gestionar los botones, sus tamaños y el modo zurdo
   late JoystickComponent joystick;
   bool showControls = false;
-  double hudSize =
-      50; // Esto  también sirve para cambiar el tamaño del resto de botones
+  double hudSize = 50;
+  bool isLeftHanded = false;
+  late final ChangePlayerSkinButton changeSkinButton;
+  late final ToggleSoundButton soundButton;
+  late final OpenMenuButton menuButton;
+  late final JumpButton jumpButton;
 
   @override
   FutureOr<void> onLoad() async {
-
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
 
     // Detectar el SO y cargar los controles, se añade el if porque al cerrar y abrir la aplicación desaparecía el botón de salto
-    //showControls = Platform.isIOS || Platform.isAndroid;
-    showControls = true;
+    showControls = Platform.isAndroid || Platform.isIOS;
 
     // Cargar los overlays para gestionar los menús y el HUD
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
+
+    // Inicializar los botones sin necesidad de reasignar buttonSize después
+    changeSkinButton = ChangePlayerSkinButton(
+      changeCharacter: changeCharacter,
+      buttonSize: hudSize,
+    );
+    soundButton = ToggleSoundButton(
+      buttonImageOn: 'soundOnButton',
+      buttonImageOff: 'soundOffButton',
+      buttonSize: hudSize,
+    );
+    menuButton = OpenMenuButton(
+      button: 'menuButton',
+      buttonSize: hudSize,
+    );
+    jumpButton = JumpButton(hudSize);
 
     addAllButtons();
 
@@ -88,34 +106,30 @@ class PixelAdventure extends FlameGame
       }
     }
     for (var component in children.where(
-      (component) =>
-          component is ChangePlayerSkinButton ||
+          (component) =>
+      component is ChangePlayerSkinButton ||
           component is ToggleSoundButton ||
           component is OpenMenuButton,
     )) {
       component.removeFromParent();
     }
-    addAllButtons();
+    addAllButtons();  // No reasignamos buttonSize, solo agregamos los botones.
   }
 
   void addAllButtons() {
-    add(
-      ChangePlayerSkinButton(
-        changeCharacter: changeCharacter,
-        buttonSize: hudSize,
-      ),
-    );
-    add(
-      ToggleSoundButton(
-        buttonImageOn: 'soundOnButton',
-        buttonImageOff: 'soundOffButton',
-        buttonSize: hudSize,
-      ),
-    );
-    add(OpenMenuButton(button: 'menuButton', buttonSize: hudSize));
+    // Aquí actualizamos el tamaño de los botones en el mismo momento en que los añadimos
+    changeSkinButton.size = Vector2.all(hudSize);
+    soundButton.size = Vector2.all(hudSize);
+    menuButton.size = Vector2.all(hudSize);
+    addAll([
+      changeSkinButton,
+      soundButton,
+      menuButton,
+    ]);
     if (showControls) {
+      jumpButton.size = Vector2.all(hudSize * 2);
+      add(jumpButton);
       addJoystick();
-      add(JumpButton(buttonSize: hudSize));
     }
   }
 

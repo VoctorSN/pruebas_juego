@@ -5,10 +5,10 @@ import 'package:flutter_flame/pixel_adventure.dart';
 
 class OpenMenuButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
 
-  final String button;
-  final buttonSize;
+  late final String button;
+  final double buttonSize;
 
-  OpenMenuButton({required this.button, this.buttonSize = 64});
+  OpenMenuButton({required this.button, required this.buttonSize});
 
   @override
   FutureOr<void> onLoad() {

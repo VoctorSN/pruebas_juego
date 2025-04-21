@@ -8,12 +8,12 @@ class ToggleSoundButton extends SpriteComponent
     with HasGameRef<PixelAdventure>, TapCallbacks {
   final String buttonImageOn;
   final String buttonImageOff;
-  final buttonSize;
+  final double buttonSize;
 
   ToggleSoundButton({
     required this.buttonImageOn,
     required this.buttonImageOff,
-    this.buttonSize  = 64,
+    required double this.buttonSize,
   });
 
 

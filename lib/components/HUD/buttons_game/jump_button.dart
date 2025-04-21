@@ -7,9 +7,9 @@ import '../../../pixel_adventure.dart';
 
 class JumpButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
 
-  final buttonSize;
+  final double buttonSize;
 
-  JumpButton({this.buttonSize = 100});
+  JumpButton(this.buttonSize);
 
   final margin = 32;
 

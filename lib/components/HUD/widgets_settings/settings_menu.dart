@@ -79,9 +79,6 @@ class SettingsMenu extends StatelessWidget {
                           game.overlays.remove(SettingsMenu.id);
                           game.overlays.add(PauseMenu.id);
 
-                          print("Size HUD: $sizeHUD");
-                          print("Volume: $volume");
-
                           // Apply size changes
                           game.hudSize = sizeHUD;
                           game.reloadAllButtons();

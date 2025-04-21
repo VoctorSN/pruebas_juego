@@ -7,9 +7,9 @@ import 'package:flutter_flame/pixel_adventure.dart';
 class ChangePlayerSkinButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
 
   final Function() changeCharacter;
-  final buttonSize;
+  final double buttonSize;
 
-  ChangePlayerSkinButton({required this.changeCharacter, this.buttonSize = 64});
+  ChangePlayerSkinButton({required this.changeCharacter, required this.buttonSize});
 
   @override
   void onTapDown(TapDownEvent event) {
