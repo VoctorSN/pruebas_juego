@@ -72,19 +72,27 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is Player) pushDirection = 0; // Detener el movimiento al terminar la colisión
-    if (other is CollisionBlock && other is !MovingBlock) {
+    if (other is CollisionBlock) {
+      print("FIN COLISIÖN");
+      if (other.position.y >= position.y + size.y - 1) {
+        print("fin bloque abajo");
+        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
+        return;
+      }
       if (other.position.x < position.x) {
         print("fin bloque izquierda");
-        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
+        isOnGround = true;
+        isBlockOnLeft = false;
         return;
       }
       if (other.position.x > position.x) {
         print("fin bloque derecha");
-        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
+        isOnGround = true;
+        isBlockOnRight = false;
         return;
       }
       print("cayendo");
-      isOnGround = true; // Resetear el estado de suelo al salir de la colisión
+      isOnGround = false; // Resetear el estado de suelo al salir de la colisión
     }
     super.onCollisionEnd(other);
   }
@@ -140,6 +148,7 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
       }
       pushDirection = 0;
     }
+    print("encima de algo");
     isOnGround = true;
   }
 
