@@ -14,6 +14,17 @@ class SettingsMenu extends StatelessWidget {
 
   SettingsMenu(this.game, {super.key});
 
+  late double sizeHUD = game.hudSize;
+  late double volume = game.soundVolume;
+
+  updateSizeHUD(double newValue) {
+    sizeHUD = newValue;
+  }
+
+  updateVolume(double newValue) {
+    volume = newValue;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -48,17 +59,40 @@ class SettingsMenu extends StatelessWidget {
                     ),
                   ),
 
-                  ToggleVolumeWidget(game: game),
+                  ToggleVolumeWidget(game: game, updateVolume: updateVolume),
 
-                  ResizeHUD(game: game),
+                  ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      game.overlays.remove(SettingsMenu.id);
-                      game.overlays.add(PauseMenu.id);
-                    },
-                    child: const Text('Back'),
-                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          game.overlays.remove(SettingsMenu.id);
+                          game.overlays.add(PauseMenu.id);
+                        },
+                        child: const Text('Back'),
+                      ),
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          game.overlays.remove(SettingsMenu.id);
+                          game.overlays.add(PauseMenu.id);
+
+                          print("Size HUD: $sizeHUD");
+                          print("Volume: $volume");
+
+                          // Apply size changes
+                          game.hudSize = sizeHUD;
+                          game.reloadAllButtons();
+
+                          // Apply volume changes
+                          game.soundVolume = volume;
+                        },
+                        child: const Text('Apply'),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),

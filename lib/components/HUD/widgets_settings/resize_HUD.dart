@@ -6,11 +6,12 @@ import 'number_slider.dart';
 class ResizeHUD extends StatefulWidget {
 
   final PixelAdventure game;
-  const ResizeHUD({super.key, required this.game});
+  Function updateSizeHUD;
+  ResizeHUD({super.key, required this.game, required this.updateSizeHUD});
 
   @override
   State<ResizeHUD> createState() {
-    return _ResizeHUDState(game: game);
+    return _ResizeHUDState(game: game, updateSizeHUD: updateSizeHUD);
   }
 
 }
@@ -18,10 +19,11 @@ class ResizeHUD extends StatefulWidget {
 class _ResizeHUDState extends State<ResizeHUD> {
 
   final PixelAdventure game;
-  _ResizeHUDState({required this.game});
+  Function updateSizeHUD;
+  _ResizeHUDState({required this.game, required this.updateSizeHUD});
 
   bool isMuted = false;
-  double value = 0.0;
+  late double value;
   bool isVisible = true;
 
   Image get eyeImage {
@@ -36,6 +38,8 @@ class _ResizeHUDState extends State<ResizeHUD> {
     );
   }
 
+  // TODO Añadir el modo para zurdos y diestros
+
   @override
   Widget build(BuildContext context) {
 
@@ -46,10 +50,8 @@ class _ResizeHUDState extends State<ResizeHUD> {
       NumberSlider(game: game, value: value, onChanged: onChanged),
       IconButton(
         onPressed: () {
-          setState(() {
-            game.showControls = !game.showControls;
-            isVisible = game.showControls;
-          });
+          // Dejar este botón o sacarlo?
+          // Hacer que con este botón los botones del HUD (solo los de la pantalla) se oculten
         },
         icon: eyeImage,
       )
@@ -57,12 +59,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
   }
 
   double? onChanged(dynamic value) {
-
-    // Lógica para redimensionar el joystick teniendo en cuenta si está visible o no
-
-    game.hudSize = value;
-    game.reloadAllButtons();
-
+    updateSizeHUD(value);
     return value;
   }
 }

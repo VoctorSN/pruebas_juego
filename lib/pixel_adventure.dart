@@ -57,7 +57,6 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
-    // HACER UNA FUNCIÓN LLAMADA CARGAR CONTROLES
 
     // Carga todas las imagenes al caché
     await images.loadAllImages();
@@ -66,11 +65,9 @@ class PixelAdventure extends FlameGame
     // Detectar el SO y cargar los controles, se añade el if porque al cerrar y abrir la aplicación desaparecía el botón de salto
     //showControls = Platform.isIOS || Platform.isAndroid;
     showControls = true;
-    print("Me he vuelto a cargar :)");
 
     // Cargar los overlays para gestionar los menús y el HUD
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
-
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
 
     addAllButtons();

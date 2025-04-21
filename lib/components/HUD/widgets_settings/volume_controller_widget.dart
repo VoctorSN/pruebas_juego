@@ -6,11 +6,12 @@ import 'number_slider.dart';
 class ToggleVolumeWidget extends StatefulWidget {
 
   final PixelAdventure game;
-  const ToggleVolumeWidget({super.key, required this.game});
+  Function updateVolume;
+  ToggleVolumeWidget({super.key, required this.game, required this.updateVolume});
 
   @override
   State<ToggleVolumeWidget> createState() {
-    return _ToggleVolumeWidgetState(game: game);
+    return _ToggleVolumeWidgetState(game: game, updateVolume: updateVolume);
   }
 
 }
@@ -18,10 +19,11 @@ class ToggleVolumeWidget extends StatefulWidget {
 class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
 
   final PixelAdventure game;
-  _ToggleVolumeWidgetState({required this.game});
+  Function updateVolume;
+  _ToggleVolumeWidgetState({required this.game, required this.updateVolume});
 
   bool isMuted = false;
-  double value = 0.0;
+  late double value;
 
   Image get volumeImage {
     return game.playSounds
@@ -59,7 +61,7 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
         return null;
       }
 
-      game.soundVolume = value/50;
+      updateVolume(value/50);
       return value;
   }
 }
