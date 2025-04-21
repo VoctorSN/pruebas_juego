@@ -38,7 +38,7 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      NumberSlider(game: game, enabled: game.playSounds),
+      NumberSlider(game: game),
       IconButton(
       onPressed: () {
         setState(() {

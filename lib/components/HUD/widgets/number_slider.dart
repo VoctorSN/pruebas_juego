@@ -5,23 +5,22 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 class NumberSlider extends StatefulWidget {
 
   final PixelAdventure game;
-  final bool isSliderEnabled;
 
-  const NumberSlider({super.key, required this.game, this.isSliderEnabled = true, required enabled});
+  const NumberSlider({super.key, required this.game});
 
   @override
   _NumberSliderState createState()  {
     final sound = game.soundVolume * 50;
-    return _NumberSliderState(game:game,soundVolume: sound);
+    return _NumberSliderState(game:game,variable: sound);
   }
 }
 
 class _NumberSliderState extends State<NumberSlider> {
 
   final PixelAdventure game;
-  double soundVolume;
+  double variable;
 
-  _NumberSliderState({required this.game, required this.soundVolume});
+  _NumberSliderState({required this.game, required this.variable});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class _NumberSliderState extends State<NumberSlider> {
           child: SfSlider(
             min: 0.0,
             max: 100.0,
-            value: soundVolume,
+            value: variable,
             interval: 50,
             activeColor: game.playSounds ? Colors.purple : Colors.grey,
             showTicks: true,
@@ -43,8 +42,8 @@ class _NumberSliderState extends State<NumberSlider> {
                 if(!game.playSounds){
                   return;
                 }
-                soundVolume = value;
-                game.soundVolume = soundVolume/50;
+                variable = value;
+                game.soundVolume = variable/50;
               });
             },
           )
