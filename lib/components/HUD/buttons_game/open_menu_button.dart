@@ -4,16 +4,18 @@ import 'package:flame/events.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
 class OpenMenuButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
-  final String button;
-  OpenMenuButton({required this.button});
 
-  final buttonSize = 64;
+  final String button;
+  final buttonSize;
+
+  OpenMenuButton({required this.button, this.buttonSize = 64});
 
   @override
   FutureOr<void> onLoad() {
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/$button.png'));
-    position = Vector2(game.size.x - 10 - buttonSize, 10); // Ajuste para la esquina superior derecha
+    size = Vector2.all(buttonSize);
+    position = Vector2(game.size.x - buttonSize - 10, 10);
     return super.onLoad();
   }
 

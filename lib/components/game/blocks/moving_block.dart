@@ -5,7 +5,7 @@ import '../spawnpoints/enemies/chicken.dart';
 import '../spawnpoints/levelContent/player.dart';
 import 'collision_block.dart';
 
-// HACER QUE ESTAS CAJAS TENGAN GRAVEDAD PERO SOLO PUEDAN CAER UNA VEZ
+// TODO HACER QUE ESTAS CAJAS TENGAN GRAVEDAD Y QUE SE PUEDAN APILAR
 class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
   // Constructor y atributos

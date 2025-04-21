@@ -15,19 +15,34 @@ import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
 class PixelAdventure extends FlameGame
-    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
-
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        HasCollisionDetection,
+        TapCallbacks {
   // Lógica para cargar el nivel y el personaje
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
-  final List<String> characters = ['Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
+  final List<String> characters = [
+    'Mask Dude',
+    'Ninja Frog',
+    'Pink Man',
+    'Virtual Guy',
+  ];
   int currentCharacterIndex = 0;
   late Player player;
   late Level level;
 
   // Lógica para gestionar el nivel actual - se ha borrado el lvl 3 pq da error
-  static const List<String> levelNames = ['level-01', 'level-02', 'level-04', 'level-05', 'level-06', 'level-07'];
+  static const List<String> levelNames = [
+    'level-01',
+    'level-02',
+    'level-04',
+    'level-05',
+    'level-06',
+    'level-07',
+  ];
   int currentLevelIndex = 4;
 
   // Lógica para gestionar el volumen
@@ -37,10 +52,12 @@ class PixelAdventure extends FlameGame
   // Lógica para gestionar el joystick y su tamaño
   late JoystickComponent joystick;
   bool showControls = false;
-  double hudSize = 50; // Esto  también sirve para cambiar el tamaño del resto de botones
+  double hudSize =
+      50; // Esto  también sirve para cambiar el tamaño del resto de botones
 
   @override
   FutureOr<void> onLoad() async {
+    // HACER UNA FUNCIÓN LLAMADA CARGAR CONTROLES
 
     // Carga todas las imagenes al caché
     await images.loadAllImages();
@@ -51,27 +68,12 @@ class PixelAdventure extends FlameGame
     showControls = true;
     print("Me he vuelto a cargar :)");
 
-    if (showControls) {
-      if (!children.any((component) => component is JoystickComponent)) {
-        addJoystick();
-      }
-      if (!children.any((component) => component is JumpButton)) {
-        add(JumpButton());
-      }
-    }
-
     // Cargar los overlays para gestionar los menús y el HUD
-    overlays.addEntry(
-      PauseMenu.id, (context, game) => PauseMenu(this),
-    );
+    overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
 
-    overlays.addEntry(
-      SettingsMenu.id, (context, game)=> SettingsMenu(this),
-    );
+    overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
 
-    add(ChangePlayerSkinButton(changeCharacter: changeCharacter));
-    add(ToggleSoundButton(buttonImageOn: 'soundOnButton', buttonImageOff: 'soundOffButton'));
-    add(OpenMenuButton(button: 'menuButton'));
+    addAllButtons();
 
     // Cargar el nivel inicial
     _loadLevel();
@@ -79,7 +81,49 @@ class PixelAdventure extends FlameGame
     return super.onLoad();
   }
 
+  void reloadAllButtons() {
+    if (showControls) {
+      if (children.any((component) => component is JoystickComponent)) {
+        joystick.removeFromParent();
+      }
+      for (var component in children.whereType<JumpButton>()) {
+        component.removeFromParent();
+      }
+    }
+    for (var component in children.where(
+      (component) =>
+          component is ChangePlayerSkinButton ||
+          component is ToggleSoundButton ||
+          component is OpenMenuButton,
+    )) {
+      component.removeFromParent();
+    }
+    addAllButtons();
+  }
+
+  void addAllButtons() {
+    add(
+      ChangePlayerSkinButton(
+        changeCharacter: changeCharacter,
+        buttonSize: hudSize,
+      ),
+    );
+    add(
+      ToggleSoundButton(
+        buttonImageOn: 'soundOnButton',
+        buttonImageOff: 'soundOffButton',
+        buttonSize: hudSize,
+      ),
+    );
+    add(OpenMenuButton(button: 'menuButton', buttonSize: hudSize));
+    if (showControls) {
+      addJoystick();
+      add(JumpButton(buttonSize: hudSize));
+    }
+  }
+
   void loadNextLevel() {
+    // TODO LOS NIVELES NO SE ELIMINAN CORREACTAMENTE
     removeWhere((component) => component is Level);
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;
@@ -92,10 +136,7 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
-    level = Level(
-      levelName: levelNames[currentLevelIndex],
-      player: player,
-    );
+    level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
     cam = CameraComponent.withFixedResolution(
       world: level,
@@ -117,17 +158,17 @@ class PixelAdventure extends FlameGame
 
   void addJoystick() {
     joystick = JoystickComponent(
-        priority: 15,
-        knob: SpriteComponent(
-          sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
-          size: Vector2.all(hudSize),
-        ),
-        knobRadius: 40,
-        background: SpriteComponent(
-          sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
-          size: Vector2.all(hudSize*2),
-        ),
-        margin: const EdgeInsets.only(left: 32, bottom: 32)
+      priority: 15,
+      knob: SpriteComponent(
+        sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
+        size: Vector2.all(hudSize),
+      ),
+      knobRadius: 40,
+      background: SpriteComponent(
+        sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
+        size: Vector2.all(hudSize * 2),
+      ),
+      margin: const EdgeInsets.only(left: 32, bottom: 32),
     );
     add(joystick);
   }
@@ -160,7 +201,7 @@ class PixelAdventure extends FlameGame
 
   void changeCharacter() {
     currentCharacterIndex++;
-    if(currentCharacterIndex >= characters.length){
+    if (currentCharacterIndex >= characters.length) {
       currentCharacterIndex = 0;
     }
     level.player.updateCharacter(characters[currentCharacterIndex]);

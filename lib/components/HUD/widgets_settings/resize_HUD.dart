@@ -60,13 +60,8 @@ class _ResizeHUDState extends State<ResizeHUD> {
 
     // Lógica para redimensionar el joystick teniendo en cuenta si está visible o no
 
-    if(!game.playSounds){
-      return null;
-    }
-
     game.hudSize = value;
-    game.joystick.removeFromParent();
-    game.addJoystick();
+    game.reloadAllButtons();
 
     return value;
   }

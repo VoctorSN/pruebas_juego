@@ -8,20 +8,21 @@ class ToggleSoundButton extends SpriteComponent
     with HasGameRef<PixelAdventure>, TapCallbacks {
   final String buttonImageOn;
   final String buttonImageOff;
+  final buttonSize;
 
   ToggleSoundButton({
     required this.buttonImageOn,
     required this.buttonImageOff,
+    this.buttonSize  = 64,
   });
 
-  final buttonSize = 64;
 
   @override
   FutureOr<void> onLoad() {
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/$buttonImageOn.png'));
-
-    position = Vector2(game.size.x - buttonSize - 50, 10);
+    size = Vector2.all(buttonSize);
+    position = Vector2(game.size.x - (buttonSize * 2) - 20, 10);
 
     return super.onLoad();
   }
