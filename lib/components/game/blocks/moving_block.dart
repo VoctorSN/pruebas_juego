@@ -5,6 +5,7 @@ import '../spawnpoints/enemies/chicken.dart';
 import '../spawnpoints/levelContent/player.dart';
 import 'collision_block.dart';
 
+// HACER QUE ESTAS CAJAS TENGAN GRAVEDAD PERO SOLO PUEDAN CAER UNA VEZ
 class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
   // Constructor y atributos
@@ -27,10 +28,11 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   bool isBlockOnRight = false;
 
   // Lógica de gravedad
-  final double _gravity = 1;
+  final double _gravity = 9.8;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   Vector2 velocity = Vector2.zero();
+  bool isOnGround = false;
 
   @override
   Future<void> onLoad() async {
@@ -81,7 +83,7 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
 
     if (pushDirection != 0) position.x = position.x + pushDirection * pushSpeed * dt;
 
-    //if(!isOnGround) _applyGravity(dt);
+    if(!isOnGround) _applyGravity(dt);
 
   }
 
@@ -122,6 +124,7 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
       }
       pushDirection = 0;
     }
+    isOnGround = true;
   }
 
   void _collisionChicken(Chicken other) {

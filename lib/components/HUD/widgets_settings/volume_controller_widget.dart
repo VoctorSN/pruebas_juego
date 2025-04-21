@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_flame/components/HUD/widgets/number_slider.dart';
-
 import '../../../pixel_adventure.dart';
+import 'number_slider.dart';
 
 class ToggleVolumeWidget extends StatefulWidget {
 
@@ -42,6 +41,7 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
     value = game.soundVolume * 50;
 
     return Row(children: [
+      Text('Volume'),
       NumberSlider(game: game, value: value, onChanged: onChanged),
       IconButton(
       onPressed: () {

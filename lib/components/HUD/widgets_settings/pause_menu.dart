@@ -1,8 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flame/components/HUD/widgets/settings_menu.dart';
+import 'package:flutter_flame/components/HUD/widgets_settings/settings_menu.dart';
 import 'package:flutter_flame/pixel_adventure.dart';
 
 class PauseMenu extends StatelessWidget {

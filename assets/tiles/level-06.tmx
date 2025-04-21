@@ -28,7 +28,7 @@
 24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24
 </data>
  </layer>
- <objectgroup id="2" name="Collisions" visible="0">
+ <objectgroup id="2" name="Collisions">
   <object id="8" x="32" y="288" width="144" height="64"/>
   <object id="9" x="176" y="304" width="448" height="48"/>
   <object id="10" x="432" y="208" width="192" height="96"/>
@@ -49,7 +49,7 @@
   <object id="44" x="320" y="192" width="16" height="16"/>
   <object id="46" x="208" y="32" width="16" height="16"/>
   <object id="47" x="368" y="32" width="16" height="16"/>
-  <object id="51" name="movingBlock" type="movingBlock" x="270.603" y="84.9964" width="28" height="24"/>
+  <object id="51" name="movingBlock" type="movingBlock" x="280.844" y="58.4904" width="28" height="24"/>
   <object id="52" name="movingBlock" type="movingBlock" x="288" y="144" width="28" height="24"/>
   <object id="53" name="movingBlock" type="movingBlock" x="288" y="240" width="28" height="24"/>
   <object id="55" type="alterningBlock" x="432" y="160" width="16" height="16">
