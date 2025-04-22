@@ -6,16 +6,16 @@ import '../spawnpoints/levelContent/player.dart';
 import 'collision_block.dart';
 
 // TODO HACER QUE ESTAS CAJAS TENGAN GRAVEDAD Y QUE SE PUEDAN APILAR
+// BUG1 (Arreglado) => Cuando una caja es más pequeña que la otra, la caja grande atraviesa a la pequeña en vez de chocar
 class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
-
   // Constructor y atributos
-  MovingBlock({super.position, super.size, this.offNeg = 0, this.offPos = 0});
-  final double offNeg;
-  final double offPos;
+  MovingBlock({super.position, super.size});
 
   // Parte de las imágenes
   late final SpriteComponent spriteComponent;
-  Sprite get idleSprite => Sprite(game.images.fromCache('Items/Boxes/Box2/Idle.png'));
+
+  Sprite get idleSprite =>
+      Sprite(game.images.fromCache('Items/Boxes/Box2/Idle.png'));
 
   // Lógica de movimiento
   late final Player player;
@@ -28,10 +28,12 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   bool isBlockOnRight = false;
 
   // Lógica de gravedad
-  final double _gravity = 1;
+  final double _gravity = 9.8;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   Vector2 velocity = Vector2.zero();
+  bool isFalling = true;
+  bool isMovable = true;
   bool isOnGround = false;
 
   @override
@@ -58,53 +60,32 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    if (other is Player) _collisionStartPlayer(other);
 
-    if (other is Player) _collisionPlayer(other);
-
-    if (other is CollisionBlock) _collisionBlock(other);
-
-    if (other is Chicken) _collisionChicken(other);
+    if (other is CollisionBlock) _collisionStartBlock(other);
 
     super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is Player) pushDirection = 0; // Detener el movimiento al terminar la colisión
-    if (other is CollisionBlock) {
-      print("FIN COLISIÖN");
-      if (other.position.y >= position.y + size.y - 1) {
-        print("fin bloque abajo");
-        isOnGround = false; // Cambiar el estado de suelo al salir de la colisión
-        return;
-      }
-      if (other.position.x < position.x) {
-        print("fin bloque izquierda");
-        isOnGround = true;
-        isBlockOnLeft = false;
-        return;
-      }
-      if (other.position.x > position.x) {
-        print("fin bloque derecha");
-        isOnGround = true;
-        isBlockOnRight = false;
-        return;
-      }
-      print("cayendo");
-      isOnGround = false; // Resetear el estado de suelo al salir de la colisión
-    }
+    if (other is Player) pushDirection = 0;
+
+    if (other is CollisionBlock) _collisionEndBlock(other);
+
     super.onCollisionEnd(other);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-
-    if (pushDirection != 0) position.x = position.x + pushDirection * pushSpeed * dt;
-
-    if(!isOnGround) _applyGravity(dt);
-
+    if (pushDirection != 0 && isMovable)
+      position.x = position.x + pushDirection * pushSpeed * dt;
+    if (isFalling) _applyGravity(dt);
   }
 
   void _applyGravity(double dt) {
@@ -113,46 +94,77 @@ class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
     position.y += velocity.y * dt;
   }
 
-  void _collisionPlayer(Player other) {
+  void _collisionStartPlayer(Player other) {
     final playerMid = other.position.x + other.size.x / 2;
     final blockMid = position.x + size.x / 2;
 
-    isPlayerInline = player.y + player.height > position.y && player.y < position.y + size.y;
+    isPlayerInline =
+        player.y + player.height > position.y && player.y < position.y + size.y;
 
-    if (playerMid < blockMid && isPlayerInline && !isBlockOnRight) {
+    if (playerMid < blockMid &&
+        isPlayerInline &&
+        !isBlockOnRight &&
+        isMovable) {
       pushDirection = 1;
       isBlockOnLeft = false;
-    } else if (playerMid > blockMid && isPlayerInline && !isBlockOnLeft) {
+    } else if (playerMid > blockMid &&
+        isPlayerInline &&
+        !isBlockOnLeft &&
+        isMovable) {
       pushDirection = -1;
       isBlockOnRight = false;
+    } else {
+      isFalling = false;
+      // When it falls it stops on the player and relocate to the top of it adding a difference to allow the player to move bellow
+      position.y =
+          position.y - other.hitbox.height - other.hitbox.offsetY + size.y - 2;
     }
   }
 
-  void _collisionBlock(CollisionBlock other) {
-    // Verificamos si el otro bloque está completamente debajo del bloque actual
+  void _collisionStartBlock(CollisionBlock other) {
     final bool isFloor = other.position.y >= position.y + size.y - 1;
+    final bool isBlockAbove =
+        other.position.y < position.y &&
+        other.position.y + other.size.y > position.y;
 
-    // Si está alineado horizontalmente pero no está por debajo, es colisión lateral
+    if (isBlockAbove) {
+      isMovable = false;
+      return;
+    } else if (isFloor) {
+      isMovable = true;
+    }
+
     if (!isFloor) {
-      if (other.position.x < position.x) {
-        print("Collision with block on left");
-        // Tiene un bloque a la izquierda
-        isOnGround = true;
+      if (other.position.x < position.x && !isBlockOnLeft) {
         isBlockOnLeft = true;
       }
-      if (other.position.x > position.x) {
-        print("Collision with block on right");
-        // Tiene un bloque a la derecha
-        isOnGround = true;
+      if (other.position.x > position.x && !isBlockOnRight) {
         isBlockOnRight = true;
+        return;
       }
       pushDirection = 0;
+    } else {
+      isFalling = false;
+      // When it falls stops on the floor
+      position.y = other.position.y - size.y;
     }
-    print("encima de algo");
-    isOnGround = true;
   }
 
-  void _collisionChicken(Chicken other) {
-    print("Collision with Chicken");
+  void _collisionEndBlock(CollisionBlock other) {
+    final bool isBlockAbove =
+        other.position.y < position.y &&
+        other.position.y + other.size.y > position.y;
+
+    if (isBlockAbove) {
+      isMovable = true;
+    }
+    if (other.position.x < position.x && !isBlockOnLeft) {
+      isBlockOnLeft = false;
+      return;
+    }
+    if (other.position.x > position.x && !isBlockOnRight) {
+      isBlockOnRight = false;
+      return;
+    }
   }
 }

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-06.tmx",
+    "activeFile": "level-08.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -37,11 +37,14 @@
             "scaleInDock": 1
         },
         "Level-01.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 304.99999999999994,
-                "y": 190.33333333333331
+                "x": 319.99999999999994,
+                "y": 180
             }
         },
         "Level-01.tmx#Pixel Adventure": {
@@ -166,8 +169,8 @@
             "scale": 1.6669531249999998,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 320.0449922669542,
-                "y": 183.86839761915923
+                "x": 319.74504382059337,
+                "y": 184.16834606551998
             }
         },
         "level-06.tmx": {
@@ -200,10 +203,10 @@
                 3
             ],
             "scale": 1.53484375,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.22803624147406,
-                "y": 184.05782347551667
+                "x": 315.01577929349486,
+                "y": 179.49709864603483
             }
         },
         "level_01.tmx": {
@@ -224,7 +227,8 @@
     "openFiles": [
         "Level-01.tmx",
         "level-05.tmx",
-        "level-06.tmx"
+        "level-06.tmx",
+        "level-08.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
@@ -232,6 +236,7 @@
         "Level-01.tmx",
         "level-05.tmx",
         "level-06.tmx",
+        "level-08.tmx",
         "Tileset_menu.tsx",
         "Menu.tmx",
         "Pixel Adventure.tsx",
@@ -239,8 +244,7 @@
         "Level-02.tmx",
         "Level-03.tmx",
         "level-04.tmx",
-        "level-07.tmx",
-        "Level-06-MAL.tmx"
+        "level-07.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
