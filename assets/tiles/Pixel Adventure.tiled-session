@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-08.tmx",
+    "activeFile": "level-07.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -169,8 +169,8 @@
             "scale": 1.6669531249999998,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.74504382059337,
-                "y": 184.16834606551998
+                "x": 320.0449922669542,
+                "y": 183.86839761915923
             }
         },
         "level-06.tmx": {
@@ -187,14 +187,14 @@
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.6684375,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.76025472935004,
-                "y": 184.00449522382468
+                "x": 319.7602547293501,
+                "y": 183.7048136355122
             }
         },
         "level-08.tmx": {
@@ -203,10 +203,10 @@
                 3
             ],
             "scale": 1.53484375,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 315.01577929349486,
-                "y": 176.8909701720452
+                "x": 309.8035223455156,
+                "y": 171.67871322406592
             }
         },
         "level_01.tmx": {
@@ -228,7 +228,8 @@
         "Level-01.tmx",
         "level-05.tmx",
         "level-06.tmx",
-        "level-08.tmx"
+        "level-08.tmx",
+        "level-07.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
@@ -237,14 +238,14 @@
         "level-05.tmx",
         "level-06.tmx",
         "level-08.tmx",
+        "level-07.tmx",
         "Tileset_menu.tsx",
         "Menu.tmx",
         "Pixel Adventure.tsx",
         "Tile_01.tsx",
         "Level-02.tmx",
         "Level-03.tmx",
-        "level-04.tmx",
-        "level-07.tmx"
+        "level-04.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

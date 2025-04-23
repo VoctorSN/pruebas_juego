@@ -7,6 +7,7 @@ enum State {
   blink,
 }
 
+/// TODO acabar las cajitas moveitida
 class Rockhead extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
   Rockhead({super.position, super.size, this.offNeg = 0, this.offPos = 0});

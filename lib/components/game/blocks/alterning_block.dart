@@ -5,6 +5,7 @@ import '../spawnpoints/levelContent/player.dart';
 import '../utils.dart';
 import 'collision_block.dart';
 
+///TODO hacer que el timing no dependa de la cantidad de bloques
 class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
 
   // Constructor

@@ -44,7 +44,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 0;
+  int currentLevelIndex = 6;
 
   // Lógica para gestionar el volumen
   bool playSounds = true;
