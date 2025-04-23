@@ -42,7 +42,7 @@
     <property name="offPos" type="float" value="0"/>
    </properties>
   </object>
-  <object id="26" name="Player" type="Player" x="304" y="256" width="30.3304" height="29.7471"/>
+  <object id="26" name="Player" type="Player" x="224" y="32" width="30.3304" height="29.7471"/>
  </objectgroup>
  <objectgroup id="2" name="Collisions">
   <object id="1" x="32" y="288" width="144" height="64"/>

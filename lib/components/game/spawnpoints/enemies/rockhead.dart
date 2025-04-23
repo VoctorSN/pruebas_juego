@@ -8,7 +8,7 @@ enum State {
 }
 
 class Rockhead extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, CollisionCallbacks {
+    with HasGameReference<PixelAdventure>, CollisionCallbacks {
   Rockhead({super.position, super.size, this.offNeg = 0, this.offPos = 0});
 
   // Limite de desplazamiento a la izquierda y derecha

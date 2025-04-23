@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import '../../../pixel_adventure.dart';
 
-class OpenMenuButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
+class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   late final String button;
   final double buttonSize;
@@ -15,15 +15,15 @@ class OpenMenuButton extends SpriteComponent with HasGameRef<PixelAdventure>, Ta
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/$button.png'));
     size = Vector2.all(buttonSize);
-    position = Vector2(game.size.x - buttonSize - 10, 10);
+    position = Vector2(game.size.x - buttonSize - 20, 10);
     return super.onLoad();
   }
 
   @override
   void onTapDown(TapDownEvent event) {
     // Pausar el motor del juego
-    gameRef.pauseEngine();
-    gameRef.pauseGame();
+    game.pauseEngine();
+    game.pauseGame();
 
     super.onTapDown(event);
   }

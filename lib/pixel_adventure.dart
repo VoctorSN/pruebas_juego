@@ -4,13 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flame/components/game/level.dart';
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/toggle_sound_button.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
+import 'components/game/level.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
 class PixelAdventure extends FlameGame

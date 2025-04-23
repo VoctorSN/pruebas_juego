@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
 
-class JumpButton extends SpriteComponent with HasGameRef<PixelAdventure>, TapCallbacks {
+class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
 

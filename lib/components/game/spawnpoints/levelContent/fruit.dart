@@ -1,13 +1,13 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter_flame/components/game/custom_hitbox.dart';
+import 'package:fruit_collector/components/game/custom_hitbox.dart';
 import 'dart:async';
 
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 
 class Fruit extends SpriteAnimationComponent
-    with HasGameRef<PixelAdventure>, CollisionCallbacks {
+    with HasGameReference<PixelAdventure>, CollisionCallbacks {
   final String fruit;
 
   Fruit({this.fruit = 'Apple', super.position, super.size});

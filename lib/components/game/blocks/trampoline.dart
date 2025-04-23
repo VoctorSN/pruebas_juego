@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../spawnpoints/levelContent/player.dart';
 
@@ -10,7 +10,7 @@ enum TrampolineState { idle, jump }
 
 
 class Trampoline extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure> {
+    with HasGameReference<PixelAdventure> {
   final double powerBounce;
 
   Trampoline({super.position, super.size, this.powerBounce = 0});

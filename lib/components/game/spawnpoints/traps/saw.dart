@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_flame/components/game/custom_hitbox.dart';
 import 'dart:async';
+import '../../../../pixel_adventure.dart';
 
-import 'package:flutter_flame/pixel_adventure.dart';
-
-class Saw extends SpriteAnimationComponent with HasGameRef<PixelAdventure>, CollisionCallbacks {
+class Saw extends SpriteAnimationComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
 
   final bool isVertical;
   final double offNeg;

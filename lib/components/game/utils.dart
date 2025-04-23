@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
-import 'package:flutter_flame/components/game/spawnpoints/enemies/chicken.dart';
-import 'package:flutter_flame/components/game/spawnpoints/levelContent/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 
 bool checkCollision(Player player, block) {
   final hitbox = player.hitbox;

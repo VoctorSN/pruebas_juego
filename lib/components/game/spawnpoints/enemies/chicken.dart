@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 import '../../blocks/collision_block.dart';
 import '../../utils.dart';
 import '../levelContent/player.dart';
@@ -11,7 +11,7 @@ import '../levelContent/player.dart';
 enum ChickenState { idle, run, hit }
 
 class Chicken extends SpriteAnimationGroupComponent
-    with CollisionCallbacks, HasGameRef<PixelAdventure> {
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;

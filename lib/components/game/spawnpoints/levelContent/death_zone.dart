@@ -1,6 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_flame/components/game/spawnpoints/levelContent/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 
 class DeathZone extends PositionComponent with CollisionCallbacks {
   // Constructor

@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 import 'collision_block.dart';
 
-class FallingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
+class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   int fallingDuration;
   late SpriteAnimationComponent sprite = SpriteAnimationComponent();
 

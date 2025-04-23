@@ -1,11 +1,11 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 import '../spawnpoints/levelContent/player.dart';
 import '../utils.dart';
 import 'collision_block.dart';
 
-class AlternatingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
+class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
 
   // Constructor
   AlternatingBlock({

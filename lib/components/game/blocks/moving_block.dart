@@ -1,13 +1,12 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
-import '../spawnpoints/enemies/chicken.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 import '../spawnpoints/levelContent/player.dart';
 import 'collision_block.dart';
 
 // TODO HACER QUE ESTAS CAJAS TENGAN GRAVEDAD Y QUE SE PUEDAN APILAR
 // BUG1 (Arreglado) => Cuando una caja es más pequeña que la otra, la caja grande atraviesa a la pequeña en vez de chocar
-class MovingBlock extends CollisionBlock with HasGameRef<PixelAdventure> {
+class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   // Constructor y atributos
   MovingBlock({super.position, super.size});
 

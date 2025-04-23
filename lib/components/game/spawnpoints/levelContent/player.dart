@@ -3,8 +3,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flame/components/game/custom_hitbox.dart';
-import 'package:flutter_flame/pixel_adventure.dart';
+import 'package:fruit_collector/components/game/custom_hitbox.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 import '../../blocks/alterning_block.dart';
 import '../../blocks/collision_block.dart';
 import '../../blocks/falling_block.dart';
@@ -27,7 +27,7 @@ enum PlayerState {
 }
 
 class Player extends SpriteAnimationGroupComponent
-    with HasGameRef<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
+    with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
   String character;
 
   Player({super.position, this.character = 'Ninja Frog'});
@@ -314,7 +314,7 @@ class Player extends SpriteAnimationGroupComponent
 
     await _animationRespawn();
 
-    gameRef.children.query<Level>().first.respawnObjects();
+    game.children.query<Level>().first.respawnObjects();
 
     velocity = Vector2.zero();
     position = statringPosition;
