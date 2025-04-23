@@ -122,6 +122,9 @@ class PixelAdventure extends FlameGame
     changeSkinButton.size = Vector2.all(hudSize);
     soundButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
+    changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
+    soundButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
+    menuButton.position = Vector2(size.x - hudSize - 20, 10);
     addAll([
       changeSkinButton,
       soundButton,

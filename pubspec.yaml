@@ -49,9 +49,11 @@ flutter:
     - assets/images/Main Characters/Virtual Guy/
     - assets/images/Enemies/Chicken/
     - assets/images/Traps/Trampoline/
+    - assets/icon/
 
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/app_icon.png"
   min_sdk_android: 21
+  remove_alpha_ios: true
