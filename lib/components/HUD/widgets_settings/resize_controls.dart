@@ -3,24 +3,24 @@ import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
 import 'number_slider.dart';
 
-class ResizeHUD extends StatefulWidget {
+class ResizeControls extends StatefulWidget {
 
   final PixelAdventure game;
-  Function updateSizeHUD;
-  ResizeHUD({super.key, required this.game, required this.updateSizeHUD});
+  Function updateSizeControls;
+  ResizeControls({super.key, required this.game, required this.updateSizeControls});
 
   @override
-  State<ResizeHUD> createState() {
-    return _ResizeHUDState(game: game, updateSizeHUD: updateSizeHUD);
+  State<ResizeControls> createState() {
+    return _ResizeControlsState(game: game, updateSizeControls: updateSizeControls);
   }
 
 }
 
-class _ResizeHUDState extends State<ResizeHUD> {
+class _ResizeControlsState extends State<ResizeControls> {
 
   final PixelAdventure game;
-  Function updateSizeHUD;
-  _ResizeHUDState({required this.game, required this.updateSizeHUD});
+  Function updateSizeControls;
+  _ResizeControlsState({required this.game, required this.updateSizeControls});
 
   late double value;
   bool isVisible = true;
@@ -42,10 +42,10 @@ class _ResizeHUDState extends State<ResizeHUD> {
   @override
   Widget build(BuildContext context) {
 
-    value = game.hudSize;
+    value = game.controlSize;
 
     return Row(children: [
-      Text('HUD Size'),
+      Text('Controls Size'),
       NumberSlider(game: game, value: value, onChanged: onChanged),
       IconButton(
         onPressed: () {
@@ -58,7 +58,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
   }
 
   double? onChanged(dynamic value) {
-    updateSizeHUD(value);
+    updateSizeControls(value);
     return value;
   }
 }

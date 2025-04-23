@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/pause_menu.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/resize_HUD.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/resize_controls.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/volume_controller_widget.dart';
 import '../../../pixel_adventure.dart';
 
@@ -14,10 +15,15 @@ class SettingsMenu extends StatelessWidget {
   SettingsMenu(this.game, {super.key});
 
   late double sizeHUD = game.hudSize;
+  late double sizeControls = game.controlSize;
   late double volume = game.soundVolume;
 
   updateSizeHUD(double newValue) {
     sizeHUD = newValue;
+  }
+
+  updateSizeControls(double newValue) {
+    sizeControls = newValue;
   }
 
   updateVolume(double newValue) {
@@ -62,6 +68,8 @@ class SettingsMenu extends StatelessWidget {
 
                   ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
 
+                  ResizeControls(game: game, updateSizeControls: updateSizeControls),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -80,6 +88,7 @@ class SettingsMenu extends StatelessWidget {
 
                           // Apply size changes
                           game.hudSize = sizeHUD;
+                          game.controlSize = sizeControls;
                           game.reloadAllButtons();
 
                           // Apply volume changes

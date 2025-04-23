@@ -44,7 +44,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 6;
+  int currentLevelIndex = 0;
 
   // Lógica para gestionar el volumen
   bool playSounds = true;
@@ -54,6 +54,7 @@ class PixelAdventure extends FlameGame
   late JoystickComponent joystick;
   bool showControls = false;
   double hudSize = 50;
+  double controlSize = 50;
   bool isLeftHanded = false;
   late final ChangePlayerSkinButton changeSkinButton;
   late final ToggleSoundButton soundButton;
@@ -87,7 +88,7 @@ class PixelAdventure extends FlameGame
       button: 'menuButton',
       buttonSize: hudSize,
     );
-    jumpButton = JumpButton(hudSize);
+    jumpButton = JumpButton(controlSize);
 
     addAllButtons();
 
@@ -131,13 +132,14 @@ class PixelAdventure extends FlameGame
       menuButton,
     ]);
     if (showControls) {
-      jumpButton.size = Vector2.all(hudSize * 2);
+      jumpButton.size = Vector2.all(controlSize * 2);
       add(jumpButton);
       addJoystick();
     }
   }
 
   void loadNextLevel() {
+
     // TODO LOS NIVELES NO SE ELIMINAN CORREACTAMENTE
     removeWhere((component) => component is Level);
     if (currentLevelIndex < levelNames.length - 1) {
@@ -176,12 +178,12 @@ class PixelAdventure extends FlameGame
       priority: 15,
       knob: SpriteComponent(
         sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
-        size: Vector2.all(hudSize),
+        size: Vector2.all(controlSize),
       ),
       knobRadius: 40,
       background: SpriteComponent(
         sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
-        size: Vector2.all(hudSize * 2),
+        size: Vector2.all(controlSize * 2),
       ),
       margin: const EdgeInsets.only(left: 32, bottom: 32),
     );
