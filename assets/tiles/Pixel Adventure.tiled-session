@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-07.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
@@ -43,8 +43,8 @@
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.99999999999994,
-                "y": 180
+                "x": 303,
+                "y": 179.66666666666666
             }
         },
         "Level-01.tmx#Pixel Adventure": {
@@ -139,7 +139,8 @@
             "scaleInEditor": 1
         },
         "Text (White) (8x10).tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "Tile_01.tsx": {
             "scaleInDock": 1,
@@ -149,64 +150,99 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "level-01.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.52890625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 345.9989780275932,
+                "y": 184.1185487991824
+            }
+        },
+        "level-01.tmx#Pixel Adventure": {
+            "scaleInDock": 1
+        },
+        "level-02.tmx": {
+            "scale": 1.64,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.12195121951214,
+                "y": 183.84146341463415
+            }
+        },
+        "level-03.tmx": {
+            "expandedObjectLayers": [
+                3,
+                2
+            ],
+            "scale": 1.64,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.12195121951214,
+                "y": 183.84146341463415
+            }
+        },
         "level-04.tmx": {
             "expandedObjectLayers": [
                 3,
                 2
             ],
-            "scale": 1.6669531249999998,
+            "scale": 1.66,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 320.0449922669542,
-                "y": 183.56844917279844
+                "x": 319.87951807228916,
+                "y": 183.43373493975903
             }
         },
         "level-05.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.6669531249999998,
-            "selectedLayer": 2,
+            "scale": 1.66,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 320.0449922669542,
-                "y": 183.86839761915923
+                "x": 319.27710843373495,
+                "y": 184.03614457831327
             }
         },
         "level-06.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.66,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 309.9397590361446,
-                "y": 165.36144578313258
+                "x": 319.87951807228916,
+                "y": 184.03614457831327
             }
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.6684375,
-            "selectedLayer": 1,
+            "scale": 1.66,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 319.7602547293501,
-                "y": 183.7048136355122
+                "x": 317.46987951807233,
+                "y": 188.25301204819283
             }
         },
         "level-08.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
-            "scale": 1.53484375,
-            "selectedLayer": 2,
+            "scale": 1.53,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 309.8035223455156,
-                "y": 171.67871322406592
+                "x": 319.6078431372549,
+                "y": 183.98692810457516
             }
         },
         "level_01.tmx": {
@@ -216,40 +252,65 @@
                 "x": 374.5,
                 "y": 142
             }
+        },
+        "tutorial-01.tmx": {
+            "expandedObjectLayers": [
+                4,
+                2
+            ],
+            "scale": 1.646171875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.136680746049,
+                "y": 183.75966968819705
+            }
+        },
+        "tutorial-01.tmx#Pixel Adventure": {
+            "scaleInDock": 1
+        },
+        "tutorial-02.tmx": {
+            "expandedObjectLayers": [
+                4,
+                2
+            ],
+            "scale": 1.646171875,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 320.136680746049,
+                "y": 183.75966968819705
+            }
+        },
+        "tutorial-02.tmx#Pixel Adventure": {
+            "scaleInDock": 1
         }
     },
-    "last.imagePath": "/Users/pumpundixital/IdeaProjects/pruebas_juego/assets/images/GUI/Interface",
+    "last.imagePath": "/Users/pumpun17/Documents/FlutterFlame/flutter_flame/assets/images/GUI/Menu/Text",
     "map.height": 23,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "Level-01.tmx",
-        "level-05.tmx",
-        "level-06.tmx",
-        "level-08.tmx",
-        "level-07.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "Level-01.tmx",
-        "level-05.tmx",
-        "level-06.tmx",
+        "level-03.tmx",
+        "level-02.tmx",
         "level-08.tmx",
+        "tutorial-01.tmx",
+        "level-01.tmx",
         "level-07.tmx",
-        "Tileset_menu.tsx",
-        "Menu.tmx",
+        "level-06.tmx",
+        "level-05.tmx",
+        "level-04.tmx",
         "Pixel Adventure.tsx",
-        "Tile_01.tsx",
-        "Level-02.tmx",
-        "Level-03.tmx",
-        "level-04.tmx"
+        "Text (White) (8x10).tsx",
+        "Level-01.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 10,
+        "width": 8
     }
 }
