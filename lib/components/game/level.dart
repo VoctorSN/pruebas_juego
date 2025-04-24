@@ -6,6 +6,7 @@ import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpoint.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/fruit.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/game_text.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 import 'package:fruit_collector/components/game/spawnpoints/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -20,7 +21,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
   final Player player;
   final String levelName;
 
-  Level({required this.levelName, required this.player,});
+  Level({required this.levelName, required this.player});
 
   late TiledComponent level;
   List<CollisionBlock> collisionBlocks = [];
@@ -40,7 +41,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
 
   void respawnObjects() {
     removeWhere(
-      (component) => component is Fruit || component is Saw || component is Checkpoint || component is Chicken|| component is Trampoline || component is DeathZone
+      (component) =>
+          component is Fruit ||
+          component is Saw ||
+          component is Checkpoint ||
+          component is Chicken ||
+          component is Trampoline ||
+          component is DeathZone ||
+          component is AlternatingBlock ||
+          component is MovingBlock ||
+          component is GameText,
     );
     _spawningObjects();
 
@@ -95,7 +105,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
               offNeg: spawnPoint.properties.getValue('offNeg'),
               offPos: spawnPoint.properties.getValue('offPos'),
-              collisionBlocks: collisionBlocks
+              collisionBlocks: collisionBlocks,
             );
             add(chicken);
             break;
@@ -114,8 +124,14 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(deathZone);
             break;
+          case 'GameText':
+            final gameText = GameText(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(gameText);
+            break;
           default:
-
         }
       }
     }
@@ -132,7 +148,9 @@ class Level extends World with HasGameReference<PixelAdventure> {
                 position: Vector2(collision.x, collision.y),
                 size: Vector2(collision.width, collision.height),
                 isPlatform: true,
-                fallingDuration: collision.properties.getValue('fallingDurationMillSec'),
+                fallingDuration: collision.properties.getValue(
+                  'fallingDurationMillSec',
+                ),
               );
               collisionBlocks.add(fallingPlatform);
               add(fallingPlatform);

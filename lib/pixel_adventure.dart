@@ -48,8 +48,10 @@ class PixelAdventure extends FlameGame
   int currentLevelIndex = 0;
 
   // Lógica para gestionar el volumen
-  bool playSounds = true;
-  double soundVolume = 1.0;
+  bool isMusicActive = true;
+  double musicSoundVolume = 1.0;
+  bool isGameSoundsActive = true;
+  double gameSoundVolume = 1.0;
 
   // Lógica para gestionar los botones, sus tamaños y el modo zurdo
   late JoystickComponent joystick;

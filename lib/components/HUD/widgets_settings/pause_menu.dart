@@ -48,7 +48,7 @@ import '../../../pixel_adventure.dart';class PauseMenu extends StatelessWidget {
                     onPressed: () {
                       game.overlays.remove(PauseMenu.id);
                       game.resumeEngine();
-                      FlameAudio.bgm.play('background_music.mp3',volume: game.soundVolume);
+                      if (game.isMusicActive) FlameAudio.bgm.play('background_music.mp3',volume: game.musicSoundVolume);
                     },
                     child: const Text('Resume'),
                   ),

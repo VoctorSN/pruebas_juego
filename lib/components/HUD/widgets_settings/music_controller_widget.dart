@@ -3,35 +3,35 @@ import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
 import 'number_slider.dart';
 
-class ToggleVolumeWidget extends StatefulWidget {
+class ToggleMusicVolumeWidget extends StatefulWidget {
   final PixelAdventure game;
-  Function updateVolume;
+  Function updateMusicVolume;
 
-  ToggleVolumeWidget({
+  ToggleMusicVolumeWidget({
     super.key,
     required this.game,
-    required this.updateVolume,
+    required this.updateMusicVolume,
   });
 
   @override
-  State<ToggleVolumeWidget> createState() {
-    return _ToggleVolumeWidgetState(game: game, updateVolume: updateVolume);
+  State<ToggleMusicVolumeWidget> createState() {
+    return _ToggleMusicVolumeWidgetState(game: game, updateMusicVolume: updateMusicVolume);
   }
 }
 
-class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
+class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
   final PixelAdventure game;
-  Function updateVolume;
+  Function updateMusicVolume;
 
-  _ToggleVolumeWidgetState({required this.game, required this.updateVolume})
-      : isSliderActive = game.playSounds;
+  _ToggleMusicVolumeWidgetState({required this.game, required this.updateMusicVolume})
+      : isSliderActive = game.isMusicActive;
 
   bool isMuted = false;
   late double value;
   bool isSliderActive;
 
   Image get volumeImage {
-    return game.playSounds
+    return game.isMusicActive
         ? Image.asset(
       'assets/images/GUI/HUD/soundOnButton.png',
       fit: BoxFit.cover,
@@ -46,10 +46,10 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Volume'),
+        const Text('Music'),
         NumberSlider(
           game: game,
-          value: game.soundVolume * 50, // Actualiza dinámicamente el valor
+          value: game.musicSoundVolume * 50, // Actualiza dinámicamente el valor
           onChanged: onChanged,
           isActive: isSliderActive,
         ),
@@ -63,17 +63,17 @@ class _ToggleVolumeWidgetState extends State<ToggleVolumeWidget> {
   }
 
   double? onChanged(dynamic value) {
-    if (!game.playSounds) {
+    if (!game.isMusicActive) {
       return null;
     }
 
-      updateVolume(value/50);
-      return value;
+    updateMusicVolume(value/50);
+    return value;
   }
 
   void changeState() {
     setState(() {
-      game.playSounds = !game.playSounds;
+      game.isMusicActive = !game.isMusicActive;
       isSliderActive = !isSliderActive;
     });
   }

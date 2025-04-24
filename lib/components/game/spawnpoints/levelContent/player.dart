@@ -198,7 +198,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (game.playSounds) jumpSound.start(volume: game.soundVolume);
+    if (game.isGameSoundsActive) jumpSound.start(volume: game.gameSoundVolume);
 
     velocity.y = -_jumpForce;
     position.y += velocity.y * dt;
@@ -311,7 +311,7 @@ class Player extends SpriteAnimationGroupComponent
       return;
     }
     isRespawning = true;
-    if (game.playSounds) hitSound.start(volume: game.soundVolume);
+    if (game.isGameSoundsActive) hitSound.start(volume: game.gameSoundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -344,7 +344,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.playSounds) disappearSound.start(volume: game.soundVolume);
+    if (game.isGameSoundsActive) disappearSound.start(volume: game.gameSoundVolume);
     hasReached = true;
     if (scale.x > 0) {
       position = position - Vector2.all(32);

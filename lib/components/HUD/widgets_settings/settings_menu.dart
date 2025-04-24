@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/pause_menu.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/resize_HUD.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/resize_controls.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/volume_controller_widget.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/game_volume_controller_widget.dart';
 import '../../../pixel_adventure.dart';
 
 class SettingsMenu extends StatelessWidget {
@@ -15,7 +16,8 @@ class SettingsMenu extends StatelessWidget {
 
   late double sizeHUD = game.hudSize;
   late double sizeControls = game.controlSize;
-  late double volume = game.soundVolume;
+  late double gameVolume = game.gameSoundVolume;
+  late double musicVolume = game.musicSoundVolume;
 
   updateSizeHUD(double newValue) {
     sizeHUD = newValue;
@@ -25,8 +27,12 @@ class SettingsMenu extends StatelessWidget {
     sizeControls = newValue;
   }
 
-  updateVolume(double newValue) {
-    volume = newValue;
+  updateMusicVolume(double newValue) {
+    musicVolume = newValue;
+  }
+
+  updateGameVolume(double newValue) {
+    gameVolume = newValue;
   }
 
   @override
@@ -63,7 +69,9 @@ class SettingsMenu extends StatelessWidget {
                     ),
                   ),
 
-                  ToggleVolumeWidget(game: game, updateVolume: updateVolume),
+                  ToggleMusicVolumeWidget(game: game, updateMusicVolume: updateMusicVolume),
+
+                  ToggleGameVolumeWidget(game: game, updateGameVolume: updateGameVolume),
 
                   ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
 
@@ -91,7 +99,8 @@ class SettingsMenu extends StatelessWidget {
                           game.reloadAllButtons();
 
                           // Apply volume changes
-                          game.soundVolume = volume;
+                          game.gameSoundVolume = gameVolume;
+                          game.musicSoundVolume = musicVolume;
                         },
                         child: const Text('Apply'),
                       ),

@@ -41,7 +41,7 @@ class Fruit extends SpriteAnimationComponent
   void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
-      if (game.playSounds) collect_fruit.start(volume: game.soundVolume);
+      if (game.isGameSoundsActive) collect_fruit.start(volume: game.gameSoundVolume);
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache('Items/Fruits/Collected.png'),
         SpriteAnimationData.sequenced(
