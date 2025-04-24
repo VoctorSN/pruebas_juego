@@ -33,6 +33,7 @@ class Chicken extends SpriteAnimationGroupComponent
   late final SpriteAnimation _runAnimation;
   late final Player player;
   late final SpriteAnimation _hitAnimation;
+  late AudioPool bounceSound;
 
   Vector2 velocity = Vector2.zero();
 
@@ -138,9 +139,7 @@ class Chicken extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.playSounds) {
-        FlameAudio.play('bounce.wav', volume: game.soundVolume);
-      }
+      if (game.playSounds) bounceSound.start(volume: game.soundVolume);
       gotStomped = true;
       current = ChickenState.hit;
       player.velocity.y = -_bounceHeight;
@@ -152,6 +151,6 @@ class Chicken extends SpriteAnimationGroupComponent
   }
 
   void _loadAudio() async {
-    await FlameAudio.audioCache.load('bounce.wav');
+    bounceSound = await AudioPool.createFromAsset(path: 'audio/bounce.wav', maxPlayers: 3);
   }
 }

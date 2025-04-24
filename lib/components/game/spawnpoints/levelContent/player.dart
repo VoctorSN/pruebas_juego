@@ -41,6 +41,10 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation desappearingAnimation;
   final double stepTime = 0.05;
 
+  late AudioPool jumpSound;
+  late AudioPool hitSound;
+  late AudioPool disappearSound;
+
   final double _gravity = 9.8;
   double _jumpForce = 260;
   final double _maximunVelocity = 1000;
@@ -194,7 +198,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (game.playSounds) FlameAudio.play('jump.wav', volume: game.soundVolume);
+    if (game.playSounds) jumpSound.start(volume: game.soundVolume);
 
     velocity.y = -_jumpForce;
     position.y += velocity.y * dt;
@@ -307,7 +311,7 @@ class Player extends SpriteAnimationGroupComponent
       return;
     }
     isRespawning = true;
-    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.soundVolume);
+    if (game.playSounds) hitSound.start(volume: game.soundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -340,9 +344,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.playSounds) {
-      FlameAudio.play('disappear.wav', volume: game.soundVolume);
-    }
+    if (game.playSounds) disappearSound.start(volume: game.soundVolume);
     hasReached = true;
     if (scale.x > 0) {
       position = position - Vector2.all(32);
@@ -364,10 +366,10 @@ class Player extends SpriteAnimationGroupComponent
     _respawn();
   }
 
-  void _loadAudio() async {
-    await FlameAudio.audioCache.load('hit.wav');
-    await FlameAudio.audioCache.load('disappear.wav');
-    await FlameAudio.audioCache.load('jump.wav');
+  Future<void> _loadAudio() async {
+    jumpSound = await AudioPool.createFromAsset(path: 'audio/jump.wav', maxPlayers: 3);
+    hitSound = await AudioPool.createFromAsset(path: 'audio/hit.wav', maxPlayers: 3);
+    disappearSound = await AudioPool.createFromAsset(path: 'audio/disappear.wav', maxPlayers: 3);
   }
 
   void updateCharacter(String newCharacter) {

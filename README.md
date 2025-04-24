@@ -1,4 +1,4 @@
-# flutter_flame
+# fruit_collector
 
 A new Flutter project with Flame.
 

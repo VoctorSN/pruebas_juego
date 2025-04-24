@@ -22,7 +22,7 @@ class Trampoline extends SpriteAnimationGroupComponent
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _jumpAnimation;
   late final Player player;
-
+  late AudioPool bounceSound;
 
   @override
   FutureOr<void> onLoad() {
@@ -59,9 +59,7 @@ class Trampoline extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.playSounds) {
-        FlameAudio.play('bounce.wav', volume: game.soundVolume * 0.5);
-      }
+      if (game.playSounds) bounceSound.start(volume: game.soundVolume);
       current = TrampolineState.jump;
       player.velocity.y = -powerBounce;
       await animationTicker?.completed;
@@ -71,6 +69,6 @@ class Trampoline extends SpriteAnimationGroupComponent
   }
 
   void _loadAudio() async {
-    await FlameAudio.audioCache.load('bounce.wav');
+    bounceSound = await AudioPool.createFromAsset(path: 'audio/bounce.wav', maxPlayers: 3);
   }
 }
