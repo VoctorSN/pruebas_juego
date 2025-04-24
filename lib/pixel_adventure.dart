@@ -12,6 +12,7 @@ import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/level.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -63,6 +64,7 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
+    FlameAudio.bgm.initialize();
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
@@ -153,6 +155,8 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
+    FlameAudio.bgm.stop();
+    FlameAudio.bgm.play('background_music.mp3');
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
     cam = CameraComponent.withFixedResolution(

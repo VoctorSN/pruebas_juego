@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpoint.dart';
