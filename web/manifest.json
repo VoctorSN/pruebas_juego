@@ -1,6 +1,6 @@
 {
-    "name": "flutter_flame",
-    "short_name": "flutter_flame",
+    "name": "fruit_collector",
+    "short_name": "fruit_collector",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

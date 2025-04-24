@@ -3,6 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import '../../../pixel_adventure.dart';
 
+
+///   Unused
 class ToggleSoundButton extends SpriteComponent
     with HasGameReference<PixelAdventure>, TapCallbacks {
   final String buttonImageOn;
@@ -28,7 +30,7 @@ class ToggleSoundButton extends SpriteComponent
 
   @override
   void update(double dt) {
-    if (game.playSounds) {
+    if (game.isGameSoundsActive) {
       sprite = Sprite(game.images.fromCache(
         'GUI/HUD/$buttonImageOn.png',
       ));
@@ -42,9 +44,9 @@ class ToggleSoundButton extends SpriteComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    game.playSounds = !game.playSounds;
+    game.isGameSoundsActive = !game.isGameSoundsActive;
     sprite = Sprite(game.images.fromCache(
-      game.playSounds ? 'GUI/HUD/$buttonImageOn.png' : 'GUI/HUD/$buttonImageOff.png',
+      game.isGameSoundsActive ? 'GUI/HUD/$buttonImageOn.png' : 'GUI/HUD/$buttonImageOff.png',
     ));
     super.onTapDown(event);
   }

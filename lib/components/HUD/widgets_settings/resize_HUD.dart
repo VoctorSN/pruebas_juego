@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
+import '../style/text_style_singleton.dart';
 import 'number_slider.dart';
 
 class ResizeHUD extends StatefulWidget {
@@ -45,8 +46,9 @@ class _ResizeHUDState extends State<ResizeHUD> {
     value = game.hudSize;
 
     return Row(children: [
-      Text('HUD Size'),
-      NumberSlider(game: game, value: value, onChanged: onChanged),
+      Text('HUD Size',
+        style: TextStyleSingleton().style,),
+      NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
           // Dejar este botón o sacarlo?

@@ -12,6 +12,7 @@ import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/level.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -44,11 +45,13 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 6;
+  int currentLevelIndex = 0;
 
   // Lógica para gestionar el volumen
-  bool playSounds = true;
-  double soundVolume = 1.0;
+  bool isMusicActive = true;
+  double musicSoundVolume = 1.0;
+  bool isGameSoundsActive = true;
+  double gameSoundVolume = 1.0;
 
   // Lógica para gestionar los botones, sus tamaños y el modo zurdo
   late JoystickComponent joystick;
@@ -57,12 +60,12 @@ class PixelAdventure extends FlameGame
   double controlSize = 50;
   bool isLeftHanded = false;
   late final ChangePlayerSkinButton changeSkinButton;
-  late final ToggleSoundButton soundButton;
   late final OpenMenuButton menuButton;
   late final JumpButton jumpButton;
 
   @override
   FutureOr<void> onLoad() async {
+    FlameAudio.bgm.initialize();
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
@@ -77,11 +80,6 @@ class PixelAdventure extends FlameGame
     // Inicializar los botones sin necesidad de reasignar buttonSize después
     changeSkinButton = ChangePlayerSkinButton(
       changeCharacter: changeCharacter,
-      buttonSize: hudSize,
-    );
-    soundButton = ToggleSoundButton(
-      buttonImageOn: 'soundOnButton',
-      buttonImageOff: 'soundOffButton',
       buttonSize: hudSize,
     );
     menuButton = OpenMenuButton(
@@ -121,14 +119,11 @@ class PixelAdventure extends FlameGame
   void addAllButtons() {
     // TODO Actualizar las posiciones de los botones
     changeSkinButton.size = Vector2.all(hudSize);
-    soundButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
-    soundButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
     addAll([
       changeSkinButton,
-      soundButton,
       menuButton,
     ]);
     if (showControls) {
@@ -153,6 +148,8 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
+    FlameAudio.bgm.stop();
+    FlameAudio.bgm.play('background_music.mp3');
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
     cam = CameraComponent.withFixedResolution(

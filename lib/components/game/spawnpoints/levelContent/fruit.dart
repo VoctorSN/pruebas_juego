@@ -12,6 +12,7 @@ class Fruit extends SpriteAnimationComponent
 
   Fruit({this.fruit = 'Apple', super.position, super.size});
 
+  late AudioPool collect_fruit;
   final double stepTime = 0.05;
   final hitbox = CustomHitbox(offsetX: 10, offsetY: 10, width: 12, height: 12);
   bool collected = false;
@@ -40,7 +41,7 @@ class Fruit extends SpriteAnimationComponent
   void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
-      if(game.playSounds) FlameAudio.play('collect_fruit.wav',volume: game.soundVolume);
+      if (game.isGameSoundsActive) collect_fruit.start(volume: game.gameSoundVolume);
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache('Items/Fruits/Collected.png'),
         SpriteAnimationData.sequenced(
@@ -57,6 +58,6 @@ class Fruit extends SpriteAnimationComponent
   }
 
   void _loadAudio() async {
-    await FlameAudio.audioCache.load('collect_fruit.wav');
+    collect_fruit = await AudioPool.createFromAsset(path: 'audio/collect_fruit.wav', maxPlayers: 3);
   }
 }

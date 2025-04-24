@@ -6,6 +6,7 @@ import 'package:fruit_collector/pixel_adventure.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  debugDefaultTargetPlatformOverride = TargetPlatform.android;
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
