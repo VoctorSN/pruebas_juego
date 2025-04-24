@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
+import '../style/text_style_singleton.dart';
 import 'number_slider.dart';
 
 class ToggleMusicVolumeWidget extends StatefulWidget {
@@ -46,7 +47,8 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text('Music'),
+        Text('Music',
+          style: TextStyleSingleton().style,),
         NumberSlider(
           game: game,
           value: game.musicSoundVolume * 50, // Actualiza dinámicamente el valor

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../../pixel_adventure.dart';
+import '../style/text_style_singleton.dart';
 import 'number_slider.dart';
 
 class ResizeControls extends StatefulWidget {
@@ -45,7 +46,8 @@ class _ResizeControlsState extends State<ResizeControls> {
     value = game.controlSize;
 
     return Row(children: [
-      Text('Controls Size'),
+      Text('Controls Size',
+        style: TextStyleSingleton().style,),
       NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {

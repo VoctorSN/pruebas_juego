@@ -6,6 +6,7 @@ import 'package:fruit_collector/components/HUD/widgets_settings/resize_HUD.dart'
 import 'package:fruit_collector/components/HUD/widgets_settings/resize_controls.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/game_volume_controller_widget.dart';
 import '../../../pixel_adventure.dart';
+import '../style/text_style_singleton.dart';
 
 class SettingsMenu extends StatelessWidget {
   static const String id = 'settings_menu';
@@ -57,25 +58,30 @@ class SettingsMenu extends StatelessWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: 10,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(10),
                     child: Text(
                       'Settings',
-                      style: TextStyle(
-                        fontSize: 50,
-                        color: Colors.white,
-                        fontFamily: 'Audiowide',
-                      ),
+                      style: TextStyleSingleton().style.copyWith(fontSize : 50),
                     ),
                   ),
 
-                  ToggleMusicVolumeWidget(game: game, updateMusicVolume: updateMusicVolume),
+                  ToggleMusicVolumeWidget(
+                    game: game,
+                    updateMusicVolume: updateMusicVolume,
+                  ),
 
-                  ToggleGameVolumeWidget(game: game, updateGameVolume: updateGameVolume),
+                  ToggleGameVolumeWidget(
+                    game: game,
+                    updateGameVolume: updateGameVolume,
+                  ),
 
                   ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
 
-                  ResizeControls(game: game, updateSizeControls: updateSizeControls),
+                  ResizeControls(
+                    game: game,
+                    updateSizeControls: updateSizeControls,
+                  ),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +91,11 @@ class SettingsMenu extends StatelessWidget {
                           game.overlays.remove(SettingsMenu.id);
                           game.overlays.add(PauseMenu.id);
                         },
-                        child: const Text('Back'),
+                        child: Text(
+                          'Back',
+                            style: TextStyleSingleton().style.copyWith(color: Colors.purple),
+
+                        ),
                       ),
                       const SizedBox(width: 20),
                       ElevatedButton(
@@ -102,10 +112,13 @@ class SettingsMenu extends StatelessWidget {
                           game.gameSoundVolume = gameVolume;
                           game.musicSoundVolume = musicVolume;
                         },
-                        child: const Text('Apply'),
+                        child: Text(
+                          'Apply',
+                          style: TextStyleSingleton().style.copyWith(color: Colors.purple),
+                      ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

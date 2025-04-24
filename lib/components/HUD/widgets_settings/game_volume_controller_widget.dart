@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 import '../../../pixel_adventure.dart';
 import 'number_slider.dart';
 
@@ -46,7 +47,8 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Volume'),
+        Text('Volume',
+        style: TextStyleSingleton().style,),
         NumberSlider(
           game: game,
           value: game.gameSoundVolume * 50, // Actualiza dinámicamente el valor

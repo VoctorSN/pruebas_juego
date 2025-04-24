@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpoint.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
@@ -35,8 +36,29 @@ class Level extends World with HasGameReference<PixelAdventure> {
     _scrollingBackground();
     _addCollisions();
     _spawningObjects();
+    _addGameText();
 
     return super.onLoad();
+  }
+
+  void _addGameText() {
+    final textObjects = level.tileMap.getLayer<ObjectGroup>('SpawnPoints')?.objects
+        .where((obj) => obj.type == 'GameText');
+
+    if (textObjects != null) {
+      for (final textObject in textObjects) {
+        final text = textObject.text?.text.toString() ?? '';
+        final position = Vector2(textObject.x + textObject.width / 2, textObject.y + textObject.height / 2);
+        final gameText = GameText(
+          text: text,
+          position: position,
+          fontSize: 16,
+          color: Colors.white,
+          fontFamily: 'ArcadeClassic',
+        );
+        add(gameText);
+      }
+    }
   }
 
   void respawnObjects() {
@@ -49,8 +71,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Trampoline ||
           component is DeathZone ||
           component is AlternatingBlock ||
-          component is MovingBlock ||
-          component is GameText,
+          component is MovingBlock
     );
     _spawningObjects();
 
@@ -123,13 +144,6 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(deathZone);
-            break;
-          case 'GameText':
-            final gameText = GameText(
-              position: Vector2(spawnPoint.x, spawnPoint.y),
-              size: Vector2(spawnPoint.width, spawnPoint.height),
-            );
-            add(gameText);
             break;
           default:
         }
