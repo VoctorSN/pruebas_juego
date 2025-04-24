@@ -58,7 +58,6 @@ class PixelAdventure extends FlameGame
   double controlSize = 50;
   bool isLeftHanded = false;
   late final ChangePlayerSkinButton changeSkinButton;
-  late final ToggleSoundButton soundButton;
   late final OpenMenuButton menuButton;
   late final JumpButton jumpButton;
 
@@ -79,11 +78,6 @@ class PixelAdventure extends FlameGame
     // Inicializar los botones sin necesidad de reasignar buttonSize después
     changeSkinButton = ChangePlayerSkinButton(
       changeCharacter: changeCharacter,
-      buttonSize: hudSize,
-    );
-    soundButton = ToggleSoundButton(
-      buttonImageOn: 'soundOnButton',
-      buttonImageOff: 'soundOffButton',
       buttonSize: hudSize,
     );
     menuButton = OpenMenuButton(
@@ -123,14 +117,11 @@ class PixelAdventure extends FlameGame
   void addAllButtons() {
     // TODO Actualizar las posiciones de los botones
     changeSkinButton.size = Vector2.all(hudSize);
-    soundButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
-    soundButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
     addAll([
       changeSkinButton,
-      soundButton,
       menuButton,
     ]);
     if (showControls) {

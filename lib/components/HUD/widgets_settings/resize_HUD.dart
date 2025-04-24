@@ -46,7 +46,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
 
     return Row(children: [
       Text('HUD Size'),
-      NumberSlider(game: game, value: value, onChanged: onChanged),
+      NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
           // Dejar este botón o sacarlo?

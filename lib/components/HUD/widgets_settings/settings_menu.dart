@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/pause_menu.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/resize_HUD.dart';

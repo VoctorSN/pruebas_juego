@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/settings_menu.dart';
 import '../../../pixel_adventure.dart';class PauseMenu extends StatelessWidget {
@@ -12,6 +12,7 @@ import '../../../pixel_adventure.dart';class PauseMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlameAudio.bgm.stop();
 
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       minimumSize: const Size(200, 50), // Tamaño uniforme para todos los botones
@@ -47,6 +48,7 @@ import '../../../pixel_adventure.dart';class PauseMenu extends StatelessWidget {
                     onPressed: () {
                       game.overlays.remove(PauseMenu.id);
                       game.resumeEngine();
+                      FlameAudio.bgm.play('background_music.mp3',volume: game.soundVolume);
                     },
                     child: const Text('Resume'),
                   ),

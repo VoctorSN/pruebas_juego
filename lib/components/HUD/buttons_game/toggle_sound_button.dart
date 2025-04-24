@@ -3,6 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import '../../../pixel_adventure.dart';
 
+
+///   Unused
 class ToggleSoundButton extends SpriteComponent
     with HasGameReference<PixelAdventure>, TapCallbacks {
   final String buttonImageOn;

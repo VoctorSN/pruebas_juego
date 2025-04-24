@@ -46,7 +46,7 @@ class _ResizeControlsState extends State<ResizeControls> {
 
     return Row(children: [
       Text('Controls Size'),
-      NumberSlider(game: game, value: value, onChanged: onChanged),
+      NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
           // Dejar este botón o sacarlo?
