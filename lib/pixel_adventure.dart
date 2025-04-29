@@ -35,17 +35,22 @@ class PixelAdventure extends FlameGame
   late Player player;
   late Level level;
 
-  // Lógica para gestionar el nivel actual - se ha borrado el lvl 3 pq da error
+  // Lógica para gestionar el nivel actual
   static const List<String> levelNames = [
+    'tutorial-01',
+    'tutorial-02',
+    'tutorial-03',
+    'tutorial-04',
     'level-01',
     'level-02',
+    'level-03',
     'level-04',
     'level-05',
     'level-06',
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 0;
+  int currentLevelIndex = 9;
 
   // Lógica para gestionar el volumen
   bool isMusicActive = true;
@@ -117,7 +122,7 @@ class PixelAdventure extends FlameGame
   }
 
   void addAllButtons() {
-    // TODO Actualizar las posiciones de los botones
+    // TODO - Actualizar las posiciones de los botones
     changeSkinButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
@@ -135,7 +140,7 @@ class PixelAdventure extends FlameGame
 
   void loadNextLevel() {
 
-    // TODO LOS NIVELES NO SE ELIMINAN CORREACTAMENTE
+    // TODO - LOS NIVELES NO SE ELIMINAN CORREACTAMENTE
     removeWhere((component) => component is Level);
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;

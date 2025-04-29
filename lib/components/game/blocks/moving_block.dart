@@ -11,10 +11,15 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   MovingBlock({super.position, super.size});
 
   // Parte de las imágenes
-  late final SpriteComponent spriteComponent;
-
-  Sprite get idleSprite =>
-      Sprite(game.images.fromCache('Items/Boxes/Box2/Idle.png'));
+  late SpriteComponent spriteComponent;
+  Sprite get  _getTile {
+    final spriteSheet = game.images.fromCache('Terrain/Terrain (16x16).png');
+    return Sprite(
+      spriteSheet,
+      srcPosition: Vector2(12 * 16.0, 2 * 16.0),
+      srcSize: Vector2.all(16),
+    );
+  }
 
   // Lógica de movimiento
   late final Player player;
@@ -51,7 +56,7 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
     );
 
     spriteComponent = SpriteComponent(
-      sprite: idleSprite,
+      sprite: _getTile,
       size: Vector2(size.x, size.y),
       position: Vector2.zero(),
     );
