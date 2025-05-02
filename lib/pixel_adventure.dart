@@ -50,7 +50,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 9;
+  int currentLevelIndex = 10;
 
   // Lógica para gestionar el volumen
   bool isMusicActive = true;
@@ -70,6 +70,7 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
+
     FlameAudio.bgm.initialize();
     // Carga todas las imagenes al caché
     await images.loadAllImages();
@@ -122,7 +123,6 @@ class PixelAdventure extends FlameGame
   }
 
   void addAllButtons() {
-    // TODO - Actualizar las posiciones de los botones
     changeSkinButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
@@ -139,8 +139,6 @@ class PixelAdventure extends FlameGame
   }
 
   void loadNextLevel() {
-
-    // TODO - LOS NIVELES NO SE ELIMINAN CORREACTAMENTE
     removeWhere((component) => component is Level);
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;
@@ -153,8 +151,9 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
-    FlameAudio.bgm.stop();
-    FlameAudio.bgm.play('background_music.mp3');
+    // TODO ESTO ESTA ASÍ PARA Q NO MOLESTE
+    //FlameAudio.bgm.stop();
+    //FlameAudio.bgm.play('background_music.mp3');
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
     cam = CameraComponent.withFixedResolution(

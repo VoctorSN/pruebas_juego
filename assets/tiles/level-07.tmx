@@ -28,7 +28,7 @@
 91,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,89
 </data>
  </layer>
- <objectgroup id="2" name="Collisions" visible="0">
+ <objectgroup id="2" name="Collisions">
   <object id="1" x="0" y="0" width="640" height="16"/>
   <object id="2" x="624" y="16" width="16" height="352"/>
   <object id="3" x="0" y="352" width="624" height="16"/>

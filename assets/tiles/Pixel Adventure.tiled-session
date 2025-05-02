@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-06.tmx",
+    "activeFile": "level-08.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -215,34 +215,34 @@
                 3
             ],
             "scale": 1.66,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 250.90361445783134,
-                "y": 182.53012048192772
+                "x": 273.1927710843374,
+                "y": 172.89156626506025
             }
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 535.3333333333333,
-                "y": 174
+                "x": 269,
+                "y": 173.99999999999997
             }
         },
         "level-08.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.53,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 173.202614379085,
-                "y": 183.6601307189543
+                "x": 263.72549019607845,
+                "y": 179.0849673202614
             }
         },
         "level_01.tmx": {
@@ -321,12 +321,16 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "level-06.tmx"
+        "level-06.tmx",
+        "level-07.tmx",
+        "level-08.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "level-06.tmx",
+        "level-07.tmx",
+        "level-08.tmx",
         "tutorial-02.tmx",
         "tutorial-01.tmx",
         "tutorial-03.tmx",
@@ -335,8 +339,6 @@
         "level-05.tmx",
         "level-04.tmx",
         "level-03.tmx",
-        "level-07.tmx",
-        "level-08.tmx",
         "tutorial-04.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",

@@ -11,8 +11,9 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   MovingBlock({super.position, super.size});
 
   // Parte de las imágenes
-  late SpriteComponent spriteComponent;
-  Sprite get  _getTile {
+  late final SpriteComponent spriteComponent;
+
+  Sprite get _getTile {
     final spriteSheet = game.images.fromCache('Terrain/Terrain (16x16).png');
     return Sprite(
       spriteSheet,
@@ -36,8 +37,6 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   Vector2 velocity = Vector2.zero();
-  bool isFalling = true;
-  bool isMovable = true;
   bool isOnGround = false;
 
   @override
@@ -59,11 +58,6 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
       sprite: _getTile,
       size: Vector2(size.x, size.y),
       position: Vector2.zero(),
-    );
-
-    Future.delayed(Duration(seconds: 1), () {
-      isFalling = true;
-    }
     );
     await add(spriteComponent);
   }
@@ -92,9 +86,9 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   @override
   void update(double dt) {
     super.update(dt);
-    if (pushDirection != 0 && isMovable)
+    if (pushDirection != 0)
       position.x = position.x + pushDirection * pushSpeed * dt;
-    if (isFalling) _applyGravity(dt);
+    if (!isOnGround) _applyGravity(dt);
   }
 
   void _applyGravity(double dt) {
@@ -112,38 +106,33 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
 
     if (playerMid < blockMid &&
         isPlayerInline &&
-        !isBlockOnRight &&
-        isMovable) {
+        !isBlockOnRight) {
       pushDirection = 1;
       isBlockOnLeft = false;
     } else if (playerMid > blockMid &&
         isPlayerInline &&
-        !isBlockOnLeft &&
-        isMovable) {
+        !isBlockOnLeft) {
       pushDirection = -1;
       isBlockOnRight = false;
     } else {
-      isFalling = false;
-      // When it falls it stops on the player and relocate to the top of it adding a difference to allow the player to move bellow
-      position.y =
-          position.y - other.hitbox.height - other.hitbox.offsetY + size.y - 2;
+      // isFalling = false;
+      // // When it falls it stops on the player and relocate to the top of it adding a difference to allow the player to move bellow
+      // position.y =
+      //     position.y - other.hitbox.height - other.hitbox.offsetY + size.y - 2;
     }
   }
 
   void _collisionStartBlock(CollisionBlock other) {
+
     final bool isFloor = other.position.y >= position.y + size.y - 1;
-    final bool isBlockAbove =
-        other.position.y < position.y &&
-            other.position.y + other.size.y > position.y;
 
-    if (isBlockAbove) {
-      isMovable = false;
-      return;
-    } else if (isFloor) {
-      isMovable = true;
-    }
+    isOnGround = true;
+    // When it falls stops on the floor
+    position.y = other.position.y - size.y;
 
-    if (!isFloor) {
+    if (isFloor) {
+
+    } else {
       if (other.position.x < position.x && !isBlockOnLeft) {
         isBlockOnLeft = true;
       }
@@ -152,21 +141,12 @@ class MovingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
         return;
       }
       pushDirection = 0;
-    } else {
-      isFalling = false;
-      // When it falls stops on the floor
-      position.y = other.position.y - size.y;
     }
+
   }
 
   void _collisionEndBlock(CollisionBlock other) {
-    final bool isBlockAbove =
-        other.position.y < position.y &&
-            other.position.y + other.size.y > position.y;
 
-    if (isBlockAbove) {
-      isMovable = true;
-    }
     if (other.position.x < position.x && !isBlockOnLeft) {
       isBlockOnLeft = false;
       return;
