@@ -10,6 +10,7 @@ import '../levelContent/player.dart';
 enum State {
   blink,
   idle,
+  atack_down,
 }
 
 class Rockhead extends SpriteAnimationGroupComponent
@@ -19,6 +20,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   // Animaciones y tamaños
   late final SpriteAnimation _blinkAnimation;
   late final SpriteAnimation _idleAnimation;
+  late final SpriteAnimation _atackDownAnimation;
   double stepTime = 0.1;
   final textureSize = Vector2(54, 52);
   CustomHitbox hitbox = CustomHitbox(
@@ -33,6 +35,8 @@ class Rockhead extends SpriteAnimationGroupComponent
   // Lógica de ataque
   bool isAtacking = false;
   bool isComingBack = false;
+  static const attackVelocity = 100.0;
+  static const comeBackVelocity = -25.0;
   late Player player;
   late Vector2 initialPosition;
   Vector2 velocity = Vector2(0, 0);
@@ -62,9 +66,11 @@ class Rockhead extends SpriteAnimationGroupComponent
   void _loadAllStates() {
     _blinkAnimation = _spriteAnimation('Blink', 4);
     _idleAnimation = _spriteAnimation('Idle', 1);
+    _atackDownAnimation = _spriteAnimation('Bottom Hit', 4);
     animations = {
       State.blink: _blinkAnimation,
       State.idle: _idleAnimation,
+      State.atack_down: _atackDownAnimation,
     };
     current = State.idle;
   }
@@ -127,14 +133,14 @@ class Rockhead extends SpriteAnimationGroupComponent
   }
 
   void checkPlayerPositionX() {
-    final rockheadHitboxLeft = x + hitbox.offsetX;
-    final rockheadHitboxRight = rockheadHitboxLeft + hitbox.width;
+    final rockheadVisionLeft = x + hitbox.offsetX - 50;
+    final rockheadVisionRight = rockheadVisionLeft + hitbox.width + 50;
 
     // Calcular la posición del centro de la hitbox del jugador considerando su escala
-    final playerMid = player.x + (player.scale.x == -1 ? -player.width - 50 / 2 : player.width + 50 / 2);
+    final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
 
     // Comprobar si el centro del jugador está alineado horizontalmente con el Rockhead
-    final isAligned = playerMid >= rockheadHitboxLeft && playerMid <= rockheadHitboxRight;
+    final isAligned = playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
 
     if (isAligned) {
       atack();
@@ -144,11 +150,12 @@ class Rockhead extends SpriteAnimationGroupComponent
   void atack() {
     if(isComingBack) return;
     isAtacking = true;
-    velocity.y = 50;
+    velocity.y = attackVelocity;
   }
 
   void comeBack() {
-    Future.delayed(inmobileDuration, () => velocity.y = -25);
+    Future.delayed(inmobileDuration, () => velocity.y = comeBackVelocity);
+    current = State.atack_down;
     velocity = Vector2.zero();
     isComingBack = true;
     isAtacking = false;
