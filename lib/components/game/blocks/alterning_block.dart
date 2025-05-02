@@ -1,11 +1,11 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'dart:async' as async;
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../spawnpoints/levelContent/player.dart';
 import '../utils.dart';
 import 'collision_block.dart';
 
-///TODO hacer que el timing no dependa de la cantidad de bloques
 class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
 
   // Constructor
@@ -20,9 +20,10 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
   late SpriteComponent spriteComponent;
   late Sprite blockActive;
   late Sprite blockInactive;
+
+  // Lógica para alternar entre los bloques activos e inactivos
   static bool isRedActive = true;
   static bool _timerStarted = false;
-  static late Timer _timer;
   static final List<AlternatingBlock> _instances = [];
 
   // Lógica que la colisión se active y desactive
@@ -33,13 +34,14 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
   Future<void> onLoad() async {
     await super.onLoad();
 
+    priority = 0;
+
     _loadSprites();
 
     hitbox = RectangleHitbox(
       size: Vector2(size.x, size.y),
       position: Vector2.zero(),
     );
-
     add(hitbox);
 
     spriteComponent = SpriteComponent(
@@ -53,7 +55,7 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
     _instances.add(this);
 
     if (!_timerStarted) {
-      _startTimer();
+      _startPeriodicToggle();
     }
     _updateSprite();
   }
@@ -77,25 +79,23 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
     );
   }
 
-  void _startTimer() {
+  void _startPeriodicToggle() {
     _timerStarted = true;
-    _timer = Timer(20, repeat: true, onTick: () {
-      isRedActive = !isRedActive;
-      for (final block in _instances) {
-        block._updateSprite();
-      }
-    })..start();
+    async.Timer.periodic(
+      const Duration(seconds: 1),
+          (async.Timer timer) {
+        isRedActive = !isRedActive;
+        for (final block in _instances) {
+          block._updateSprite();
+        }
+      },
+    );
   }
 
   void _updateSprite() {
     isActive = isRed == isRedActive;
     spriteComponent.sprite = isActive ? blockActive : blockInactive;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (_timerStarted) _timer.update(dt);
+    hitbox.collisionType = isActive ? CollisionType.active : CollisionType.inactive;
   }
 
   @override
