@@ -160,8 +160,9 @@ class PixelAdventure extends FlameGame
     cam = CameraComponent.withFixedResolution(
       world: level,
       width: 640,
-      height: 360,
+      height: 368,
     );
+
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
     addAll([cam, level]);
@@ -229,5 +230,15 @@ class PixelAdventure extends FlameGame
   void pauseGame() {
     overlays.add(PauseMenu.id);
     pauseEngine();
+  }
+
+  void switchHUDPosition() {
+    isLeftHanded = !isLeftHanded;
+    if (isLeftHanded) {
+      jumpButton.position = joystick.position;
+    } else {
+
+    }
+    reloadAllButtons();
   }
 }

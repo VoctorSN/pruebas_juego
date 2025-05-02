@@ -51,11 +51,13 @@ class _ResizeHUDState extends State<ResizeHUD> {
       NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
-          // Dejar este botón o sacarlo?
-          // Hacer que con este botón los botones del HUD (solo los de la pantalla) se oculten
+          setState(() {
+            isVisible = !isVisible;
+            game.showControls = isVisible;
+          });
         },
         icon: eyeImage,
-      )
+      ),
     ]);
   }
 

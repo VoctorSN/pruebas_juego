@@ -25,6 +25,7 @@ class _ResizeControlsState extends State<ResizeControls> {
 
   late double value;
   bool isVisible = true;
+  bool isLeftHanded = false;
 
   Image get eyeImage {
     return isVisible
@@ -34,6 +35,18 @@ class _ResizeControlsState extends State<ResizeControls> {
     )
         : Image.asset(
       'assets/images/GUI/HUD/closeEye.png',
+      fit: BoxFit.cover,
+    );
+  }
+
+  Image get arrowImage {
+    return game.isLeftHanded
+        ? Image.asset(
+      'assets/images/GUI/HUD/arrowsFacingEachother.png',
+      fit: BoxFit.cover,
+    )
+        : Image.asset(
+      'assets/images/GUI/HUD/arrowsFacingEachotherInversed.png',
       fit: BoxFit.cover,
     );
   }
@@ -51,10 +64,21 @@ class _ResizeControlsState extends State<ResizeControls> {
       NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
-          // Dejar este botón o sacarlo?
-          // Hacer que con este botón los botones del HUD (solo los de la pantalla) se oculten
+          setState(() {
+            isVisible = !isVisible;
+          });
         },
         icon: eyeImage,
+      ),
+      IconButton(
+        onPressed: () {
+          setState(() {
+            isLeftHanded = !isLeftHanded;
+            game.isLeftHanded = isLeftHanded;
+            game.switchHUDPosition();
+          });
+        },
+        icon: arrowImage,
       )
     ]);
   }
