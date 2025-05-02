@@ -4,6 +4,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
+import 'package:fruit_collector/components/game/spawnpoints/enemies/rockhead.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpoint.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/fruit.dart';
@@ -144,6 +145,14 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(deathZone);
+            break;
+            case 'rockHead':
+            final rockHead = Rockhead(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              floorDistance: spawnPoint.properties.getValue('floorDistance'),
+            );
+            add(rockHead);
             break;
           default:
         }

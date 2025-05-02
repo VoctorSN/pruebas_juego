@@ -326,10 +326,10 @@
         "level-08.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "bool",
+    "property.type": "int",
     "recentFiles": [
-        "level-06.tmx",
         "level-07.tmx",
+        "level-06.tmx",
         "level-08.tmx",
         "tutorial-02.tmx",
         "tutorial-01.tmx",
