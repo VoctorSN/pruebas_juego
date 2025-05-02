@@ -1,6 +1,8 @@
 import 'dart:async' as async;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:fruit_collector/components/game/blocks/collision_block.dart';
 import '../../../../pixel_adventure.dart';
 import '../../custom_hitbox.dart';
 import '../levelContent/player.dart';
@@ -12,10 +14,7 @@ enum State {
 
 class Rockhead extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
-  Rockhead({super.position, super.size, this.floorDistance = 0});
-
-  // Limite de desplazamiento a la izquierda y derecha
-  final int floorDistance;
+  Rockhead({super.position, super.size});
 
   // Animaciones y tamaños
   late final SpriteAnimation _blinkAnimation;
@@ -29,17 +28,34 @@ class Rockhead extends SpriteAnimationGroupComponent
     height: 35,
   );
 
+  static const Duration inmobileDuration = Duration(milliseconds: 350);
+
+  // Lógica de ataque
+  bool isAtacking = false;
+  bool isComingBack = false;
+  late Player player;
+  late Vector2 initialPosition;
+  Vector2 velocity = Vector2(0, 0);
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
+
   @override
   async.FutureOr<void> onLoad() {
+
     debugMode = true;
+
     add(
       RectangleHitbox(
         position: Vector2(hitbox.offsetX, hitbox.offsetY),
         size: Vector2(hitbox.width, hitbox.height),
       ),
     );
+    initialPosition = position.clone()..round();
     _loadAllStates();
     _startBlinkTimer();
+
+    player = game.player;
+
     return super.onLoad();
   }
 
@@ -77,9 +93,64 @@ class Rockhead extends SpriteAnimationGroupComponent
     );
   }
 
+
+
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
     if (other is Player) other.collidedWithEnemy();
+    if (other is CollisionBlock) comeBack();
+    super.onCollisionStart(intersectionPoints, other);
+  }
+
+  void _updateMovement(double dt) {
+    var actualPosition = position.clone()..round();
+    if(isComingBack && actualPosition == initialPosition){
+      position = initialPosition;
+      velocity = Vector2.zero();
+      Future.delayed(inmobileDuration, () => isComingBack = false);
+    }
+    position.y += velocity.y * dt;
+  }
+
+  @override
+  void update(double dt) {
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime) {
+
+      if(!isAtacking && !isComingBack) {
+        checkPlayerPositionX();
+      }
+      _updateMovement(fixedDeltaTime);
+      accumulatedTime -= fixedDeltaTime;
+    }
+    super.update(dt);
+  }
+
+  void checkPlayerPositionX() {
+    final rockheadHitboxLeft = x + hitbox.offsetX;
+    final rockheadHitboxRight = rockheadHitboxLeft + hitbox.width;
+
+    // Calcular la posición del centro de la hitbox del jugador considerando su escala
+    final playerMid = player.x + (player.scale.x == -1 ? -player.width - 50 / 2 : player.width + 50 / 2);
+
+    // Comprobar si el centro del jugador está alineado horizontalmente con el Rockhead
+    final isAligned = playerMid >= rockheadHitboxLeft && playerMid <= rockheadHitboxRight;
+
+    if (isAligned) {
+      atack();
+    }
+  }
+
+  void atack() {
+    if(isComingBack) return;
+    isAtacking = true;
+    velocity.y = 50;
+  }
+
+  void comeBack() {
+    Future.delayed(inmobileDuration, () => velocity.y = -25);
+    velocity = Vector2.zero();
+    isComingBack = true;
+    isAtacking = false;
   }
 }

@@ -42,12 +42,12 @@
     <property name="offPos" type="float" value="0"/>
    </properties>
   </object>
-  <object id="26" name="Player" type="Player" x="208" y="256" width="30.3304" height="29.7471"/>
+  <object id="26" name="Player" type="Player" x="320" y="272" width="30.3304" height="29.7471"/>
   <object id="36" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="37" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="38" type="deathZone" x="-48" y="0" width="48" height="368"/>
   <object id="39" type="deathZone" x="640" y="0" width="48" height="368"/>
-  <object id="42" name="rockHead" type="rockHead" x="352" y="112" width="48" height="48">
+  <object id="42" name="rockHead" type="rockHead" x="352" y="192" width="48" height="48">
    <properties>
     <property name="floorDistance" type="int" value="0"/>
    </properties>

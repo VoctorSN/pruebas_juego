@@ -43,13 +43,18 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   void _addGameText() {
-    final textObjects = level.tileMap.getLayer<ObjectGroup>('SpawnPoints')?.objects
+    final textObjects = level.tileMap
+        .getLayer<ObjectGroup>('SpawnPoints')
+        ?.objects
         .where((obj) => obj.type == 'GameText');
 
     if (textObjects != null) {
       for (final textObject in textObjects) {
         final text = textObject.text?.text.toString() ?? '';
-        final position = Vector2(textObject.x + textObject.width / 2, textObject.y + textObject.height / 2);
+        final position = Vector2(
+          textObject.x + textObject.width / 2,
+          textObject.y + textObject.height / 2,
+        );
         final gameText = GameText(
           text: text,
           position: position,
@@ -72,7 +77,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Trampoline ||
           component is DeathZone ||
           component is AlternatingBlock ||
-          component is MovingBlock
+          component is MovingBlock ||
+          component is Rockhead,
     );
     _spawningObjects();
 
@@ -146,11 +152,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(deathZone);
             break;
-            case 'rockHead':
+          case 'rockHead':
             final rockHead = Rockhead(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
-              floorDistance: spawnPoint.properties.getValue('floorDistance'),
             );
             add(rockHead);
             break;
