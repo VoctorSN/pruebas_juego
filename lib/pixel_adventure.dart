@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
@@ -12,7 +15,6 @@ import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings_menu.dart';
 import 'components/game/level.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
-import 'package:flame_audio/flame_audio.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -20,7 +22,6 @@ class PixelAdventure extends FlameGame
         DragCallbacks,
         HasCollisionDetection,
         TapCallbacks {
-
   // Lógica para cargar el nivel y el personaje
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -50,10 +51,10 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 11;
+  int currentLevelIndex = 1;
 
   // Lógica para gestionar el volumen
-  bool isMusicActive = true;
+  bool isMusicActive = false;
   double musicSoundVolume = 1.0;
   bool isGameSoundsActive = true;
   double gameSoundVolume = 1.0;
@@ -70,14 +71,15 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
-
     FlameAudio.bgm.initialize();
     // Carga todas las imagenes al caché
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
 
     // Detectar el SO y cargar los controles, se añade el if porque al cerrar y abrir la aplicación desaparecía el botón de salto
-    showControls = Platform.isAndroid || Platform.isIOS;
+    try {
+      showControls = Platform.isAndroid || Platform.isIOS;
+    } catch (e) {}
 
     // Cargar los overlays para gestionar los menús y el HUD
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
@@ -88,10 +90,7 @@ class PixelAdventure extends FlameGame
       changeCharacter: changeCharacter,
       buttonSize: hudSize,
     );
-    menuButton = OpenMenuButton(
-      button: 'menuButton',
-      buttonSize: hudSize,
-    );
+    menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
     jumpButton = JumpButton(controlSize);
 
     addAllButtons();
@@ -103,17 +102,10 @@ class PixelAdventure extends FlameGame
   }
 
   void reloadAllButtons() {
-    if (showControls) {
-      if (children.any((component) => component is JoystickComponent)) {
-        joystick.removeFromParent();
-      }
-      for (var component in children.whereType<JumpButton>()) {
-        component.removeFromParent();
-      }
-    }
+    removeControls();
     for (var component in children.where(
-          (component) =>
-      component is ChangePlayerSkinButton ||
+      (component) =>
+          component is ChangePlayerSkinButton ||
           component is ToggleSoundButton ||
           component is OpenMenuButton,
     )) {
@@ -122,15 +114,21 @@ class PixelAdventure extends FlameGame
     addAllButtons();
   }
 
+  void removeControls() {
+      if (children.any((component) => component is JoystickComponent)) {
+        joystick.removeFromParent();
+      }
+      for (var component in children.whereType<JumpButton>()) {
+        component.removeFromParent();
+      }
+  }
+
   void addAllButtons() {
     changeSkinButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
-    addAll([
-      changeSkinButton,
-      menuButton,
-    ]);
+    addAll([changeSkinButton, menuButton]);
     if (showControls) {
       jumpButton.size = Vector2.all(controlSize * 2);
       add(jumpButton);
@@ -151,9 +149,10 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
-    // TODO ESTO ESTA ASÍ PARA Q NO MOLESTE
-    //FlameAudio.bgm.stop();
-    //FlameAudio.bgm.play('background_music.mp3');
+    FlameAudio.bgm.stop();
+    if (isMusicActive) {
+      FlameAudio.bgm.play('background_music.mp3');
+    }
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
     cam = CameraComponent.withFixedResolution(
@@ -235,9 +234,7 @@ class PixelAdventure extends FlameGame
     isLeftHanded = !isLeftHanded;
     if (isLeftHanded) {
       jumpButton.position = joystick.position;
-    } else {
-
-    }
+    } else {}
     reloadAllButtons();
   }
 }

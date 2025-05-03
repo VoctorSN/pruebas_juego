@@ -24,11 +24,10 @@ class _ResizeControlsState extends State<ResizeControls> {
   _ResizeControlsState({required this.game, required this.updateSizeControls});
 
   late double value;
-  bool isVisible = true;
   bool isLeftHanded = false;
 
   Image get eyeImage {
-    return isVisible
+    return game.showControls
         ? Image.asset(
       'assets/images/GUI/HUD/openEye.png',
       fit: BoxFit.cover,
@@ -65,7 +64,9 @@ class _ResizeControlsState extends State<ResizeControls> {
       IconButton(
         onPressed: () {
           setState(() {
-            isVisible = !isVisible;
+            print('showControls: ${game.showControls}');
+            game.showControls = !game.showControls;
+            game.reloadAllButtons();
           });
         },
         icon: eyeImage,

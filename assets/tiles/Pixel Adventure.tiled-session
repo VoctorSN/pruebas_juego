@@ -152,25 +152,25 @@
         },
         "level-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.52890625,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 142.5855901890649,
-                "y": 200.79713847726106
+                "x": 142.2585590189065,
+                "y": 200.79713847726111
             }
         },
         "level-01.tmx#Pixel Adventure": {
             "scaleInDock": 1
         },
         "level-02.tmx": {
-            "scale": 1.64,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 639.6341463414634,
-                "y": 104.8780487804878
+                "x": 527.5,
+                "y": 182
             }
         },
         "level-03.tmx": {
@@ -181,7 +181,7 @@
             "scale": 1.64,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 609.1463414634146,
+                "x": 235.06097560975613,
                 "y": 104.8780487804878
             }
         },
@@ -193,8 +193,8 @@
             "scale": 1.66,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 643.9759036144578,
-                "y": 183.132530120482
+                "x": 281.0240963855422,
+                "y": 183.13253012048193
             }
         },
         "level-05.tmx": {
@@ -205,14 +205,14 @@
             "scale": 1.66,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 604.8192771084339,
-                "y": 183.7349397590362
+                "x": 225,
+                "y": 183.73493975903617
             }
         },
         "level-06.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.66,
             "selectedLayer": 1,
@@ -223,26 +223,26 @@
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 269,
-                "y": 173.99999999999997
+                "y": 174
             }
         },
         "level-08.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.53,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 263.72549019607845,
-                "y": 179.0849673202614
+                "x": 329.08496732026146,
+                "y": 205.22875816993468
             }
         },
         "level_01.tmx": {
@@ -255,13 +255,13 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 275.7913720279057,
+                "x": 276.0951070191258,
                 "y": 183.4559346969769
             }
         },
@@ -270,13 +270,13 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 513.3121351620711,
+                "x": 257.2635375634759,
                 "y": 277.61378197522663
             }
         },
@@ -285,13 +285,13 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 125.13881638270607,
+                "x": 124.83508139148594,
                 "y": 183.4559346969769
             }
         },
@@ -306,7 +306,7 @@
             "scale": 1.646171875,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 284.2959517820701,
+                "x": 283.99221679084997,
                 "y": 183.4559346969769
             }
         },

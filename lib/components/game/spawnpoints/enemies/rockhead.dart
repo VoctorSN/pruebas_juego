@@ -37,6 +37,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   bool isComingBack = false;
   static const attackVelocity = 100.0;
   static const comeBackVelocity = -25.0;
+  static const detectDistance = 50;
   late Player player;
   late Vector2 initialPosition;
   Vector2 velocity = Vector2(0, 0);
@@ -133,8 +134,8 @@ class Rockhead extends SpriteAnimationGroupComponent
   }
 
   void checkPlayerPositionX() {
-    final rockheadVisionLeft = x + hitbox.offsetX - 50;
-    final rockheadVisionRight = rockheadVisionLeft + hitbox.width + 50;
+    final rockheadVisionLeft = x + hitbox.offsetX - detectDistance;
+    final rockheadVisionRight = x + width - hitbox.offsetX + detectDistance;
 
     // Calcular la posición del centro de la hitbox del jugador considerando su escala
     final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);

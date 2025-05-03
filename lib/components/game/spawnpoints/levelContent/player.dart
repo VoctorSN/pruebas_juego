@@ -280,6 +280,7 @@ class Player extends SpriteAnimationGroupComponent
             break;
           }
         }
+      /// TODO the player falls in blocks if he is in the middle of sand and ground
       } else if (block.isSand) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
