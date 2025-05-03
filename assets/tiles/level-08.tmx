@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="43">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="58">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <data encoding="csv">
@@ -84,6 +84,81 @@
   <object id="25" type="Platform" x="144" y="128" width="32" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="43" type="alterningBlock" x="96" y="160" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="44" type="alterningBlock" x="96" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="45" type="alterningBlock" x="32" y="32" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="46" type="alterningBlock" x="32" y="48" width="80" height="80">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="47" type="alterningBlock" x="240" y="48" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="48" type="alterningBlock" x="368" y="64" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="49" type="alterningBlock" x="480" y="64" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="50" type="alterningBlock" x="400" y="64" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="51" type="alterningBlock" x="272" y="112" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="52" type="alterningBlock" x="336" y="128" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="53" type="alterningBlock" x="320" y="64" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="54" type="alterningBlock" x="288" y="160" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="55" type="alterningBlock" x="240" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="56" type="alterningBlock" x="272" y="176" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="57" type="alterningBlock" x="320" y="208" width="16" height="16">
+   <properties>
+    <property name="isRed" type="bool" value="false"/>
    </properties>
   </object>
  </objectgroup>
