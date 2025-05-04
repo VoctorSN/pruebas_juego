@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/blocks/collision_block.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
+
 
 import '../../../../pixel_adventure.dart';
 
@@ -14,18 +17,22 @@ class LootBox extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
   Function(CollisionBlock) addCollisionBlock;
   Function(CollisionBlock) removeCollisionBlock;
+  Function(dynamic) addSpawnPoint;
+  String objectInside;
 
   LootBox({
     super.position,
     super.size,
     required this.addCollisionBlock,
     required this.removeCollisionBlock,
+    required this.objectInside,
+    required this.addSpawnPoint,
   });
 
   static const stepTime = 0.1;
   static const tileSize = 32;
   static final textureSize = Vector2(28, 24);
-  static const _bounceHeight = 260.0;
+  static const _bounceHeight = 200.0;
   int hp = 3;
 
   late final SpriteAnimation _idleAnimation;
@@ -39,10 +46,10 @@ class LootBox extends SpriteAnimationGroupComponent
     position.y = position.y + 12;
     player = game.player;
     debugMode = true;
-    add(RectangleHitbox(position: Vector2.zero(), size: Vector2(24, 28)));
+    add(RectangleHitbox(position: Vector2.zero(), size: size));
     _loadAllAnimations();
     _loadAudio();
-    collisionBlock = CollisionBlock(position: position, size: Vector2(size.x,size.y));
+    collisionBlock = CollisionBlock(position: Vector2(position.x, position.y+2), size: size);
     addCollisionBlock(collisionBlock);
     return super.onLoad();
   }
@@ -82,6 +89,7 @@ class LootBox extends SpriteAnimationGroupComponent
       if (hp == 0) {
         removeCollisionBlock(collisionBlock);
         removeFromParent();
+        dropObject();
       } else {
         current = LootBoxState.idle;
       }
@@ -93,5 +101,10 @@ class LootBox extends SpriteAnimationGroupComponent
       path: 'audio/bounce.wav',
       maxPlayers: 3,
     );
+  }
+
+  void dropObject() {
+    KeyUnlocker key = KeyUnlocker(position:position,size:size,name: objectInside);
+    addSpawnPoint(key);
   }
 }

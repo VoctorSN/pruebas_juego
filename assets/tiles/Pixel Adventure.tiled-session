@@ -335,7 +335,7 @@
         "tutorial-02.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
         "level-06.tmx",
         "level-08.tmx",

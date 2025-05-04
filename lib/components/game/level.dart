@@ -170,6 +170,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
               addCollisionBlock: addCollisionBlock,
               removeCollisionBlock: removeCollisionBlock,
+              objectInside: spawnPoint.properties.getValue('objectInside'),
+              addSpawnPoint: addSpawnPoint,
             );
             add(lootBox);
             break;
@@ -235,6 +237,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
       }
     }
     player.collisionBlocks = collisionBlocks;
+  }
+
+  void addSpawnPoint(var spawnPoint) {
+    add(spawnPoint);
   }
 
   void addCollisionBlock(CollisionBlock collisionBlock) {

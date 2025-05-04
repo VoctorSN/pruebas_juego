@@ -34,6 +34,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/tiles/
+    - assets/images/Gems/
     - assets/images/Terrain/
     - assets/images/GUI/HUD/
     - assets/images/Items/Fruits/

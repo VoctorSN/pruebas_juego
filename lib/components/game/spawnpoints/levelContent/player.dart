@@ -1,11 +1,14 @@
 import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../../blocks/alterning_block.dart';
 import '../../blocks/collision_block.dart';
 import '../../blocks/falling_block.dart';
@@ -73,7 +76,6 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   FutureOr<void> onLoad() {
-
     debugMode = true;
 
     _loadAllAnimations();
@@ -140,7 +142,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Chicken) other.collidedWithPlayer();
       if (other is Trampoline) other.collidedWithPlayer();
       if (other is LootBox) other.collidedWithPlayer();
-
+      if (other is KeyUnlocker) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -233,7 +235,7 @@ class Player extends SpriteAnimationGroupComponent
 
   void _checkHorizontalCollisions() {
     for (final block in collisionBlocks) {
-      if(block is AlternatingBlock) {
+      if (block is AlternatingBlock) {
         if (!block.isActive) {
           continue;
         }
@@ -261,7 +263,7 @@ class Player extends SpriteAnimationGroupComponent
 
   void _checkVerticalCollisions() {
     for (final block in collisionBlocks) {
-      if(block is AlternatingBlock) {
+      if (block is AlternatingBlock) {
         if (!block.isActive) {
           continue;
         }
@@ -283,7 +285,8 @@ class Player extends SpriteAnimationGroupComponent
             break;
           }
         }
-      /// TODO the player falls in blocks if he is in the middle of sand and ground
+
+        /// TODO the player falls in blocks if he is in the middle of sand and ground
       } else if (block.isSand) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
@@ -350,7 +353,8 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive) disappearSound.start(volume: game.gameSoundVolume);
+    if (game.isGameSoundsActive)
+      disappearSound.start(volume: game.gameSoundVolume);
     hasReached = true;
     if (scale.x > 0) {
       position = position - Vector2.all(32);
@@ -373,15 +377,24 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   Future<void> _loadAudio() async {
-    jumpSound = await AudioPool.createFromAsset(path: 'audio/jump.wav', maxPlayers: 3);
-    hitSound = await AudioPool.createFromAsset(path: 'audio/hit.wav', maxPlayers: 3);
-    disappearSound = await AudioPool.createFromAsset(path: 'audio/disappear.wav', maxPlayers: 3);
+    jumpSound = await AudioPool.createFromAsset(
+      path: 'audio/jump.wav',
+      maxPlayers: 3,
+    );
+    hitSound = await AudioPool.createFromAsset(
+      path: 'audio/hit.wav',
+      maxPlayers: 3,
+    );
+    disappearSound = await AudioPool.createFromAsset(
+      path: 'audio/disappear.wav',
+      maxPlayers: 3,
+    );
   }
 
   void updateCharacter(String newCharacter) {
-  character = newCharacter;
+    character = newCharacter;
 
-  // Recargar las animaciones del personaje
-  _loadAllAnimations();
-}
+    // Recargar las animaciones del personaje
+    _loadAllAnimations();
+  }
 }
