@@ -47,7 +47,6 @@ class Rockhead extends SpriteAnimationGroupComponent
   @override
   async.FutureOr<void> onLoad() {
 
-    debugMode = true;
 
     add(
       RectangleHitbox(

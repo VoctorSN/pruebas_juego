@@ -44,7 +44,7 @@ class PixelAdventure extends FlameGame
     'tutorial-01',
     'tutorial-02',
     'tutorial-03',
-    'tutorial-04',
+    // 'tutorial-04',
     'level-01',
     'level-02',
     'level-03',
@@ -54,7 +54,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 9;
+  int currentLevelIndex = 0;
 
   // Lógica para gestionar el volumen
   bool isMusicActive = false;
@@ -83,7 +83,6 @@ class PixelAdventure extends FlameGame
     try {
       showControls = Platform.isAndroid || Platform.isIOS;
     } catch (e) {}
-    print(showControls);
 
     // Cargar los overlays para gestionar los menús y el HUD
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));

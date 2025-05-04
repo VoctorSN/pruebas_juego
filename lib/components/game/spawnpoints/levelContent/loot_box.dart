@@ -45,7 +45,6 @@ class LootBox extends SpriteAnimationGroupComponent
   FutureOr<void> onLoad() {
     position.y = position.y + 12;
     player = game.player;
-    debugMode = true;
     add(RectangleHitbox(position: Vector2.zero(), size: size));
     _loadAllAnimations();
     _loadAudio();
