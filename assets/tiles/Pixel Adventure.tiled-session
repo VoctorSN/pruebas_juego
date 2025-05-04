@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-01.tmx",
+    "activeFile": "tutorial-02.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -152,11 +152,11 @@
         },
         "level-01.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.52890625,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 357.77210015329587,
                 "y": 317.8742973939703
@@ -170,67 +170,67 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 320,
-                "y": 183.5
+                "y": 183
             }
         },
         "level-03.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.64,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 320.1219512195122,
-                "y": 183.84146341463412
+                "x": 379.26829268292687,
+                "y": 248.78048780487802
             }
         },
         "level-04.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.66,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 559.0361445783133,
-                "y": 290.9638554216868
+                "x": 319.87951807228916,
+                "y": 184.03614457831327
             }
         },
         "level-05.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.66,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 423.4939759036145,
-                "y": 291.566265060241
+                "x": 319.87951807228916,
+                "y": 184.03614457831327
             }
         },
         "level-06.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 408,
-                "y": 359
+                "x": 320,
+                "y": 183.5
             }
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 488.6666666666667,
-                "y": 292.6666666666667
+                "x": 320.3333333333333,
+                "y": 183.66666666666663
             }
         },
         "level-08.tmx": {
@@ -255,14 +255,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
-            "scale": 0.5,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 252,
-                "y": -90
+                "x": 276,
+                "y": 152.66666666666669
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -270,14 +270,14 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
-            "scale": 1.646171875,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 457.4248967775615,
-                "y": 386.35090883204407
+                "x": 379,
+                "y": 181
             }
         },
         "tutorial-02.tmx#Pixel Adventure": {
@@ -285,11 +285,11 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 125.1388163827061,
                 "y": 183.4559346969769
@@ -300,14 +300,14 @@
         },
         "tutorial-04.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 284.2959517820701,
-                "y": 183.4559346969769
+                "x": 320.1366807460491,
+                "y": 183.75966968819702
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -337,16 +337,16 @@
     "property.type": "string",
     "recentFiles": [
         "level-07.tmx",
+        "level-01.tmx",
+        "level-02.tmx",
+        "level-03.tmx",
+        "level-04.tmx",
+        "tutorial-01.tmx",
+        "tutorial-03.tmx",
+        "tutorial-04.tmx",
+        "level-05.tmx",
         "level-06.tmx",
         "tutorial-02.tmx",
-        "level-05.tmx",
-        "tutorial-04.tmx",
-        "tutorial-03.tmx",
-        "tutorial-01.tmx",
-        "level-04.tmx",
-        "level-03.tmx",
-        "level-02.tmx",
-        "level-01.tmx",
         "level-08.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
