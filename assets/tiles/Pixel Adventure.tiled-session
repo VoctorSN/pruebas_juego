@@ -156,10 +156,10 @@
                 2
             ],
             "scale": 1.52890625,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 142.2585590189065,
-                "y": 200.79713847726111
+                "x": 357.77210015329587,
+                "y": 317.8742973939703
             }
         },
         "level-01.tmx#Pixel Adventure": {
@@ -169,8 +169,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 527.5,
-                "y": 182
+                "x": 528,
+                "y": 181.5
             }
         },
         "level-03.tmx": {
@@ -193,8 +193,8 @@
             "scale": 1.66,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 281.0240963855422,
-                "y": 183.13253012048193
+                "x": 559.0361445783133,
+                "y": 290.9638554216868
             }
         },
         "level-05.tmx": {
@@ -205,8 +205,8 @@
             "scale": 1.66,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 225,
-                "y": 183.73493975903617
+                "x": 423.4939759036145,
+                "y": 291.566265060241
             }
         },
         "level-06.tmx": {
@@ -217,8 +217,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 261,
-                "y": 123.5
+                "x": 526,
+                "y": 281
             }
         },
         "level-07.tmx": {
@@ -229,8 +229,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 269,
-                "y": 174
+                "x": 488.6666666666667,
+                "y": 292.6666666666667
             }
         },
         "level-08.tmx": {
@@ -255,14 +255,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
-            "scale": 1.646171875,
+            "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 276.0951070191258,
-                "y": 183.4559346969769
+                "x": 252,
+                "y": -89
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -270,14 +270,14 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 257.2635375634759,
-                "y": 277.61378197522663
+                "x": 457.4248967775615,
+                "y": 386.35090883204407
             }
         },
         "tutorial-02.tmx#Pixel Adventure": {
@@ -285,14 +285,14 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 124.83508139148594,
-                "y": 183.4559346969769
+                "x": 125.13881638270608,
+                "y": 183.75966968819702
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -300,14 +300,14 @@
         },
         "tutorial-04.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.646171875,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 283.99221679084997,
-                "y": 183.4559346969769
+                "x": 284.2959517820701,
+                "y": 183.75966968819702
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -338,8 +338,8 @@
     "property.type": "int",
     "recentFiles": [
         "level-06.tmx",
-        "level-07.tmx",
         "level-08.tmx",
+        "level-07.tmx",
         "level-01.tmx",
         "level-02.tmx",
         "tutorial-02.tmx",

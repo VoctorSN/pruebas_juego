@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 
 bool checkCollision(Player player, block) {
@@ -24,6 +25,26 @@ bool checkCollision(Player player, block) {
           playerY + playerHeight > blockY &&
           fixedX < blockX + blockWidth &&
           fixedX + playerWidth > blockX
+  );
+}
+
+bool checkCollisionLootBox(LootBox lootBox, block) {
+
+  final playerX = lootBox.position.x;
+  final playerY = lootBox.position.y;
+  final playerWidth = lootBox.width;
+  final playerHeight = lootBox.height;
+
+  final blockX = block.x;
+  final blockY = block.y;
+  final blockWidth = block.width;
+  final blockHeight = block.height;
+
+  return(
+      playerY < blockY + blockHeight &&
+          playerY + playerHeight > blockY &&
+          playerX < blockX + blockWidth &&
+          playerX + playerWidth > blockX
   );
 }
 

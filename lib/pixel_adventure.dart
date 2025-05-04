@@ -31,6 +31,9 @@ class PixelAdventure extends FlameGame
     'Ninja Frog',
     'Pink Man',
     'Virtual Guy',
+    '1',
+    '2',
+    '3',
   ];
   int currentCharacterIndex = 0;
   late Player player;
@@ -80,6 +83,7 @@ class PixelAdventure extends FlameGame
     try {
       showControls = Platform.isAndroid || Platform.isIOS;
     } catch (e) {}
+    print(showControls);
 
     // Cargar los overlays para gestionar los menús y el HUD
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));

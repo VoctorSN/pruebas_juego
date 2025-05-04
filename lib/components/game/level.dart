@@ -1,6 +1,6 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
@@ -9,14 +9,15 @@ import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpo
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/fruit.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/game_text.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 import 'package:fruit_collector/components/game/spawnpoints/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import 'background_tile.dart';
 import 'blocks/alterning_block.dart';
 import 'blocks/collision_block.dart';
 import 'blocks/falling_block.dart';
-import 'blocks/moving_block.dart';
 import 'blocks/trampoline.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
@@ -77,13 +78,17 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Trampoline ||
           component is DeathZone ||
           component is AlternatingBlock ||
-          component is MovingBlock ||
+          component is LootBox ||
           component is Rockhead,
     );
-    _spawningObjects();
 
-    collisionBlocks.forEach((block) => remove(block));
+    for (CollisionBlock block in collisionBlocks) {
+      if (block.parent != null) {
+        remove(block);
+      }
+    }
     collisionBlocks.clear();
+    _spawningObjects();
     _addCollisions();
   }
 
@@ -159,6 +164,15 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(rockHead);
             break;
+          case 'lootBox':
+            final lootBox = LootBox(
+              position: Vector2(spawnPoint.x - 20, spawnPoint.y - 36),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              addCollisionBlock: addCollisionBlock,
+              removeCollisionBlock: removeCollisionBlock,
+            );
+            add(lootBox);
+            break;
           default:
         }
       }
@@ -201,14 +215,6 @@ class Level extends World with HasGameReference<PixelAdventure> {
             collisionBlocks.add(platform);
             add(platform);
             break;
-          case 'movingBlock':
-            final movingBlock = MovingBlock(
-              position: Vector2(collision.x, collision.y),
-              size: Vector2(collision.width, collision.height),
-            );
-            collisionBlocks.add(movingBlock);
-            add(movingBlock);
-            break;
           case 'alterningBlock':
             final alterningBlock = AlternatingBlock(
               isRed: collision.properties.getValue('isRed'),
@@ -229,6 +235,18 @@ class Level extends World with HasGameReference<PixelAdventure> {
       }
     }
     player.collisionBlocks = collisionBlocks;
+  }
+
+  void addCollisionBlock(CollisionBlock collisionBlock) {
+    player.collisionBlocks.add(collisionBlock);
+    collisionBlocks.add(collisionBlock);
+    add(collisionBlock);
+  }
+
+  void removeCollisionBlock(CollisionBlock collisionBlock) {
+    player.collisionBlocks.remove(collisionBlock);
+    collisionBlocks.remove(collisionBlock);
+    collisionBlock.removeFromParent();
   }
 
   bool checkpointEnabled() {
