@@ -71,7 +71,7 @@ bool checkCollisionChicken(Chicken chicken, block) {
 bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {
   final playerHitbox = player.hitbox;
 
-  // Calcular la posición del hitbox en función de la dirección
+  // Get hitbox position in relation to the direction
   final baseX = player.position.x + playerHitbox.offsetX;
   final adjustedPlayerLeft = player.scale.x < 0
       ? baseX - (playerHitbox.offsetX * 2) - playerHitbox.width
@@ -86,13 +86,13 @@ bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {
   final blockTop = blockHitbox.absolutePosition.y;
   final blockBottom = blockTop + blockHitbox.size.y;
 
-  // Calcular la superposición horizontal
+  // Get horizontal superposition
   final horizontalOverlap = (adjustedPlayerRight > blockLeft && adjustedPlayerLeft < blockRight);
 
-  // Calcular la superposición vertical
+  // Get vertical superposition
   final verticalOverlap = (playerBottom > blockTop && playerTop < blockBottom);
 
-  // Devolver true solo si hay superposición horizontal y vertical
+  // Check if the player is inside the block
   return horizontalOverlap && verticalOverlap;
 }
 
@@ -100,7 +100,7 @@ bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {
 void movePlayerNextToBlock(Player player, RectangleHitbox blockHitbox) {
   final playerHitbox = player.hitbox;
 
-  // Calcular la posición del hitbox en función de la dirección
+  // Calculate the hitbox position based on the direction
   final baseX = player.position.x + playerHitbox.offsetX;
   final adjustedPlayerLeft = player.scale.x < 0
       ? baseX - (playerHitbox.offsetX * 2) - playerHitbox.width

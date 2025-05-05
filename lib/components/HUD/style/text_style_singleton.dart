@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TextStyleSingleton {
-  // Instancia única del singleton
+
+  // Unique instance singleton
   static final TextStyleSingleton _instance = TextStyleSingleton._internal();
 
-  // Constructor privado
+  // Private constructor
   TextStyleSingleton._internal();
 
-  // Método para acceder a la instancia
+  // Function to access the singleton instance
   factory TextStyleSingleton() {
     return _instance;
   }
 
-  // Método para obtener el estilo de texto
+  // Function to get the text style
   TextStyle get style {
     return const TextStyle(
       fontFamily: 'ArcadeClassic',

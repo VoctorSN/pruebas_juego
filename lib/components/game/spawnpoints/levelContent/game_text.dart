@@ -25,6 +25,6 @@ class GameText extends TextComponent with HasGameReference {
   @override
   void onMount() {
     super.onMount();
-    anchor = Anchor.center; // Centra el texto en su posición
+    anchor = Anchor.center;
   }
 }

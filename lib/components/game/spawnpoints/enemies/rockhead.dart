@@ -136,10 +136,10 @@ class Rockhead extends SpriteAnimationGroupComponent
     final rockheadVisionLeft = x + hitbox.offsetX - detectDistance;
     final rockheadVisionRight = x + width - hitbox.offsetX + detectDistance;
 
-    // Calcular la posición del centro de la hitbox del jugador considerando su escala
+    // Get the midle point of the player considering its direction
     final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
 
-    // Comprobar si el centro del jugador está alineado horizontalmente con el Rockhead
+    // Check if the center of the player is within the Rockhead's vision
     final isAligned = playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
 
     if (isAligned) {

@@ -22,7 +22,8 @@ class PixelAdventure extends FlameGame
         DragCallbacks,
         HasCollisionDetection,
         TapCallbacks {
-  // Lógica para cargar el nivel y el personaje
+
+  // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
@@ -39,12 +40,12 @@ class PixelAdventure extends FlameGame
   late Player player;
   late Level level;
 
-  // Lógica para gestionar el nivel actual
+  // Logic to manage the levels
   static const List<String> levelNames = [
     'tutorial-01',
     'tutorial-02',
     'tutorial-03',
-    // 'tutorial-04',
+    //'tutorial-04',
     'level-01',
     'level-02',
     'level-03',
@@ -56,13 +57,13 @@ class PixelAdventure extends FlameGame
   ];
   int currentLevelIndex = 0;
 
-  // Lógica para gestionar el volumen
+  // Logic to manage the sounds
   bool isMusicActive = false;
   double musicSoundVolume = 1.0;
   bool isGameSoundsActive = true;
   double gameSoundVolume = 1.0;
 
-  // Lógica para gestionar los botones, sus tamaños y el modo zurdo
+  // Logic to manage the HUD, controls, size of the buttons and the positions
   late JoystickComponent joystick;
   bool showControls = false;
   double hudSize = 50;
@@ -75,20 +76,20 @@ class PixelAdventure extends FlameGame
   @override
   FutureOr<void> onLoad() async {
     FlameAudio.bgm.initialize();
-    // Carga todas las imagenes al caché
+    // Load all the images in cache
     await images.loadAllImages();
     player = Player(character: characters[currentCharacterIndex]);
 
-    // Detectar el SO y cargar los controles, se añade el if porque al cerrar y abrir la aplicación desaparecía el botón de salto
+    // Detect if the device is a mobile device to show the controls
     try {
       showControls = Platform.isAndroid || Platform.isIOS;
     } catch (e) {}
 
-    // Cargar los overlays para gestionar los menús y el HUD
+    // Load the overlays for the pause menu and settings menu
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
 
-    // Inicializar los botones sin necesidad de reasignar buttonSize después
+    // Initialize the buttons
     changeSkinButton = ChangePlayerSkinButton(
       changeCharacter: changeCharacter,
       buttonSize: hudSize,
@@ -98,7 +99,7 @@ class PixelAdventure extends FlameGame
 
     addAllButtons();
 
-    // Cargar el nivel inicial
+    // Load the first level
     _loadLevel();
 
     return super.onLoad();
@@ -145,7 +146,7 @@ class PixelAdventure extends FlameGame
       currentLevelIndex++;
       _loadLevel();
     } else {
-      //Game Finished - se vuelve al primer nivel
+      //Game Finished - Reload the first level (for the moment)
       currentLevelIndex = 0;
       _loadLevel();
     }

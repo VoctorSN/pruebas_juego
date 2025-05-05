@@ -28,7 +28,7 @@ class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, 
   @override
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    // Actualiza la posición del botón en función del tamaño de la ventana
+    // Update the position of the button when the game is resized
     position = Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
   }
 

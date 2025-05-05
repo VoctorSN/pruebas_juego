@@ -50,7 +50,7 @@ class _ResizeControlsState extends State<ResizeControls> {
     );
   }
 
-  // TODO Añadir el modo para zurdos y diestros
+  // TODO add button to change left handed to right handed
 
   @override
   Widget build(BuildContext context) {

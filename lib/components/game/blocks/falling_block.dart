@@ -17,7 +17,7 @@ class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> 
   final Vector2 initialPosition;
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
-  Vector2 fallingVelocity = Vector2(0, 50); // Velocidad inicial (solo en Y)
+  Vector2 fallingVelocity = Vector2(0, 50);
   bool isFalling = false;
   bool hasCollided = false;
 
@@ -46,7 +46,7 @@ class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Carga el sprite de la plataforma
+    // Change platform sprite
     sprite.animation = animacionEstatica;
     add(sprite);
   }
@@ -57,7 +57,7 @@ class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> 
     while (accumulatedTime >= fixedDeltaTime) {
       if (isFalling) {
         position +=
-            fallingVelocity * dt; // Actualiza la posición según la velocidad
+            fallingVelocity * dt; // Update position based on velocity
       }
       accumulatedTime -= fixedDeltaTime;
     }
@@ -71,7 +71,7 @@ class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> 
   }
 
   void _stopFalling() {
-    isFalling = false; // Detiene el movimiento
+    isFalling = false;
     position = initialPosition;
     sprite.animation = animacionEstatica;
   }

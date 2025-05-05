@@ -51,7 +51,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
           style: TextStyleSingleton().style,),
         NumberSlider(
           game: game,
-          value: game.musicSoundVolume * 50, // Actualiza dinámicamente el valor
+          value: game.musicSoundVolume * 50, // This value updates dinamically
           onChanged: onChanged,
           isActive: isSliderActive,
         ),

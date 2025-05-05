@@ -16,17 +16,17 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
   });
   bool isRed;
 
-  // Cargar sprites
+  // Loading sprites
   late SpriteComponent spriteComponent;
   late Sprite blockActive;
   late Sprite blockInactive;
 
-  // Lógica para alternar entre los bloques activos e inactivos
+  // Logic to switch between active and inactive blocks
   static bool isRedActive = true;
   static bool _timerStarted = false;
   static final List<AlternatingBlock> _instances = [];
 
-  // Lógica que la colisión se active y desactive
+  // Logic to handle collision
   late RectangleHitbox hitbox;
   bool isActive = true;
 

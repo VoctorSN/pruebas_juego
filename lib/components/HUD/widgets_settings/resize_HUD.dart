@@ -38,7 +38,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
     );
   }
 
-  // TODO Añadir el modo para zurdos y diestros
+  // TODO Add left-hand and right-hand options
 
   @override
   Widget build(BuildContext context) {

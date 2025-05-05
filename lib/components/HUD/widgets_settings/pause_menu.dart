@@ -16,8 +16,8 @@ import '../style/text_style_singleton.dart';class PauseMenu extends StatelessWid
     FlameAudio.bgm.stop();
 
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-      minimumSize: const Size(200, 50), // Tamaño uniforme para todos los botones
-      textStyle: const TextStyle(fontSize: 18), // Tamaño de texto uniforme
+      minimumSize: const Size(200, 50),
+      textStyle: const TextStyle(fontSize: 18),
     );
 
     return Center(
@@ -74,7 +74,6 @@ import '../style/text_style_singleton.dart';class PauseMenu extends StatelessWid
                     child: Text('Main Menu',
                       style: TextStyleSingleton().style.copyWith(color: Colors.purple),),
                   ),
-
                 ],
               ),
             ),

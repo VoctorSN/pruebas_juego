@@ -16,10 +16,10 @@ class CollisionBlock extends PositionComponent with CollisionCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // Esto hace que el bloque tenga colisiones
+    // This makes the block solid
     add(
       RectangleHitbox()
-        ..collisionType = CollisionType.passive, // o active si lo prefieres
+        ..collisionType = CollisionType.passive,
     );
   }
 }

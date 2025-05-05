@@ -21,7 +21,7 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Pausar el motor del juego
+    // Stop the game engine and pause the game
     game.pauseEngine();
     game.pauseGame();
 

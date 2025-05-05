@@ -155,7 +155,7 @@ class Player extends SpriteAnimationGroupComponent
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     desappearingAnimation = _specialspriteAnimation('Desappearing', 7);
 
-    // list of all animations
+    // List of all animations
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
@@ -166,7 +166,7 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.desappearing: desappearingAnimation,
     };
 
-    //Current animation
+    // Current animation
     current = PlayerState.idle;
   }
 
@@ -197,8 +197,8 @@ class Player extends SpriteAnimationGroupComponent
     if (hasJumped && isOnGround) {
       _playerJump(dt);
     }
-    //si no quieres saltar en el aire
-    //if(velocity.y > _gravity) isOnGround = false;
+    // If you dont want to jump in the air, then:
+    // if(velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -393,7 +393,7 @@ class Player extends SpriteAnimationGroupComponent
   void updateCharacter(String newCharacter) {
     character = newCharacter;
 
-    // Recargar las animaciones del personaje
+    // Reload animations of the player
     _loadAllAnimations();
   }
 }
