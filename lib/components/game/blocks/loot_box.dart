@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/blocks/collision_block.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
 
@@ -16,11 +17,12 @@ enum LootBoxState { idle, hit }
 // TODO when you hit the lootbox and you collide with the celling the lootbox makes inmune with infinite hp
 class LootBox extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
+
+  // Constructor and atributes
   Function(CollisionBlock) addCollisionBlock;
   Function(CollisionBlock) removeCollisionBlock;
   Function(dynamic) addSpawnPoint;
   String objectInside;
-
   LootBox({
     super.position,
     super.size,
@@ -30,17 +32,19 @@ class LootBox extends SpriteAnimationGroupComponent
     required this.addSpawnPoint,
   });
 
+  // Interactions logic
+  static const _bounceHeight = 200.0;
+  int hp = 3;
+  late final Player player;
+  late CollisionBlock collisionBlock;
+
+  // Animations logic
+  late final SpriteAnimation _idleAnimation;
+  late final SpriteAnimation _hitAnimation;
   static const stepTime = 0.1;
   static const tileSize = 32;
   static final textureSize = Vector2(28, 24);
-  static const _bounceHeight = 200.0;
-  int hp = 3;
 
-  late final SpriteAnimation _idleAnimation;
-  late final SpriteAnimation _hitAnimation;
-  late final Player player;
-  late AudioPool bounceSound;
-  late CollisionBlock collisionBlock;
 
   @override
   FutureOr<void> onLoad() {
@@ -48,7 +52,6 @@ class LootBox extends SpriteAnimationGroupComponent
     player = game.player;
     add(RectangleHitbox(position: Vector2.zero(), size: size));
     _loadAllAnimations();
-    _loadAudio();
     collisionBlock = CollisionBlock(position: Vector2(position.x, position.y+2), size: size);
     addCollisionBlock(collisionBlock);
     return super.onLoad();
@@ -80,8 +83,7 @@ class LootBox extends SpriteAnimationGroupComponent
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       hp--;
-      if (game.isGameSoundsActive)
-        bounceSound.start(volume: game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
       current = LootBoxState.hit;
       player.velocity.y = -_bounceHeight;
       await animationTicker?.completed;
@@ -94,13 +96,6 @@ class LootBox extends SpriteAnimationGroupComponent
         current = LootBoxState.idle;
       }
     }
-  }
-
-  void _loadAudio() async {
-    bounceSound = await AudioPool.createFromAsset(
-      path: 'audio/bounce.wav',
-      maxPlayers: 3,
-    );
   }
 
   void dropObject() {

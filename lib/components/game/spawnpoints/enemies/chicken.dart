@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../../blocks/collision_block.dart';
 import '../../utils.dart';
@@ -12,12 +13,14 @@ enum ChickenState { idle, run, hit }
 
 class Chicken extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameReference<PixelAdventure> {
+
+  // Constructor and attributes
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;
-
   Chicken({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks});
 
+  // Movement logic and interactions with player
   static const stepTime = 0.05;
   static const tileSize = 16;
   static const runSpeed = 80;
@@ -28,12 +31,12 @@ class Chicken extends SpriteAnimationGroupComponent
   double moveDirection = 1;
   double targetDirection = 1;
   bool gotStomped = false;
+  late final Player player;
 
+  // Animations logic
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _runAnimation;
-  late final Player player;
   late final SpriteAnimation _hitAnimation;
-  late AudioPool bounceSound;
 
   Vector2 velocity = Vector2.zero();
 
@@ -43,7 +46,6 @@ class Chicken extends SpriteAnimationGroupComponent
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
     _loadAllAnimations();
     _calculateRange();
-    _loadAudio();
     return super.onLoad();
   }
 
@@ -139,7 +141,7 @@ class Chicken extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive) bounceSound.start(volume: game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
       gotStomped = true;
       current = ChickenState.hit;
       player.velocity.y = -_bounceHeight;
@@ -148,9 +150,5 @@ class Chicken extends SpriteAnimationGroupComponent
     } else {
       player.collidedWithEnemy();
     }
-  }
-
-  void _loadAudio() async {
-    bounceSound = await AudioPool.createFromAsset(path: 'audio/bounce.wav', maxPlayers: 3);
   }
 }

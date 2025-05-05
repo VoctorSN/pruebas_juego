@@ -1,6 +1,6 @@
 import 'package:flame_audio/flame_audio.dart';
 
-/// TODO add background music
+/// TODO add background music?
 class SoundManager {
 
   // Unique instance singleton
@@ -52,5 +52,21 @@ class SoundManager {
 
   void playCollectFruit(volume) {
     collectFruitPool.start(volume: volume);
+  }
+
+  void playHit(volume) {
+    hitPool.start(volume: volume);
+  }
+
+  void playBounce(volume) {
+    bouncePool.start(volume: volume);
+  }
+
+  void playDisappear(volume) {
+    disappearPool.start(volume: volume);
+  }
+
+  void playJump(volume) {
+    jumpPool.start(volume: volume);
   }
 }

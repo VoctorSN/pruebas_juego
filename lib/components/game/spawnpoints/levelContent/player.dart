@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
 import 'package:fruit_collector/components/game/blocks/loot_box.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -32,10 +33,12 @@ enum PlayerState {
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
+  
+  // Constructor and atributes
   String character;
-
   Player({super.position, this.character = 'Ninja Frog'});
 
+  // Animations config
   late SpriteAnimation idleAnimation;
   late SpriteAnimation runningAnimation;
   late SpriteAnimation jumpingAnimation;
@@ -45,10 +48,7 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation desappearingAnimation;
   final double stepTime = 0.05;
 
-  late AudioPool jumpSound;
-  late AudioPool hitSound;
-  late AudioPool disappearSound;
-
+  // Movement logic
   final double _gravity = 9.8;
   double _jumpForce = 260;
   final double _maximunVelocity = 1000;
@@ -61,7 +61,14 @@ class Player extends SpriteAnimationGroupComponent
   bool isOnGround = false;
   bool isOnSand = false;
   bool hasJumped = false;
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
+
+  // Death logic
   bool gotHit = false;
+  bool isRespawning = false;
+  
+  // Collision logic
   List<CollisionBlock> collisionBlocks = [];
   CustomHitbox hitbox = CustomHitbox(
     offsetX: 10,
@@ -69,16 +76,12 @@ class Player extends SpriteAnimationGroupComponent
     width: 14,
     height: 28,
   );
-  double fixedDeltaTime = 1 / 60;
-  double accumulatedTime = 0;
-
-  bool isRespawning = false;
-
+  
   @override
   FutureOr<void> onLoad() {
 
     _loadAllAnimations();
-    _loadAudio();
+    
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(
@@ -204,7 +207,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (game.isGameSoundsActive) jumpSound.start(volume: game.gameSoundVolume);
+    if (game.isGameSoundsActive) SoundManager().playJump(game.gameSoundVolume);
 
     velocity.y = -_jumpForce;
     position.y += velocity.y * dt;
@@ -319,7 +322,7 @@ class Player extends SpriteAnimationGroupComponent
       return;
     }
     isRespawning = true;
-    if (game.isGameSoundsActive) hitSound.start(volume: game.gameSoundVolume);
+    if (game.isGameSoundsActive) SoundManager().playHit(game.gameSoundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
     current = PlayerState.hit;
@@ -341,7 +344,7 @@ class Player extends SpriteAnimationGroupComponent
     await animationTicker?.completed;
     animationTicker?.reset();
     scale.x = 1;
-    position = statringPosition - Vector2.all(32); // 32 = 96-64
+    position = statringPosition - Vector2.all(32);
     current = PlayerState.appearing;
 
     await animationTicker?.completed;
@@ -352,8 +355,8 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive)
-      disappearSound.start(volume: game.gameSoundVolume);
+    if (game.isGameSoundsActive) SoundManager().playDisappear(game.gameSoundVolume);
+
     hasReached = true;
     if (scale.x > 0) {
       position = position - Vector2.all(32);
@@ -373,21 +376,6 @@ class Player extends SpriteAnimationGroupComponent
 
   void collidedWithEnemy() {
     _respawn();
-  }
-
-  Future<void> _loadAudio() async {
-    jumpSound = await AudioPool.createFromAsset(
-      path: 'audio/jump.wav',
-      maxPlayers: 3,
-    );
-    hitSound = await AudioPool.createFromAsset(
-      path: 'audio/hit.wav',
-      maxPlayers: 3,
-    );
-    disappearSound = await AudioPool.createFromAsset(
-      path: 'audio/disappear.wav',
-      maxPlayers: 3,
-    );
   }
 
   void updateCharacter(String newCharacter) {
