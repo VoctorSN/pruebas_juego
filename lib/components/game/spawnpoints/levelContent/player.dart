@@ -51,7 +51,7 @@ class Player extends SpriteAnimationGroupComponent
 
   // Movement logic
   final double _gravity = 9.8;
-  double _jumpForce = 260;
+  double _jumpForce = 240;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   double moveSpeed = 100;
@@ -218,7 +218,7 @@ class Player extends SpriteAnimationGroupComponent
     if (game.isGameSoundsActive) SoundManager().playJump(game.gameSoundVolume);
 
     jumpCount++;
-    velocity.y = -_jumpForce;
+    velocity.y = jumpCount==2 ? -_jumpForce*0.8: -_jumpForce;
     isOnGround = false;
     hasJumped = false;
   }

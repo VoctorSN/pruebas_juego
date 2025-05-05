@@ -205,8 +205,8 @@
             "scale": 1.66,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.8795180722892,
-                "y": 183.73493975903614
+                "x": 320.18072289156623,
+                "y": 183.43373493975903
             }
         },
         "level-06.tmx": {
@@ -215,7 +215,7 @@
                 2
             ],
             "scale": 1,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 319.5,
                 "y": 183.5
@@ -239,7 +239,7 @@
                 2
             ],
             "scale": 1.53,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 353.92156862745094,
                 "y": 117.32026143790853
@@ -259,7 +259,7 @@
                 4
             ],
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 319.6666666666667,
                 "y": 183.66666666666663
@@ -270,8 +270,8 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1,
             "selectedLayer": 0,
@@ -289,10 +289,10 @@
                 4
             ],
             "scale": 1.646171875,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.1366807460491,
-                "y": 184.0634046794172
+                "x": 320.44041573726923,
+                "y": 183.75966968819705
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -304,10 +304,10 @@
                 4
             ],
             "scale": 1.646171875,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 320.1366807460491,
-                "y": 180.41858478477528
+                "x": 320.44041573726923,
+                "y": 180.1148497935551
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {

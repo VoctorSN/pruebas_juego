@@ -43,7 +43,7 @@
   <object id="27" name="Kiwi" type="Fruit" x="272" y="272" width="32" height="32"/>
   <object id="268" name="Orange" type="Fruit" x="304" y="272" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="2" name="Collisions" visible="0">
+ <objectgroup id="2" name="Collisions">
   <object id="6" x="0" y="192" width="160" height="176"/>
   <object id="7" x="160" y="304" width="256" height="64"/>
   <object id="9" x="416" y="192" width="208" height="176"/>
