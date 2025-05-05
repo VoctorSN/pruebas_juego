@@ -70,8 +70,8 @@
   <object id="15" type="Checkpoint" x="526.391" y="142.595" width="64" height="64"/>
   <object id="16" name="Chicken" type="Chicken" x="191.186" y="238.595" width="32" height="32">
    <properties>
-    <property name="offNeg" type="float" value="4.75"/>
-    <property name="offPos" type="float" value="3.75"/>
+    <property name="offNeg" type="float" value="5"/>
+    <property name="offPos" type="float" value="4"/>
    </properties>
   </object>
   <object id="50" type="deathZone" x="-48" y="368" width="736" height="48"/>

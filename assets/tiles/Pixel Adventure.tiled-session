@@ -9,6 +9,9 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/PixelAdventure.tsx": {
+            "scaleInDock": 1
+        },
         "C:/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx": {
             "scale": 1.669921875,
             "selectedLayer": 1,
@@ -191,7 +194,7 @@
                 2
             ],
             "scale": 1.66,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 320.18072289156623,
                 "y": 183.43373493975903

@@ -240,7 +240,7 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y < 0 && jumpCount<2) playerState = PlayerState.jumping;
 
-    if (jumpCount==2) playerState = PlayerState.double_jumping;
+    if (jumpCount==2 && !isOnSand && !isRespawning) playerState = PlayerState.double_jumping;
 
 
     current = playerState;
@@ -338,6 +338,7 @@ class Player extends SpriteAnimationGroupComponent
     if (game.isGameSoundsActive) SoundManager().playHit(game.gameSoundVolume);
     const inmobileDuration = Duration(milliseconds: 400);
     gotHit = true;
+    isOnSand = false;
     current = PlayerState.hit;
 
     await _animationRespawn();

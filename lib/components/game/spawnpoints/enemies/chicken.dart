@@ -32,6 +32,8 @@ class Chicken extends SpriteAnimationGroupComponent
   double targetDirection = 1;
   bool gotStomped = false;
   late final Player player;
+  double fixedDeltaTime = 1 / 60;
+  double accumulatedTime = 0;
 
   // Animations logic
   late final SpriteAnimation _idleAnimation;
@@ -43,6 +45,7 @@ class Chicken extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     player = game.player;
+    debugMode = true;
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
     _loadAllAnimations();
     _calculateRange();
@@ -51,10 +54,15 @@ class Chicken extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    if (!gotStomped) {
-      _movement(dt);
-      _updateState();
-      _checkHorizontalCollisions();
+
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime) {
+      if (!gotStomped) {
+        _movement(fixedDeltaTime);
+        _updateState();
+        _checkHorizontalCollisions();
+      }
+      accumulatedTime -= fixedDeltaTime;
     }
     super.update(dt);
   }
@@ -78,13 +86,12 @@ class Chicken extends SpriteAnimationGroupComponent
       if (!block.isPlatform) {
         if (checkCollisionChicken(this, block)) {
           if (velocity.x > 0) {
-            velocity.x = 0;
             position.x = block.x;
           }
           if (velocity.x < 0) {
-            velocity.x = 0;
             position.x = block.x + block.width;
           }
+          velocity.x = 0;
         }
       }
     }

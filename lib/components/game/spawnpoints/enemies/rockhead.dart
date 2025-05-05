@@ -40,7 +40,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   bool isAtacking = false;
   bool isComingBack = false;
   static const attackVelocity = 100.0;
-  late final comeBackVelocity;
+  static const comeBackVelocity = 25.0;
   static const detectDistance = 50;
   late Player player;
   late Vector2 initialPosition;
@@ -63,7 +63,6 @@ class Rockhead extends SpriteAnimationGroupComponent
     _loadAllStates();
 
     player = game.player;
-    comeBackVelocity = isReversed ? 25.0 : -25.0;
 
     return super.onLoad();
   }
@@ -155,12 +154,8 @@ class Rockhead extends SpriteAnimationGroupComponent
   }
 
   void comeBack() async{
-    Future.delayed(inmobileDuration, () => velocity.y = comeBackVelocity);
-    if (isReversed) {
-      current = State.atack_top;
-    } else {
-      current = State.atack_down;
-    }
+    Future.delayed(inmobileDuration, () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity);
+    current = isReversed ? State.atack_top : State.atack_down;
     velocity = Vector2.zero();
     isComingBack = true;
     isAtacking = false;
