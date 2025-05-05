@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../spawnpoints/levelContent/player.dart';
@@ -22,7 +23,6 @@ class Trampoline extends SpriteAnimationGroupComponent
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _jumpAnimation;
   late final Player player;
-  late AudioPool bounceSound;
 
   @override
   FutureOr<void> onLoad() {
@@ -30,7 +30,6 @@ class Trampoline extends SpriteAnimationGroupComponent
     player = game.player;
     add(RectangleHitbox(position: Vector2.zero(), size: Vector2(28,28)));
     _loadAllAnimations();
-    _loadAudio();
     return super.onLoad();
   }
 
@@ -59,16 +58,12 @@ class Trampoline extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive) bounceSound.start(volume: game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
       current = TrampolineState.jump;
       player.velocity.y = -powerBounce;
       await animationTicker?.completed;
       animationTicker?.reset();
       current = TrampolineState.idle;
     }
-  }
-
-  void _loadAudio() async {
-    bounceSound = await AudioPool.createFromAsset(path: 'audio/bounce.wav', maxPlayers: 3);
   }
 }

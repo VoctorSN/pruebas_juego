@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="58">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="59">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <data encoding="csv">
@@ -9,7 +9,7 @@
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,0,0,62,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
+113,0,0,0,0,0,0,0,0,0,0,62,63,63,63,63,63,63,63,63,63,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,224,224,224,224,224,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,62,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,95,96,96,96,96,96,96,96,96,96,96,97,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,118,118,118,118,118,118,118,118,118,118,119,111,
@@ -42,14 +42,19 @@
     <property name="offPos" type="float" value="0"/>
    </properties>
   </object>
-  <object id="26" name="Player" type="Player" x="320" y="272" width="30.3304" height="29.7471"/>
+  <object id="26" name="Player" type="Player" x="256" y="272" width="30.3304" height="29.7471"/>
   <object id="36" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="37" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="38" type="deathZone" x="-48" y="0" width="48" height="368"/>
   <object id="39" type="deathZone" x="640" y="0" width="48" height="368"/>
   <object id="42" name="rockHead" type="rockHead" x="352" y="192" width="48" height="48">
    <properties>
-    <property name="floorDistance" type="int" value="0"/>
+    <property name="isReversed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="58" name="rockHead" type="rockHead" x="368" y="112" width="48" height="48">
+   <properties>
+    <property name="isReversed" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
@@ -60,7 +65,7 @@
   <object id="4" x="624" y="16" width="16" height="352"/>
   <object id="5" x="0" y="0" width="640" height="16"/>
   <object id="6" x="0" y="16" width="16" height="352"/>
-  <object id="12" type="Platform" x="176" y="96" width="96" height="16">
+  <object id="12" type="Platform" x="176" y="96" width="176" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
    </properties>

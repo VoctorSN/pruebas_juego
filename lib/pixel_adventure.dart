@@ -49,17 +49,17 @@ class PixelAdventure extends FlameGame
     'tutorial-04',
     'level-01',
     'level-02',
-    'level-03',
+    // 'level-03', => lvl de viti imposible
     'level-04',
     'level-05',
     'level-06',
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 0;
+  int currentLevelIndex = 10;
 
   // Logic to manage the sounds
-  bool isMusicActive = true;
+  bool isMusicActive = false;
   double musicSoundVolume = 1.0;
   bool isGameSoundsActive = true;
   double gameSoundVolume = 1.0;

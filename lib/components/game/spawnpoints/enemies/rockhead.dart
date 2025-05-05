@@ -8,19 +8,23 @@ import '../../custom_hitbox.dart';
 import '../levelContent/player.dart';
 
 enum State {
-  blink,
   idle,
   atack_down,
+  atack_top,
+  atacking,
 }
 
 class Rockhead extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
-  Rockhead({super.position, super.size});
+
+  bool isReversed = false;
+  Rockhead({super.position, super.size, this.isReversed = false});
 
   // Animaciones y tamaños
-  late final SpriteAnimation _blinkAnimation;
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _atackDownAnimation;
+  late final SpriteAnimation _atackAnimation;
+  late final SpriteAnimation _atackTopAnimation;
   double stepTime = 0.1;
   final textureSize = Vector2(54, 52);
   CustomHitbox hitbox = CustomHitbox(
@@ -36,7 +40,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   bool isAtacking = false;
   bool isComingBack = false;
   static const attackVelocity = 100.0;
-  static const comeBackVelocity = -25.0;
+  late final comeBackVelocity;
   static const detectDistance = 50;
   late Player player;
   late Vector2 initialPosition;
@@ -47,50 +51,40 @@ class Rockhead extends SpriteAnimationGroupComponent
   @override
   async.FutureOr<void> onLoad() {
 
-
     add(
       RectangleHitbox(
         position: Vector2(hitbox.offsetX, hitbox.offsetY),
         size: Vector2(hitbox.width, hitbox.height),
       ),
     );
+
     initialPosition = position.clone()..round();
+
     _loadAllStates();
-    _startBlinkTimer();
 
     player = game.player;
+    comeBackVelocity = isReversed ? 25.0 : -25.0;
 
     return super.onLoad();
   }
 
   void _loadAllStates() {
-    _blinkAnimation = _spriteAnimation('Blink', 4);
-    _idleAnimation = _spriteAnimation('Idle', 1);
-    _atackDownAnimation = _spriteAnimation('Bottom Hit', 4);
+    _idleAnimation = _spriteAnimation('Blink', 12);
+    _atackDownAnimation = _spriteAnimation('Bottom Hit', 4)..loop = false;
+    _atackAnimation = _spriteAnimation('Attack', 4)..loop = false;
+    _atackTopAnimation = _spriteAnimation('Top Hit', 4)..loop = false;
     animations = {
-      State.blink: _blinkAnimation,
       State.idle: _idleAnimation,
       State.atack_down: _atackDownAnimation,
+      State.atacking: _atackAnimation,
+      State.atack_top: _atackTopAnimation,
     };
     current = State.idle;
   }
 
-  void _startBlinkTimer() {
-    async.Timer.periodic(const Duration(seconds: 3), (timer) {
-      current = State.blink;
-      Future.delayed(Duration(milliseconds: 350), () {
-        current = State.idle;
-      });
-    });
-  }
-
   SpriteAnimation _spriteAnimation(String state, int amount) {
-    final path = state == 'Idle'
-        ? 'Traps/Spike Head/Idle.png'
-        : 'Traps/Spike Head/$state (54x52).png';
-
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache(path),
+      game.images.fromCache('Traps/Spike Head/$state (54x52).png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
@@ -98,8 +92,6 @@ class Rockhead extends SpriteAnimationGroupComponent
       ),
     );
   }
-
-
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
@@ -124,7 +116,7 @@ class Rockhead extends SpriteAnimationGroupComponent
     while (accumulatedTime >= fixedDeltaTime) {
 
       if(!isAtacking && !isComingBack) {
-        checkPlayerPositionX();
+        checkPlayerPosition();
       }
       _updateMovement(fixedDeltaTime);
       accumulatedTime -= fixedDeltaTime;
@@ -132,9 +124,12 @@ class Rockhead extends SpriteAnimationGroupComponent
     super.update(dt);
   }
 
-  void checkPlayerPositionX() {
+  void checkPlayerPosition() {
     final rockheadVisionLeft = x + hitbox.offsetX - detectDistance;
     final rockheadVisionRight = x + width - hitbox.offsetX + detectDistance;
+
+    final playerY = player.y + player.height / 2;
+    final rockheadY = y + height / 2;
 
     // Get the midle point of the player considering its direction
     final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
@@ -142,22 +137,34 @@ class Rockhead extends SpriteAnimationGroupComponent
     // Check if the center of the player is within the Rockhead's vision
     final isAligned = playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
 
-    if (isAligned) {
-      atack();
+    // Check if the player is above or below the Rockhead
+    final isAbove = playerY < rockheadY;
+
+    if (isAligned && !isAbove && !isReversed) {
+      attack(1);
+    } else if (isAligned && isAbove && isReversed) {
+      attack(-1);
     }
   }
 
-  void atack() {
+  void attack(int direction) {
     if(isComingBack) return;
     isAtacking = true;
-    velocity.y = attackVelocity;
+    velocity.y = attackVelocity * direction;
+    current = State.atacking;
   }
 
-  void comeBack() {
+  void comeBack() async{
     Future.delayed(inmobileDuration, () => velocity.y = comeBackVelocity);
-    current = State.atack_down;
+    if (isReversed) {
+      current = State.atack_top;
+    } else {
+      current = State.atack_down;
+    }
     velocity = Vector2.zero();
     isComingBack = true;
     isAtacking = false;
+    await animationTicker?.completed;
+    current = State.idle;
   }
 }

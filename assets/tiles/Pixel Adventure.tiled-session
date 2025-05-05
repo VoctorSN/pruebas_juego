@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "level-08.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -235,14 +235,14 @@
         },
         "level-08.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.53,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 114.05228758169937,
-                "y": 125.16339869281049
+                "x": 359.15032679738556,
+                "y": 121.89542483660134
             }
         },
         "level_01.tmx": {
@@ -261,8 +261,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.6666666666667,
-                "y": 183.66666666666663
+                "x": 320,
+                "y": 183.99999999999997
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -291,8 +291,8 @@
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.44041573726923,
-                "y": 183.75966968819705
+                "x": 320.1366807460491,
+                "y": 184.0634046794172
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -306,8 +306,8 @@
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.44041573726923,
-                "y": 199.55388923164537
+                "x": 320.1366807460491,
+                "y": 180.41858478477528
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -321,19 +321,23 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-    ],
-    "project": "Pixel Adventure.tiled-project",
-    "property.type": "string",
-    "recentFiles": [
-        "level-04.tmx",
-        "tutorial-01.tmx",
-        "level-06.tmx",
-        "level-07.tmx",
-        "level-08.tmx",
-        "tutorial-02.tmx",
-        "level-05.tmx",
         "tutorial-04.tmx",
         "tutorial-03.tmx",
+        "tutorial-01.tmx",
+        "level-08.tmx"
+    ],
+    "project": "Pixel Adventure.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "tutorial-04.tmx",
+        "tutorial-03.tmx",
+        "tutorial-01.tmx",
+        "level-08.tmx",
+        "level-04.tmx",
+        "level-06.tmx",
+        "level-07.tmx",
+        "tutorial-02.tmx",
+        "level-05.tmx",
         "level-03.tmx",
         "level-02.tmx",
         "level-01.tmx"

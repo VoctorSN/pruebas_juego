@@ -161,6 +161,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
             final rockHead = Rockhead(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
+              isReversed: spawnPoint.properties.getValue('isReversed'),
             );
             add(rockHead);
             break;
