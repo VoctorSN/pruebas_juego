@@ -9,7 +9,7 @@ import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpo
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/fruit.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/game_text.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
+import 'package:fruit_collector/components/game/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 import 'package:fruit_collector/components/game/spawnpoints/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';

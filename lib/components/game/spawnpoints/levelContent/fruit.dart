@@ -2,6 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'dart:async';
 
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -18,7 +19,7 @@ class Fruit extends SpriteAnimationComponent
   bool collected = false;
 
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     add(
       RectangleHitbox(
         position: Vector2(hitbox.offsetX, hitbox.offsetY),
@@ -34,14 +35,17 @@ class Fruit extends SpriteAnimationComponent
         textureSize: Vector2.all(32),
       ),
     );
-    _loadAudio();
+
+    //collect_fruit = await AudioPool.createFromAsset(path: 'audio/collect_fruit.wav', maxPlayers: 3);
+
     return super.onLoad();
   }
 
   void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
-      if (game.isGameSoundsActive) collect_fruit.start(volume: game.gameSoundVolume);
+      //if (game.isGameSoundsActive) collect_fruit.start(volume: game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playCollectFruit(game.gameSoundVolume);
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache('Items/Fruits/Collected.png'),
         SpriteAnimationData.sequenced(
@@ -55,9 +59,5 @@ class Fruit extends SpriteAnimationComponent
       await animationTicker?.completed;
       removeFromParent();
     }
-  }
-
-  void _loadAudio() async {
-    collect_fruit = await AudioPool.createFromAsset(path: 'audio/collect_fruit.wav', maxPlayers: 3);
   }
 }

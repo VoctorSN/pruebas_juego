@@ -9,10 +9,11 @@ import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
 
 
-import '../../../../pixel_adventure.dart';
+import '../../../pixel_adventure.dart';
 
 enum LootBoxState { idle, hit }
 
+// TODO when you hit the lootbox and you collide with the celling the lootbox makes inmune with infinite hp
 class LootBox extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
   Function(CollisionBlock) addCollisionBlock;

@@ -6,7 +6,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
+import 'package:fruit_collector/components/game/blocks/loot_box.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../blocks/alterning_block.dart';

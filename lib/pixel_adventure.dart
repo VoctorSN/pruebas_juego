@@ -6,6 +6,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/game/sound_manager.dart';
 
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
@@ -45,7 +46,7 @@ class PixelAdventure extends FlameGame
     'tutorial-01',
     'tutorial-02',
     'tutorial-03',
-    //'tutorial-04',
+    'tutorial-04',
     'level-01',
     'level-02',
     'level-03',
@@ -58,7 +59,7 @@ class PixelAdventure extends FlameGame
   int currentLevelIndex = 0;
 
   // Logic to manage the sounds
-  bool isMusicActive = false;
+  bool isMusicActive = true;
   double musicSoundVolume = 1.0;
   bool isGameSoundsActive = true;
   double gameSoundVolume = 1.0;
@@ -75,9 +76,14 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
+
     FlameAudio.bgm.initialize();
-    // Load all the images in cache
+
+    // Load all the images and sounds in cache
     await images.loadAllImages();
+    await SoundManager().init();
+
+    // Load the player skin
     player = Player(character: characters[currentCharacterIndex]);
 
     // Detect if the device is a mobile device to show the controls
@@ -153,8 +159,8 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadLevel() {
-    FlameAudio.bgm.stop();
     if (isMusicActive) {
+      FlameAudio.bgm.stop();
       FlameAudio.bgm.play('background_music.mp3');
     }
     level = Level(levelName: levelNames[currentLevelIndex], player: player);

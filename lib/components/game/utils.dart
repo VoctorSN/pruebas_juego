@@ -1,7 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/loot_box.dart';
+import 'package:fruit_collector/components/game/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 
 bool checkCollision(Player player, block) {

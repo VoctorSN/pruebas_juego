@@ -13,7 +13,10 @@ import '../style/text_style_singleton.dart';class PauseMenu extends StatelessWid
 
   @override
   Widget build(BuildContext context) {
-    FlameAudio.bgm.stop();
+
+    if (game.isMusicActive) {
+      FlameAudio.bgm.stop();
+    }
 
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       minimumSize: const Size(200, 50),
