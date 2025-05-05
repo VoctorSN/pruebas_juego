@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
 import 'package:fruit_collector/components/game/sound_manager.dart';
@@ -25,15 +24,16 @@ enum PlayerState {
   idle,
   running,
   jumping,
+  double_jumping,
   falling,
   hit,
   appearing,
-  desappearing,
+  disappearing,
 }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
-  
+
   // Constructor and atributes
   String character;
   Player({super.position, this.character = 'Ninja Frog'});
@@ -45,7 +45,8 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation fallingAnimation;
   late SpriteAnimation hitAnimation;
   late SpriteAnimation appearingAnimation;
-  late SpriteAnimation desappearingAnimation;
+  late SpriteAnimation disappearingAnimation;
+  late SpriteAnimation doubleJumpingAnimation;
   final double stepTime = 0.05;
 
   // Movement logic
@@ -61,13 +62,17 @@ class Player extends SpriteAnimationGroupComponent
   bool isOnGround = false;
   bool isOnSand = false;
   bool hasJumped = false;
+  int jumpCount = 0;
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
+
+  // Double jump logic
+  bool hasDoubleJumped = false;
 
   // Death logic
   bool gotHit = false;
   bool isRespawning = false;
-  
+
   // Collision logic
   List<CollisionBlock> collisionBlocks = [];
   CustomHitbox hitbox = CustomHitbox(
@@ -76,12 +81,12 @@ class Player extends SpriteAnimationGroupComponent
     width: 14,
     height: 28,
   );
-  
+
   @override
   FutureOr<void> onLoad() {
 
     _loadAllAnimations();
-    
+
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(
@@ -156,7 +161,8 @@ class Player extends SpriteAnimationGroupComponent
     fallingAnimation = _spriteAnimation('Fall', 1);
     hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
-    desappearingAnimation = _specialspriteAnimation('Desappearing', 7);
+    disappearingAnimation = _specialspriteAnimation('Desappearing', 7);
+    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6);
 
     // List of all animations
     animations = {
@@ -166,7 +172,8 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.falling: fallingAnimation,
       PlayerState.hit: hitAnimation,
       PlayerState.appearing: appearingAnimation,
-      PlayerState.desappearing: desappearingAnimation,
+      PlayerState.disappearing: disappearingAnimation,
+      PlayerState.double_jumping: doubleJumpingAnimation,
     };
 
     // Current animation
@@ -197,11 +204,11 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _updatePlayerMovement(double dt) {
-    if (hasJumped && isOnGround) {
+    if (hasJumped && jumpCount < 2) {
       _playerJump(dt);
     }
     // If you dont want to jump in the air, then:
-    // if(velocity.y > _gravity) isOnGround = false;
+    if(velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -209,8 +216,8 @@ class Player extends SpriteAnimationGroupComponent
   void _playerJump(double dt) {
     if (game.isGameSoundsActive) SoundManager().playJump(game.gameSoundVolume);
 
+    jumpCount++;
     velocity.y = -_jumpForce;
-    position.y += velocity.y * dt;
     isOnGround = false;
     hasJumped = false;
   }
@@ -230,7 +237,10 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y > 0) playerState = PlayerState.falling;
 
-    if (velocity.y < 0) playerState = PlayerState.jumping;
+    if (velocity.y < 0 && jumpCount<2) playerState = PlayerState.jumping;
+
+    if (velocity.y < 0 && jumpCount==2) playerState = PlayerState.double_jumping;
+
 
     current = playerState;
   }
@@ -274,6 +284,7 @@ class Player extends SpriteAnimationGroupComponent
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
             isOnGround = true;
+            jumpCount = 0;
             velocity.y = 0;
             if (block is FallingBlock && !block.isFalling) {
               position.y = block.position.y - hitbox.height - hitbox.offsetY;
@@ -305,6 +316,7 @@ class Player extends SpriteAnimationGroupComponent
             velocity.y = 0;
             position.y = block.y - hitbox.height - hitbox.offsetY;
             isOnGround = true;
+            jumpCount = 0;
             break;
           }
           if (velocity.y < 0) {
@@ -363,7 +375,7 @@ class Player extends SpriteAnimationGroupComponent
     } else if (scale.x < 0) {
       position = position + Vector2(32, -32);
     }
-    current = PlayerState.desappearing;
+    current = PlayerState.disappearing;
 
     await animationTicker?.completed;
     animationTicker?.reset();
