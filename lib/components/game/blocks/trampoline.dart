@@ -2,34 +2,45 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../spawnpoints/levelContent/player.dart';
+import 'collision_block.dart';
 
 enum TrampolineState { idle, jump }
-
 
 class Trampoline extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
   final double powerBounce;
+  Function(CollisionBlock) addCollisionBlock;
 
-  Trampoline({super.position, super.size, this.powerBounce = 0});
+  Trampoline({
+    super.position,
+    super.size,
+    this.powerBounce = 0,
+    required this.addCollisionBlock,
+  });
 
   static const stepTime = 0.05;
   static const tileSize = 32;
   static final textureSize = Vector2(28, 34);
+  late CollisionBlock collisionBlock;
 
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _jumpAnimation;
   late final Player player;
 
+
   @override
   FutureOr<void> onLoad() {
     position.y = position.y + 6;
     player = game.player;
-    add(RectangleHitbox(position: Vector2.zero(), size: Vector2(28,28)));
+    add(RectangleHitbox(position: Vector2.zero(), size: Vector2.all(tileSize+0.0)));
     _loadAllAnimations();
+    collisionBlock = CollisionBlock(position: Vector2(position.x, position.y+5), size: Vector2(tileSize+0.0,tileSize-5.0));
+    addCollisionBlock(collisionBlock);
     return super.onLoad();
   }
 
@@ -58,7 +69,8 @@ class Trampoline extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
+      if (game.isGameSoundsActive)
+        SoundManager().playBounce(game.gameSoundVolume);
       current = TrampolineState.jump;
       player.velocity.y = -powerBounce;
       await animationTicker?.completed;

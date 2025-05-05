@@ -68,6 +68,7 @@ class Player extends SpriteAnimationGroupComponent
 
   // Double jump logic
   bool hasDoubleJumped = false;
+  static const maxJumps = 2;
 
   // Death logic
   bool gotHit = false;
@@ -204,7 +205,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _updatePlayerMovement(double dt) {
-    if (hasJumped && jumpCount < 2) {
+    if (hasJumped && jumpCount < maxJumps) {
       _playerJump(dt);
     }
     // If you dont want to jump in the air, then:
@@ -239,7 +240,7 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y < 0 && jumpCount<2) playerState = PlayerState.jumping;
 
-    if (velocity.y < 0 && jumpCount==2) playerState = PlayerState.double_jumping;
+    if (jumpCount==2) playerState = PlayerState.double_jumping;
 
 
     current = playerState;

@@ -34,7 +34,7 @@
 91,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,89
 </data>
  </layer>
- <objectgroup id="3" name="Collisions" visible="0">
+ <objectgroup id="3" name="Collisions">
   <object id="7" x="0" y="16" width="16" height="336"/>
   <object id="9" x="0" y="0" width="624" height="16"/>
   <object id="10" x="624" y="0" width="16" height="368"/>
@@ -66,7 +66,6 @@
    </properties>
   </object>
   <object id="65" x="176" y="96" width="16" height="64"/>
-  <object id="68" x="48" y="256" width="28" height="16"/>
   <object id="70" type="Platform" x="160" y="304" width="256" height="48">
    <properties>
     <property name="falls" type="bool" value="false"/>
@@ -96,7 +95,7 @@
     <property name="offPos" type="float" value="3.75"/>
    </properties>
   </object>
-  <object id="61" name="Trampoline" type="Trampoline" x="48" y="242.667" width="28" height="28">
+  <object id="61" name="Trampoline" type="Trampoline" x="48" y="240" width="32" height="32">
    <properties>
     <property name="powerBounce" type="float" value="350"/>
    </properties>
