@@ -30,13 +30,13 @@ class PixelAdventure extends FlameGame
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
   final List<String> characters = [
+    '1',
+    '2',
+    '3',
     'Mask Dude',
     'Ninja Frog',
     'Pink Man',
     'Virtual Guy',
-    '1',
-    '2',
-    '3',
   ];
   int currentCharacterIndex = 0;
   late Player player;
@@ -101,7 +101,7 @@ class PixelAdventure extends FlameGame
 
     // Initialize the buttons
     changeSkinButton = ChangePlayerSkinButton(
-      changeCharacter: changeCharacter,
+      changeCharacter: openChangeCharacterMenu,
       buttonSize: hudSize,
     );
     menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
@@ -231,14 +231,14 @@ class PixelAdventure extends FlameGame
     }
   }
 
-  void changeCharacter() {
+  void selectedCharacterIndex(int index) {
+    currentCharacterIndex = index;
+    player.updateCharacter(characters[currentCharacterIndex]);
+  }
+
+  void openChangeCharacterMenu() {
     overlays.add(CharacterSelection.id);
     pauseEngine();
-    // currentCharacterIndex++;
-    // if (currentCharacterIndex >= characters.length) {
-    //   currentCharacterIndex = 0;
-    // }
-    // level.player.updateCharacter(characters[currentCharacterIndex]);
   }
 
   void pauseGame() {

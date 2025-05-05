@@ -44,12 +44,15 @@ class _CharacterSelectionState extends State<CharacterSelection> {
   }
 
   void selectCharacter() {
-    // game.selectedCharacterIndex = selectedIndex;
-    // Navigator.of(context).pop();
+    game.overlays.remove(CharacterSelection.id);
+    game.resumeEngine();
+
+    game.selectedCharacterIndex(selectedIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+    // Reusamos los mismos colores del PauseMenu
     const Color baseColor = Color(0xFF212030);
     const Color buttonColor = Color(0xFF3A3750);
     const Color borderColor = Color(0xFF5A5672);
@@ -59,12 +62,12 @@ class _CharacterSelectionState extends State<CharacterSelection> {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
       foregroundColor: textColor,
-      minimumSize: const Size(180, 48),
+      minimumSize: const Size(220, 48),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(4),
         side: const BorderSide(color: borderColor, width: 2),
       ),
-      elevation: 6,
+      elevation: 8,
     );
 
     return Center(
@@ -81,20 +84,20 @@ class _CharacterSelectionState extends State<CharacterSelection> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'SELECT CHARACTER',
+                'CHARACTER',
                 style: TextStyleSingleton().style.copyWith(
-                  fontSize: 28,
+                  fontSize: 32,
                   color: textColor,
                   shadows: const [
                     Shadow(
                       color: Colors.black,
                       offset: Offset(2, 2),
                       blurRadius: 1,
-                    ),
+                    )
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 30),
               SizedBox(
                 width: avatarSize * 2,
                 child: Row(
@@ -102,8 +105,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                   children: [
                     IconButton(
                       onPressed: previousCharacter,
-                      icon: const Icon(Icons.chevron_left_rounded,
-                          color: Colors.white, size: 40),
+                      icon: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 40),
                     ),
                     Container(
                       width: avatarSize,
@@ -123,13 +125,12 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                     ),
                     IconButton(
                       onPressed: nextCharacter,
-                      icon: const Icon(Icons.chevron_right_rounded,
-                          color: Colors.white, size: 40),
+                      icon: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 40),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 30),
               ElevatedButton.icon(
                 style: buttonStyle,
                 onPressed: selectCharacter,
@@ -137,7 +138,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                 label: Text(
                   'SELECT',
                   style: TextStyleSingleton().style.copyWith(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: textColor,
                   ),
                 ),
