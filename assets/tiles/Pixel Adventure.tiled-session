@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-08.tmx",
+    "activeFile": "level-03.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -158,8 +158,8 @@
             "scale": 1.52890625,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 319.8364844149208,
-                "y": 183.79151762902404
+                "x": 319.50945324476237,
+                "y": 183.46448645886562
             }
         },
         "level-01.tmx#Pixel Adventure": {
@@ -169,8 +169,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320,
-                "y": 184
+                "x": 319.5,
+                "y": 183.5
             }
         },
         "level-03.tmx": {
@@ -179,10 +179,10 @@
                 2
             ],
             "scale": 1.64,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 320.1219512195122,
-                "y": 184.14634146341461
+                "x": 320.4268292682927,
+                "y": 183.84146341463415
             }
         },
         "level-04.tmx": {
@@ -191,7 +191,7 @@
                 2
             ],
             "scale": 1.66,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 320.18072289156623,
                 "y": 183.43373493975903
@@ -235,14 +235,14 @@
         },
         "level-08.tmx": {
             "expandedObjectLayers": [
-                2,
-                3
+                3,
+                2
             ],
             "scale": 1.53,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 359.15032679738556,
-                "y": 121.89542483660134
+                "x": 353.92156862745094,
+                "y": 117.32026143790853
             }
         },
         "level_01.tmx": {
@@ -255,14 +255,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320,
-                "y": 183.99999999999997
+                "x": 319.6666666666667,
+                "y": 183.66666666666663
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -285,14 +285,14 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 320.1366807460491,
-                "y": 184.0634046794172
+                "x": 320.44041573726923,
+                "y": 183.75966968819705
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -300,8 +300,8 @@
         },
         "tutorial-04.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
@@ -324,7 +324,11 @@
         "tutorial-04.tmx",
         "tutorial-03.tmx",
         "tutorial-01.tmx",
-        "level-08.tmx"
+        "level-08.tmx",
+        "level-03.tmx",
+        "level-02.tmx",
+        "level-01.tmx",
+        "level-04.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
@@ -334,13 +338,13 @@
         "tutorial-01.tmx",
         "level-08.tmx",
         "level-04.tmx",
+        "level-01.tmx",
+        "level-02.tmx",
+        "level-03.tmx",
         "level-06.tmx",
         "level-07.tmx",
         "tutorial-02.tmx",
-        "level-05.tmx",
-        "level-03.tmx",
-        "level-02.tmx",
-        "level-01.tmx"
+        "level-05.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-import '../../../pixel_adventure.dart';
+import '../../../../pixel_adventure.dart';
 
 class NumberSlider extends StatefulWidget {
   final PixelAdventure game;

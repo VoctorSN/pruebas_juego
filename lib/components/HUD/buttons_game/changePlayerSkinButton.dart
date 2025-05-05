@@ -11,23 +11,17 @@ class ChangePlayerSkinButton extends SpriteComponent with HasGameReference<Pixel
   ChangePlayerSkinButton({required this.changeCharacter, required this.buttonSize});
 
   @override
-  void onTapDown(TapDownEvent event) {
-    changeCharacter();
-    super.onTapDown(event);
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    game.player.hasJumped = false;
-    super.onTapUp(event);
-  }
-
-  @override
   FutureOr<void> onLoad() {
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/characterButton.png'));
     size = Vector2.all(buttonSize);
     position = Vector2(game.size.x - (buttonSize * 3) - 40, 10);
     return super.onLoad();
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    changeCharacter();
+    super.onTapDown(event);
   }
 }

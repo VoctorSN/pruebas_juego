@@ -12,8 +12,9 @@ import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/toggle_sound_button.dart';
+import 'components/HUD/widgets_settings/character_selecition.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
-import 'components/HUD/widgets_settings/settings_menu.dart';
+import 'components/HUD/widgets_settings/settings/settings_menu.dart';
 import 'components/game/level.dart';
 import 'components/game/spawnpoints/levelContent/player.dart';
 
@@ -89,11 +90,14 @@ class PixelAdventure extends FlameGame
     // Detect if the device is a mobile device to show the controls
     try {
       showControls = Platform.isAndroid || Platform.isIOS;
-    } catch (e) {}
+    } catch (e) {
+      showControls = false;
+    }
 
     // Load the overlays for the pause menu and settings menu
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
+    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
 
     // Initialize the buttons
     changeSkinButton = ChangePlayerSkinButton(
@@ -228,11 +232,13 @@ class PixelAdventure extends FlameGame
   }
 
   void changeCharacter() {
-    currentCharacterIndex++;
-    if (currentCharacterIndex >= characters.length) {
-      currentCharacterIndex = 0;
-    }
-    level.player.updateCharacter(characters[currentCharacterIndex]);
+    overlays.add(CharacterSelection.id);
+    pauseEngine();
+    // currentCharacterIndex++;
+    // if (currentCharacterIndex >= characters.length) {
+    //   currentCharacterIndex = 0;
+    // }
+    // level.player.updateCharacter(characters[currentCharacterIndex]);
   }
 
   void pauseGame() {

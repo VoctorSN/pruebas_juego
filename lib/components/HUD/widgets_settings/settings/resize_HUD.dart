@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../../../pixel_adventure.dart';
-import '../style/text_style_singleton.dart';
-import 'number_slider.dart';
+import '../../../../pixel_adventure.dart';
+import '../../style/text_style_singleton.dart';
+import '../utils/number_slider.dart';
 
 class ResizeHUD extends StatefulWidget {
 

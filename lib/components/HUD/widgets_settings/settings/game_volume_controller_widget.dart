@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
-import '../../../pixel_adventure.dart';
-import 'number_slider.dart';
+import '../../../../pixel_adventure.dart';
+import '../utils/number_slider.dart';
 
 class ToggleGameVolumeWidget extends StatefulWidget {
   final PixelAdventure game;
