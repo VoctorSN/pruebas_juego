@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/settings/settings_menu.dart';
 import '../../../pixel_adventure.dart';
 import '../style/text_style_singleton.dart';
+import 'main_menu/main_menu.dart';
 
 class PauseMenu extends StatelessWidget {
   static String id = 'PauseMenu';
@@ -103,7 +104,13 @@ class PauseMenu extends StatelessWidget {
               ElevatedButton.icon(
                 style: buttonStyle,
                 onPressed: () {
-                  print("Go to Stardew Valley-style main menu");
+                  game.overlays.remove(PauseMenu.id);
+                  game.overlays.add(MainMenu.id);
+                  game.pauseEngine();
+                  if (game.isMusicActive) {
+                    FlameAudio.bgm.play('background_music.mp3',
+                        volume: game.musicSoundVolume);
+                  }
                 },
                 icon: Icon(Icons.home, color: textColor),
                 label: Text(

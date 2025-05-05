@@ -33,6 +33,7 @@ flutter:
 
   assets:
     - assets/audio/
+    - assets/gifsMainMenu/
     - assets/tiles/
     - assets/images/Gems/
     - assets/images/Terrain/

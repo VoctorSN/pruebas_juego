@@ -24,19 +24,6 @@ class _ResizeHUDState extends State<ResizeHUD> {
   _ResizeHUDState({required this.game, required this.updateSizeHUD});
 
   late double value;
-  bool isVisible = true;
-
-  Image get eyeImage {
-    return isVisible
-        ? Image.asset(
-      'assets/images/GUI/HUD/openEye.png',
-      fit: BoxFit.cover,
-    )
-        : Image.asset(
-      'assets/images/GUI/HUD/closeEye.png',
-      fit: BoxFit.cover,
-    );
-  }
 
   // TODO Add left-hand and right-hand options
 
@@ -49,15 +36,6 @@ class _ResizeHUDState extends State<ResizeHUD> {
       Text('HUD Size',
         style: TextStyleSingleton().style,),
       NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
-      IconButton(
-        onPressed: () {
-          setState(() {
-            isVisible = !isVisible;
-            game.showControls = isVisible;
-          });
-        },
-        icon: eyeImage,
-      ),
     ]);
   }
 

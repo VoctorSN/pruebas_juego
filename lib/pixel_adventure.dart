@@ -6,6 +6,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/sound_manager.dart';
 
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
@@ -94,11 +95,6 @@ class PixelAdventure extends FlameGame
       showControls = false;
     }
 
-    // Load the overlays for the pause menu and settings menu
-    overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
-    overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
-    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
-
     // Initialize the buttons
     changeSkinButton = ChangePlayerSkinButton(
       changeCharacter: openChangeCharacterMenu,
@@ -108,6 +104,16 @@ class PixelAdventure extends FlameGame
     jumpButton = JumpButton(controlSize);
 
     addAllButtons();
+
+    // Load the overlays for the pause menu and settings menu
+    overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
+    overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
+    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
+
+    // Open the main menu
+    overlays.add(MainMenu.id);
+    pauseEngine();
 
     // Load the first level
     _loadLevel();
