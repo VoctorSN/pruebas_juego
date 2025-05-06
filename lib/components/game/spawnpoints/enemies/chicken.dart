@@ -45,7 +45,6 @@ class Chicken extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     player = game.player;
-    debugMode = true;
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
     _loadAllAnimations();
     _calculateRange();
