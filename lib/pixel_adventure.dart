@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
-import 'package:fruit_collector/components/game/sound_manager.dart';
-
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
@@ -16,8 +14,8 @@ import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/widgets_settings/character_selecition.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
-import 'components/game/level.dart';
-import 'components/game/spawnpoints/levelContent/player.dart';
+import 'components/game/level/level.dart';
+import 'components/game/spawnpoints/levelBasics/player.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -58,7 +56,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 10;
+  int currentLevelIndex = 8;
 
   // Logic to manage the sounds
   bool isMusicActive = false;

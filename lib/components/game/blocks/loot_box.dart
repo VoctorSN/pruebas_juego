@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/blocks/collision_block.dart';
-import 'package:fruit_collector/components/game/sound_manager.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelBasics/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelExtras/key_unlocker.dart';
 
 import '../../../pixel_adventure.dart';
 

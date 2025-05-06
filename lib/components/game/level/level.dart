@@ -5,20 +5,20 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/spawnpoints/enemies/rockhead.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/checkpoint.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/death_zone.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/fruit.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/game_text.dart';
 import 'package:fruit_collector/components/game/blocks/loot_box.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelBasics/checkpoint.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelBasics/death_zone.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelBasics/fruit.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelBasics/player.dart';
+import 'package:fruit_collector/components/game/spawnpoints/levelExtras/game_text.dart';
 import 'package:fruit_collector/components/game/spawnpoints/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import 'background_tile.dart';
-import 'blocks/alterning_block.dart';
-import 'blocks/collision_block.dart';
-import 'blocks/falling_block.dart';
-import 'blocks/trampoline.dart';
+import '../blocks/alterning_block.dart';
+import '../blocks/collision_block.dart';
+import '../blocks/falling_block.dart';
+import '../blocks/trampoline.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
   final Player player;

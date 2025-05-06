@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-01.tmx",
+    "activeFile": "tutorial-04.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -163,14 +163,14 @@
         },
         "level-01.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.52890625,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.50945324476237,
-                "y": 183.46448645886562
+                "x": 319.8364844149208,
+                "y": 183.79151762902404
             }
         },
         "level-01.tmx#Pixel Adventure": {
@@ -296,14 +296,14 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.44041573726923,
-                "y": 183.75966968819705
+                "x": 320.1366807460491,
+                "y": 180.41858478477528
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -311,14 +311,14 @@
         },
         "tutorial-04.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.646171875,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 320.44041573726923,
-                "y": 180.1148497935551
+                "x": 320.1366807460491,
+                "y": 184.0634046794172
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -340,8 +340,8 @@
     "property.type": "bool",
     "recentFiles": [
         "tutorial-03.tmx",
-        "tutorial-04.tmx",
         "level-01.tmx",
+        "tutorial-04.tmx",
         "tutorial-01.tmx",
         "tutorial-02.tmx",
         "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx",

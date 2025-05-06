@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/game/sound_manager.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-
-import '../spawnpoints/levelContent/player.dart';
+import '../spawnpoints/levelBasics/player.dart';
 import 'collision_block.dart';
 
 enum TrampolineState { idle, jump }

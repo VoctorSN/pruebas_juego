@@ -1,12 +1,11 @@
 import 'dart:async' as async;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fruit_collector/components/game/blocks/collision_block.dart';
 import '../../../../pixel_adventure.dart';
 import '../../custom_hitbox.dart';
-import '../../sound_manager.dart';
-import '../levelContent/player.dart';
+import '../../level/sound_manager.dart';
+import '../levelBasics/player.dart';
 
 enum State { idle, atack_down, atack_top, atacking }
 

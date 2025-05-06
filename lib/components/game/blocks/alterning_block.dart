@@ -2,7 +2,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'dart:async' as async;
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../spawnpoints/levelContent/player.dart';
+import '../spawnpoints/levelBasics/player.dart';
 import '../utils.dart';
 import 'collision_block.dart';
 

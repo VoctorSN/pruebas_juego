@@ -4,8 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
-import 'package:fruit_collector/components/game/sound_manager.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/blocks/loot_box.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
@@ -13,9 +12,10 @@ import '../../blocks/alterning_block.dart';
 import '../../blocks/collision_block.dart';
 import '../../blocks/falling_block.dart';
 import '../../blocks/trampoline.dart';
-import '../../level.dart';
+import '../../level/level.dart';
 import '../../utils.dart';
 import '../enemies/chicken.dart';
+import '../levelExtras/key_unlocker.dart';
 import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';
@@ -29,13 +29,14 @@ enum PlayerState {
   hit,
   appearing,
   disappearing,
+  wallSlide,
 }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
-
   // Constructor and atributes
   String character;
+
   Player({super.position, this.character = 'Ninja Frog'});
 
   // Animations config
@@ -47,6 +48,7 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation appearingAnimation;
   late SpriteAnimation disappearingAnimation;
   late SpriteAnimation doubleJumpingAnimation;
+  late SpriteAnimation wallSlideAnimation;
   final double stepTime = 0.05;
 
   // Movement logic
@@ -85,7 +87,6 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   FutureOr<void> onLoad() {
-
     _loadAllAnimations();
 
     statringPosition = Vector2(position.x, position.y);
@@ -164,6 +165,7 @@ class Player extends SpriteAnimationGroupComponent
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     disappearingAnimation = _specialspriteAnimation('Desappearing', 7);
     doubleJumpingAnimation = _spriteAnimation('Double Jump', 6);
+    wallSlideAnimation = _spriteAnimation('Wall Jump', 5);
 
     // List of all animations
     animations = {
@@ -175,6 +177,7 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.appearing: appearingAnimation,
       PlayerState.disappearing: disappearingAnimation,
       PlayerState.double_jumping: doubleJumpingAnimation,
+      PlayerState.wallSlide: wallSlideAnimation,
     };
 
     // Current animation
@@ -209,7 +212,7 @@ class Player extends SpriteAnimationGroupComponent
       _playerJump(dt);
     }
     // If you dont want to jump in the air, then:
-    if(velocity.y > _gravity) isOnGround = false;
+    if (velocity.y > _gravity) isOnGround = false;
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -218,7 +221,7 @@ class Player extends SpriteAnimationGroupComponent
     if (game.isGameSoundsActive) SoundManager().playJump(game.gameSoundVolume);
 
     jumpCount++;
-    velocity.y = jumpCount==2 ? -_jumpForce*0.8: -_jumpForce;
+    velocity.y = jumpCount == 2 ? -_jumpForce * 0.8 : -_jumpForce;
     isOnGround = false;
     hasJumped = false;
   }
@@ -238,10 +241,10 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y > 0) playerState = PlayerState.falling;
 
-    if (velocity.y < 0 && jumpCount<2) playerState = PlayerState.jumping;
+    if (velocity.y < 0 && jumpCount < 2) playerState = PlayerState.jumping;
 
-    if (jumpCount==2 && !isOnSand && !isRespawning) playerState = PlayerState.double_jumping;
-
+    if (jumpCount == 2 && !isOnSand && !isRespawning)
+      playerState = PlayerState.double_jumping;
 
     current = playerState;
   }
@@ -263,8 +266,16 @@ class Player extends SpriteAnimationGroupComponent
             velocity.x = 0;
             position.x = block.x + block.width + hitbox.width + hitbox.offsetX;
           }
+          _checkWallSlide(block);
         }
       }
+    }
+  }
+
+  _checkWallSlide(CollisionBlock block) {
+    if (velocity.y >= 0 && !isOnGround) {
+      velocity.y = velocity.y * 0.8;
+      current = PlayerState.wallSlide;
     }
   }
 
@@ -321,6 +332,7 @@ class Player extends SpriteAnimationGroupComponent
             break;
           }
           if (velocity.y < 0) {
+            current = PlayerState.wallSlide;
             velocity.y = 0;
             position.y = block.y + block.height - hitbox.offsetY;
             break;
@@ -369,7 +381,8 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive) SoundManager().playDisappear(game.gameSoundVolume);
+    if (game.isGameSoundsActive)
+      SoundManager().playDisappear(game.gameSoundVolume);
 
     hasReached = true;
     if (scale.x > 0) {
