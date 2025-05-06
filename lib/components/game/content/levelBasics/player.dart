@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:fruit_collector/components/game/content/traps/spike.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
@@ -88,7 +89,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-
+    //debugMode = true;
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(

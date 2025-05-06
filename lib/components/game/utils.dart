@@ -95,7 +95,6 @@ bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {
   return horizontalOverlap && verticalOverlap;
 }
 
-
 void movePlayerNextToBlock(Player player, RectangleHitbox blockHitbox) {
   final playerHitbox = player.hitbox;
 
