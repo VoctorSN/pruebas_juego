@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="58">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -35,13 +35,13 @@
   <object id="1" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="2" type="deathZone" x="0" y="368" width="640" height="48"/>
   <object id="3" type="deathZone" x="-48" y="0" width="48" height="416"/>
-  <object id="4" name="Player" type="Player" x="48" y="256" width="32" height="32"/>
+  <object id="4" name="Player" type="Player" x="432" y="176" width="32" height="32"/>
   <object id="5" type="Checkpoint" x="528" y="48" width="64" height="64"/>
   <object id="23" name="Orange" type="Fruit" x="224" y="128" width="32" height="32"/>
   <object id="24" name="Apple" type="Fruit" x="400" y="112" width="32" height="32"/>
   <object id="25" name="Kiwi" type="Fruit" x="160" y="144" width="32" height="32"/>
   <object id="26" name="Bananas" type="Fruit" x="464" y="96" width="32" height="32"/>
-  <object id="27" name="Cherries" type="Fruit" x="528" y="256" width="32" height="32"/>
+  <object id="27" name="Cherries" type="Fruit" x="256" y="256" width="32" height="32"/>
   <object id="28" name="Melon" type="Fruit" x="400" y="256" width="32" height="32"/>
   <object id="29" name="Melon" type="Fruit" x="336" y="128" width="32" height="32"/>
   <object id="30" name="Pineapple" type="Fruit" x="272" y="128" width="32" height="32"/>
@@ -57,6 +57,11 @@
   </object>
   <object id="56" type="GameText" x="320" y="32" width="183.897" height="48">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">JUMP   FAST   AND   DONT   FALL   😱</text>
+  </object>
+  <object id="57" name="Fan" type="Fan" x="464" y="224" width="16" height="32">
+   <properties>
+    <property name="directionRight" type="bool" value="false"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="2" name="Collisions">

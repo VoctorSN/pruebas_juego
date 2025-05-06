@@ -337,7 +337,7 @@
         "level-01.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
-    "property.type": "string",
+    "property.type": "bool",
     "recentFiles": [
         "level-04.tmx",
         "level-07.tmx",

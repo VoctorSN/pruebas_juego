@@ -57,6 +57,7 @@ flutter:
     - assets/images/Main Characters/3/
     - assets/images/Enemies/Chicken/
     - assets/images/Traps/Trampoline/
+    - assets/images/Traps/Fan/
     - assets/icon/
 
 flutter_launcher_icons:

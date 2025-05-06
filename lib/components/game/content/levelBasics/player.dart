@@ -17,6 +17,7 @@ import '../../level/level.dart';
 import '../../util/utils.dart';
 import '../enemies/chicken.dart';
 import '../levelExtras/key_unlocker.dart';
+import '../traps/fan.dart';
 import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';
@@ -152,6 +153,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Chicken) other.collidedWithPlayer();
       if (other is Trampoline) other.collidedWithPlayer();
       if (other is LootBox) other.collidedWithPlayer();
+      if (other is Fan) other.collidedWithPlayer();
       if (other is KeyUnlocker) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);

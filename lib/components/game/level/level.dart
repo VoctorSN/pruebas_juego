@@ -12,6 +12,7 @@ import 'package:fruit_collector/components/game/content/levelBasics/player.dart'
 import 'package:fruit_collector/components/game/content/levelExtras/game_text.dart';
 import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+import '../content/traps/fan.dart';
 import '../content/traps/spike.dart';
 import 'background_tile.dart';
 import '../content/blocks/alterning_block.dart';
@@ -90,6 +91,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is LootBox ||
           component is Spike ||
           component is GameText ||
+          component is Fan ||
           component is Rockhead,
     );
 
@@ -135,6 +137,15 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(saw);
+            break;
+          case 'Fan':
+            final fan = Fan(
+              directionRight: spawnPoint.properties.getValue('directionRight'),
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              addCollisionBlock: addCollisionBlock,
+            );
+            add(fan);
             break;
           case 'Checkpoint':
             final checkpoint = Checkpoint(
