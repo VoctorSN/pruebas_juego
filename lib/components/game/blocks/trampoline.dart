@@ -69,8 +69,7 @@ class Trampoline extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive)
-        SoundManager().playBounce(game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
       current = TrampolineState.jump;
       player.velocity.y = -powerBounce;
       await animationTicker?.completed;

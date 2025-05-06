@@ -5,19 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:fruit_collector/components/game/blocks/collision_block.dart';
 import '../../../../pixel_adventure.dart';
 import '../../custom_hitbox.dart';
+import '../../sound_manager.dart';
 import '../levelContent/player.dart';
 
-enum State {
-  idle,
-  atack_down,
-  atack_top,
-  atacking,
-}
+enum State { idle, atack_down, atack_top, atacking }
 
 class Rockhead extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
-
   bool isReversed = false;
+
   Rockhead({super.position, super.size, this.isReversed = false});
 
   // Animaciones y tamaños
@@ -50,7 +46,6 @@ class Rockhead extends SpriteAnimationGroupComponent
 
   @override
   async.FutureOr<void> onLoad() {
-
     add(
       RectangleHitbox(
         position: Vector2(hitbox.offsetX, hitbox.offsetY),
@@ -93,7 +88,10 @@ class Rockhead extends SpriteAnimationGroupComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     if (other is Player) other.collidedWithEnemy();
     if (other is CollisionBlock) comeBack();
     super.onCollisionStart(intersectionPoints, other);
@@ -101,7 +99,7 @@ class Rockhead extends SpriteAnimationGroupComponent
 
   void _updateMovement(double dt) {
     var actualPosition = position.clone()..round();
-    if(isComingBack && actualPosition == initialPosition){
+    if (isComingBack && actualPosition == initialPosition) {
       position = initialPosition;
       velocity = Vector2.zero();
       Future.delayed(inmobileDuration, () => isComingBack = false);
@@ -113,8 +111,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   void update(double dt) {
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
-
-      if(!isAtacking && !isComingBack) {
+      if (!isAtacking && !isComingBack) {
         checkPlayerPosition();
       }
       _updateMovement(fixedDeltaTime);
@@ -131,10 +128,13 @@ class Rockhead extends SpriteAnimationGroupComponent
     final rockheadY = y + height / 2;
 
     // Get the midle point of the player considering its direction
-    final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
+    final playerMid =
+        player.x +
+        (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
 
     // Check if the center of the player is within the Rockhead's vision
-    final isAligned = playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
+    final isAligned =
+        playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
 
     // Check if the player is above or below the Rockhead
     final isAbove = playerY < rockheadY;
@@ -147,14 +147,24 @@ class Rockhead extends SpriteAnimationGroupComponent
   }
 
   void attack(int direction) {
-    if(isComingBack) return;
+    if (isComingBack) return;
+    if (game.isGameSoundsActive) {
+      SoundManager().startRockheadAttackingLoop(game.gameSoundVolume);
+    }
     isAtacking = true;
     velocity.y = attackVelocity * direction;
     current = State.atacking;
   }
 
-  void comeBack() async{
-    Future.delayed(inmobileDuration, () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity);
+  void comeBack() async {
+    if (game.isGameSoundsActive) {
+      SoundManager().stopRockheadAttackingLoop();
+      SoundManager().playSmash(game.gameSoundVolume);
+    }
+    Future.delayed(
+      inmobileDuration,
+      () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity,
+    );
     current = isReversed ? State.atack_top : State.atack_down;
     velocity = Vector2.zero();
     isComingBack = true;

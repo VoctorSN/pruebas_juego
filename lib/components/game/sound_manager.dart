@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame_audio/flame_audio.dart';
 
 /// TODO add background music?
@@ -17,8 +19,13 @@ class SoundManager {
   late AudioPool hitPool;
   late AudioPool jumpPool;
   late AudioPool bouncePool;
+  late AudioPool smashPool;
+  late AudioPool rockheadAttackingPool;
 
   bool _initialized = false;
+
+  // Timers to control sounds in loop
+  Timer? _rockheadLoopTimer;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -48,25 +55,36 @@ class SoundManager {
       path: 'audio/bounce.wav',
       maxPlayers: 2,
     );
+
+    smashPool = await AudioPool.createFromAsset(
+      path: 'audio/explosion.wav',
+      maxPlayers: 2,
+    );
+
+    rockheadAttackingPool = await AudioPool.createFromAsset(
+      path: 'audio/rockheadAttacking.wav',
+      maxPlayers: 2,
+    );
   }
 
-  void playCollectFruit(volume) {
-    collectFruitPool.start(volume: volume);
+  void playCollectFruit(volume) => collectFruitPool.start(volume: volume);
+  void playHit(volume) => hitPool.start(volume: volume);
+  void playBounce(volume) => bouncePool.start(volume: volume);
+  void playDisappear(volume) => disappearPool.start(volume: volume);
+  void playJump(volume) => jumpPool.start(volume: volume);
+  void playSmash(volume) => smashPool.start(volume: volume);
+  void playRockheadAttacking(volume) => rockheadAttackingPool.start(volume: volume);
+
+  void startRockheadAttackingLoop(double volume, {Duration interval = const Duration(milliseconds: 500)}) {
+    stopRockheadAttackingLoop();
+    playRockheadAttacking(volume);
+    _rockheadLoopTimer = Timer.periodic(interval, (_) {
+      playRockheadAttacking(volume);
+    });
   }
 
-  void playHit(volume) {
-    hitPool.start(volume: volume);
-  }
-
-  void playBounce(volume) {
-    bouncePool.start(volume: volume);
-  }
-
-  void playDisappear(volume) {
-    disappearPool.start(volume: volume);
-  }
-
-  void playJump(volume) {
-    jumpPool.start(volume: volume);
+  void stopRockheadAttackingLoop() {
+    _rockheadLoopTimer?.cancel();
+    _rockheadLoopTimer = null;
   }
 }
