@@ -17,6 +17,7 @@ class Spike extends PositionComponent
   late final int rows;
   static const double spikeSize = 16;
   late RectangleHitbox hitbox;
+  static const double halfRotation = 3.14159;
 
   @override
   FutureOr<void> onLoad() async {
@@ -40,29 +41,35 @@ class Spike extends PositionComponent
 
     switch (wallPosition) {
       case 'TopWall':
-        angleS = 3.14159; // 180°
+        angleS = halfRotation; // 180°
         positionS = Vector2.all(spikeSize);
-        hitboxSize = Vector2(spikeSize, spikeSize/2);
+        hitboxSize = size..y/=2;
         break;
       case 'LeftWall':
-        angleS = 1.5708; // 90°
+        angleS = halfRotation/2; // 90°
         positionS = Vector2(spikeSize, 0);
-        hitboxSize = Vector2(spikeSize/2, spikeSize);
+        hitboxSize = size..x/=2;
         break;
       case 'RightWall':
-        angleS = -1.5708; // -90°
+        angleS = -halfRotation/2; // -90°
         positionS = Vector2(0, spikeSize);
-        hitboxSize = Vector2(spikeSize/2, spikeSize);
+        hitboxSize = size..x/=2;
         hitboxRotation = Vector2(spikeSize/2, 0);
         break;
       case 'BottomWall':
         angleS = 0; // 0°
-        hitboxSize = Vector2(spikeSize, spikeSize/2);
+        hitboxSize = size..y/=2;
         hitboxRotation = Vector2(0, spikeSize/2);
         break;
       default:
         break;
     }
+
+    hitbox = RectangleHitbox(
+      size: hitboxSize,
+      position: Vector2(hitboxRotation.x, hitboxRotation.y),
+    )..debugMode = true..debugColor = Colors.green;
+    add(hitbox);
 
     for (var row = 0; row < rows; row++) {
       for (var col = 0; col < cols; col++) {
@@ -72,11 +79,6 @@ class Spike extends PositionComponent
           angle: angleS,
           position: Vector2(col * spikeSize, row * spikeSize) + positionS,
         );
-        hitbox = RectangleHitbox(
-          size: hitboxSize,
-          position: Vector2(col * spikeSize + hitboxRotation.x, row * spikeSize + hitboxRotation.y),
-        );
-        add(hitbox);
         add(spike);
       }
     }

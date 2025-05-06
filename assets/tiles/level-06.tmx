@@ -91,12 +91,12 @@
     <property name="powerBounce" type="float" value="350"/>
    </properties>
   </object>
-  <object id="144" type="Spike" x="208" y="48" width="16" height="96">
+  <object id="144" type="Spike" x="16" y="48" width="16" height="96">
    <properties>
     <property name="position" value="LeftWall"/>
    </properties>
   </object>
-  <object id="145" type="Spike" x="176" y="48" width="16" height="96">
+  <object id="145" type="Spike" x="336" y="16" width="16" height="96">
    <properties>
     <property name="position" value="RightWall"/>
    </properties>
@@ -116,22 +116,22 @@
     <property name="position" value="RightWall"/>
    </properties>
   </object>
-  <object id="151" type="Spike" x="208" y="160" width="16" height="32">
+  <object id="151" type="Spike" x="16" y="160" width="16" height="32">
    <properties>
     <property name="position" value="LeftWall"/>
    </properties>
   </object>
-  <object id="152" type="Spike" x="208" y="208" width="16" height="16">
+  <object id="152" type="Spike" x="16" y="208" width="16" height="16">
    <properties>
     <property name="position" value="LeftWall"/>
    </properties>
   </object>
-  <object id="153" type="Spike" x="176" y="160" width="16" height="32">
+  <object id="153" type="Spike" x="336" y="128" width="16" height="32">
    <properties>
     <property name="position" value="RightWall"/>
    </properties>
   </object>
-  <object id="154" type="Spike" x="176" y="208" width="16" height="16">
+  <object id="154" type="Spike" x="336" y="176" width="16" height="16">
    <properties>
     <property name="position" value="RightWall"/>
    </properties>
