@@ -22,7 +22,7 @@ class Spike extends PositionComponent
   FutureOr<void> onLoad() async {
     await _loadRepeatedSpikes();
 
-    hitbox = RectangleHitbox(anchor: Anchor.topLeft)..debugColor = Colors.red;
+    hitbox = RectangleHitbox(anchor: Anchor.topLeft);
 
     return super.onLoad();
   }
@@ -35,22 +35,30 @@ class Spike extends PositionComponent
     rows = (size.y / spikeSize).ceil();
     double angleS = 0;
     Vector2 positionS = Vector2.zero();
+    Vector2 hitboxSize = Vector2.all(16);
+    Vector2 hitboxRotation = Vector2.zero();
 
     switch (wallPosition) {
       case 'TopWall':
         angleS = 3.14159; // 180°
-        positionS += Vector2.all(spikeSize);
+        positionS = Vector2.all(spikeSize);
+        hitboxSize = Vector2(spikeSize, spikeSize/2);
         break;
       case 'LeftWall':
         angleS = 1.5708; // 90°
-        positionS += Vector2(spikeSize, 0);
+        positionS = Vector2(spikeSize, 0);
+        hitboxSize = Vector2(spikeSize/2, spikeSize);
         break;
       case 'RightWall':
         angleS = -1.5708; // -90°
-        positionS += Vector2(0, spikeSize);
+        positionS = Vector2(0, spikeSize);
+        hitboxSize = Vector2(spikeSize/2, spikeSize);
+        hitboxRotation = Vector2(spikeSize/2, 0);
         break;
       case 'BottomWall':
         angleS = 0; // 0°
+        hitboxSize = Vector2(spikeSize, spikeSize/2);
+        hitboxRotation = Vector2(0, spikeSize/2);
         break;
       default:
         break;
@@ -64,6 +72,11 @@ class Spike extends PositionComponent
           angle: angleS,
           position: Vector2(col * spikeSize, row * spikeSize) + positionS,
         );
+        hitbox = RectangleHitbox(
+          size: hitboxSize,
+          position: Vector2(col * spikeSize + hitboxRotation.x, row * spikeSize + hitboxRotation.y),
+        );
+        add(hitbox);
         add(spike);
       }
     }

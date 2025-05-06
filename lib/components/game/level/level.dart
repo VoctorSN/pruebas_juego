@@ -71,11 +71,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   void respawnObjects() {
-    for(var component in children) {
+    for (var component in children) {
       if (component is Trampoline) {
         removeCollisionBlock(component.collisionBlock);
-      }
-      else if (component is LootBox) {
+      } else if (component is LootBox) {
         removeCollisionBlock(component.collisionBlock);
       }
     }
@@ -89,6 +88,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is DeathZone ||
           component is AlternatingBlock ||
           component is LootBox ||
+          component is Spike ||
+          component is GameText ||
           component is Rockhead,
     );
 

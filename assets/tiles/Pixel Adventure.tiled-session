@@ -222,14 +222,14 @@
         },
         "level-06.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
-            "scale": 1,
+            "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.5,
-                "y": 183.5
+                "x": 318.33333333333326,
+                "y": 224.33333333333337
             }
         },
         "level-07.tmx": {

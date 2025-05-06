@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../../content/blocks/collision_block.dart';
-import '../../utils.dart';
+import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum ChickenState { idle, run, hit }
