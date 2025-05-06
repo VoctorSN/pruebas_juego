@@ -16,16 +16,13 @@ class Spike extends PositionComponent
   late final int cols;
   late final int rows;
   static const double spikeSize = 16;
+  late RectangleHitbox hitbox;
 
   @override
   FutureOr<void> onLoad() async {
     await _loadRepeatedSpikes();
 
-    add(
-      RectangleHitbox(anchor: Anchor.topLeft)
-        ..debugMode = true
-        ..debugColor = Colors.red,
-    );
+    hitbox = RectangleHitbox(anchor: Anchor.topLeft)..debugColor = Colors.red;
 
     return super.onLoad();
   }
@@ -36,34 +33,37 @@ class Spike extends PositionComponent
 
     cols = (size.x / spikeSize).ceil();
     rows = (size.y / spikeSize).ceil();
+    double angleS = 0;
+    Vector2 positionS = Vector2.zero();
+
+    switch (wallPosition) {
+      case 'TopWall':
+        angleS = 3.14159; // 180°
+        positionS += Vector2.all(spikeSize);
+        break;
+      case 'LeftWall':
+        angleS = 1.5708; // 90°
+        positionS += Vector2(spikeSize, 0);
+        break;
+      case 'RightWall':
+        angleS = -1.5708; // -90°
+        positionS += Vector2(0, spikeSize);
+        break;
+      case 'BottomWall':
+        angleS = 0; // 0°
+        break;
+      default:
+        break;
+    }
 
     for (var row = 0; row < rows; row++) {
       for (var col = 0; col < cols; col++) {
         spike = SpriteComponent(
           sprite: baseSprite,
           size: Vector2.all(spikeSize),
-          position: Vector2(col * spikeSize, row * spikeSize),
+          angle: angleS,
+          position: Vector2(col * spikeSize, row * spikeSize) + positionS,
         );
-
-        // Rotate the spikes based on the wall position (using π)
-        switch (wallPosition) {
-          case 'TopWall':
-            spike.angle = 3.14159; // 180°
-            spike.position += Vector2.all(spikeSize);
-            break;
-          case 'LeftWall':
-            spike.angle = 1.5708; // 90°
-            spike.position += Vector2(spikeSize, 0);
-            break;
-          case 'RightWall':
-            spike.angle = -1.5708; // -90°
-            spike.position += Vector2(0, spikeSize);
-            break;
-          case 'BottomWall':
-          default:
-            spike.angle = 0;
-            break;
-        }
         add(spike);
       }
     }
