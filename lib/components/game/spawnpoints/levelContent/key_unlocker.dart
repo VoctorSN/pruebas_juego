@@ -14,15 +14,13 @@ class KeyUnlocker extends SpriteAnimationComponent
   KeyUnlocker({this.name = '3', super.position, super.size});
 
   final double stepTime = 0.05;
-  final hitbox = CustomHitbox(offsetX: 10, offsetY: 10, width: 12, height: 12);
   bool collected = false;
 
   @override
   FutureOr<void> onLoad() {
+    debugMode = true;
     add(
       RectangleHitbox(
-        position: Vector2(hitbox.offsetX, hitbox.offsetY),
-        size: Vector2(hitbox.width, hitbox.height),
         collisionType: CollisionType.passive,
       ),
     );

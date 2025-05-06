@@ -18,12 +18,11 @@ class GameText extends TextComponent with HasGameReference {
         fontSize: fontSize,
         fontFamily: fontFamily,
         color: color,
-        height: 1.0, // Espaciado de línea
+        height: 1.0,
         overflow: TextOverflow.visible,
       ),
     ),
   ) {
-    // Establecer el tamaño máximo para permitir el ajuste de texto
     size = Vector2(maxWidth, double.infinity);
   }
 
@@ -39,19 +38,15 @@ class GameText extends TextComponent with HasGameReference {
       text: TextSpan(
         text: text,
         style: TextStyle(
-          fontSize: 16,  // Asegúrate de que sea el mismo que se usa en el constructor
+          fontSize: 16,
           fontFamily: 'ArcadeClassic',
           color: Colors.black,
         ),
       ),
       textDirection: TextDirection.ltr,
-      textAlign: TextAlign.center,  // Centrar el texto
+      textAlign: TextAlign.center,
     );
-
-    // Ajustar el tamaño del texto automáticamente para el contenedor
     textPainter.layout(maxWidth: size.x);
-
-    // Dibujar el texto con ajuste de línea
     textPainter.paint(canvas, position.toOffset());
   }
 }

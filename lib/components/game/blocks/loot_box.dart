@@ -9,7 +9,6 @@ import 'package:fruit_collector/components/game/sound_manager.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/player.dart';
 import 'package:fruit_collector/components/game/spawnpoints/levelContent/key_unlocker.dart';
 
-
 import '../../../pixel_adventure.dart';
 
 enum LootBoxState { idle, hit }
@@ -17,12 +16,12 @@ enum LootBoxState { idle, hit }
 // TODO when you hit the lootbox and you collide with the celling the lootbox makes inmune with infinite hp
 class LootBox extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
-
   // Constructor and atributes
   Function(CollisionBlock) addCollisionBlock;
   Function(CollisionBlock) removeCollisionBlock;
   Function(dynamic) addSpawnPoint;
   String objectInside;
+
   LootBox({
     super.position,
     super.size,
@@ -45,14 +44,16 @@ class LootBox extends SpriteAnimationGroupComponent
   static const tileSize = 32;
   static final textureSize = Vector2(28, 24);
 
-
   @override
   FutureOr<void> onLoad() {
     position.y = position.y + 12;
     player = game.player;
     add(RectangleHitbox(position: Vector2.zero(), size: size));
     _loadAllAnimations();
-    collisionBlock = CollisionBlock(position: Vector2(position.x, position.y+2), size: size);
+    collisionBlock = CollisionBlock(
+      position: Vector2(position.x, position.y + 2),
+      size: size,
+    );
     addCollisionBlock(collisionBlock);
     return super.onLoad();
   }
@@ -83,7 +84,8 @@ class LootBox extends SpriteAnimationGroupComponent
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       hp--;
-      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
+      if (game.isGameSoundsActive)
+        SoundManager().playBounce(game.gameSoundVolume);
       current = LootBoxState.hit;
       player.velocity.y = -_bounceHeight;
       await animationTicker?.completed;
@@ -99,7 +101,13 @@ class LootBox extends SpriteAnimationGroupComponent
   }
 
   void dropObject() {
-    KeyUnlocker key = KeyUnlocker(position:position,size:size,name: objectInside);
+    Vector2 keyPosition =
+        position + (size / 2) - Vector2.all(8); // Centra el KeyUnlocker
+    KeyUnlocker key = KeyUnlocker(
+      position: keyPosition,
+      size: Vector2.all(16),
+      name: objectInside,
+    );
     addSpawnPoint(key);
   }
 }
