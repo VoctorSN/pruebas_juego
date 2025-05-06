@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../blocks/collision_block.dart';
@@ -11,6 +12,7 @@ enum FanState { off, on }
 class Fan extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
   final bool directionRight;
+  final double fanDistance;
   Function(CollisionBlock) addCollisionBlock;
 
   Fan({
@@ -18,10 +20,11 @@ class Fan extends SpriteAnimationGroupComponent
     super.size,
     this.directionRight = false,
     required this.addCollisionBlock,
+    this.fanDistance = 10,
   });
 
   static const stepTime = 0.05;
-  static const tileSize = 32;
+  static const tileSize = 16.0;
   static final textureSize = Vector2(9,23);
   late CollisionBlock collisionBlock;
 
@@ -32,19 +35,26 @@ class Fan extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     player = game.player;
-    add(
-      RectangleHitbox(
-        position: Vector2.zero(),
-        size: Vector2.all(tileSize + 0.0),
-      ),
-    );
+    createHitbox();
     _loadAllAnimations();
+    position.x += directionRight ? tileSize : 0;
     collisionBlock = CollisionBlock(
       position: position,
       size: size,
     );
     addCollisionBlock(collisionBlock);
+    scale = directionRight ? Vector2(-1,1) : Vector2(1, 1);
     return super.onLoad();
+  }
+
+  void createHitbox() {
+    Vector2 hitboxSize = Vector2(fanDistance*tileSize,size.y);
+    add(
+      RectangleHitbox(
+        position: Vector2(-hitboxSize.x,0),
+        size: hitboxSize,
+      )..debugMode = true..debugColor = Colors.cyan,
+    );
   }
 
   void _loadAllAnimations() {
@@ -71,13 +81,11 @@ class Fan extends SpriteAnimationGroupComponent
   }
 
   void collidedWithPlayer() async {
-    // if (player.velocity.y > 0 && player.y + player.height > position.y) {
-    //   if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
-    //   current = TrampolineState.jump;
-    //   player.velocity.y = -powerBounce;
-    //   await animationTicker?.completed;
-    //   animationTicker?.reset();
-    //   current = TrampolineState.idle;
-    // }
+    player.horizontalMovement += directionRight ? 0.1 : -0.1;
+    player.horizontalMovement.clamp(-100, 100);
+  }
+
+  onCollisionEnd(CollisionBlock other) {
+    print("salio");
   }
 }

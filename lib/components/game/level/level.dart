@@ -72,10 +72,13 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   void respawnObjects() {
+    ///TODO chechk if this works without the for loop
     for (var component in children) {
       if (component is Trampoline) {
         removeCollisionBlock(component.collisionBlock);
       } else if (component is LootBox) {
+        removeCollisionBlock(component.collisionBlock);
+      } else if (component is Fan) {
         removeCollisionBlock(component.collisionBlock);
       }
     }
@@ -144,6 +147,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
               addCollisionBlock: addCollisionBlock,
+              fanDistance: spawnPoint.properties.getValue('fanDistance'),
             );
             add(fan);
             break;

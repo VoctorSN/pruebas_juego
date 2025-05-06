@@ -153,10 +153,17 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Chicken) other.collidedWithPlayer();
       if (other is Trampoline) other.collidedWithPlayer();
       if (other is LootBox) other.collidedWithPlayer();
-      if (other is Fan) other.collidedWithPlayer();
       if (other is KeyUnlocker) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (!hasReached) {
+      if (other is Fan) other.collidedWithPlayer();
+    }
+    super.onCollision(intersectionPoints, other);
   }
 
   void _loadAllAnimations() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="58">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="59">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -41,7 +41,7 @@
   <object id="24" name="Apple" type="Fruit" x="400" y="112" width="32" height="32"/>
   <object id="25" name="Kiwi" type="Fruit" x="160" y="144" width="32" height="32"/>
   <object id="26" name="Bananas" type="Fruit" x="464" y="96" width="32" height="32"/>
-  <object id="27" name="Cherries" type="Fruit" x="256" y="256" width="32" height="32"/>
+  <object id="27" name="Cherries" type="Fruit" x="240" y="256" width="32" height="32"/>
   <object id="28" name="Melon" type="Fruit" x="400" y="256" width="32" height="32"/>
   <object id="29" name="Melon" type="Fruit" x="336" y="128" width="32" height="32"/>
   <object id="30" name="Pineapple" type="Fruit" x="272" y="128" width="32" height="32"/>
@@ -58,9 +58,16 @@
   <object id="56" type="GameText" x="320" y="32" width="183.897" height="48">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">JUMP   FAST   AND   DONT   FALL   😱</text>
   </object>
-  <object id="57" name="Fan" type="Fan" x="464" y="224" width="16" height="32">
+  <object id="57" name="Fan" type="Fan" x="560" y="256" width="16" height="32">
    <properties>
     <property name="directionRight" type="bool" value="false"/>
+    <property name="fanDistance" type="float" value="8"/>
+   </properties>
+  </object>
+  <object id="58" name="Fan" type="Fan" x="16" y="256" width="16" height="32">
+   <properties>
+    <property name="directionRight" type="bool" value="true"/>
+    <property name="fanDistance" type="float" value="8"/>
    </properties>
   </object>
  </objectgroup>
