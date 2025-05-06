@@ -3,22 +3,23 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/game/spawnpoints/enemies/chicken.dart';
-import 'package:fruit_collector/components/game/spawnpoints/enemies/rockhead.dart';
-import 'package:fruit_collector/components/game/blocks/loot_box.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelBasics/checkpoint.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelBasics/death_zone.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelBasics/fruit.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelBasics/player.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelExtras/game_text.dart';
-import 'package:fruit_collector/components/game/spawnpoints/traps/saw.dart';
+import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
+import 'package:fruit_collector/components/game/content/enemies/rockhead.dart';
+import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
+import 'package:fruit_collector/components/game/content/levelBasics/checkpoint.dart';
+import 'package:fruit_collector/components/game/content/levelBasics/death_zone.dart';
+import 'package:fruit_collector/components/game/content/levelBasics/fruit.dart';
+import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
+import 'package:fruit_collector/components/game/content/levelExtras/game_text.dart';
+import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
+import '../content/traps/spike.dart';
 import 'background_tile.dart';
-import '../blocks/alterning_block.dart';
-import '../blocks/collision_block.dart';
-import '../blocks/falling_block.dart';
-import '../blocks/trampoline.dart';
+import '../content/blocks/alterning_block.dart';
+import '../content/blocks/collision_block.dart';
+import '../content/blocks/falling_block.dart';
+import '../content/blocks/trampoline.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
   final Player player;
@@ -90,7 +91,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is DeathZone ||
           component is AlternatingBlock ||
           component is LootBox ||
-          component is Rockhead,
+          component is Rockhead ||
+          component is Spike,
     );
 
     for (CollisionBlock block in collisionBlocks) {
@@ -176,6 +178,14 @@ class Level extends World with HasGameReference<PixelAdventure> {
               isReversed: spawnPoint.properties.getValue('isReversed'),
             );
             add(rockHead);
+            break;
+          case 'Spike':
+            final spike = Spike(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              wallPosition: spawnPoint.properties.getValue('position'),
+            );
+            add(spike);
             break;
           case 'lootBox':
             final lootBox = LootBox(

@@ -14,8 +14,8 @@ import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/widgets_settings/character_selecition.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
+import 'components/game/content/levelBasics/player.dart';
 import 'components/game/level/level.dart';
-import 'components/game/spawnpoints/levelBasics/player.dart';
 
 class PixelAdventure extends FlameGame
     with

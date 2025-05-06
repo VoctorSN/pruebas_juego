@@ -5,13 +5,13 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/custom_hitbox.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
-import 'package:fruit_collector/components/game/blocks/loot_box.dart';
+import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
-import '../../blocks/alterning_block.dart';
-import '../../blocks/collision_block.dart';
-import '../../blocks/falling_block.dart';
-import '../../blocks/trampoline.dart';
+import '../../content/blocks/alterning_block.dart';
+import '../../content/blocks/collision_block.dart';
+import '../../content/blocks/falling_block.dart';
+import '../../content/blocks/trampoline.dart';
 import '../../level/level.dart';
 import '../../utils.dart';
 import '../enemies/chicken.dart';
@@ -274,7 +274,7 @@ class Player extends SpriteAnimationGroupComponent
 
   _checkWallSlide(CollisionBlock block) {
     if (velocity.y >= 0 && !isOnGround) {
-      velocity.y = velocity.y * 0.8;
+      velocity.y = velocity.y * 0.7;
       current = PlayerState.wallSlide;
     }
   }

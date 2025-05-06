@@ -3,7 +3,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../spawnpoints/levelBasics/player.dart';
+import '../levelBasics/player.dart';
 import 'collision_block.dart';
 
 enum TrampolineState { idle, jump }

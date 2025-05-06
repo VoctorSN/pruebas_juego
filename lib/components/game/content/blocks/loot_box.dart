@@ -2,16 +2,15 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:fruit_collector/components/game/blocks/collision_block.dart';
+import 'package:fruit_collector/components/game/content/blocks/collision_block.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelBasics/player.dart';
-import 'package:fruit_collector/components/game/spawnpoints/levelExtras/key_unlocker.dart';
+import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
+import 'package:fruit_collector/components/game/content/levelExtras/key_unlocker.dart';
 
-import '../../../pixel_adventure.dart';
+import '../../../../pixel_adventure.dart';
 
 enum LootBoxState { idle, hit }
 
-// TODO when you hit the lootbox and you collide with the celling the lootbox makes inmune with infinite hp
 class LootBox extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
   // Constructor and atributes
