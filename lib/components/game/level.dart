@@ -56,13 +56,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
           textObject.x + textObject.width / 2,
           textObject.y + textObject.height / 2,
         );
+
         final gameText = GameText(
           text: text,
-          position: position,
+          position: Vector2(position.x - textObject.width / 2, position.y),
+          maxWidth: textObject.width,
           fontSize: 16,
-          color: Colors.white,
+          color: Colors.black,
           fontFamily: 'ArcadeClassic',
         );
+
         add(gameText);
       }
     }

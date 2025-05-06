@@ -88,7 +88,7 @@ class LootBox extends SpriteAnimationGroupComponent
       player.velocity.y = -_bounceHeight;
       await animationTicker?.completed;
       animationTicker?.reset();
-      if (hp == 0) {
+      if (hp <= 0) {
         removeCollisionBlock(collisionBlock);
         removeFromParent();
         dropObject();

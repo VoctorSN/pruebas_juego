@@ -68,7 +68,7 @@
    </properties>
   </object>
   <object id="47" type="GameText" x="208" y="96" width="192" height="64">
-   <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">DODGE THE SAWS, VOID AND ENEMIES TO SURVIVE ☠️</text>
+   <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">DODGE   THE   SAWS,   VOID   AND   ENEMIES   TO   SURVIVE   ☠️</text>
   </object>
  </objectgroup>
  <objectgroup id="2" name="Collisions">
