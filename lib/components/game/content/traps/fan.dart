@@ -10,7 +10,7 @@ import '../levelBasics/player.dart';
 enum FanState { off, on }
 
 class Fan extends SpriteAnimationGroupComponent
-    with HasGameReference<PixelAdventure> {
+    with HasGameReference<PixelAdventure>, CollisionCallbacks {
   final bool directionRight;
   final double fanDistance;
   Function(CollisionBlock) addCollisionBlock;
@@ -25,7 +25,7 @@ class Fan extends SpriteAnimationGroupComponent
 
   static const stepTime = 0.05;
   static const tileSize = 16.0;
-  static final textureSize = Vector2(9,23);
+  static final textureSize = Vector2(9, 23);
   late CollisionBlock collisionBlock;
 
   late final SpriteAnimation _offAnimation;
@@ -38,22 +38,18 @@ class Fan extends SpriteAnimationGroupComponent
     createHitbox();
     _loadAllAnimations();
     position.x += directionRight ? tileSize : 0;
-    collisionBlock = CollisionBlock(
-      position: position,
-      size: size,
-    );
+    collisionBlock = CollisionBlock(position: position, size: size);
     addCollisionBlock(collisionBlock);
-    scale = directionRight ? Vector2(-1,1) : Vector2(1, 1);
+    scale = directionRight ? Vector2(-1, 1) : Vector2(1, 1);
     return super.onLoad();
   }
 
   void createHitbox() {
-    Vector2 hitboxSize = Vector2(fanDistance*tileSize,size.y);
+    Vector2 hitboxSize = Vector2(fanDistance * tileSize, size.y);
     add(
-      RectangleHitbox(
-        position: Vector2(-hitboxSize.x,0),
-        size: hitboxSize,
-      )..debugMode = true..debugColor = Colors.cyan,
+      RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize)
+        ..debugMode = true
+        ..debugColor = Colors.cyan,
     );
   }
 
@@ -61,10 +57,7 @@ class Fan extends SpriteAnimationGroupComponent
     _offAnimation = _spriteAnimation('Off', 1);
     _onAnimation = _spriteAnimation('On (36x23)', 4);
 
-    animations = {
-      FanState.off: _offAnimation,
-      FanState.on: _onAnimation,
-    };
+    animations = {FanState.off: _offAnimation, FanState.on: _onAnimation};
 
     current = FanState.on;
   }
@@ -85,7 +78,11 @@ class Fan extends SpriteAnimationGroupComponent
     player.horizontalMovement.clamp(-100, 100);
   }
 
-  onCollisionEnd(CollisionBlock other) {
-    print("salio");
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (other is Player) {
+      other.horizontalMovement=0;
+    }
+    super.onCollisionEnd(other);
   }
 }
