@@ -17,7 +17,7 @@ import '../../level/level.dart';
 import '../../util/utils.dart';
 import '../enemies/chicken.dart';
 import '../levelExtras/key_unlocker.dart';
-import '../traps/fan.dart';
+import '../traps/fan/fan.dart';
 import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';

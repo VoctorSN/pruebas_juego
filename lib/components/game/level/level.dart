@@ -12,7 +12,7 @@ import 'package:fruit_collector/components/game/content/levelBasics/player.dart'
 import 'package:fruit_collector/components/game/content/levelExtras/game_text.dart';
 import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../content/traps/fan.dart';
+import '../content/traps/fan/fan.dart';
 import '../content/traps/spike.dart';
 import 'background_tile.dart';
 import '../content/blocks/alterning_block.dart';
@@ -72,16 +72,6 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   void respawnObjects() {
-    ///TODO chechk if this works without the for loop
-    for (var component in children) {
-      if (component is Trampoline) {
-        removeCollisionBlock(component.collisionBlock);
-      } else if (component is LootBox) {
-        removeCollisionBlock(component.collisionBlock);
-      } else if (component is Fan) {
-        removeCollisionBlock(component.collisionBlock);
-      }
-    }
     removeWhere(
       (component) =>
           component is Fruit ||
@@ -105,6 +95,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     }
     collisionBlocks.clear();
     _spawningObjects();
+    _addGameText();
     _addCollisions();
   }
 

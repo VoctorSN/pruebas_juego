@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../blocks/collision_block.dart';
-import '../levelBasics/player.dart';
+import '../../blocks/collision_block.dart';
+import '../../levelBasics/player.dart';
+import 'air_effect.dart';
 
 enum FanState { off, on }
 
@@ -48,8 +48,15 @@ class Fan extends SpriteAnimationGroupComponent
     Vector2 hitboxSize = Vector2(fanDistance * tileSize, size.y);
     add(
       RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize)
-        ..debugMode = true
+        ..debugMode = false
         ..debugColor = Colors.cyan,
+    );
+
+    add(
+      AirEffect(
+        size: hitboxSize,
+        position: Vector2(-hitboxSize.x, 0),
+      ),
     );
   }
 
