@@ -126,6 +126,16 @@ void movePlayerNextToBlock(Player player, RectangleHitbox blockHitbox) {
   }
 }
 
+bool checkPlayerOnBlock(Player player, RectangleHitbox blockHitbox) {
+
+  final realPlayerX = getPlayerXPosition(player);
+
+  final bool isVerticalAlign = realPlayerX > blockHitbox.position.x - player.hitbox.width && realPlayerX < blockHitbox.position.x + blockHitbox.size.x;
+  final bool isPlayerOnPlatform = player.position.y + player.hitbox.offsetY + player.hitbox.height == blockHitbox.position.y;
+
+  return isVerticalAlign && isPlayerOnPlatform;
+}
+
 double getPlayerXPosition(Player player) {
 
   final hitbox = player.hitbox;

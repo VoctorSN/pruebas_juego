@@ -65,22 +65,35 @@ class FallingBlock extends CollisionBlock
   void update(double dt) {
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
-      if (isFalling) position += fallingVelocity * fixedDeltaTime; // Update position based on velocity
-      accumulatedTime -= fixedDeltaTime;
-      if (_checkPlayerOnPlatform()) {
-        player.position += fallingVelocity * fixedDeltaTime;
+      final delta = fallingVelocity * fixedDeltaTime;
+
+      if (!isFalling && _checkPlayerOnPlatform()) {
         _startFalling();
       }
+
+      if (isFalling) {
+        position += delta;
+
+        // Solo arrastra al jugador si sigue encima
+        if (_checkPlayerOnPlatform()) {
+          player.position.y = position.y - player.hitbox.height - player.hitbox.offsetY;
+        }
+      }
+
+      accumulatedTime -= fixedDeltaTime;
     }
+
     super.update(dt);
   }
 
   void _startFalling() {
+    if (isFalling) return;
+
     isFalling = true;
     sprite.animation = fallingAnimation;
+
     Future.delayed(Duration(milliseconds: fallingDuration), () {
       _stopFalling();
-      hasCollided = false;
     });
   }
 
@@ -91,14 +104,13 @@ class FallingBlock extends CollisionBlock
   }
 
   bool _checkPlayerOnPlatform() {
-
     final realPlayerX = getPlayerXPosition(player);
+    final isWithinX = realPlayerX > position.x - player.hitbox.width &&
+        realPlayerX < position.x + size.x;
 
-    final bool isVerticalAlign = realPlayerX > position.x - player.hitbox.width && realPlayerX < position.x + size.x;;
-    final bool isPlayerOnPlatform = player.position.y + player.hitbox.offsetY + player.hitbox.height == position.y;
+    final playerBottom = player.position.y + player.hitbox.offsetY + player.hitbox.height;
+    final isOnTop = (playerBottom - position.y).abs() < 1; // tolerancia de 1 px
 
-    print(isVerticalAlign && isPlayerOnPlatform);
-
-    return isVerticalAlign && isPlayerOnPlatform;
+    return isWithinX && isOnTop;
   }
 }
