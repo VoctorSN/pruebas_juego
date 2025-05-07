@@ -30,6 +30,7 @@ class FallingBlock extends CollisionBlock
   bool hasCollided = false;
   bool isPlayerOnPlatform = false;
   late Player player = game.player;
+  late List<CollisionBlock> collisionBlocks = player.collisionBlocks;
 
   get fallingAnimation {
     return SpriteAnimation.fromFrameData(
@@ -58,23 +59,28 @@ class FallingBlock extends CollisionBlock
     await super.onLoad();
     // Add platform sprite
     sprite.animation = idleAnimation;
-    add(sprite..debugMode = true);
+    add(sprite);
   }
 
   @override
   void update(double dt) {
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
-      final delta = fallingVelocity * fixedDeltaTime;
 
+      // Check if the player is on the platform then start falling
       if (!isFalling && _checkPlayerOnPlatform()) {
         _startFalling();
       }
 
+      // When it falls moves the player with the platform
       if (isFalling) {
-        position += delta;
-
-        // Solo arrastra al jugador si sigue encima
+        final delta = fallingVelocity * fixedDeltaTime;
+        // Check if the block is colliding with another block below
+        if (!_checkBlockCollisionBelow(delta)) {
+          position += delta;
+        } else {
+          _stopFalling();
+        }
         if (_checkPlayerOnPlatform()) {
           player.position.y = position.y - player.hitbox.height - player.hitbox.offsetY;
         }
@@ -82,35 +88,56 @@ class FallingBlock extends CollisionBlock
 
       accumulatedTime -= fixedDeltaTime;
     }
-
     super.update(dt);
   }
 
   void _startFalling() {
+    // Flag to prevent multiple calls
     if (isFalling) return;
-
     isFalling = true;
     sprite.animation = fallingAnimation;
-
-    Future.delayed(Duration(milliseconds: fallingDuration), () {
-      _stopFalling();
-    });
   }
 
   void _stopFalling() {
+    // Flag to prevent multiple calls
+    if (!isFalling) return;
     isFalling = false;
-    position = initialPosition;
     sprite.animation = idleAnimation;
   }
 
+  // Check if the player is on the platform (exactly on top, not on the sides)
   bool _checkPlayerOnPlatform() {
     final realPlayerX = getPlayerXPosition(player);
-    final isWithinX = realPlayerX > position.x - player.hitbox.width &&
-        realPlayerX < position.x + size.x;
+    final isWithinX = realPlayerX > position.x &&
+        realPlayerX < position.x + size.x - player.hitbox.width;
 
     final playerBottom = player.position.y + player.hitbox.offsetY + player.hitbox.height;
     final isOnTop = (playerBottom - position.y).abs() < 1; // tolerancia de 1 px
 
     return isWithinX && isOnTop;
   }
+
+  // Check if the block is colliding with another block below
+  bool _checkBlockCollisionBelow(Vector2 delta) {
+    for (final block in collisionBlocks) {
+      if (!block.isPlatform) {
+        final futureBottom = position.y + size.y + delta.y;
+        final blockTop = block.position.y;
+
+        final intersectsHorizontally =
+            (position.x + size.x > block.position.x) &&
+                (position.x < block.position.x + block.size.x);
+
+        final intersectsVertically =
+            futureBottom >= blockTop &&
+                position.y + size.y <= blockTop;
+
+        if (intersectsHorizontally && intersectsVertically) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }
