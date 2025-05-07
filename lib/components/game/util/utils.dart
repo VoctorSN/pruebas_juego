@@ -125,3 +125,14 @@ void movePlayerNextToBlock(Player player, RectangleHitbox blockHitbox) {
     }
   }
 }
+
+double getPlayerXPosition(Player player) {
+
+  final hitbox = player.hitbox;
+  final playerX = player.position.x + hitbox.offsetX;
+  final playerWidth = hitbox.width;
+
+  final fixedX = player.scale.x < 0 ? playerX - (hitbox.offsetX*2) - playerWidth : playerX;
+
+  return fixedX;
+}

@@ -1,10 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+import '../../util/utils.dart';
 import 'collision_block.dart';
 
 class FallingBlock extends CollisionBlock
     with HasGameReference<PixelAdventure> {
+
   // Constructor and atributes
   int fallingDuration;
   final Vector2 initialPosition;
@@ -26,6 +28,8 @@ class FallingBlock extends CollisionBlock
 
   // Make player fall with platform logic
   bool hasCollided = false;
+  bool isPlayerOnPlatform = false;
+  late Player player = game.player;
 
   get fallingAnimation {
     return SpriteAnimation.fromFrameData(
@@ -61,8 +65,12 @@ class FallingBlock extends CollisionBlock
   void update(double dt) {
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
-      if (isFalling) position += fallingVelocity * dt; // Update position based on velocity
+      if (isFalling) position += fallingVelocity * fixedDeltaTime; // Update position based on velocity
       accumulatedTime -= fixedDeltaTime;
+      if (_checkPlayerOnPlatform()) {
+        player.position += fallingVelocity * fixedDeltaTime;
+        _startFalling();
+      }
     }
     super.update(dt);
   }
@@ -70,6 +78,10 @@ class FallingBlock extends CollisionBlock
   void _startFalling() {
     isFalling = true;
     sprite.animation = fallingAnimation;
+    Future.delayed(Duration(milliseconds: fallingDuration), () {
+      _stopFalling();
+      hasCollided = false;
+    });
   }
 
   void _stopFalling() {
@@ -78,27 +90,15 @@ class FallingBlock extends CollisionBlock
     sprite.animation = idleAnimation;
   }
 
-  void collisionWithPlayer() {
-    if (hasCollided) {
-      return;
-    }
-    hasCollided = true;
-    _startFalling();
-    Future.delayed(Duration(milliseconds: fallingDuration), () {
-      _stopFalling();
-      hasCollided = false;
-    });
-  }
+  bool _checkPlayerOnPlatform() {
 
-  @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    if (other is Player) {
-      other.position.y = position.y - other.size.y;
-      other.velocity.y = 50;
-    }
-    super.onCollisionStart(intersectionPoints, other);
+    final realPlayerX = getPlayerXPosition(player);
+
+    final bool isVerticalAlign = realPlayerX > position.x - player.hitbox.width && realPlayerX < position.x + size.x;;
+    final bool isPlayerOnPlatform = player.position.y + player.hitbox.offsetY + player.hitbox.height == position.y;
+
+    print(isVerticalAlign && isPlayerOnPlatform);
+
+    return isVerticalAlign && isPlayerOnPlatform;
   }
 }

@@ -319,7 +319,6 @@ class Player extends SpriteAnimationGroupComponent
               if (block.isFalling) {
                 position.y += block.fallingVelocity.y * fixedDeltaTime;
               }
-              block.collisionWithPlayer();
             } else {
               position.y = block.y - hitbox.height - hitbox.offsetY;
             }

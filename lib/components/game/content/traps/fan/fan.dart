@@ -9,6 +9,7 @@ import 'air_effect.dart';
 
 enum FanState { off, on }
 
+/// TODO if the fan is in the air the movement is not correct
 class Fan extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
 

@@ -193,10 +193,10 @@
                 3
             ],
             "scale": 1.64,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 320.1219512195122,
-                "y": 184.14634146341461
+                "x": 320.4268292682927,
+                "y": 183.84146341463418
             }
         },
         "level-04.tmx": {
@@ -321,7 +321,7 @@
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 275.4876370366855,
-                "y": 180.1148497935551
+                "y": 180.11484979355515
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -346,17 +346,17 @@
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
     "recentFiles": [
+        "tutorial-03.tmx",
+        "tutorial-04.tmx",
         "level-02.tmx",
         "tutorial-01.tmx",
         "level-03.tmx",
         "tutorial-02.tmx",
         "level-01.tmx",
         "level-06.tmx",
-        "tutorial-03.tmx",
         "level-04.tmx",
         "level-07.tmx",
         "level-08.tmx",
-        "tutorial-04.tmx",
         "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
