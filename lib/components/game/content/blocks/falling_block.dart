@@ -25,6 +25,7 @@ class FallingBlock extends CollisionBlock
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
   Vector2 fallingVelocity = Vector2(0, 50);
+  bool isOnGround = false;
 
   // Make player fall with platform logic
   bool hasCollided = false;
@@ -68,7 +69,7 @@ class FallingBlock extends CollisionBlock
     while (accumulatedTime >= fixedDeltaTime) {
 
       // Check if the player is on the platform then start falling
-      if (!isFalling && _checkPlayerOnPlatform()) {
+      if (!isFalling && _checkPlayerOnPlatform() && !isOnGround) {
         _startFalling();
       }
 
@@ -79,13 +80,13 @@ class FallingBlock extends CollisionBlock
         if (!_checkBlockCollisionBelow(delta)) {
           position += delta;
         } else {
+          isOnGround = true;
           _stopFalling();
         }
         if (_checkPlayerOnPlatform()) {
           player.position.y = position.y - player.hitbox.height - player.hitbox.offsetY;
         }
       }
-
       accumulatedTime -= fixedDeltaTime;
     }
     super.update(dt);
@@ -93,26 +94,35 @@ class FallingBlock extends CollisionBlock
 
   void _startFalling() {
     // Flag to prevent multiple calls
-    if (isFalling) return;
-    isFalling = true;
-    sprite.animation = fallingAnimation;
+    if (!isOnGround) {
+      if (isFalling) return;
+      isFalling = true;
+      sprite.animation = idleAnimation;
+    }
   }
 
   void _stopFalling() {
     // Flag to prevent multiple calls
     if (!isFalling) return;
     isFalling = false;
-    sprite.animation = idleAnimation;
+    sprite.animation = fallingAnimation;
   }
 
   // Check if the player is on the platform (exactly on top, not on the sides)
   bool _checkPlayerOnPlatform() {
     final realPlayerX = getPlayerXPosition(player);
-    final isWithinX = realPlayerX > position.x &&
-        realPlayerX < position.x + size.x - player.hitbox.width;
+    final isWithinX;
+    if (isFalling) {
+      isWithinX = realPlayerX + player.hitbox.width > position.x &&
+          realPlayerX < position.x + size.x;
+    } else {
+      isWithinX = realPlayerX  > position.x &&
+          realPlayerX < position.x + size.x - player.hitbox.width;
+    }
+
 
     final playerBottom = player.position.y + player.hitbox.offsetY + player.hitbox.height;
-    final isOnTop = (playerBottom - position.y).abs() < 1; // tolerancia de 1 px
+    final isOnTop = (playerBottom - position.y).abs() < 1; // Margin of 1 px
 
     return isWithinX && isOnTop;
   }
@@ -139,5 +149,4 @@ class FallingBlock extends CollisionBlock
     }
     return false;
   }
-
 }
