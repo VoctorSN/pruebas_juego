@@ -63,9 +63,7 @@ class _ResizeControlsState extends State<ResizeControls> {
       NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
       IconButton(
         onPressed: () {
-          /// TODO when you press the button the joystick duplicates
           setState(() {
-            print('showControls: ${game.showControls}');
             game.showControls = !game.showControls;
             game.reloadAllButtons();
           });

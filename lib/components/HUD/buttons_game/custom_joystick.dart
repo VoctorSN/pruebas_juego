@@ -1,27 +1,23 @@
 import 'package:flame/components.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
+import '../../../pixel_adventure.dart';
+import '../../game/content/levelBasics/player.dart';
 
-class CustomJoystick extends JoystickComponent {
-  final void Function(JoystickDirection)? onDirectionChanged;
-  final VoidCallback? onReleased;
+class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
 
+  // Constructor and attributes
+  final double controlSize;
   CustomJoystick({
-    required SpriteComponent knob,
-    required SpriteComponent background,
-    required double knobRadius,
-    this.onDirectionChanged,
-    this.onReleased,
-    EdgeInsets? margin,
-    int priority = 0,
-  }) : super(
-    knob: knob,
-    background: background,
-    knobRadius: knobRadius,
-    margin: margin,
-    priority: priority,
-  );
+    required this.controlSize,
+  });
 
-  static final List<JoystickDirection> movementDirections = [
+  // Logic to manage the joystick
+  late JoystickComponent joystick;
+  late Player player = game.player;
+
+  // Logic to manage the update
+  static const List<JoystickDirection> movementDirections = [
     JoystickDirection.left,
     JoystickDirection.right,
     JoystickDirection.upLeft,
@@ -29,21 +25,67 @@ class CustomJoystick extends JoystickComponent {
     JoystickDirection.downLeft,
     JoystickDirection.downRight,
   ];
-  bool wasStill = true;
+  bool wasIdle = true;
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    _addJoystick();
+  }
+
+  void _addJoystick() {
+    joystick = JoystickComponent(
+      priority: 15,
+      knob: SpriteComponent(
+        sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')),
+        size: Vector2.all(controlSize),
+      ),
+      knobRadius: 40,
+      background: SpriteComponent(
+        sprite: Sprite(game.images.fromCache('GUI/HUD/Joystick.png')),
+        size: Vector2.all(controlSize * 2),
+      ),
+      margin: const EdgeInsets.only(left: 32, bottom: 32),
+    );
+    game.add(joystick);
+  }
 
   @override
   void update(double dt) {
-
-    // if (!wasStill &&  !movementDirections.contains(direction)) {
-    //   print("cambiamos a wasStill");
-    //   wasStill = true;
-    // }else if (wasStill && !movementDirections.contains(direction)) {
-    //   print("nos vamos rapido");
-    // }else{
-    //   wasStill = false;
-    //   print("moviendose ${direction}");
-    // }
-    // print("update");
     super.update(dt);
+
+    if (game.showControls && movementDirections.contains(joystick.direction)) {
+      wasIdle = false;
+      _updateJoystick();
+    } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {
+      wasIdle = true;
+      player.horizontalMovement = 0;
+      player.isLeftKeyPressed = false;
+      player.isRightKeyPressed = false;
+    }
+  }
+
+  void _updateJoystick() {
+    switch (joystick.direction) {
+      case JoystickDirection.left:
+      case JoystickDirection.upLeft:
+      case JoystickDirection.downLeft:
+        player.horizontalMovement = -1;
+        player.isLeftKeyPressed = true;
+        player.isRightKeyPressed = false;
+        break;
+      case JoystickDirection.right:
+      case JoystickDirection.upRight:
+      case JoystickDirection.downRight:
+        player.horizontalMovement = 1;
+        player.isRightKeyPressed = true;
+        player.isLeftKeyPressed = false;
+        break;
+      default:
+        player.horizontalMovement = 0;
+        player.isLeftKeyPressed = false;
+        player.isRightKeyPressed = false;
+        break;
+    }
   }
 }

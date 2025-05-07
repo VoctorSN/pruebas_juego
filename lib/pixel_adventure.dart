@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
@@ -65,7 +66,7 @@ class PixelAdventure extends FlameGame
   double gameSoundVolume = 1.0;
 
   // Logic to manage the HUD, controls, size of the buttons and the positions
-  late JoystickComponent joystick;
+  late CustomJoystick customJoystick;
   bool showControls = true;
   double hudSize = 50;
   double controlSize = 50;
@@ -74,17 +75,7 @@ class PixelAdventure extends FlameGame
   late final OpenMenuButton menuButton;
   late final LevelSelection levelSelectionButton;
   late final JumpButton jumpButton;
-
-  // Optimization to joystick
-  bool wasIdle = true;
-  static List<JoystickDirection> movementDirections = [
-    JoystickDirection.left,
-    JoystickDirection.right,
-    JoystickDirection.upLeft,
-    JoystickDirection.upRight,
-    JoystickDirection.downLeft,
-    JoystickDirection.downRight,
-  ];
+  bool isJoystickAdded = false;
 
   @override
   FutureOr<void> onLoad() async {
@@ -147,7 +138,8 @@ class PixelAdventure extends FlameGame
 
   void removeControls() {
       if (children.any((component) => component is JoystickComponent)) {
-        joystick.removeFromParent();
+        isJoystickAdded = false;
+        customJoystick.joystick.removeFromParent();
       }
       for (var component in children.whereType<JumpButton>()) {
         component.removeFromParent();
@@ -199,77 +191,13 @@ class PixelAdventure extends FlameGame
     addAll([cam, level]);
   }
 
-  @override
-  void update(double dt) {
-    if (showControls && movementDirections.contains(joystick.direction)) {
-      print(joystick.direction);
-      wasIdle = false;
-      updateJoystick();
-    } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {
-      print('Joystick not pressed');
-      wasIdle = true;
-      player.horizontalMovement = 0;
-      player.isLeftKeyPressed = false;
-      player.isRightKeyPressed = false;
-    }
-    super.update(dt);
-  }
-
   void addJoystick() {
-    joystick = JoystickComponent(
-      priority: 15,
-      knob: SpriteComponent(
-        sprite: Sprite(images.fromCache('GUI/HUD/Knob.png')),
-        size: Vector2.all(controlSize),
-      ),
-      knobRadius: 40,
-      background: SpriteComponent(
-        sprite: Sprite(images.fromCache('GUI/HUD/Joystick.png')),
-        size: Vector2.all(controlSize * 2),
-      ),
-      margin: const EdgeInsets.only(left: 32, bottom: 32),
-    );
-    add(joystick);
-  }
-
-  void updateJoystick() {
-    switch (joystick.direction) {
-      case JoystickDirection.left:
-        player.horizontalMovement = -1;
-        player.isLeftKeyPressed = true;
-        player.isRightKeyPressed = false;
-        break;
-      case JoystickDirection.upLeft:
-        player.horizontalMovement = -1;
-        player.isLeftKeyPressed = true;
-        player.isRightKeyPressed = false;
-        break;
-      case JoystickDirection.downLeft:
-        player.horizontalMovement = -1;
-        player.isLeftKeyPressed = true;
-        player.isRightKeyPressed = false;
-        break;
-      case JoystickDirection.upRight:
-        player.horizontalMovement = 1;
-        player.isRightKeyPressed = true;
-        player.isLeftKeyPressed = false;
-        break;
-      case JoystickDirection.downRight:
-        player.horizontalMovement = 1;
-        player.isRightKeyPressed = true;
-        player.isLeftKeyPressed = false;
-        break;
-      case JoystickDirection.right:
-        player.horizontalMovement = 1;
-        player.isRightKeyPressed = true;
-        player.isLeftKeyPressed = false;
-        break;
-      default:
-        print('Joystick not pressed');
-        player.horizontalMovement = 0;
-        player.isLeftKeyPressed = false;
-        player.isRightKeyPressed = false;
-        break;
+    if (!isJoystickAdded) {
+      isJoystickAdded = true;
+      customJoystick = CustomJoystick(
+        controlSize: controlSize,
+      );
+      add(customJoystick);
     }
   }
 
@@ -291,7 +219,7 @@ class PixelAdventure extends FlameGame
   void switchHUDPosition() {
     isLeftHanded = !isLeftHanded;
     if (isLeftHanded) {
-      jumpButton.position = joystick.position;
+      jumpButton.position = customJoystick.joystick.position;
     } else {}
     reloadAllButtons();
   }
