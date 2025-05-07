@@ -66,7 +66,7 @@ class PixelAdventure extends FlameGame
 
   // Logic to manage the HUD, controls, size of the buttons and the positions
   late JoystickComponent joystick;
-  bool showControls = false;
+  bool showControls = true;
   double hudSize = 50;
   double controlSize = 50;
   bool isLeftHanded = false;
@@ -74,6 +74,17 @@ class PixelAdventure extends FlameGame
   late final OpenMenuButton menuButton;
   late final LevelSelection levelSelectionButton;
   late final JumpButton jumpButton;
+
+  // Optimization to joystick
+  bool wasIdle = true;
+  static List<JoystickDirection> movementDirections = [
+    JoystickDirection.left,
+    JoystickDirection.right,
+    JoystickDirection.upLeft,
+    JoystickDirection.upRight,
+    JoystickDirection.downLeft,
+    JoystickDirection.downRight,
+  ];
 
   @override
   FutureOr<void> onLoad() async {
@@ -89,7 +100,7 @@ class PixelAdventure extends FlameGame
 
     // Detect if the device is a mobile device to show the controls
     try {
-      showControls = Platform.isAndroid || Platform.isIOS;
+      //showControls = Platform.isAndroid || Platform.isIOS;
     } catch (e) {
       showControls = false;
     }
@@ -190,8 +201,16 @@ class PixelAdventure extends FlameGame
 
   @override
   void update(double dt) {
-    if (showControls) {
+    if (showControls && movementDirections.contains(joystick.direction)) {
+      print(joystick.direction);
+      wasIdle = false;
       updateJoystick();
+    } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {
+      print('Joystick not pressed');
+      wasIdle = true;
+      player.horizontalMovement = 0;
+      player.isLeftKeyPressed = false;
+      player.isRightKeyPressed = false;
     }
     super.update(dt);
   }
@@ -218,26 +237,32 @@ class PixelAdventure extends FlameGame
       case JoystickDirection.left:
         player.horizontalMovement = -1;
         player.isLeftKeyPressed = true;
+        player.isRightKeyPressed = false;
         break;
       case JoystickDirection.upLeft:
         player.horizontalMovement = -1;
         player.isLeftKeyPressed = true;
+        player.isRightKeyPressed = false;
         break;
       case JoystickDirection.downLeft:
         player.horizontalMovement = -1;
         player.isLeftKeyPressed = true;
+        player.isRightKeyPressed = false;
         break;
       case JoystickDirection.upRight:
         player.horizontalMovement = 1;
         player.isRightKeyPressed = true;
+        player.isLeftKeyPressed = false;
         break;
       case JoystickDirection.downRight:
         player.horizontalMovement = 1;
         player.isRightKeyPressed = true;
+        player.isLeftKeyPressed = false;
         break;
       case JoystickDirection.right:
         player.horizontalMovement = 1;
         player.isRightKeyPressed = true;
+        player.isLeftKeyPressed = false;
         break;
       default:
         print('Joystick not pressed');
