@@ -107,7 +107,7 @@ class Fan extends SpriteAnimationGroupComponent
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is Player) {
-      other.horizontalMovement = 0;
+      if (other.isOnGround) player.horizontalMovement = 0;
       other.moveSpeed = 100;
     }
     super.onCollisionEnd(other);

@@ -67,7 +67,7 @@ class PixelAdventure extends FlameGame
 
   // Logic to manage the HUD, controls, size of the buttons and the positions
   late CustomJoystick customJoystick;
-  bool showControls = true;
+  bool showControls = false;
   double hudSize = 50;
   double controlSize = 50;
   bool isLeftHanded = false;
@@ -91,7 +91,7 @@ class PixelAdventure extends FlameGame
 
     // Detect if the device is a mobile device to show the controls
     try {
-      //showControls = Platform.isAndroid || Platform.isIOS;
+      showControls = Platform.isAndroid || Platform.isIOS;
     } catch (e) {
       showControls = false;
     }
