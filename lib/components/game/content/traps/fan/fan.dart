@@ -11,6 +11,8 @@ enum FanState { off, on }
 
 class Fan extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
+
+  // Constructor and attributes
   final bool directionRight;
   final double fanDistance;
   Function(CollisionBlock) addCollisionBlock;
@@ -23,23 +25,26 @@ class Fan extends SpriteAnimationGroupComponent
     this.fanDistance = 10,
   });
 
+  // Hitbox and animation attributes
   static const stepTime = 0.05;
   static const tileSize = 16.0;
   static final textureSize = Vector2(9, 23);
   late CollisionBlock collisionBlock;
-
   late final SpriteAnimation _offAnimation;
   late final SpriteAnimation _onAnimation;
-  late final Player player;
+
+  // Interactions logic
+  late final Player player = game.player;
+  late final fanDirection = directionRight ? 1.0 : -1.0;
+
 
   @override
   FutureOr<void> onLoad() {
-    player = game.player;
     createHitbox();
     _loadAllAnimations();
-    position.x += directionRight ? tileSize : 0;
     collisionBlock = CollisionBlock(position: position, size: size);
     addCollisionBlock(collisionBlock);
+    position.x += directionRight ? tileSize : 0;
     scale = directionRight ? Vector2(-1, 1) : Vector2(1, 1);
     return super.onLoad();
   }
@@ -47,17 +52,10 @@ class Fan extends SpriteAnimationGroupComponent
   void createHitbox() {
     Vector2 hitboxSize = Vector2(fanDistance * tileSize, size.y);
     add(
-      RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize)
-        ..debugMode = false
-        ..debugColor = Colors.cyan,
+      RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize),
     );
 
-    add(
-      AirEffect(
-        size: hitboxSize,
-        position: Vector2(-hitboxSize.x, 0),
-      ),
-    );
+    add(AirEffect(size: hitboxSize, position: Vector2(-hitboxSize.x, 0)));
   }
 
   void _loadAllAnimations() {
@@ -80,15 +78,44 @@ class Fan extends SpriteAnimationGroupComponent
     );
   }
 
-  void collidedWithPlayer() async {
-    player.horizontalMovement += directionRight ? 0.1 : -0.1;
-    player.horizontalMovement.clamp(-100, 100);
+  void collidedWithPlayer() {
+
+    bool isAnyKeyPressed = player.isLeftKeyPressed || player.isRightKeyPressed;
+    bool isRightKeyPressed = player.isRightKeyPressed;
+    bool isLeftKeyPressed = player.isLeftKeyPressed;
+
+    print(isAnyKeyPressed);
+
+    if (!isAnyKeyPressed) {
+      print("object");
+      // Player isnt moving
+      player.moveSpeed = 100;
+      player.horizontalMovement = fanDirection;
+
+    } else if ((isRightKeyPressed && fanDirection < 0) ||
+        (isLeftKeyPressed && fanDirection > 0)) {
+
+      // Player is moving against the wind
+      player.moveSpeed = 50;
+      // Apply the correct direction of the player
+      player.horizontalMovement = player.horizontalMovement;
+    } else {
+
+      // Player is moving with the wind
+      player.moveSpeed = 200;
+      // Apply the correct direction of the player
+      player.horizontalMovement = player.horizontalMovement;
+    }
+
+    // Clamp para que el jugador no exceda ±1 (input normalizado)
+    player.horizontalMovement = player.horizontalMovement.clamp(-1.0, 1.0);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is Player) {
-      other.horizontalMovement=0;
+      other.horizontalMovement = 0;
+      other.moveSpeed = 100;
     }
     super.onCollisionEnd(other);
   }

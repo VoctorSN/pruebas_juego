@@ -62,7 +62,7 @@ class SoundManager {
     );
 
     rockheadAttackingPool = await AudioPool.createFromAsset(
-      path: 'audio/rockheadAttacking.wav',
+      path: 'audio/rockHeadAttacking.wav',
       maxPlayers: 2,
     );
   }

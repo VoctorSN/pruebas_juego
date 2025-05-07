@@ -217,24 +217,33 @@ class PixelAdventure extends FlameGame
     switch (joystick.direction) {
       case JoystickDirection.left:
         player.horizontalMovement = -1;
+        player.isLeftKeyPressed = true;
         break;
       case JoystickDirection.upLeft:
         player.horizontalMovement = -1;
+        player.isLeftKeyPressed = true;
         break;
       case JoystickDirection.downLeft:
         player.horizontalMovement = -1;
+        player.isLeftKeyPressed = true;
         break;
       case JoystickDirection.upRight:
         player.horizontalMovement = 1;
+        player.isRightKeyPressed = true;
         break;
       case JoystickDirection.downRight:
         player.horizontalMovement = 1;
+        player.isRightKeyPressed = true;
         break;
       case JoystickDirection.right:
         player.horizontalMovement = 1;
+        player.isRightKeyPressed = true;
         break;
       default:
+        print('Joystick not pressed');
         player.horizontalMovement = 0;
+        player.isLeftKeyPressed = false;
+        player.isRightKeyPressed = false;
         break;
     }
   }

@@ -78,6 +78,10 @@ class Player extends SpriteAnimationGroupComponent
   bool gotHit = false;
   bool isRespawning = false;
 
+  // Key pressed logic
+  bool isLeftKeyPressed = false;
+  bool isRightKeyPressed = false;
+
   // Collision logic
   List<CollisionBlock> collisionBlocks = [];
   CustomHitbox hitbox = CustomHitbox(
@@ -125,15 +129,16 @@ class Player extends SpriteAnimationGroupComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
-    final isLeftKeyPressed =
+    isLeftKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyA) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed =
+    isRightKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
+
     hasJumped =
         keysPressed.contains(LogicalKeyboardKey.space) ||
         keysPressed.contains(LogicalKeyboardKey.arrowUp);
