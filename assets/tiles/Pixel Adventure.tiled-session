@@ -177,6 +177,9 @@
             "scaleInDock": 1
         },
         "level-02.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
@@ -299,11 +302,11 @@
                 2,
                 4
             ],
-            "scale": 4,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 25.625,
-                "y": 336.875
+                "x": 318.99999999999994,
+                "y": 224.33333333333331
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -343,12 +346,12 @@
     "project": "Pixel Adventure.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "level-06.tmx",
-        "level-01.tmx",
-        "tutorial-02.tmx",
-        "level-03.tmx",
-        "tutorial-01.tmx",
         "level-02.tmx",
+        "tutorial-01.tmx",
+        "level-03.tmx",
+        "tutorial-02.tmx",
+        "level-01.tmx",
+        "level-06.tmx",
         "tutorial-03.tmx",
         "level-04.tmx",
         "level-07.tmx",

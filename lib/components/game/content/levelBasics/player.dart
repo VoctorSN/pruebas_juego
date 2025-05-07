@@ -307,6 +307,7 @@ class Player extends SpriteAnimationGroupComponent
           continue;
         }
       }
+      /// TODO make that with downKey you can pass through the platforms
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
@@ -332,6 +333,7 @@ class Player extends SpriteAnimationGroupComponent
             velocity.y = 0;
             moveSpeed = 0;
             _jumpForce = 0;
+            current = PlayerState.falling;
           }
           isOnSand = true;
           break;
