@@ -8,9 +8,8 @@ import '../../../pixel_adventure.dart';
 class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
-  Vector2 actualPosition;
 
-  JumpButton(this.buttonSize, this.actualPosition);
+  JumpButton(this.buttonSize);
 
 
   @override
@@ -18,7 +17,10 @@ class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, 
     priority = 15;
     sprite = Sprite(game.images.fromCache('GUI/HUD/jumpButton.png'));
     size = Vector2.all(buttonSize * 2);
-    position = actualPosition;
+    position = Vector2(
+      game.isLeftHanded ? 32 : game.size.x - size.x - 32,
+      game.size.y - size.y - 32,
+    );
 
     return super.onLoad();
   }
@@ -27,7 +29,7 @@ class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, 
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
     // Update the position of the button when the game is resized
-    position = Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
+    position = game.isLeftHanded ? Vector2(32, gameSize.y - size.y - 32) : Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
   }
 
   @override

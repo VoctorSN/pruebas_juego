@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
@@ -24,8 +24,6 @@ class _ResizeControlsState extends State<ResizeControls> {
   _ResizeControlsState({required this.game, required this.updateSizeControls});
 
   late double value;
-  bool isLeftHanded = false;
-
   Image get eyeImage {
     return game.showControls
         ? Image.asset(
@@ -73,8 +71,8 @@ class _ResizeControlsState extends State<ResizeControls> {
       IconButton(
         onPressed: () {
           setState(() {
-            isLeftHanded = !isLeftHanded;
-            game.isLeftHanded = isLeftHanded;
+
+            game.isLeftHanded = !game.isLeftHanded;
             game.switchHUDPosition();
           });
         },

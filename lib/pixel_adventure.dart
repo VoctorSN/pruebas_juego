@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -8,10 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
+
 import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
-import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
+import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/widgets_settings/character_selecition.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
@@ -76,11 +78,6 @@ class PixelAdventure extends FlameGame
   late final LevelSelection levelSelectionButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
-  late final Vector2 rightControlPosition = Vector2(
-    size.x - 32 - controlSize,
-    size.y - 32 - controlSize,
-  );
-  late final Vector2 leftControlPosition = customJoystick.joystick.position;
 
   @override
   FutureOr<void> onLoad() async {
@@ -108,7 +105,7 @@ class PixelAdventure extends FlameGame
     );
     menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
     levelSelectionButton = LevelSelection(buttonSize: hudSize);
-    jumpButton = JumpButton(controlSize,rightControlPosition);
+    jumpButton = JumpButton(controlSize);
 
     addAllButtons();
 
@@ -143,10 +140,12 @@ class PixelAdventure extends FlameGame
 
   void removeControls() {
       if (children.any((component) => component is JoystickComponent)) {
+        print("Joystick removed");
         isJoystickAdded = false;
         customJoystick.joystick.removeFromParent();
       }
       for (var component in children.whereType<JumpButton>()) {
+        print("Jump button removed");
         component.removeFromParent();
       }
   }
@@ -201,6 +200,10 @@ class PixelAdventure extends FlameGame
       isJoystickAdded = true;
       customJoystick = CustomJoystick(
         controlSize: controlSize,
+        positionFromParent: isLeftHanded
+            ? Vector2(controlSize + 32, size.y - controlSize - 32)
+            : Vector2(size.x - controlSize * 2 - 32, size.y - controlSize - 32),
+        leftMargin: isLeftHanded ? size.x - 32 - controlSize * 2 : 32,
       );
       add(customJoystick);
     }
@@ -222,17 +225,10 @@ class PixelAdventure extends FlameGame
   }
 
   void switchHUDPosition() {
-    print("jumpButton.position ${jumpButton.position}");
     if(!showControls) return;
-    if(isLeftHanded){
-      jumpButton.position = leftControlPosition;
-    } else {
-      jumpButton.position = rightControlPosition;
-    }
     print("isLeftHanded $isLeftHanded");
-    print("rightControlPosition $rightControlPosition");
-    print("leftControlPosition $leftControlPosition");
-    print("jumpButton.position ${jumpButton.position}");
     reloadAllButtons();
+    print("Reloading all buttons");
+    print("jumpButton position ${jumpButton.position}");
   }
 }
