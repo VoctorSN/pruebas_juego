@@ -55,13 +55,12 @@ class SettingsMenu extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 90),
-              child: Wrap(
-                direction: Axis.vertical,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 18,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Título centrado
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 30),
                     child: Text(
                       'Settings',
                       style: TextStyleSingleton().style.copyWith(
@@ -70,18 +69,32 @@ class SettingsMenu extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ToggleMusicVolumeWidget(
-                    game: game,
-                    updateMusicVolume: updateMusicVolume,
-                  ),
-                  ToggleGameVolumeWidget(
-                    game: game,
-                    updateGameVolume: updateGameVolume,
-                  ),
-                  ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
-                  ResizeControls(game: game, updateSizeControls: updateSizeControls),
 
-                  const SizedBox(height: 20),
+                  // Controles alineados a la izquierda
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      direction: Axis.vertical,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      spacing: 18,
+                      children: [
+                        ToggleMusicVolumeWidget(
+                          game: game,
+                          updateMusicVolume: updateMusicVolume,
+                        ),
+                        ToggleGameVolumeWidget(
+                          game: game,
+                          updateGameVolume: updateGameVolume,
+                        ),
+                        ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
+                        ResizeControls(game: game, updateSizeControls: updateSizeControls),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Botones centrados
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

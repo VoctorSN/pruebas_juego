@@ -5,9 +5,9 @@ import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
 // Constantes para definir el tamaño y la posición
-const double rowWidth = 400.0;
-const double textPositionX = 10.0;
-const double sliderPositionX = 2.0;
+const double rowWidth = 475.0;
+const double textPositionX = 37.5;
+const double sliderPositionX = 17.5;
 const double sliderWidth = 250.0;
 
 class ResizeHUD extends StatefulWidget {

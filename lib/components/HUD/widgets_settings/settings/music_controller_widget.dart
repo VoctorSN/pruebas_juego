@@ -5,9 +5,9 @@ import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
 // Constantes para definir el tamaño y la posición
-const double rowWidth = 400.0;
-const double textPositionX = 20.0;
-const double sliderPositionX = 10.0;
+const double rowWidth = 475.0;
+const double textPositionX = 50.0;
+const double sliderPositionX = 23.0;
 const double buttonPositionX = .0;
 const double sliderWidth = 250.0;
 

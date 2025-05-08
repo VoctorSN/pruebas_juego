@@ -4,12 +4,14 @@ import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
+// TODO: When you press it doesnt depends on applyButton (showControls and leftHanded)
+
 // Constantes para definir el tamaño y la posición
-const double rowWidth = 465.0;
-const double textPositionX = 5.0;
+const double rowWidth = 475.0;
+const double textPositionX = 15.0;
 const double sliderPositionX = 0.0;
 const double sliderWidth = 250.0;
-const double iconSpacing = 10.0;
+const double iconSpacing = 0.0;
 
 class ResizeControls extends StatefulWidget {
   final PixelAdventure game;
@@ -87,7 +89,7 @@ class _ResizeControlsState extends State<ResizeControls> {
               game: game,
               value: value,
               onChanged: onChanged,
-              isActive: true,
+              isActive: game.showControls,
             ),
           ),
           const SizedBox(width: iconSpacing),

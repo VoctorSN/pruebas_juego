@@ -5,9 +5,9 @@ import '../../../../pixel_adventure.dart';
 import '../utils/number_slider.dart';
 
 // Constantes para definir el tamaño y la posición
-const double rowWidth = 400.0;
-const double textPositionX = 15.0;
-const double sliderPositionX = 7.0;
+const double rowWidth = 475.0;
+const double textPositionX = 45.0;
+const double sliderPositionX = 20.0;
 const double buttonPositionX = 0.0;
 const double sliderWidth = 250.0;
 
