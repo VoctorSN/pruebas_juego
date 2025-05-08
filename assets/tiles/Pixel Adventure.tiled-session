@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-03.tmx",
+    "activeFile": "tutorial-03.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -195,8 +195,8 @@
             "scale": 1.64,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 316.1585365853659,
-                "y": 179.5731707317073
+                "x": 311.5853658536585,
+                "y": 175
             }
         },
         "level-04.tmx": {
@@ -275,8 +275,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.6666666666667,
-                "y": 183.66666666666663
+                "x": 319.66666666666663,
+                "y": 183.33333333333331
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -291,7 +291,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 319.5,
-                "y": 183.5
+                "y": 183
             }
         },
         "tutorial-02.tmx#Pixel Adventure": {
@@ -303,10 +303,10 @@
                 2
             ],
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 405.66666666666663,
-                "y": 224.33333333333337
+                "x": 463,
+                "y": 210
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -336,18 +336,18 @@
     "map.width": 40,
     "openFiles": [
         "tutorial-03.tmx",
-        "level-03.tmx"
+        "tutorial-02.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "tutorial-02.tmx",
         "tutorial-03.tmx",
+        "tutorial-01.tmx",
+        "level-03.tmx",
         "level-02.tmx",
         "level-01.tmx",
         "tutorial-04.tmx",
-        "tutorial-02.tmx",
-        "tutorial-01.tmx",
-        "level-03.tmx",
         "level-06.tmx",
         "level-04.tmx",
         "level-07.tmx",
