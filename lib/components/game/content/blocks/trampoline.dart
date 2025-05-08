@@ -10,9 +10,10 @@ enum TrampolineState { idle, jump }
 
 class Trampoline extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure> {
+
+  // Constructor and attributes
   final double powerBounce;
   Function(CollisionBlock) addCollisionBlock;
-
   Trampoline({
     super.position,
     super.size,
@@ -20,15 +21,16 @@ class Trampoline extends SpriteAnimationGroupComponent
     required this.addCollisionBlock,
   });
 
+  // Animation logic
   static const stepTime = 0.05;
   static const tileSize = 32;
   static final textureSize = Vector2(28, 34);
-  late CollisionBlock collisionBlock;
-
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _jumpAnimation;
-  late final Player player;
 
+  // Player interactions logic
+  late CollisionBlock collisionBlock;
+  late final Player player;
 
   @override
   FutureOr<void> onLoad() {

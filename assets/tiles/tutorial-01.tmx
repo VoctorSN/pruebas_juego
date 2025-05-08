@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="344">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="365">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -35,7 +35,7 @@
   <object id="1" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="2" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="3" type="deathZone" x="-48" y="0" width="48" height="368"/>
-  <object id="4" name="Player" type="Player" x="48" y="160" width="27" height="30"/>
+  <object id="4" name="Player" type="Player" x="32" y="160" width="27" height="30"/>
   <object id="20" type="deathZone" x="640" y="0" width="48" height="368"/>
   <object id="21" type="Checkpoint" x="496" y="128" width="64" height="64"/>
   <object id="23" name="Apple" type="Fruit" x="240" y="272" width="32" height="32"/>
@@ -44,6 +44,30 @@
   <object id="268" name="Orange" type="Fruit" x="304" y="272" width="32" height="32"/>
   <object id="343" type="GameText" x="208" y="128" width="160" height="64">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">GET   ALL   FRUITS   TO   PASS   THE   LEVEL    🤫</text>
+  </object>
+  <object id="353" name="Fire" type="FireBlock" x="112" y="160" width="16" height="32">
+   <properties>
+    <property name="fireDirection" value="Up"/>
+    <property name="startIn" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="362" name="Fire" type="FireBlock" x="48" y="112" width="32" height="16">
+   <properties>
+    <property name="fireDirection" value="Right"/>
+    <property name="startIn" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="363" name="Fire" type="FireBlock" x="112" y="48" width="16" height="32">
+   <properties>
+    <property name="fireDirection" value="Down"/>
+    <property name="startIn" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="364" name="Fire" type="FireBlock" x="160" y="112" width="32" height="16">
+   <properties>
+    <property name="fireDirection" value="Left"/>
+    <property name="startIn" type="int" value="1"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="2" name="Collisions">

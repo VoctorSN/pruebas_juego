@@ -5,6 +5,7 @@ import '../../util/utils.dart';
 import 'collision_block.dart';
 
 /// TODO:  made platform come back after a while
+/// TODO:  add a attribute to made the platform sensible in the sides or not
 class FallingBlock extends CollisionBlock
     with HasGameReference<PixelAdventure> {
 

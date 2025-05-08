@@ -146,3 +146,5 @@ double getPlayerXPosition(Player player) {
 
   return fixedX;
 }
+
+// TODO: make a getTile function to get the tile from the sprite sheet

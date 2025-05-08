@@ -10,6 +10,7 @@ import 'package:fruit_collector/components/game/content/levelBasics/death_zone.d
 import 'package:fruit_collector/components/game/content/levelBasics/fruit.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/components/game/content/levelExtras/game_text.dart';
+import 'package:fruit_collector/components/game/content/traps/fire_block.dart';
 import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../content/traps/fan.dart';
@@ -85,6 +86,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Spike ||
           component is GameText ||
           component is Fan ||
+          component is FireBlock ||
           component is Rockhead,
     );
 
@@ -202,7 +204,18 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(lootBox);
             break;
+          case 'FireBlock':
+            final fireBlock = FireBlock(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              startIn: spawnPoint.properties.getValue('startIn'),
+              fireDirection: spawnPoint.properties.getValue('fireDirection'),
+              addCollisionBlock: addCollisionBlock,
+            );
+            add(fireBlock);
+            break;
           default:
+            break;
         }
       }
     }

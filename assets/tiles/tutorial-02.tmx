@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="48">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="49">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -46,13 +46,6 @@
   <object id="29" name="Melon" type="Fruit" x="304" y="272" width="32" height="32"/>
   <object id="30" name="Pineapple" type="Fruit" x="32" y="240" width="32" height="32"/>
   <object id="31" name="Strawberry" type="Fruit" x="256" y="240" width="32" height="32"/>
-  <object id="40" name="Saw" type="Saw" x="451.807" y="297.704" width="55.333" height="32">
-   <properties>
-    <property name="isVertical" type="bool" value="true"/>
-    <property name="offNeg" type="float" value="0"/>
-    <property name="offPos" type="float" value="0"/>
-   </properties>
-  </object>
   <object id="41" name="Saw" type="Saw" x="192" y="208" width="32" height="32">
    <properties>
     <property name="isVertical" type="bool" value="true"/>
@@ -70,8 +63,9 @@
   <object id="47" type="GameText" x="208" y="96" width="192" height="64">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">DODGE   THE   SAWS,   VOID   AND   ENEMIES   TO   SURVIVE   ☠️</text>
   </object>
+  <object id="48" type="deathZone" x="456" y="307" width="48" height="32"/>
  </objectgroup>
- <objectgroup id="2" name="Collisions">
+ <objectgroup id="2" name="Collisions" visible="0">
   <object id="6" x="0" y="272" width="64" height="96"/>
   <object id="7" x="160" y="304" width="256" height="64"/>
   <object id="9" x="512" y="272" width="128" height="96"/>

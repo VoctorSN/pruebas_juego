@@ -26,7 +26,7 @@ enum PlayerState {
   idle,
   running,
   jumping,
-  double_jumping,
+  doubleJumping,
   falling,
   hit,
   appearing,
@@ -36,9 +36,9 @@ enum PlayerState {
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
+
   // Constructor and atributes
   String character;
-
   Player({super.position, this.character = 'Ninja Frog'});
 
   // Animations config
@@ -192,7 +192,7 @@ class Player extends SpriteAnimationGroupComponent
       PlayerState.hit: hitAnimation,
       PlayerState.appearing: appearingAnimation,
       PlayerState.disappearing: disappearingAnimation,
-      PlayerState.double_jumping: doubleJumpingAnimation,
+      PlayerState.doubleJumping: doubleJumpingAnimation,
       PlayerState.wallSlide: wallSlideAnimation,
     };
 
@@ -260,7 +260,7 @@ class Player extends SpriteAnimationGroupComponent
     if (velocity.y < 0 && jumpCount < 2) playerState = PlayerState.jumping;
 
     if (jumpCount == 2 && !isOnSand && !isRespawning)
-      playerState = PlayerState.double_jumping;
+      playerState = PlayerState.doubleJumping;
 
     current = playerState;
   }
