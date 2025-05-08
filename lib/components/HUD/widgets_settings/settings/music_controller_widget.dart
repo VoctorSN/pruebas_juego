@@ -4,9 +4,16 @@ import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
+// Constantes para definir el tamaño y la posición
+const double rowWidth = 400.0;
+const double textPositionX = 20.0;
+const double sliderPositionX = 10.0;
+const double buttonPositionX = .0;
+const double sliderWidth = 250.0;
+
 class ToggleMusicVolumeWidget extends StatefulWidget {
   final PixelAdventure game;
-  Function updateMusicVolume;
+  final Function updateMusicVolume;
 
   ToggleMusicVolumeWidget({
     super.key,
@@ -16,16 +23,21 @@ class ToggleMusicVolumeWidget extends StatefulWidget {
 
   @override
   State<ToggleMusicVolumeWidget> createState() {
-    return _ToggleMusicVolumeWidgetState(game: game, updateMusicVolume: updateMusicVolume);
+    return _ToggleMusicVolumeWidgetState(
+      game: game,
+      updateMusicVolume: updateMusicVolume,
+    );
   }
 }
 
 class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
   final PixelAdventure game;
-  Function updateMusicVolume;
+  final Function updateMusicVolume;
 
-  _ToggleMusicVolumeWidgetState({required this.game, required this.updateMusicVolume})
-      : isSliderActive = game.isMusicActive;
+  _ToggleMusicVolumeWidgetState({
+    required this.game,
+    required this.updateMusicVolume,
+  }) : isSliderActive = game.isMusicActive;
 
   bool isMuted = false;
   late double value;
@@ -45,22 +57,33 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text('Music',
-          style: TextStyleSingleton().style,),
-        NumberSlider(
-          game: game,
-          value: game.musicSoundVolume * 50, // This value updates dinamically
-          onChanged: onChanged,
-          isActive: isSliderActive,
-        ),
-
-        IconButton(
-          onPressed: changeState,
-          icon: volumeImage,
-        ),
-      ],
+    return SizedBox(
+      width: rowWidth,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: textPositionX),
+          Text(
+            'Music',
+            style: TextStyleSingleton().style,
+          ),
+          SizedBox(width: sliderPositionX),
+          SizedBox(
+            width: sliderWidth,
+            child: NumberSlider(
+              game: game,
+              value: game.musicSoundVolume * 50,
+              onChanged: onChanged,
+              isActive: isSliderActive,
+            ),
+          ),
+          SizedBox(width: buttonPositionX),
+          IconButton(
+            onPressed: changeState,
+            icon: volumeImage,
+          ),
+        ],
+      ),
     );
   }
 
@@ -69,7 +92,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
       return null;
     }
 
-    updateMusicVolume(value/50);
+    updateMusicVolume(value / 50);
     return value;
   }
 

@@ -4,38 +4,69 @@ import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
-class ResizeHUD extends StatefulWidget {
+// Constantes para definir el tamaño y la posición
+const double rowWidth = 400.0;
+const double textPositionX = 10.0;
+const double sliderPositionX = 2.0;
+const double sliderWidth = 250.0;
 
+class ResizeHUD extends StatefulWidget {
   final PixelAdventure game;
-  Function updateSizeHUD;
-  ResizeHUD({super.key, required this.game, required this.updateSizeHUD});
+  final Function updateSizeHUD;
+
+  ResizeHUD({
+    super.key,
+    required this.game,
+    required this.updateSizeHUD,
+  });
 
   @override
   State<ResizeHUD> createState() {
-    return _ResizeHUDState(game: game, updateSizeHUD: updateSizeHUD);
+    return _ResizeHUDState(
+      game: game,
+      updateSizeHUD: updateSizeHUD,
+    );
   }
-
 }
 
 class _ResizeHUDState extends State<ResizeHUD> {
-
   final PixelAdventure game;
-  Function updateSizeHUD;
-  _ResizeHUDState({required this.game, required this.updateSizeHUD});
+  final Function updateSizeHUD;
+
+  _ResizeHUDState({
+    required this.game,
+    required this.updateSizeHUD,
+  });
 
   late double value;
 
-
   @override
   Widget build(BuildContext context) {
-
     value = game.hudSize;
 
-    return Row(children: [
-      Text('HUD Size',
-        style: TextStyleSingleton().style,),
-      NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
-    ]);
+    return SizedBox(
+      width: rowWidth,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: textPositionX),
+          Text(
+            'HUD Size',
+            style: TextStyleSingleton().style,
+          ),
+          SizedBox(width: sliderPositionX),
+          SizedBox(
+            width: sliderWidth,
+            child: NumberSlider(
+              game: game,
+              value: value,
+              onChanged: onChanged,
+              isActive: true,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   double? onChanged(dynamic value) {

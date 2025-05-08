@@ -4,24 +4,40 @@ import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
-class ResizeControls extends StatefulWidget {
+// Constantes para definir el tamaño y la posición
+const double rowWidth = 465.0;
+const double textPositionX = 5.0;
+const double sliderPositionX = 0.0;
+const double sliderWidth = 250.0;
+const double iconSpacing = 10.0;
 
+class ResizeControls extends StatefulWidget {
   final PixelAdventure game;
-  Function updateSizeControls;
-  ResizeControls({super.key, required this.game, required this.updateSizeControls});
+  final Function updateSizeControls;
+
+  ResizeControls({
+    super.key,
+    required this.game,
+    required this.updateSizeControls,
+  });
 
   @override
   State<ResizeControls> createState() {
-    return _ResizeControlsState(game: game, updateSizeControls: updateSizeControls);
+    return _ResizeControlsState(
+      game: game,
+      updateSizeControls: updateSizeControls,
+    );
   }
-
 }
 
 class _ResizeControlsState extends State<ResizeControls> {
-
   final PixelAdventure game;
-  Function updateSizeControls;
-  _ResizeControlsState({required this.game, required this.updateSizeControls});
+  final Function updateSizeControls;
+
+  _ResizeControlsState({
+    required this.game,
+    required this.updateSizeControls,
+  });
 
   late double value;
   bool isLeftHanded = false;
@@ -50,37 +66,54 @@ class _ResizeControlsState extends State<ResizeControls> {
     );
   }
 
-  // TODO add button to change left handed to right handed
-
   @override
   Widget build(BuildContext context) {
-
     value = game.controlSize;
 
-    return Row(children: [
-      Text('Controls Size',
-        style: TextStyleSingleton().style,),
-      NumberSlider(game: game, value: value, onChanged: onChanged, isActive: true,),
-      IconButton(
-        onPressed: () {
-          setState(() {
-            game.showControls = !game.showControls;
-            game.reloadAllButtons();
-          });
-        },
-        icon: eyeImage,
+    return SizedBox(
+      width: rowWidth,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(width: textPositionX),
+          Text(
+            'Controls Size',
+            style: TextStyleSingleton().style,
+          ),
+          SizedBox(width: sliderPositionX),
+          SizedBox(
+            width: sliderWidth,
+            child: NumberSlider(
+              game: game,
+              value: value,
+              onChanged: onChanged,
+              isActive: true,
+            ),
+          ),
+          const SizedBox(width: iconSpacing),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                game.showControls = !game.showControls;
+                game.reloadAllButtons();
+              });
+            },
+            icon: eyeImage,
+          ),
+          const SizedBox(width: iconSpacing),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isLeftHanded = !isLeftHanded;
+                game.isLeftHanded = isLeftHanded;
+                game.switchHUDPosition();
+              });
+            },
+            icon: arrowImage,
+          ),
+        ],
       ),
-      IconButton(
-        onPressed: () {
-          setState(() {
-            isLeftHanded = !isLeftHanded;
-            game.isLeftHanded = isLeftHanded;
-            game.switchHUDPosition();
-          });
-        },
-        icon: arrowImage,
-      )
-    ]);
+    );
   }
 
   double? onChanged(dynamic value) {
