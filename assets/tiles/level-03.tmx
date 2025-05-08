@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="180">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="184">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -90,12 +90,6 @@
   <object id="77" type="Platform" x="160" y="128" width="16" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
-   </properties>
-  </object>
-  <object id="91" type="Platform" x="64" y="128" width="32" height="16">
-   <properties>
-    <property name="fallingDurationMillSec" type="int" value="7000"/>
-    <property name="falls" type="bool" value="true"/>
    </properties>
   </object>
   <object id="121" type="Platform" x="160" y="160" width="16" height="16">
@@ -269,5 +263,17 @@
    </properties>
   </object>
   <object id="179" x="96" y="128" width="48" height="16"/>
+  <object id="182" type="Platform" x="64" y="128" width="32" height="16">
+   <properties>
+    <property name="fallingDurationMillSec" type="int" value="7000"/>
+    <property name="falls" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="183" type="Platform" x="32" y="192" width="32" height="16">
+   <properties>
+    <property name="fallingDurationMillSec" type="int" value="7000"/>
+    <property name="falls" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

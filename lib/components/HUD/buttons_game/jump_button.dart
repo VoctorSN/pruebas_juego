@@ -8,20 +8,18 @@ import '../../../pixel_adventure.dart';
 class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
+  Vector2 actualPosition;
 
-  JumpButton(this.buttonSize);
+  JumpButton(this.buttonSize, this.actualPosition);
 
-  final margin = 32;
 
   @override
   FutureOr<void> onLoad() {
     priority = 15;
     sprite = Sprite(game.images.fromCache('GUI/HUD/jumpButton.png'));
     size = Vector2.all(buttonSize * 2);
-    position = Vector2(
-      game.size.x - margin - buttonSize,
-      game.size.y - margin - buttonSize,
-    );
+    position = actualPosition;
+
     return super.onLoad();
   }
 

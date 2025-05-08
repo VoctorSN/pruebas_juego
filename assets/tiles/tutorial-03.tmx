@@ -17,7 +17,7 @@
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,272,272,272,272,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
-113,0,0,0,0,0,0,0,0,0,0,0,226,249,250,250,250,250,250,251,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
+113,0,0,0,0,0,0,0,0,0,0,0,226,249,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,251,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,293,294,294,294,294,294,295,0,0,0,0,0,0,0,0,0,0,0,0,293,294,294,294,253,30,273,111,
@@ -40,7 +40,7 @@
   <object id="23" name="Orange" type="Fruit" x="224" y="128" width="32" height="32"/>
   <object id="24" name="Apple" type="Fruit" x="400" y="112" width="32" height="32"/>
   <object id="25" name="Kiwi" type="Fruit" x="160" y="144" width="32" height="32"/>
-  <object id="26" name="Bananas" type="Fruit" x="464" y="96" width="32" height="32"/>
+  <object id="26" name="Bananas" type="Fruit" x="448" y="112" width="32" height="32"/>
   <object id="27" name="Cherries" type="Fruit" x="224" y="256" width="32" height="32"/>
   <object id="28" name="Melon" type="Fruit" x="288" y="256" width="32" height="32"/>
   <object id="29" name="Melon" type="Fruit" x="336" y="128" width="32" height="32"/>
@@ -58,13 +58,13 @@
   <object id="56" type="GameText" x="320" y="32" width="183.897" height="48">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">JUMP   FAST   AND   DONT   FALL   😱</text>
   </object>
-  <object id="57" name="Fan" type="Fan" x="560" y="256" width="16" height="32">
+  <object id="57" name="Fan" type="Fan" x="496" y="256" width="16" height="32">
    <properties>
     <property name="directionRight" type="bool" value="false"/>
-    <property name="fanDistance" type="float" value="3"/>
+    <property name="fanDistance" type="float" value="15"/>
    </properties>
   </object>
-  <object id="58" name="Fan" type="Fan" x="320" y="224" width="16" height="32">
+  <object id="58" name="Fan" type="Fan" x="112" y="112" width="16" height="32">
    <properties>
     <property name="directionRight" type="bool" value="true"/>
     <property name="fanDistance" type="float" value="15"/>
@@ -77,20 +77,20 @@
   <object id="12" x="0" y="16" width="16" height="352"/>
   <object id="34" x="16" y="288" width="608" height="80"/>
   <object id="47" x="512" y="112" width="112" height="128"/>
-  <object id="48" x="208" y="176" width="112" height="16"/>
-  <object id="50" type="Platform" x="336" y="160" width="32" height="16">
+  <object id="48" x="208" y="176" width="288" height="16"/>
+  <object id="50" type="Platform" x="336" y="80" width="32" height="16">
    <properties>
     <property name="fallingDurationMillSec" type="int" value="5000"/>
     <property name="falls" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="51" type="Platform" x="400" y="144" width="32" height="16">
+  <object id="51" type="Platform" x="400" y="80" width="32" height="16">
    <properties>
     <property name="fallingDurationMillSec" type="int" value="5000"/>
     <property name="falls" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="52" type="Platform" x="464" y="128" width="32" height="16">
+  <object id="52" type="Platform" x="464" y="80" width="32" height="16">
    <properties>
     <property name="fallingDurationMillSec" type="int" value="5000"/>
     <property name="falls" type="bool" value="true"/>

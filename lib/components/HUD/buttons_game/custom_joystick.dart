@@ -27,6 +27,8 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   ];
   bool wasIdle = true;
 
+
+
   @override
   Future<void> onLoad() async {
     super.onLoad();

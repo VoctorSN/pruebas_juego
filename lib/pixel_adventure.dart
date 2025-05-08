@@ -76,6 +76,11 @@ class PixelAdventure extends FlameGame
   late final LevelSelection levelSelectionButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
+  late final Vector2 rightControlPosition = Vector2(
+    size.x - 32 - controlSize,
+    size.y - 32 - controlSize,
+  );
+  late final Vector2 leftControlPosition = customJoystick.joystick.position;
 
   @override
   FutureOr<void> onLoad() async {
@@ -103,7 +108,7 @@ class PixelAdventure extends FlameGame
     );
     menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
     levelSelectionButton = LevelSelection(buttonSize: hudSize);
-    jumpButton = JumpButton(controlSize);
+    jumpButton = JumpButton(controlSize,rightControlPosition);
 
     addAllButtons();
 
@@ -217,10 +222,17 @@ class PixelAdventure extends FlameGame
   }
 
   void switchHUDPosition() {
-    isLeftHanded = !isLeftHanded;
-    if (isLeftHanded) {
-      jumpButton.position = customJoystick.joystick.position;
-    } else {}
+    print("jumpButton.position ${jumpButton.position}");
+    if(!showControls) return;
+    if(isLeftHanded){
+      jumpButton.position = leftControlPosition;
+    } else {
+      jumpButton.position = rightControlPosition;
+    }
+    print("isLeftHanded $isLeftHanded");
+    print("rightControlPosition $rightControlPosition");
+    print("leftControlPosition $leftControlPosition");
+    print("jumpButton.position ${jumpButton.position}");
     reloadAllButtons();
   }
 }

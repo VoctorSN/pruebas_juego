@@ -25,7 +25,6 @@ class _ResizeHUDState extends State<ResizeHUD> {
 
   late double value;
 
-  // TODO Add left-hand and right-hand options
 
   @override
   Widget build(BuildContext context) {
