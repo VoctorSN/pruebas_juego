@@ -1,7 +1,6 @@
 import 'dart:async' as async;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../../util/utils.dart';
@@ -9,13 +8,13 @@ import '../blocks/collision_block.dart';
 
 enum FireBlockState { on, off }
 
-class FireBlock extends SpriteAnimationGroupComponent
+class FireBlock extends PositionComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
-
   // Constructor and attributes
   final int startIn;
   final String fireDirection;
   final Function(CollisionBlock) addCollisionBlock;
+
   FireBlock({
     required this.startIn,
     required this.fireDirection,
@@ -25,8 +24,10 @@ class FireBlock extends SpriteAnimationGroupComponent
   });
 
   // Animations logic
-  late SpriteAnimation offAnimation;
-  late SpriteAnimation onAnimation;
+  late final SpriteAnimation onAnimation;
+  late final SpriteAnimation offAnimation;
+  late final SpriteAnimationGroupComponent<FireBlockState> fireSprite;
+
   static const stepTime = 0.05;
   static const double tileSize = 16.0;
   bool isOn = false;
@@ -37,7 +38,6 @@ class FireBlock extends SpriteAnimationGroupComponent
 
   // Rotation logic
   static const double halfRotation = 3.14159;
-  late SpriteAnimationGroupComponent<FireBlockState> fireSprite;
 
   @override
   Future<void> onLoad() async {
@@ -45,16 +45,29 @@ class FireBlock extends SpriteAnimationGroupComponent
 
     _loadAnimations();
 
+    // Extract the sprite to apply him the angle later
+    fireSprite = SpriteAnimationGroupComponent<FireBlockState>(
+      animations: {
+        FireBlockState.on: onAnimation,
+        FireBlockState.off: offAnimation,
+      },
+      current: FireBlockState.off,
+      size: size,
+      anchor: Anchor.topLeft,
+    );
+    add(fireSprite);
+
     collisionBlock = CollisionBlock(
-        position: Vector2(position.x, position.y + tileSize),
-        size: Vector2(size.x, tileSize));
+      position: Vector2(position.x, position.y + tileSize),
+      size: Vector2(size.x, tileSize),
+    );
     addCollisionBlock(collisionBlock);
 
     attackHitbox = RectangleHitbox(
       position: Vector2.zero(),
       size: Vector2(size.x, tileSize),
     );
-    add(attackHitbox..debugMode = true..debugColor = Colors.red);
+    add(attackHitbox);
 
     rotate();
 
@@ -62,46 +75,45 @@ class FireBlock extends SpriteAnimationGroupComponent
   }
 
   void rotate() {
-    double angleS = 0;
-    Vector2 collisionPosition = Vector2.zero();
+    Vector2 collisionPosition = position;
     Vector2 hitboxPosition = Vector2.zero();
     Vector2 spritePosition = Vector2.zero();
+    double spriteAngle = 0;
 
     switch (fireDirection) {
       case 'Up':
-        angleS = 0;
         collisionPosition = Vector2(position.x, position.y + tileSize);
-        hitboxPosition = Vector2.zero();
         break;
 
       case 'Down':
-        angleS = FireBlock.halfRotation;
-        collisionPosition = position;
-        hitboxPosition = Vector2(0,16);
+        spriteAngle = FireBlock.halfRotation;
+        hitboxPosition = Vector2(0, tileSize);
+        spritePosition = Vector2(tileSize, tileSize * 2);
         break;
 
       case 'Left':
-        angleS = -FireBlock.halfRotation / 2;
+        spriteAngle = -FireBlock.halfRotation / 2;
         collisionPosition = Vector2(position.x + tileSize, position.y);
-        hitboxPosition = Vector2.zero();
+        spritePosition = Vector2(0, tileSize);
         break;
 
       case 'Right':
-        angleS = FireBlock.halfRotation / 2;
-        collisionPosition = position;
-        hitboxPosition = Vector2(16,0);
+        spriteAngle = FireBlock.halfRotation / 2;
+        hitboxPosition = Vector2(tileSize, 0);
+        spritePosition = Vector2(tileSize * 2, 0);
         break;
     }
 
-    // Ajustar el sprite
+    // Sprite correction
+    fireSprite.angle = spriteAngle;
+    fireSprite.position = spritePosition;
+    fireSprite.size = Vector2(16, 32);
 
-    // angle = angleS;
-
-    // Ajustar la collision
+    // Collision correction
     collisionBlock.position = collisionPosition;
     collisionBlock.size = Vector2.all(tileSize);
 
-    // Ajustar hitbox
+    // Hitbox correction
     attackHitbox.position = hitboxPosition;
     attackHitbox.size = Vector2.all(tileSize);
   }
@@ -109,11 +121,6 @@ class FireBlock extends SpriteAnimationGroupComponent
   void _loadAnimations() {
     onAnimation = _spriteAnimation("On", 3);
     offAnimation = _spriteAnimation("Off", 4);
-    animations = {
-      FireBlockState.on: onAnimation,
-      FireBlockState.off: offAnimation,
-    };
-    current = FireBlockState.off;
   }
 
   SpriteAnimation _spriteAnimation(String state, int amount) {
@@ -131,7 +138,7 @@ class FireBlock extends SpriteAnimationGroupComponent
   void _startPeriodicToggle() {
     async.Timer.periodic(const Duration(seconds: 2), (_) {
       isOn = !isOn;
-      current = isOn ? FireBlockState.on : FireBlockState.off;
+      fireSprite.current = isOn ? FireBlockState.on : FireBlockState.off;
     });
   }
 
