@@ -7,10 +7,9 @@ import '../../game/content/levelBasics/player.dart';
 class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   // Constructor and attributes
   final double controlSize;
-  final Vector2 positionFromParent;
   double leftMargin;
 
-  CustomJoystick({required this.controlSize, required this.positionFromParent, required this.leftMargin});
+  CustomJoystick({required this.controlSize, required this.leftMargin});
 
   // Logic to manage the joystick
   late JoystickComponent joystick;

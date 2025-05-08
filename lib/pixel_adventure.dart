@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -8,10 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
-import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
+
+import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
-import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
+import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/widgets_settings/character_selection.dart';
 import 'components/HUD/widgets_settings/level_selection_menu.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
@@ -81,7 +83,10 @@ class PixelAdventure extends FlameGame
     size.x - 32 - controlSize,
     size.y - 32 - controlSize,
   );
-  late final Vector2 leftControlPosition = customJoystick.joystick.position;
+  late final Vector2 leftControlPosition = Vector2(
+    32 - controlSize,
+    32 - controlSize,
+  );
 
   @override
   FutureOr<void> onLoad() async {
@@ -125,7 +130,7 @@ class PixelAdventure extends FlameGame
     );
     menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
     levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
-    jumpButton = JumpButton(controlSize,rightControlPosition);
+    jumpButton = JumpButton(controlSize);
   }
 
   // TODO: Extract list of complete levels and unlocked levels
@@ -221,6 +226,7 @@ class PixelAdventure extends FlameGame
       isJoystickAdded = true;
       customJoystick = CustomJoystick(
         controlSize: controlSize,
+        leftMargin: isLeftHanded ? size.x - 32 - controlSize * 2 : 32,
       );
       add(customJoystick);
     }
@@ -247,17 +253,7 @@ class PixelAdventure extends FlameGame
   }
 
   void switchHUDPosition() {
-    print("jumpButton.position ${jumpButton.position}");
     if(!showControls) return;
-    if(isLeftHanded){
-      jumpButton.position = leftControlPosition;
-    } else {
-      jumpButton.position = rightControlPosition;
-    }
-    print("isLeftHanded $isLeftHanded");
-    print("rightControlPosition $rightControlPosition");
-    print("leftControlPosition $leftControlPosition");
-    print("jumpButton.position ${jumpButton.position}");
     reloadAllButtons();
   }
 }
