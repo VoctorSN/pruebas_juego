@@ -183,8 +183,8 @@
             "scale": 1.64,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.8170731707317,
-                "y": 183.84146341463412
+                "x": 315.8536585365853,
+                "y": 179.2682926829268
             }
         },
         "level-04.tmx": {
@@ -272,7 +272,6 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                2,
                 4
             ],
             "scale": 1,
@@ -287,11 +286,10 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                2,
                 4
             ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 406,
                 "y": 224.66666666666669
@@ -314,6 +312,17 @@
         },
         "tutorial-04.tmx#Pixel Adventure": {
             "scaleInDock": 1
+        },
+        "tutorial-05.tmx": {
+            "scale": 1.5882812499999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.8425971470733,
+                "y": 183.84653221839648
+            }
+        },
+        "tutorial-05.tmx#Pixel Adventure": {
+            "scaleInDock": 1
         }
     },
     "last.imagePath": "/Users/pumpun17/Documents/FlutterFlame/flutter_flame/assets/images/GUI/Menu/Text",
@@ -329,18 +338,18 @@
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "tutorial-05.tmx",
+        "tutorial-02.tmx",
         "level-03.tmx",
         "tutorial-03.tmx",
         "level-02.tmx",
         "level-01.tmx",
         "tutorial-04.tmx",
-        "tutorial-02.tmx",
         "tutorial-01.tmx",
         "level-06.tmx",
         "level-04.tmx",
         "level-07.tmx",
-        "level-08.tmx",
-        "C:/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx"
+        "level-08.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

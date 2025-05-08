@@ -19,13 +19,15 @@ class BeeProjectile extends SpriteComponent
   });
 
   late final Player player;
+  static final double lifeSpan = 0.5;
+  static final Vector2 particleSize = Vector2.all(24);
 
   @override
   Future<void> onLoad() async {
     player = game.player;
     await super.onLoad();
     sprite = await game.loadSprite('Enemies/Bee/Bullet.png');
-    priority = 5;
+    priority = 1;
     add(RectangleHitbox()..debugMode = true);
   }
 
@@ -33,14 +35,6 @@ class BeeProjectile extends SpriteComponent
   void update(double dt) {
     super.update(dt);
     position += velocity * dt;
-
-    // Remove the projectile if it goes off-screen
-    if (position.x < 0 ||
-        position.x > game.size.x ||
-        position.y < 0 ||
-        position.y > game.size.y) {
-      removeFromParent();
-    }
   }
 
   @override
@@ -59,15 +53,14 @@ class BeeProjectile extends SpriteComponent
     final sprite = await game.loadSprite('Enemies/Bee/Bullet Pieces.png');
     final particle = ParticleSystemComponent(
       particle: Particle.generate(
-        count: 10,
-        lifespan: 0.5,
+        lifespan: lifeSpan,
         generator:
             (i) => AcceleratedParticle(
               position: position,
               speed: Vector2.random() * 20 - Vector2.all(10),
               child: SpriteParticle(
                 sprite: sprite,
-                size: Vector2.all(24), // Tamaño de cada fragmento
+                size: particleSize, // Tamaño de cada fragmento
               ),
             ),
       ),
