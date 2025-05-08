@@ -9,7 +9,8 @@ import 'air_effect.dart';
 
 enum FanState { off, on }
 
-/// TODO if the fan is in the air the movement is not correct fix it with an update? (for Aman)
+/// TODO: add vertical fan
+/// TODO: add a attribute to add windForce
 class Fan extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, CollisionCallbacks {
 

@@ -235,6 +235,9 @@ class Level extends World with HasGameReference<PixelAdventure> {
                 fallingDuration: collision.properties.getValue(
                   'fallingDurationMillSec',
                 ),
+                isSideSensible: collision.properties.getValue(
+                  'isSideSensible',
+                ),
               );
               collisionBlocks.add(fallingPlatform);
               add(fallingPlatform);

@@ -5,17 +5,17 @@ import '../../util/utils.dart';
 import 'collision_block.dart';
 
 /// TODO:  made platform come back after a while
-/// TODO:  add a attribute to made the platform sensible in the sides or not
 class FallingBlock extends CollisionBlock
     with HasGameReference<PixelAdventure> {
 
   // Constructor and atributes
   int fallingDuration;
   final Vector2 initialPosition;
-
+  bool isSideSensible;
   FallingBlock({
     required Vector2 position,
     required this.fallingDuration,
+    this.isSideSensible = false,
     super.size,
     super.isPlatform,
   }) : initialPosition = position.clone(),
@@ -51,7 +51,7 @@ class FallingBlock extends CollisionBlock
       game.images.fromCache('Traps/Falling Platforms/On (32x10).png'),
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: 1,
+        stepTime: 0.75,
         textureSize: Vector2(32, 10),
       ),
     );
@@ -60,7 +60,7 @@ class FallingBlock extends CollisionBlock
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // Add platform sprite
+    priority = -1;
     sprite.animation = idleAnimation;
     add(sprite);
   }
@@ -103,18 +103,20 @@ class FallingBlock extends CollisionBlock
     }
   }
 
-  void _stopFalling() {
+  void _stopFalling() async {
     // Flag to prevent multiple calls
     if (!isFalling) return;
     isFalling = false;
     sprite.animation = fallingAnimation;
+    await Future.delayed(Duration(seconds: 4));
+    position = initialPosition;
   }
 
   // Check if the player is on the platform (exactly on top, not on the sides)
   bool _checkPlayerOnPlatform() {
     final realPlayerX = getPlayerXPosition(player);
     final isWithinX;
-    if (isFalling) {
+    if (isFalling || isSideSensible) {
       isWithinX = realPlayerX + player.hitbox.width > position.x &&
           realPlayerX < position.x + size.x;
     } else {
