@@ -292,7 +292,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 406,
-                "y": 224.66666666666669
+                "y": 40.666666666666686
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -332,16 +332,15 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "level-03.tmx",
         "tutorial-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "tutorial-03.tmx",
         "tutorial-05.tmx",
         "tutorial-02.tmx",
         "level-03.tmx",
-        "tutorial-03.tmx",
         "level-02.tmx",
         "level-01.tmx",
         "tutorial-04.tmx",
