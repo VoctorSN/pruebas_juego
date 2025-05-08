@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
+import 'package:fruit_collector/components/game/content/enemies/bee.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/content/enemies/rockhead.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/checkpoint.dart';
@@ -85,6 +86,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Spike ||
           component is GameText ||
           component is Fan ||
+          component is Bee ||
           component is FireBlock ||
           component is Rockhead,
     );
@@ -159,6 +161,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
               collisionBlocks: collisionBlocks,
             );
             add(chicken);
+            break;
+          case 'Bee':
+            final bee = Bee(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+              collisionBlocks: collisionBlocks,
+            );
+            add(bee);
             break;
           case 'Trampoline':
             final trampoline = Trampoline(

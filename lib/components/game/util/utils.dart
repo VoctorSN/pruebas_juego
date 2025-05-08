@@ -3,6 +3,8 @@ import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
+import '../content/enemies/bee.dart';
+
 bool checkCollision(Player player, block) {
   final hitbox = player.hitbox;
 
@@ -30,6 +32,23 @@ bool checkCollisionLootBox(LootBox lootBox, block) {
   final playerY = lootBox.position.y;
   final playerWidth = lootBox.width;
   final playerHeight = lootBox.height;
+
+  final blockX = block.x;
+  final blockY = block.y;
+  final blockWidth = block.width;
+  final blockHeight = block.height;
+
+  return (playerY < blockY + blockHeight &&
+      playerY + playerHeight > blockY &&
+      playerX < blockX + blockWidth &&
+      playerX + playerWidth > blockX);
+}
+
+bool checkCollisionBee(Bee bee, block) {
+  final playerX = bee.position.x;
+  final playerY = bee.position.y;
+  final playerWidth = bee.width;
+  final playerHeight = bee.height;
 
   final blockX = block.x;
   final blockY = block.y;
