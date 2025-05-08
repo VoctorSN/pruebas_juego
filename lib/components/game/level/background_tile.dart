@@ -5,8 +5,8 @@ import 'package:flame/parallax.dart';
 import 'package:flutter/cupertino.dart';
 
 class BackgroundTile extends ParallaxComponent {
-
   BackgroundTile({this.color = 'Gray', super.position});
+
   String color;
 
   final double scrollSpeed = 40;

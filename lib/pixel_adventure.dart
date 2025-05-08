@@ -10,7 +10,7 @@ import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
-import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
+import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
@@ -140,12 +140,10 @@ class PixelAdventure extends FlameGame
 
   void removeControls() {
       if (children.any((component) => component is JoystickComponent)) {
-        print("Joystick removed");
         isJoystickAdded = false;
         customJoystick.joystick.removeFromParent();
       }
       for (var component in children.whereType<JumpButton>()) {
-        print("Jump button removed");
         component.removeFromParent();
       }
   }
@@ -226,9 +224,6 @@ class PixelAdventure extends FlameGame
 
   void switchHUDPosition() {
     if(!showControls) return;
-    print("isLeftHanded $isLeftHanded");
     reloadAllButtons();
-    print("Reloading all buttons");
-    print("jumpButton position ${jumpButton.position}");
   }
 }

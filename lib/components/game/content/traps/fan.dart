@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../blocks/collision_block.dart';
 import '../levelBasics/player.dart';
 import 'air_effect.dart';
@@ -11,9 +12,7 @@ enum FanState { off, on }
 
 /// TODO: add vertical fan
 /// TODO: add a attribute to add windForce
-class Fan extends SpriteAnimationGroupComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
-
+class Fan extends SpriteAnimationGroupComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   // Constructor and attributes
   final bool directionRight;
   final double fanDistance;
@@ -40,7 +39,6 @@ class Fan extends SpriteAnimationGroupComponent
   late final fanDirection = directionRight ? 1.0 : -1.0;
   late final Vector2 windVelocity = Vector2(directionRight ? 50 : -50, 0);
 
-
   @override
   FutureOr<void> onLoad() {
     createHitbox();
@@ -54,9 +52,7 @@ class Fan extends SpriteAnimationGroupComponent
 
   void createHitbox() {
     Vector2 hitboxSize = Vector2(fanDistance * tileSize, size.y);
-    add(
-      RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize),
-    );
+    add(RectangleHitbox(position: Vector2(-hitboxSize.x, 0), size: hitboxSize));
 
     add(AirEffect(size: hitboxSize, position: Vector2(-hitboxSize.x, 0)));
   }
@@ -73,16 +69,11 @@ class Fan extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Traps/Fan/$state.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: textureSize,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: textureSize),
     );
   }
 
   void collidedWithPlayer() {
-
     player.windVelocity = windVelocity;
     // bool isAnyKeyPressed = player.isLeftKeyPressed || player.isRightKeyPressed;
     // bool isRightKeyPressed = player.isRightKeyPressed;

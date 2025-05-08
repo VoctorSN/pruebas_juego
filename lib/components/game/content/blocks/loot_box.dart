@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/blocks/collision_block.dart';
-import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/components/game/content/levelExtras/key_unlocker.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
 import '../../../../pixel_adventure.dart';
 
 enum LootBoxState { idle, hit }
 
-class LootBox extends SpriteAnimationGroupComponent
-    with HasGameReference<PixelAdventure> {
+class LootBox extends SpriteAnimationGroupComponent with HasGameReference<PixelAdventure> {
   // Constructor and atributes
   Function(CollisionBlock) addCollisionBlock;
   Function(CollisionBlock) removeCollisionBlock;
@@ -47,10 +46,7 @@ class LootBox extends SpriteAnimationGroupComponent
     player = game.player;
     add(RectangleHitbox(position: Vector2.zero(), size: size));
     _loadAllAnimations();
-    collisionBlock = CollisionBlock(
-      position: Vector2(position.x, position.y + 2),
-      size: size,
-    );
+    collisionBlock = CollisionBlock(position: Vector2(position.x, position.y + 2), size: size);
     addCollisionBlock(collisionBlock);
     return super.onLoad();
   }
@@ -59,10 +55,7 @@ class LootBox extends SpriteAnimationGroupComponent
     _idleAnimation = _spriteAnimation('Idle', 1);
     _hitAnimation = _spriteAnimation('Hit (28x24)', 4)..loop = false;
 
-    animations = {
-      LootBoxState.idle: _idleAnimation,
-      LootBoxState.hit: _hitAnimation,
-    };
+    animations = {LootBoxState.idle: _idleAnimation, LootBoxState.hit: _hitAnimation};
 
     current = LootBoxState.idle;
   }
@@ -70,19 +63,14 @@ class LootBox extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Items/Boxes/Box2/$state.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: textureSize,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: textureSize),
     );
   }
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       hp--;
-      if (game.isGameSoundsActive)
-        SoundManager().playBounce(game.gameSoundVolume);
+      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
       current = LootBoxState.hit;
       player.velocity.y = -_bounceHeight;
       await animationTicker?.completed;
@@ -98,13 +86,8 @@ class LootBox extends SpriteAnimationGroupComponent
   }
 
   void dropObject() {
-    Vector2 keyPosition =
-        position + (size / 2) - Vector2.all(8); // Centra el KeyUnlocker
-    KeyUnlocker key = KeyUnlocker(
-      position: keyPosition,
-      size: Vector2.all(16),
-      name: objectInside,
-    );
+    Vector2 keyPosition = position + (size / 2) - Vector2.all(8); // Centra el KeyUnlocker
+    KeyUnlocker key = KeyUnlocker(position: keyPosition, size: Vector2.all(16), name: objectInside);
     addSpawnPoint(key);
   }
 }

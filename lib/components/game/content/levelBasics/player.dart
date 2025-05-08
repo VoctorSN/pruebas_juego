@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:fruit_collector/components/game/content/traps/spike.dart';
-import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
-import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
+import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../content/blocks/alterning_block.dart';
@@ -22,23 +21,13 @@ import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';
 
-enum PlayerState {
-  idle,
-  running,
-  jumping,
-  doubleJumping,
-  falling,
-  hit,
-  appearing,
-  disappearing,
-  wallSlide,
-}
+enum PlayerState { idle, running, jumping, doubleJumping, falling, hit, appearing, disappearing, wallSlide }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
-
   // Constructor and atributes
   String character;
+
   Player({super.position, this.character = 'Ninja Frog'});
 
   // Animations config
@@ -85,24 +74,14 @@ class Player extends SpriteAnimationGroupComponent
 
   // Collision logic
   List<CollisionBlock> collisionBlocks = [];
-  CustomHitbox hitbox = CustomHitbox(
-    offsetX: 10,
-    offsetY: 4,
-    width: 14,
-    height: 28,
-  );
+  CustomHitbox hitbox = CustomHitbox(offsetX: 10, offsetY: 4, width: 14, height: 28);
 
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
     //debugMode = true;
     statringPosition = Vector2(position.x, position.y);
-    add(
-      RectangleHitbox(
-        position: Vector2(hitbox.offsetX, hitbox.offsetY),
-        size: Vector2(hitbox.width, hitbox.height),
-      ),
-    );
+    add(RectangleHitbox(position: Vector2(hitbox.offsetX, hitbox.offsetY), size: Vector2(hitbox.width, hitbox.height)));
     _animationRespawn();
     return super.onLoad();
   }
@@ -131,27 +110,20 @@ class Player extends SpriteAnimationGroupComponent
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
     isLeftKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyA) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+        keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     isRightKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyD) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowRight);
+        keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
 
-    hasJumped =
-        keysPressed.contains(LogicalKeyboardKey.space) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowUp);
+    hasJumped = keysPressed.contains(LogicalKeyboardKey.space) || keysPressed.contains(LogicalKeyboardKey.arrowUp);
 
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!hasReached) {
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
@@ -203,23 +175,14 @@ class Player extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$character/$state.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: Vector2.all(32),
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: Vector2.all(32)),
     );
   }
 
   SpriteAnimation _specialspriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$state (96x96).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: Vector2.all(96),
-        loop: false,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: Vector2.all(96), loop: false),
     );
   }
 
@@ -259,8 +222,7 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y < 0 && jumpCount < 2) playerState = PlayerState.jumping;
 
-    if (jumpCount == 2 && !isOnSand && !isRespawning)
-      playerState = PlayerState.doubleJumping;
+    if (jumpCount == 2 && !isOnSand && !isRespawning) playerState = PlayerState.doubleJumping;
 
     current = playerState;
   }
@@ -308,6 +270,7 @@ class Player extends SpriteAnimationGroupComponent
           continue;
         }
       }
+
       /// TODO make that with downKey you can pass through the platforms
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
@@ -326,7 +289,6 @@ class Player extends SpriteAnimationGroupComponent
             break;
           }
         }
-
       } else if (block.isSand) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {
@@ -397,8 +359,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive)
-      SoundManager().playDisappear(game.gameSoundVolume);
+    if (game.isGameSoundsActive) SoundManager().playDisappear(game.gameSoundVolume);
 
     hasReached = true;
     if (scale.x > 0) {

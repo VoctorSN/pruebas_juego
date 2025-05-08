@@ -5,16 +5,12 @@ import '../../../pixel_adventure.dart';
 import '../../game/content/levelBasics/player.dart';
 
 class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
-
   // Constructor and attributes
   final double controlSize;
   final Vector2 positionFromParent;
   double leftMargin;
-  CustomJoystick({
-    required this.controlSize,
-    required this.positionFromParent,
-    required this.leftMargin,
-  });
+
+  CustomJoystick({required this.controlSize, required this.positionFromParent, required this.leftMargin});
 
   // Logic to manage the joystick
   late JoystickComponent joystick;
@@ -31,8 +27,6 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   ];
   bool wasIdle = true;
 
-
-
   @override
   Future<void> onLoad() async {
     super.onLoad();
@@ -42,10 +36,7 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   void _addJoystick() {
     joystick = JoystickComponent(
       priority: 15,
-      knob: SpriteComponent(
-        sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')),
-        size: Vector2.all(controlSize),
-      ),
+      knob: SpriteComponent(sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')), size: Vector2.all(controlSize)),
       knobRadius: 40,
       background: SpriteComponent(
         sprite: Sprite(game.images.fromCache('GUI/HUD/Joystick.png')),

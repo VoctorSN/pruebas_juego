@@ -1,19 +1,17 @@
+import 'dart:async' as async;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'dart:async' as async;
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 import 'collision_block.dart';
 
 class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
-
   // Constructor
-  AlternatingBlock({
-    required this.isRed,
-    super.position,
-    super.size,
-  });
+  AlternatingBlock({required this.isRed, super.position, super.size});
+
   bool isRed;
 
   // Loading sprites
@@ -38,17 +36,10 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
 
     _loadSprites();
 
-    hitbox = RectangleHitbox(
-      size: Vector2(size.x, size.y),
-      position: Vector2.zero(),
-    );
+    hitbox = RectangleHitbox(size: Vector2(size.x, size.y), position: Vector2.zero());
     add(hitbox);
 
-    spriteComponent = SpriteComponent(
-      sprite: blockActive,
-      size: Vector2(size.x, size.y),
-      position: Vector2.zero(),
-    );
+    spriteComponent = SpriteComponent(sprite: blockActive, size: Vector2(size.x, size.y), position: Vector2.zero());
 
     add(spriteComponent);
 
@@ -60,7 +51,7 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
     _updateSprite();
   }
 
-  void _loadSprites()  {
+  void _loadSprites() {
     if (isRed) {
       blockActive = _getTile(9, 2);
       blockInactive = _getTile(10, 2);
@@ -72,24 +63,17 @@ class AlternatingBlock extends CollisionBlock with HasGameReference<PixelAdventu
 
   Sprite _getTile(int col, int row) {
     final spriteSheet = game.images.fromCache('Terrain/Terrain (16x16).png');
-    return Sprite(
-      spriteSheet,
-      srcPosition: Vector2(col * 16.0, row * 16.0),
-      srcSize: Vector2.all(16),
-    );
+    return Sprite(spriteSheet, srcPosition: Vector2(col * 16.0, row * 16.0), srcSize: Vector2.all(16));
   }
 
   void _startPeriodicToggle() {
     _timerStarted = true;
-    async.Timer.periodic(
-      const Duration(seconds: 1),
-          (async.Timer timer) {
-        isRedActive = !isRedActive;
-        for (final block in _instances) {
-          block._updateSprite();
-        }
-      },
-    );
+    async.Timer.periodic(const Duration(seconds: 1), (async.Timer timer) {
+      isRedActive = !isRedActive;
+      for (final block in _instances) {
+        block._updateSprite();
+      }
+    });
   }
 
   void _updateSprite() {

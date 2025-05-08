@@ -1,17 +1,14 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+
 import '../../../pixel_adventure.dart';
 
-class LevelSelection extends SpriteComponent
-    with HasGameReference<PixelAdventure>, TapCallbacks {
-
+class LevelSelection extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
   final double buttonSize;
 
-  LevelSelection({
-    required double this.buttonSize,
-  });
-
+  LevelSelection({required this.buttonSize});
 
   @override
   FutureOr<void> onLoad() {

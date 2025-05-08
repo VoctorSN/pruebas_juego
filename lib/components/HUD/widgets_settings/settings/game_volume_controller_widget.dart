@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../utils/number_slider.dart';
 
@@ -8,11 +8,7 @@ class ToggleGameVolumeWidget extends StatefulWidget {
   final PixelAdventure game;
   Function updateGameVolume;
 
-  ToggleGameVolumeWidget({
-    super.key,
-    required this.game,
-    required this.updateGameVolume,
-  });
+  ToggleGameVolumeWidget({super.key, required this.game, required this.updateGameVolume});
 
   @override
   State<ToggleGameVolumeWidget> createState() {
@@ -25,7 +21,7 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
   Function updateGameVolume;
 
   _ToggleGameVolumeWidgetState({required this.game, required this.updateGameVolume})
-      : isSliderActive = game.isGameSoundsActive;
+    : isSliderActive = game.isGameSoundsActive;
 
   bool isMuted = false;
   late double value;
@@ -33,22 +29,15 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
 
   Image get volumeImage {
     return game.isGameSoundsActive
-        ? Image.asset(
-      'assets/images/GUI/HUD/soundOnButton.png',
-      fit: BoxFit.cover,
-    )
-        : Image.asset(
-      'assets/images/GUI/HUD/soundOffButton.png',
-      fit: BoxFit.cover,
-    );
+        ? Image.asset('assets/images/GUI/HUD/soundOnButton.png', fit: BoxFit.cover)
+        : Image.asset('assets/images/GUI/HUD/soundOffButton.png', fit: BoxFit.cover);
   }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text('Volume',
-        style: TextStyleSingleton().style,),
+        Text('Volume', style: TextStyleSingleton().style),
         NumberSlider(
           game: game,
           value: game.gameSoundVolume * 50, // This value updates dinamically
@@ -56,10 +45,7 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
           isActive: isSliderActive,
         ),
 
-        IconButton(
-          onPressed: changeState,
-          icon: volumeImage,
-        ),
+        IconButton(onPressed: changeState, icon: volumeImage),
       ],
     );
   }
@@ -69,8 +55,8 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
       return null;
     }
 
-      updateGameVolume(value/50);
-      return value;
+    updateGameVolume(value / 50);
+    return value;
   }
 
   void changeState() {

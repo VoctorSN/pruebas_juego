@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter/material.dart';
+
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
 import '../../../../pixel_adventure.dart';
-import '../character_selecition.dart';
-import '../settings/settings_menu.dart';
 
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';
@@ -18,12 +18,8 @@ class MainMenu extends StatefulWidget {
   State<MainMenu> createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu>
-    with SingleTickerProviderStateMixin {
-  final List<String> gifPaths = List.generate(
-    7,
-        (i) => 'assets/gifsMainMenu/gif${i + 1}.gif',
-  );
+class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin {
+  final List<String> gifPaths = List.generate(7, (i) => 'assets/gifsMainMenu/gif${i + 1}.gif');
   int _currentGif = 0;
   late Timer _gifTimer;
   late AnimationController _logoController;
@@ -76,13 +72,7 @@ class _MainMenuState extends State<MainMenu>
       style: buttonStyle,
       onPressed: onPressed,
       icon: Icon(icon, color: textColor),
-      label: Text(
-        label,
-        style: TextStyleSingleton().style.copyWith(
-          fontSize: 14,
-          color: textColor,
-        ),
-      ),
+      label: Text(label, style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
     );
   }
 
@@ -91,15 +81,13 @@ class _MainMenuState extends State<MainMenu>
     return Stack(
       children: [
         // Background made of gifs
-        Positioned.fill(
-          child: Image.asset(gifPaths[_currentGif], fit: BoxFit.cover),
-        ),
+        Positioned.fill(child: Image.asset(gifPaths[_currentGif], fit: BoxFit.cover)),
 
         // Made the background a bit translucent
         Positioned.fill(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-            child: Container(color: baseColor.withOpacity(0.4)),
+            child: Container(color: baseColor.withAlpha((0.4 * 255).toInt())),
           ),
         ),
 
@@ -117,13 +105,7 @@ class _MainMenuState extends State<MainMenu>
                   style: TextStyleSingleton().style.copyWith(
                     fontSize: 48,
                     color: textColor,
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black,
-                        offset: Offset(3, 3),
-                        blurRadius: 6,
-                      ),
-                    ],
+                    shadows: const [Shadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 6)],
                   ),
                 ),
               ),

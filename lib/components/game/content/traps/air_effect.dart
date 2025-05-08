@@ -1,9 +1,8 @@
-import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class AirEffect extends PositionComponent {
-  final Paint airPaint = Paint()..color = Colors.cyan.withOpacity(0.4);
+  final Paint airPaint = Paint()..color = Colors.cyan.withAlpha((0.4 * 255).toInt());
   double offsetX = 0.0;
 
   static const double lineSpacing = 6.0;
@@ -13,10 +12,7 @@ class AirEffect extends PositionComponent {
 
   final List<double> _horizontalOffsets = [];
 
-  AirEffect({
-    required Vector2 size,
-    required Vector2 position,
-  }) {
+  AirEffect({required Vector2 size, required Vector2 position}) {
     this.size = size;
     this.position = position;
 
@@ -40,10 +36,7 @@ class AirEffect extends PositionComponent {
       // Creating the air stream effect by drawing horizontal lines
       for (double x = -lineLength; x < size.x; x += 2 * lineLength) {
         final lineX = ((x + offsetX + deviation) % size.x);
-        canvas.drawRect(
-          Rect.fromLTWH(lineX, y, lineLength, lineHeight),
-          airPaint,
-        );
+        canvas.drawRect(Rect.fromLTWH(lineX, y, lineLength, lineHeight), airPaint);
       }
 
       row++;

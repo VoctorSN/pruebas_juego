@@ -1,10 +1,12 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/pause_menu.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/settings/game_volume_controller_widget.dart';
+import 'package:fruit_collector/components/HUD/widgets_settings/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/settings/resize_HUD.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/settings/resize_controls.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/game_volume_controller_widget.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 
@@ -21,8 +23,11 @@ class SettingsMenu extends StatelessWidget {
   late double musicVolume = game.musicSoundVolume;
 
   updateSizeHUD(double newValue) => sizeHUD = newValue;
+
   updateSizeControls(double newValue) => sizeControls = newValue;
+
   updateMusicVolume(double newValue) => musicVolume = newValue;
+
   updateGameVolume(double newValue) => gameVolume = newValue;
 
   @override
@@ -47,10 +52,8 @@ class SettingsMenu extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          color: baseColor.withOpacity(0.85),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          color: baseColor.withAlpha((0.85 * 255).toInt()),
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Padding(
@@ -62,22 +65,10 @@ class SettingsMenu extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      'Settings',
-                      style: TextStyleSingleton().style.copyWith(
-                        fontSize: 46,
-                        color: textColor,
-                      ),
-                    ),
+                    child: Text('Settings', style: TextStyleSingleton().style.copyWith(fontSize: 46, color: textColor)),
                   ),
-                  ToggleMusicVolumeWidget(
-                    game: game,
-                    updateMusicVolume: updateMusicVolume,
-                  ),
-                  ToggleGameVolumeWidget(
-                    game: game,
-                    updateGameVolume: updateGameVolume,
-                  ),
+                  ToggleMusicVolumeWidget(game: game, updateMusicVolume: updateMusicVolume),
+                  ToggleGameVolumeWidget(game: game, updateGameVolume: updateGameVolume),
                   ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
                   ResizeControls(game: game, updateSizeControls: updateSizeControls),
 
@@ -92,13 +83,7 @@ class SettingsMenu extends StatelessWidget {
                           game.overlays.add(PauseMenu.id);
                         },
                         icon: const Icon(Icons.arrow_back, size: 20, color: Colors.white),
-                        label: Text(
-                          'Back',
-                          style: TextStyleSingleton().style.copyWith(
-                            fontSize: 20,
-                            color: textColor,
-                          ),
-                        ),
+                        label: Text('Back', style: TextStyleSingleton().style.copyWith(fontSize: 20, color: textColor)),
                       ),
                       const SizedBox(width: 24),
                       ElevatedButton.icon(
@@ -115,10 +100,7 @@ class SettingsMenu extends StatelessWidget {
                         icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
                         label: Text(
                           'Apply',
-                          style: TextStyleSingleton().style.copyWith(
-                            fontSize: 20,
-                            color: textColor,
-                          ),
+                          style: TextStyleSingleton().style.copyWith(fontSize: 20, color: textColor),
                         ),
                       ),
                     ],

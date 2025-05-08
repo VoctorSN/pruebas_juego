@@ -10,19 +10,19 @@ class GameText extends TextComponent with HasGameReference {
     Color color = Colors.white,
     String fontFamily = 'ArcadeClassic',
   }) : super(
-    text: text,
-    position: position,
-    priority: -3,
-    textRenderer: TextPaint(
-      style: TextStyle(
-        fontSize: fontSize,
-        fontFamily: fontFamily,
-        color: color,
-        height: 1.0,
-        overflow: TextOverflow.visible,
-      ),
-    ),
-  ) {
+         text: text,
+         position: position,
+         priority: -3,
+         textRenderer: TextPaint(
+           style: TextStyle(
+             fontSize: fontSize,
+             fontFamily: fontFamily,
+             color: color,
+             height: 1.0,
+             overflow: TextOverflow.visible,
+           ),
+         ),
+       ) {
     size = Vector2(maxWidth, double.infinity);
   }
 
@@ -35,14 +35,7 @@ class GameText extends TextComponent with HasGameReference {
   @override
   void render(Canvas canvas) {
     final textPainter = TextPainter(
-      text: TextSpan(
-        text: text,
-        style: TextStyle(
-          fontSize: 16,
-          fontFamily: 'ArcadeClassic',
-          color: Colors.black,
-        ),
-      ),
+      text: TextSpan(text: text, style: TextStyle(fontSize: 16, fontFamily: 'ArcadeClassic', color: Colors.black)),
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
     );

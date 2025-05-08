@@ -1,12 +1,13 @@
-import 'package:flame/components.dart';
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
-import 'dart:async';
+
 import '../../../../pixel_adventure.dart';
 
-class Spike extends PositionComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
+class Spike extends PositionComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   // Constructor
   final String wallPosition;
 
@@ -43,32 +44,32 @@ class Spike extends PositionComponent
       case 'TopWall':
         angleS = halfRotation; // 180°
         positionS = Vector2.all(spikeSize);
-        hitboxSize = size..y/=2;
+        hitboxSize = size..y /= 2;
         break;
       case 'LeftWall':
-        angleS = halfRotation/2; // 90°
+        angleS = halfRotation / 2; // 90°
         positionS = Vector2(spikeSize, 0);
-        hitboxSize = size..x/=2;
+        hitboxSize = size..x /= 2;
         break;
       case 'RightWall':
-        angleS = -halfRotation/2; // -90°
+        angleS = -halfRotation / 2; // -90°
         positionS = Vector2(0, spikeSize);
-        hitboxSize = size..x/=2;
-        hitboxRotation = Vector2(spikeSize/2, 0);
+        hitboxSize = size..x /= 2;
+        hitboxRotation = Vector2(spikeSize / 2, 0);
         break;
       case 'BottomWall':
         angleS = 0; // 0°
-        hitboxSize = size..y/=2;
-        hitboxRotation = Vector2(0, spikeSize/2);
+        hitboxSize = size..y /= 2;
+        hitboxRotation = Vector2(0, spikeSize / 2);
         break;
       default:
         break;
     }
 
-    hitbox = RectangleHitbox(
-      size: hitboxSize,
-      position: Vector2(hitboxRotation.x, hitboxRotation.y),
-    )..debugMode = true..debugColor = Colors.green;
+    hitbox =
+        RectangleHitbox(size: hitboxSize, position: Vector2(hitboxRotation.x, hitboxRotation.y))
+          ..debugMode = true
+          ..debugColor = Colors.green;
     add(hitbox);
 
     for (var row = 0; row < rows; row++) {
@@ -85,10 +86,7 @@ class Spike extends PositionComponent
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Player) other.collidedWithEnemy();
     super.onCollisionStart(intersectionPoints, other);
   }

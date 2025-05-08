@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TextStyleSingleton {
-
   // Unique instance singleton
   static final TextStyleSingleton _instance = TextStyleSingleton._internal();
 
@@ -15,9 +14,6 @@ class TextStyleSingleton {
 
   // Function to get the text style
   TextStyle get style {
-    return const TextStyle(
-      fontFamily: 'ArcadeClassic',
-      color: Colors.white,
-    );
+    return const TextStyle(fontFamily: 'ArcadeClassic', color: Colors.white);
   }
 }
