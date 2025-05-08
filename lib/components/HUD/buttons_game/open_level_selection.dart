@@ -8,8 +8,9 @@ class LevelSelection extends SpriteComponent
     with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
-
+  final Function onTap;
   LevelSelection({
+    required this.onTap,
     required double this.buttonSize,
   });
 
@@ -26,7 +27,7 @@ class LevelSelection extends SpriteComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    /// TODO: Open level selection screen
+    onTap();
     super.onTapDown(event);
   }
 }

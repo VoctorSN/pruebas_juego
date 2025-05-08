@@ -12,7 +12,8 @@ import 'components/HUD/buttons_game/changePlayerSkinButton.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
-import 'components/HUD/widgets_settings/character_selecition.dart';
+import 'components/HUD/widgets_settings/character_selection.dart';
+import 'components/HUD/widgets_settings/level_selection_menu.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
 import 'components/game/content/levelBasics/player.dart';
@@ -101,22 +102,11 @@ class PixelAdventure extends FlameGame
       showControls = false;
     }
 
-    // Initialize the buttons
-    changeSkinButton = ChangePlayerSkinButton(
-      changeCharacter: openChangeCharacterMenu,
-      buttonSize: hudSize,
-    );
-    menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
-    levelSelectionButton = LevelSelection(buttonSize: hudSize);
-    jumpButton = JumpButton(controlSize,rightControlPosition);
+    initializateButtons();
 
     addAllButtons();
 
-    // Load the overlays for the pause menu and settings menu
-    overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
-    overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
-    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
-    overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
+    addOverlays();
 
     // Open the main menu
     overlays.add(MainMenu.id);
@@ -126,6 +116,36 @@ class PixelAdventure extends FlameGame
     _loadLevel();
 
     return super.onLoad();
+  }
+
+  void initializateButtons() {
+    changeSkinButton = ChangePlayerSkinButton(
+      changeCharacter: openChangeCharacterMenu,
+      buttonSize: hudSize,
+    );
+    menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
+    levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
+    jumpButton = JumpButton(controlSize,rightControlPosition);
+  }
+
+  // TODO: Extract list of complete levels and unlocked levels
+  void addOverlays() {
+    overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
+    overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
+    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
+    overlays.addEntry(LevelSelectionMenu.id, (context, game) => LevelSelectionMenu(
+      game: this,
+      totalLevels: levelNames.length,
+      onLevelSelected: (level) {
+        game.overlays.remove(LevelSelectionMenu.id);
+        game.resumeEngine();
+        currentLevelIndex = level - 2;
+        loadNextLevel();
+      },
+      unlockedLevels: [1, 2, 3, 4],
+      completedLevels: [],
+    ));
   }
 
   void reloadAllButtons() {
@@ -213,6 +233,11 @@ class PixelAdventure extends FlameGame
 
   void openChangeCharacterMenu() {
     overlays.add(CharacterSelection.id);
+    pauseEngine();
+  }
+
+  void openLevelSelectionMenu() {
+    overlays.add(LevelSelectionMenu.id);
     pauseEngine();
   }
 

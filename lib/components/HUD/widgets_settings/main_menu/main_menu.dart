@@ -5,7 +5,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 import '../../../../pixel_adventure.dart';
-import '../character_selecition.dart';
+import '../character_selection.dart';
 import '../settings/settings_menu.dart';
 
 class MainMenu extends StatefulWidget {
