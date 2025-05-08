@@ -15,7 +15,7 @@ class Rockhead extends SpriteAnimationGroupComponent
 
   Rockhead({super.position, super.size, this.isReversed = false});
 
-  // Animaciones y tamaños
+  // Size and animations
   late final SpriteAnimation _idleAnimation;
   late final SpriteAnimation _atackDownAnimation;
   late final SpriteAnimation _atackAnimation;
@@ -31,7 +31,7 @@ class Rockhead extends SpriteAnimationGroupComponent
 
   static const Duration inmobileDuration = Duration(milliseconds: 350);
 
-  // Lógica de ataque
+  // Attack logic
   bool isAtacking = false;
   bool isComingBack = false;
   static const attackVelocity = 100.0;
@@ -155,6 +155,7 @@ class Rockhead extends SpriteAnimationGroupComponent
     current = State.atacking;
   }
 
+  // TODO refactor this to use EffectController
   void comeBack() async {
     if (game.isGameSoundsActive) {
       SoundManager().stopRockheadAttackingLoop();

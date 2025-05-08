@@ -1,10 +1,11 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/animation.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../../util/utils.dart';
 import 'collision_block.dart';
 
-/// TODO:  made platform come back after a while
 class FallingBlock extends CollisionBlock
     with HasGameReference<PixelAdventure> {
 
@@ -99,17 +100,30 @@ class FallingBlock extends CollisionBlock
     if (!isOnGround) {
       if (isFalling) return;
       isFalling = true;
-      sprite.animation = idleAnimation;
+      sprite.animation = fallingAnimation;
     }
   }
 
-  void _stopFalling() async {
+  void _stopFalling() {
     // Flag to prevent multiple calls
     if (!isFalling) return;
     isFalling = false;
     sprite.animation = fallingAnimation;
-    await Future.delayed(Duration(seconds: 4));
-    position = initialPosition;
+    _comeBack();
+  }
+
+  void _comeBack() async {
+    await Future.delayed(Duration(seconds: 3));
+    add(
+      MoveToEffect(
+        initialPosition,
+        EffectController(duration: 1.0, curve: Curves.easeInOut),
+      ),
+    );
+    isOnGround = false;
+    isFalling = false;
+    hasCollided = false;
+    sprite.animation = idleAnimation;
   }
 
   // Check if the player is on the platform (exactly on top, not on the sides)
