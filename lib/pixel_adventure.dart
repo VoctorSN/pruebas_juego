@@ -51,6 +51,7 @@ class PixelAdventure extends FlameGame
     'tutorial-02',
     'tutorial-03',
     'tutorial-04',
+    'tutorial-05',
     'level-01',
     'level-02',
     'level-03',
@@ -60,8 +61,8 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 2;
-  List<int> unlockedLevels = [1, 2, 3, 4]; //tutorial levels
+  int currentLevelIndex = 0;
+  List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
 
   // Logic to manage the sounds

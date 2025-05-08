@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
 import '../../../../pixel_adventure.dart';
@@ -67,9 +66,7 @@ class Spike extends PositionComponent with HasGameReference<PixelAdventure>, Col
     }
 
     hitbox =
-        RectangleHitbox(size: hitboxSize, position: Vector2(hitboxRotation.x, hitboxRotation.y))
-          ..debugMode = true
-          ..debugColor = Colors.green;
+        RectangleHitbox(size: hitboxSize, position: Vector2(hitboxRotation.x, hitboxRotation.y));
     add(hitbox);
 
     for (var row = 0; row < rows; row++) {

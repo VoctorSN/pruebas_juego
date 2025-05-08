@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/content/enemies/projectiles/bee_projectile.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -62,14 +61,10 @@ class Bee extends SpriteAnimationGroupComponent
   FutureOr<void> onLoad() {
     player = game.player;
     add(
-      RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26))
-        ..debugMode = true
-        ..debugColor = Colors.yellow,
+      RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)),
     );
     _loadAllAnimations();
     _calculateRange();
-    debugMode = true;
-    debugColor = Colors.green;
     return super.onLoad();
   }
 

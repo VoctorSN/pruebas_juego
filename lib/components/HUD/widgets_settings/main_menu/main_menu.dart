@@ -5,8 +5,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 import '../../../../pixel_adventure.dart';
-import '../character_selection.dart';
-import '../settings/settings_menu.dart';
+import '../level_selection_menu.dart';
 
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';
@@ -134,7 +133,8 @@ class _MainMenuState extends State<MainMenu>
               }),
               const SizedBox(height: 12),
               _menuButton('LEVELS', Icons.map, () {
-                // TODO open levels menu
+                widget.game.overlays.remove(MainMenu.id);
+                widget.game.overlays.add(LevelSelectionMenu.id);
               }),
               const SizedBox(height: 12),
               _menuButton('SETTINGS', Icons.settings, () {

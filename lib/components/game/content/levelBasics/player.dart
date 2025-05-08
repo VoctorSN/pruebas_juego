@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/bee.dart';
-import 'package:fruit_collector/components/game/content/enemies/projectiles/bee_projectile.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -97,7 +96,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-    debugMode = true;
+    // debugMode = true;
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(

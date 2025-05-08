@@ -27,8 +27,8 @@ class BeeProjectile extends SpriteComponent
     player = game.player;
     await super.onLoad();
     sprite = await game.loadSprite('Enemies/Bee/Bullet.png');
-    priority = 1;
-    add(RectangleHitbox()..debugMode = true);
+    priority = 5;
+    add(RectangleHitbox());
   }
 
   @override
