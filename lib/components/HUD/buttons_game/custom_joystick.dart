@@ -24,10 +24,9 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
     JoystickDirection.upRight,
     JoystickDirection.downLeft,
     JoystickDirection.downRight,
+    JoystickDirection.down,
   ];
   bool wasIdle = true;
-
-
 
   @override
   Future<void> onLoad() async {
@@ -61,6 +60,7 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
       _updateJoystick();
     } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {
       wasIdle = true;
+      player.isDownPressed = false;
       player.horizontalMovement = 0;
       // player.isLeftKeyPressed = false;
       // player.isRightKeyPressed = false;
@@ -83,8 +83,13 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
         // player.isRightKeyPressed = true;
         // player.isLeftKeyPressed = false;
         break;
+      case JoystickDirection.down:
+        player.isDownPressed = true;
+        print('down');
+        break;
       default:
         player.horizontalMovement = 0;
+        player.isDownPressed = false;
         // player.isLeftKeyPressed = false;
         // player.isRightKeyPressed = false;
         break;

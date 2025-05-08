@@ -82,6 +82,7 @@ class Player extends SpriteAnimationGroupComponent
   // Key pressed logic
   bool isLeftKeyPressed = false;
   bool isRightKeyPressed = false;
+  bool isDownPressed = false;
 
   // Collision logic
   List<CollisionBlock> collisionBlocks = [];
@@ -136,13 +137,18 @@ class Player extends SpriteAnimationGroupComponent
     isRightKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
-
+    
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
 
     hasJumped =
         keysPressed.contains(LogicalKeyboardKey.space) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowUp);
+        keysPressed.contains(LogicalKeyboardKey.arrowUp) ||
+        keysPressed.contains(LogicalKeyboardKey.keyW);
+
+    isDownPressed =
+        keysPressed.contains(LogicalKeyboardKey.arrowDown) ||
+        keysPressed.contains(LogicalKeyboardKey.keyS);
 
     return super.onKeyEvent(event, keysPressed);
   }
@@ -311,7 +317,7 @@ class Player extends SpriteAnimationGroupComponent
       /// TODO make that with downKey you can pass through the platforms
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
-          if (velocity.y > 0) {
+          if (velocity.y > 0 && !isDownPressed) {
             isOnGround = true;
             jumpCount = 0;
             velocity.y = 0;
