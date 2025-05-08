@@ -37,6 +37,7 @@ class FireBlock extends SpriteAnimationGroupComponent
 
   // Rotation logic
   static const double halfRotation = 3.14159;
+  late SpriteAnimationGroupComponent<FireBlockState> fireSprite;
 
   @override
   Future<void> onLoad() async {
@@ -47,13 +48,13 @@ class FireBlock extends SpriteAnimationGroupComponent
     collisionBlock = CollisionBlock(
         position: Vector2(position.x, position.y + tileSize),
         size: Vector2(size.x, tileSize));
-    addCollisionBlock(collisionBlock..debugMode = true..debugColor = Colors.red);
+    addCollisionBlock(collisionBlock);
 
     attackHitbox = RectangleHitbox(
       position: Vector2.zero(),
       size: Vector2(size.x, tileSize),
     );
-    add(attackHitbox..debugMode = true..debugColor = Colors.green);
+    add(attackHitbox..debugMode = true..debugColor = Colors.red);
 
     rotate();
 
@@ -61,31 +62,48 @@ class FireBlock extends SpriteAnimationGroupComponent
   }
 
   void rotate() {
-    // switch (fireDirection) {
-    //   case 'Up':
-    //     angleS = halfRotation; // 180°
-    //     positionS = Vector2.all(tileSize);
-    //     hitboxSize = size..y/=2;
-    //     break;
-    //   case 'Left':
-    //     angleS = halfRotation/2; // 90°
-    //     positionS = Vector2(tileSize, 0);
-    //     hitboxSize = size..x/=2;
-    //     break;
-    //   case 'Right':
-    //     angleS = -halfRotation/2; // -90°
-    //     positionS = Vector2(0, tileSize);
-    //     hitboxSize = size..x/=2;
-    //     hitboxRotation = Vector2(tileSize/2, 0);
-    //     break;
-    //   case 'Down':
-    //     angleS = 0; // 0°
-    //     hitboxSize = size..y/=2;
-    //     hitboxRotation = Vector2(0, tileSize/2);
-    //     break;
-    //   default:
-    //     break;
-    // }
+    double angleS = 0;
+    Vector2 collisionPosition = Vector2.zero();
+    Vector2 hitboxPosition = Vector2.zero();
+    Vector2 spritePosition = Vector2.zero();
+
+    switch (fireDirection) {
+      case 'Up':
+        angleS = 0;
+        collisionPosition = Vector2(position.x, position.y + tileSize);
+        hitboxPosition = Vector2.zero();
+        break;
+
+      case 'Down':
+        angleS = FireBlock.halfRotation;
+        collisionPosition = position;
+        hitboxPosition = Vector2(0,16);
+        break;
+
+      case 'Left':
+        angleS = -FireBlock.halfRotation / 2;
+        collisionPosition = Vector2(position.x + tileSize, position.y);
+        hitboxPosition = Vector2.zero();
+        break;
+
+      case 'Right':
+        angleS = FireBlock.halfRotation / 2;
+        collisionPosition = position;
+        hitboxPosition = Vector2(16,0);
+        break;
+    }
+
+    // Ajustar el sprite
+
+    // angle = angleS;
+
+    // Ajustar la collision
+    collisionBlock.position = collisionPosition;
+    collisionBlock.size = Vector2.all(tileSize);
+
+    // Ajustar hitbox
+    attackHitbox.position = hitboxPosition;
+    attackHitbox.size = Vector2.all(tileSize);
   }
 
   void _loadAnimations() {
