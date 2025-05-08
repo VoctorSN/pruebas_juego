@@ -45,37 +45,15 @@ bool checkCollisionLootBox(LootBox lootBox, block) {
 }
 
 bool checkCollisionBee(Bee bee, block) {
-  final playerX = bee.position.x;
-  final playerY = bee.position.y;
-  final playerWidth = bee.width;
-  final playerHeight = bee.height;
-
-  final blockX = block.x;
-  final blockY = block.y;
-  final blockWidth = block.width;
-  final blockHeight = block.height;
-
-  return (playerY < blockY + blockHeight &&
-      playerY + playerHeight > blockY &&
-      playerX < blockX + blockWidth &&
-      playerX + playerWidth > blockX);
+  final beeRect = bee.toRect();
+  final blockRect = block.toRect();
+  return beeRect.overlaps(blockRect);
 }
 
 bool checkCollisionChicken(Chicken chicken, block) {
-  final playerX = chicken.position.x;
-  final playerY = chicken.position.y;
-  final playerWidth = chicken.width;
-  final playerHeight = chicken.height;
-
-  final blockX = block.x;
-  final blockY = block.y;
-  final blockWidth = block.width;
-  final blockHeight = block.height;
-
-  return (playerY < blockY + blockHeight &&
-      playerY + playerHeight > blockY &&
-      playerX < blockX + blockWidth &&
-      playerX + playerWidth > blockX);
+  final chickenRect = chicken.toRect();
+  final blockRect = block.toRect();
+  return chickenRect.overlaps(blockRect);
 }
 
 bool isPlayerInsideBlock(Player player, RectangleHitbox blockHitbox) {

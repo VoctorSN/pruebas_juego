@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="64">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="65">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -20,7 +20,7 @@
 113,0,0,0,0,0,0,0,0,0,0,0,226,249,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,250,251,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,30,30,30,30,273,111,
-113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,293,294,294,294,253,30,273,111,
+113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,249,250,250,250,250,250,250,250,250,250,250,250,250,250,250,293,294,294,294,253,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,273,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,271,30,273,111,
@@ -31,7 +31,7 @@
 91,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,89
 </data>
  </layer>
- <objectgroup id="4" name="SpawnPoints" visible="0">
+ <objectgroup id="4" name="SpawnPoints">
   <object id="1" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="2" type="deathZone" x="0" y="368" width="640" height="48"/>
   <object id="3" type="deathZone" x="-48" y="0" width="48" height="416"/>
@@ -49,10 +49,10 @@
   <object id="56" type="GameText" x="320" y="32" width="183.897" height="48">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">JUMP   FAST   AND   DONT   FALL   😱</text>
   </object>
-  <object id="63" name="Bee" type="Bee" x="336" y="192" width="32" height="32">
+  <object id="63" name="Bee" type="Bee" x="128" y="176" width="32" height="32">
    <properties>
-    <property name="offNeg" type="float" value="4.75"/>
-    <property name="offPos" type="float" value="2.75"/>
+    <property name="offNeg" type="float" value="10"/>
+    <property name="offPos" type="float" value="10"/>
    </properties>
   </object>
  </objectgroup>
@@ -64,5 +64,6 @@
   <object id="47" x="512" y="112" width="112" height="128"/>
   <object id="48" x="208" y="176" width="288" height="16"/>
   <object id="53" x="576" y="240" width="48" height="48"/>
+  <object id="64" x="272" y="224" width="288" height="16"/>
  </objectgroup>
 </map>

@@ -27,8 +27,6 @@ class Saw extends SpriteAnimationComponent with HasGameReference<PixelAdventure>
     //we make the hitbox smaller for the saw to
     // not hit the player if he is on top of the ground and the saw is on the ground
     add(CircleHitbox(position: Vector2.all(1),radius: size.x/2-1,));
-    debugColor = Colors.green;
-    debugMode = true;
 
     if (isVertical) {
       rangeNeg = position.y - offNeg * tileSize;

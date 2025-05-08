@@ -60,7 +60,7 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 0;
+  int currentLevelIndex = 2;
   List<int> unlockedLevels = [1, 2, 3, 4]; //tutorial levels
   List<int> completedLevels = [];
 

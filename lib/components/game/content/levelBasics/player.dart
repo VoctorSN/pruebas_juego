@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
-import 'package:fruit_collector/components/game/content/traps/spike.dart';
-import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
-import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
+import 'package:fruit_collector/components/game/content/enemies/bee.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
+import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../content/blocks/alterning_block.dart';
@@ -36,9 +36,9 @@ enum PlayerState {
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
-
   // Constructor and atributes
   String character;
+
   Player({super.position, this.character = 'Ninja Frog'});
 
   // Animations config
@@ -96,7 +96,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
-    //debugMode = true;
+    debugMode = true;
     statringPosition = Vector2(position.x, position.y);
     add(
       RectangleHitbox(
@@ -137,7 +137,7 @@ class Player extends SpriteAnimationGroupComponent
     isRightKeyPressed =
         keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight);
-    
+
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
 
@@ -166,6 +166,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Trampoline) other.collidedWithPlayer();
       if (other is LootBox) other.collidedWithPlayer();
       if (other is KeyUnlocker) other.collidedWithPlayer();
+      if (other is Bee) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -314,7 +315,7 @@ class Player extends SpriteAnimationGroupComponent
           continue;
         }
       }
-      /// TODO make that with downKey you can pass through the platforms
+
       if (block.isPlatform) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0 && !isDownPressed) {
@@ -332,7 +333,6 @@ class Player extends SpriteAnimationGroupComponent
             break;
           }
         }
-
       } else if (block.isSand) {
         if (checkCollision(this, block)) {
           if (velocity.y > 0) {

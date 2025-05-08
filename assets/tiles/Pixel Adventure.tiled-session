@@ -9,15 +9,7 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
-        "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx": {
-            "scale": 1.5318749999999999,
-            "selectedLayer": 1,
-            "viewCenter": {
-                "x": 315.6262749898001,
-                "y": 178.53937168502654
-            }
-        },
-        "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/PixelAdventure.tsx": {
+        "": {
             "scaleInDock": 1
         },
         "C:/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx": {
@@ -188,15 +180,11 @@
             }
         },
         "level-03.tmx": {
-            "expandedObjectLayers": [
-                3,
-                2
-            ],
             "scale": 1.64,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 311.5853658536585,
-                "y": 175
+                "x": 319.8170731707317,
+                "y": 183.84146341463412
             }
         },
         "level-04.tmx": {
@@ -275,8 +263,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.66666666666663,
-                "y": 183.33333333333331
+                "x": 319.6666666666667,
+                "y": 183.66666666666663
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -284,13 +272,13 @@
         },
         "tutorial-02.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.5,
+                "x": 319,
                 "y": 183
             }
         },
@@ -299,14 +287,14 @@
         },
         "tutorial-03.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 463,
-                "y": 210
+                "x": 406,
+                "y": 224.66666666666669
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -335,24 +323,24 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "tutorial-03.tmx",
-        "tutorial-02.tmx"
+        "level-03.tmx",
+        "tutorial-03.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "tutorial-02.tmx",
-        "tutorial-03.tmx",
-        "tutorial-01.tmx",
         "level-03.tmx",
+        "tutorial-03.tmx",
         "level-02.tmx",
         "level-01.tmx",
         "tutorial-04.tmx",
+        "tutorial-02.tmx",
+        "tutorial-01.tmx",
         "level-06.tmx",
         "level-04.tmx",
         "level-07.tmx",
         "level-08.tmx",
-        "/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx"
+        "C:/Users/pumpundixital/IdeaProjects/demo_basic_game/assets/tiles/Level-01.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

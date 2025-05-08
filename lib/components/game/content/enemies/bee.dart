@@ -1,11 +1,10 @@
-
-
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/game/content/enemies/projectiles/bee_projectile.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
@@ -15,18 +14,27 @@ import '../levelBasics/player.dart';
 
 enum BeeState { idle, attack, hit }
 
-class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGameReference<PixelAdventure> {
+class Bee extends SpriteAnimationGroupComponent
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
   // Constructor and attributes
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;
+  Function(dynamic) addSpawnPoint;
 
-  Bee({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks});
+  Bee({
+    super.position,
+    super.size,
+    this.offPos = 0,
+    this.offNeg = 0,
+    required this.collisionBlocks,
+    required this.addSpawnPoint,
+  });
 
   // Movement logic and interactions with player
   static const stepTime = 0.1;
   static const tileSize = 16;
-  static const runSpeed = 80;
+  static const runSpeed = 60;
   static const _bounceHeight = 260.0;
   static final textureSize = Vector2(36, 34);
   double rangeNeg = 0;
@@ -37,6 +45,11 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
   late final Player player;
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
+  bool isAtacking = false;
+  bool isDuringCoolDown = false;
+  static const attackCouldDown = 2500;
+  final projectileSize = Vector2.all(16);
+  final Vector2 projectileVelocity = Vector2(0, 100);
 
   // Animations logic
   late final SpriteAnimation _idleAnimation;
@@ -48,7 +61,11 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
   @override
   FutureOr<void> onLoad() {
     player = game.player;
-    add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26))..debugMode = true..debugColor = Colors.green);
+    add(
+      RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26))
+        ..debugMode = true
+        ..debugColor = Colors.yellow,
+    );
     _loadAllAnimations();
     _calculateRange();
     debugMode = true;
@@ -71,10 +88,14 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
 
   void _loadAllAnimations() {
     _idleAnimation = _spriteAnimation('Idle', 6);
-    _attackAnimation = _spriteAnimation('Attack', 8);
+    _attackAnimation = _spriteAnimation('Attack', 8)..loop = false;
     _hitAnimation = _spriteAnimation('Hit', 5)..loop = false;
 
-    animations = {BeeState.idle: _idleAnimation, BeeState.attack: _attackAnimation, BeeState.hit: _hitAnimation};
+    animations = {
+      BeeState.idle: _idleAnimation,
+      BeeState.attack: _attackAnimation,
+      BeeState.hit: _hitAnimation,
+    };
 
     current = BeeState.idle;
   }
@@ -84,7 +105,7 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
       if (!block.isPlatform) {
         if (checkCollisionBee(this, block)) {
           if (velocity.x > 0) {
-            position.x = block.x;
+            position.x = block.x - width;
           }
           if (velocity.x < 0) {
             position.x = block.x + block.width;
@@ -98,7 +119,11 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Enemies/Bee/$state (36x34).png'),
-      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: textureSize),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: textureSize,
+      ),
     );
   }
 
@@ -107,18 +132,51 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
     rangePos = position.x + offPos * tileSize;
   }
 
-  void _movement(double dt) {
+  void _movement(double dt) async {
+    if (isAtacking) return;
     velocity.x = 0;
 
     double chickenOffset = (scale.x > 0) ? 0 : -width;
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
 
     if (playerInRange()) {
-      targetDirection = (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
+      if (playerBelow()) {
+        if (isDuringCoolDown) return;
+        await attack();
+        return;
+      }
+      targetDirection =
+          (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
       velocity.x = targetDirection * runSpeed;
     }
     moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
     position.x += velocity.x * dt;
+  }
+
+  Future<void> attack() async {
+    isAtacking = true;
+    current = BeeState.attack;
+    await animationTicker?.completed;
+    animationTicker?.reset();
+    shootProjectile();
+    current = BeeState.idle;
+    isAtacking = false;
+    isDuringCoolDown = true;
+    Future.delayed(const Duration(milliseconds: attackCouldDown), () {
+      isDuringCoolDown = false;
+    });
+  }
+
+  void shootProjectile() {
+    final Vector2 projectilePosition =
+        position + (Vector2(width, height) - projectileSize) / 2;
+
+    final projectile = BeeProjectile(
+      position: projectilePosition,
+      velocity: projectileVelocity,
+      size: projectileSize,
+    );
+    addSpawnPoint(projectile);
   }
 
   bool playerInRange() {
@@ -126,13 +184,21 @@ class Bee extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGame
 
     return player.x + playerOffset >= rangeNeg &&
         player.x + playerOffset <= rangePos &&
-        player.y + player.height > position.y &&
-        player.y < position.y + height;
+        player.y + player.height > position.y;
+  }
+
+  bool playerBelow() {
+    double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
+    double halfOfBee = width / 2;
+    return player.x + playerOffset <= position.x + halfOfBee &&
+        player.x + playerOffset >= position.x - halfOfBee &&
+        player.y + player.height > position.y;
   }
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
+      if (game.isGameSoundsActive)
+        SoundManager().playBounce(game.gameSoundVolume);
       gotStomped = true;
       current = BeeState.hit;
       player.velocity.y = -_bounceHeight;
