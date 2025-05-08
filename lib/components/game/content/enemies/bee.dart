@@ -175,6 +175,7 @@ class Bee extends SpriteAnimationGroupComponent
       position: projectilePosition,
       velocity: projectileVelocity,
       size: projectileSize,
+      addSpawnPoint: addSpawnPoint,
     );
     addSpawnPoint(projectile);
   }
