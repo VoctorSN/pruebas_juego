@@ -4,6 +4,7 @@ import 'package:fruit_collector/pixel_adventure.dart';
 import '../../util/utils.dart';
 import 'collision_block.dart';
 
+/// TODO:  made platform come back after a while
 class FallingBlock extends CollisionBlock
     with HasGameReference<PixelAdventure> {
 

@@ -3,8 +3,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../../blocks/collision_block.dart';
-import '../../levelBasics/player.dart';
+import '../blocks/collision_block.dart';
+import '../levelBasics/player.dart';
 import 'air_effect.dart';
 
 enum FanState { off, on }
@@ -37,6 +37,7 @@ class Fan extends SpriteAnimationGroupComponent
   // Interactions logic
   late final Player player = game.player;
   late final fanDirection = directionRight ? 1.0 : -1.0;
+  late final Vector2 windVelocity = Vector2(directionRight ? 50 : -50, 0);
 
 
   @override
@@ -81,36 +82,38 @@ class Fan extends SpriteAnimationGroupComponent
 
   void collidedWithPlayer() {
 
-    bool isAnyKeyPressed = player.isLeftKeyPressed || player.isRightKeyPressed;
-    bool isRightKeyPressed = player.isRightKeyPressed;
-    bool isLeftKeyPressed = player.isLeftKeyPressed;
-
-    if (!isAnyKeyPressed) {
-      // Player isnt moving
-      player.moveSpeed = 100;
-      player.horizontalMovement = fanDirection;
-    } else if ((isRightKeyPressed && fanDirection < 0) ||
-        (isLeftKeyPressed && fanDirection > 0)) {
-      // Player is moving against the wind
-      player.moveSpeed = 50;
-      // Apply the correct direction of the player
-      player.horizontalMovement = fanDirection * -1;
-    } else {
-      // Player is moving with the wind
-      player.moveSpeed = 200;
-      // Apply the correct direction of the player
-      player.horizontalMovement = fanDirection;
-    }
-    // Clamp para que el jugador no exceda ±1 (input normalizado)
-    player.horizontalMovement = player.horizontalMovement.clamp(-1.0, 1.0);
+    player.windVelocity = windVelocity;
+    // bool isAnyKeyPressed = player.isLeftKeyPressed || player.isRightKeyPressed;
+    // bool isRightKeyPressed = player.isRightKeyPressed;
+    // bool isLeftKeyPressed = player.isLeftKeyPressed;
+    //
+    // if (!isAnyKeyPressed) {
+    //   // Player isnt moving
+    //   player.moveSpeed = 100;
+    //   player.horizontalMovement = fanDirection;
+    // } else if ((isRightKeyPressed && fanDirection < 0) ||
+    //     (isLeftKeyPressed && fanDirection > 0)) {
+    //   // Player is moving against the wind
+    //   player.moveSpeed = 50;
+    //   // Apply the correct direction of the player
+    //   player.horizontalMovement = fanDirection * -1;
+    // } else {
+    //   // Player is moving with the wind
+    //   player.moveSpeed = 200;
+    //   // Apply the correct direction of the player
+    //   player.horizontalMovement = fanDirection;
+    // }
+    // // Clamp para que el jugador no exceda ±1 (input normalizado)
+    // player.horizontalMovement = player.horizontalMovement.clamp(-1.0, 1.0);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is Player) {
-      if (other.isOnGround) player.horizontalMovement = 0;
-      other.moveSpeed = 100;
-    }
+    player.windVelocity = Vector2.zero();
+    // if (other is Player) {
+    //   if (other.isOnGround) player.horizontalMovement = 0;
+    //   other.moveSpeed = 100;
+    // }
     super.onCollisionEnd(other);
   }
 }

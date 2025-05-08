@@ -62,8 +62,8 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
     } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {
       wasIdle = true;
       player.horizontalMovement = 0;
-      player.isLeftKeyPressed = false;
-      player.isRightKeyPressed = false;
+      // player.isLeftKeyPressed = false;
+      // player.isRightKeyPressed = false;
     }
   }
 
@@ -73,20 +73,20 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
       case JoystickDirection.upLeft:
       case JoystickDirection.downLeft:
         player.horizontalMovement = -1;
-        player.isLeftKeyPressed = true;
-        player.isRightKeyPressed = false;
+        // player.isLeftKeyPressed = true;
+        // player.isRightKeyPressed = false;
         break;
       case JoystickDirection.right:
       case JoystickDirection.upRight:
       case JoystickDirection.downRight:
         player.horizontalMovement = 1;
-        player.isRightKeyPressed = true;
-        player.isLeftKeyPressed = false;
+        // player.isRightKeyPressed = true;
+        // player.isLeftKeyPressed = false;
         break;
       default:
         player.horizontalMovement = 0;
-        player.isLeftKeyPressed = false;
-        player.isRightKeyPressed = false;
+        // player.isLeftKeyPressed = false;
+        // player.isRightKeyPressed = false;
         break;
     }
   }

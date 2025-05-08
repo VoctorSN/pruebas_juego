@@ -17,7 +17,7 @@ import '../../level/level.dart';
 import '../../util/utils.dart';
 import '../enemies/chicken.dart';
 import '../levelExtras/key_unlocker.dart';
-import '../traps/fan/fan.dart';
+import '../traps/fan.dart';
 import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';
@@ -63,6 +63,7 @@ class Player extends SpriteAnimationGroupComponent
   double horizontalMovement = 0;
   Vector2 statringPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
+  Vector2 windVelocity = Vector2.zero();
   bool isOnGround = false;
   bool isOnSand = false;
   bool hasJumped = false;
@@ -228,7 +229,7 @@ class Player extends SpriteAnimationGroupComponent
     }
     // If you dont want to jump in the air, then:
     if (velocity.y > _gravity) isOnGround = false;
-    velocity.x = horizontalMovement * moveSpeed;
+    velocity.x = horizontalMovement * moveSpeed + windVelocity.x;
     position.x += velocity.x * dt;
   }
 
