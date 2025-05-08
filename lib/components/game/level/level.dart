@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/content/enemies/rockhead.dart';
-import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/checkpoint.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/death_zone.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/fruit.dart';
@@ -13,13 +14,14 @@ import 'package:fruit_collector/components/game/content/levelExtras/game_text.da
 import 'package:fruit_collector/components/game/content/traps/fire_block.dart';
 import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-import '../content/traps/fan.dart';
-import '../content/traps/spike.dart';
-import 'background_tile.dart';
+
 import '../content/blocks/alterning_block.dart';
 import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
+import '../content/traps/fan.dart';
+import '../content/traps/spike.dart';
+import 'background_tile.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
   final Player player;
@@ -53,10 +55,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     if (textObjects != null) {
       for (final textObject in textObjects) {
         final text = textObject.text?.text.toString() ?? '';
-        final position = Vector2(
-          textObject.x + textObject.width / 2,
-          textObject.y + textObject.height / 2,
-        );
+        final position = Vector2(textObject.x + textObject.width / 2, textObject.y + textObject.height / 2);
 
         final gameText = GameText(
           text: text,
@@ -232,12 +231,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
                 position: Vector2(collision.x, collision.y),
                 size: Vector2(collision.width, collision.height),
                 isPlatform: true,
-                fallingDuration: collision.properties.getValue(
-                  'fallingDurationMillSec',
-                ),
-                isSideSensible: collision.properties.getValue(
-                  'isSideSensible',
-                ),
+                fallingDuration: collision.properties.getValue('fallingDurationMillSec'),
+                isSideSensible: collision.properties.getValue('isSideSensible'),
               );
               collisionBlocks.add(fallingPlatform);
               add(fallingPlatform);
@@ -309,13 +304,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
   void _scrollingBackground() {
     final backgroundLayer = level.tileMap.getLayer('Background');
     if (backgroundLayer != null) {
-      final backgroundColor = backgroundLayer.properties.getValue(
-        'BackgroundColor',
-      );
-      final backgroundTile = BackgroundTile(
-        color: backgroundColor ?? 'Gray',
-        position: Vector2(0, 0),
-      );
+      final backgroundColor = backgroundLayer.properties.getValue('BackgroundColor');
+      final backgroundTile = BackgroundTile(color: backgroundColor ?? 'Gray', position: Vector2(0, 0));
       add(backgroundTile);
     }
   }

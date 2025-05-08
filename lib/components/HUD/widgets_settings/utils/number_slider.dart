@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+
 import '../../../../pixel_adventure.dart';
 
 class NumberSlider extends StatefulWidget {
@@ -8,22 +9,11 @@ class NumberSlider extends StatefulWidget {
   final Function(dynamic) onChanged;
   final bool isActive;
 
-  NumberSlider({
-    super.key,
-    required this.game,
-    required this.value,
-    required this.onChanged,
-    required this.isActive,
-  });
+  const NumberSlider({super.key, required this.game, required this.value, required this.onChanged, required this.isActive});
 
   @override
   _NumberSliderState createState() {
-    return _NumberSliderState(
-      game: game,
-      value: value,
-      onChanged: onChanged,
-      isActive: isActive,
-    );
+    return _NumberSliderState(game: game, value: value, onChanged: onChanged, isActive: isActive);
   }
 }
 
@@ -33,12 +23,7 @@ class _NumberSliderState extends State<NumberSlider> {
   Function(dynamic) onChanged;
   bool isActive;
 
-  _NumberSliderState({
-    required this.game,
-    required this.value,
-    required this.onChanged,
-    required this.isActive,
-  });
+  _NumberSliderState({required this.game, required this.value, required this.onChanged, required this.isActive});
 
   set setValue(double newValue) {
     setState(() {

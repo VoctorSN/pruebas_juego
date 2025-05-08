@@ -1,16 +1,17 @@
 import 'dart:async' as async;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/blocks/collision_block.dart';
+
 import '../../../../pixel_adventure.dart';
-import '../../util/custom_hitbox.dart';
 import '../../level/sound_manager.dart';
+import '../../util/custom_hitbox.dart';
 import '../levelBasics/player.dart';
 
-enum State { idle, atack_down, atack_top, atacking }
+enum State { idle, atackDown, atackTop, atacking }
 
-class Rockhead extends SpriteAnimationGroupComponent
-    with HasGameReference<PixelAdventure>, CollisionCallbacks {
+class Rockhead extends SpriteAnimationGroupComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   bool isReversed = false;
 
   Rockhead({super.position, super.size, this.isReversed = false});
@@ -22,12 +23,7 @@ class Rockhead extends SpriteAnimationGroupComponent
   late final SpriteAnimation _atackTopAnimation;
   double stepTime = 0.1;
   final textureSize = Vector2(54, 52);
-  CustomHitbox hitbox = CustomHitbox(
-    offsetX: 7,
-    offsetY: 7,
-    width: 35,
-    height: 35,
-  );
+  CustomHitbox hitbox = CustomHitbox(offsetX: 7, offsetY: 7, width: 35, height: 35);
 
   static const Duration inmobileDuration = Duration(milliseconds: 350);
 
@@ -45,12 +41,7 @@ class Rockhead extends SpriteAnimationGroupComponent
 
   @override
   async.FutureOr<void> onLoad() {
-    add(
-      RectangleHitbox(
-        position: Vector2(hitbox.offsetX, hitbox.offsetY),
-        size: Vector2(hitbox.width, hitbox.height),
-      ),
-    );
+    add(RectangleHitbox(position: Vector2(hitbox.offsetX, hitbox.offsetY), size: Vector2(hitbox.width, hitbox.height)));
 
     initialPosition = position.clone()..round();
 
@@ -68,9 +59,9 @@ class Rockhead extends SpriteAnimationGroupComponent
     _atackTopAnimation = _spriteAnimation('Top Hit', 4)..loop = false;
     animations = {
       State.idle: _idleAnimation,
-      State.atack_down: _atackDownAnimation,
+      State.atackDown: _atackDownAnimation,
       State.atacking: _atackAnimation,
-      State.atack_top: _atackTopAnimation,
+      State.atackTop: _atackTopAnimation,
     };
     current = State.idle;
   }
@@ -78,19 +69,12 @@ class Rockhead extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Traps/Spike Head/$state (54x52).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: textureSize,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: textureSize),
     );
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Player) other.collidedWithEnemy();
     if (other is CollisionBlock) comeBack();
     super.onCollisionStart(intersectionPoints, other);
@@ -127,13 +111,10 @@ class Rockhead extends SpriteAnimationGroupComponent
     final rockheadY = y + height / 2;
 
     // Get the midle point of the player considering its direction
-    final playerMid =
-        player.x +
-        (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
+    final playerMid = player.x + (player.scale.x == -1 ? -player.width / 2 : player.width / 2);
 
     // Check if the center of the player is within the Rockhead's vision
-    final isAligned =
-        playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
+    final isAligned = playerMid >= rockheadVisionLeft && playerMid <= rockheadVisionRight;
 
     // Check if the player is above or below the Rockhead
     final isAbove = playerY < rockheadY;
@@ -161,11 +142,8 @@ class Rockhead extends SpriteAnimationGroupComponent
       SoundManager().stopRockheadAttackingLoop();
       SoundManager().playSmash(game.gameSoundVolume);
     }
-    Future.delayed(
-      inmobileDuration,
-      () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity,
-    );
-    current = isReversed ? State.atack_top : State.atack_down;
+    Future.delayed(inmobileDuration, () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity);
+    current = isReversed ? State.atackTop : State.atackDown;
     velocity = Vector2.zero();
     isComingBack = true;
     isAtacking = false;

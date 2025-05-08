@@ -1,6 +1,8 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
 import '../../../pixel_adventure.dart';
 
 class CharacterSelection extends StatefulWidget {
@@ -8,7 +10,7 @@ class CharacterSelection extends StatefulWidget {
 
   final PixelAdventure game;
 
-  CharacterSelection(this.game, {super.key});
+  const CharacterSelection(this.game, {super.key});
 
   @override
   State<CharacterSelection> createState() => _CharacterSelectionState(game: game);
@@ -76,7 +78,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: baseColor.withOpacity(0.95),
+            color: baseColor.withAlpha((0.95 * 255).toInt()),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: borderColor, width: 2),
           ),
@@ -88,13 +90,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                 style: TextStyleSingleton().style.copyWith(
                   fontSize: 32,
                   color: textColor,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black,
-                      offset: Offset(2, 2),
-                      blurRadius: 1,
-                    )
-                  ],
+                  shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
                 ),
               ),
               const SizedBox(height: 30),
@@ -117,10 +113,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          characterAssets[selectedIndex],
-                          fit: BoxFit.cover,
-                        ),
+                        child: Image.asset(characterAssets[selectedIndex], fit: BoxFit.cover),
                       ),
                     ),
                     IconButton(
@@ -135,13 +128,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
                 style: buttonStyle,
                 onPressed: selectCharacter,
                 icon: const Icon(Icons.check_circle_outline, color: textColor),
-                label: Text(
-                  'SELECT',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
+                label: Text('SELECT', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
               ),
             ],
           ),

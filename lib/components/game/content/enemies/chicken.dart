@@ -1,22 +1,23 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../../content/blocks/collision_block.dart';
 import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum ChickenState { idle, run, hit }
 
-class Chicken extends SpriteAnimationGroupComponent
-    with CollisionCallbacks, HasGameReference<PixelAdventure> {
-
+class Chicken extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGameReference<PixelAdventure> {
   // Constructor and attributes
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;
+
   Chicken({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks});
 
   // Movement logic and interactions with player
@@ -52,7 +53,6 @@ class Chicken extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
       if (!gotStomped) {
@@ -70,11 +70,7 @@ class Chicken extends SpriteAnimationGroupComponent
     _runAnimation = _spriteAnimation('Run', 14);
     _hitAnimation = _spriteAnimation('Hit', 5)..loop = false;
 
-    animations = {
-      ChickenState.idle: _idleAnimation,
-      ChickenState.run: _runAnimation,
-      ChickenState.hit: _hitAnimation,
-    };
+    animations = {ChickenState.idle: _idleAnimation, ChickenState.run: _runAnimation, ChickenState.hit: _hitAnimation};
 
     current = ChickenState.idle;
   }
@@ -98,11 +94,7 @@ class Chicken extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Enemies/Chicken/$state (32x34).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: textureSize,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: textureSize),
     );
   }
 
@@ -118,8 +110,7 @@ class Chicken extends SpriteAnimationGroupComponent
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
 
     if (playerInRange()) {
-      targetDirection =
-          (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
+      targetDirection = (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
       velocity.x = targetDirection * runSpeed;
     }
     moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
@@ -138,8 +129,7 @@ class Chicken extends SpriteAnimationGroupComponent
   void _updateState() {
     current = (velocity.x != 0) ? ChickenState.run : ChickenState.idle;
 
-    if ((moveDirection > 0 && scale.x > 0) ||
-        (moveDirection < 0 && scale.x < 0)) {
+    if ((moveDirection > 0 && scale.x > 0) || (moveDirection < 0 && scale.x < 0)) {
       flipHorizontallyAroundCenter();
     }
   }

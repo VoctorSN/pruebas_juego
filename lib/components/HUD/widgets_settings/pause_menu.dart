@@ -1,7 +1,9 @@
 import 'dart:ui';
+
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/settings/settings_menu.dart';
+
 import '../../../pixel_adventure.dart';
 import '../style/text_style_singleton.dart';
 import 'main_menu/main_menu.dart';
@@ -10,7 +12,7 @@ class PauseMenu extends StatelessWidget {
   static String id = 'PauseMenu';
   final PixelAdventure game;
 
-  PauseMenu(this.game, {super.key});
+  const PauseMenu(this.game, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class PauseMenu extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: baseColor.withOpacity(0.95),
+            color: baseColor.withAlpha((0.95 * 255).toInt()),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: borderColor, width: 2),
           ),
@@ -52,13 +54,7 @@ class PauseMenu extends StatelessWidget {
                 style: TextStyleSingleton().style.copyWith(
                   fontSize: 32,
                   color: textColor,
-                  shadows: [
-                    const Shadow(
-                      color: Colors.black,
-                      offset: Offset(2, 2),
-                      blurRadius: 1,
-                    )
-                  ],
+                  shadows: [const Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
                 ),
               ),
               const SizedBox(height: 30),
@@ -69,18 +65,11 @@ class PauseMenu extends StatelessWidget {
                   game.overlays.remove(PauseMenu.id);
                   game.resumeEngine();
                   if (game.isMusicActive) {
-                    FlameAudio.bgm.play('background_music.mp3',
-                        volume: game.musicSoundVolume);
+                    FlameAudio.bgm.play('background_music.mp3', volume: game.musicSoundVolume);
                   }
                 },
                 icon: Icon(Icons.play_arrow, color: textColor),
-                label: Text(
-                  'RESUME',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
+                label: Text('RESUME', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
               ),
               const SizedBox(height: 12),
 
@@ -91,13 +80,7 @@ class PauseMenu extends StatelessWidget {
                   game.overlays.add(SettingsMenu.id);
                 },
                 icon: Icon(Icons.settings, color: textColor),
-                label: Text(
-                  'SETTINGS',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
+                label: Text('SETTINGS', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
               ),
               const SizedBox(height: 12),
 
@@ -108,18 +91,11 @@ class PauseMenu extends StatelessWidget {
                   game.overlays.add(MainMenu.id);
                   game.pauseEngine();
                   if (game.isMusicActive) {
-                    FlameAudio.bgm.play('background_music.mp3',
-                        volume: game.musicSoundVolume);
+                    FlameAudio.bgm.play('background_music.mp3', volume: game.musicSoundVolume);
                   }
                 },
                 icon: Icon(Icons.home, color: textColor),
-                label: Text(
-                  'MAIN MENU',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 14,
-                    color: textColor,
-                  ),
-                ),
+                label: Text('MAIN MENU', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
               ),
             ],
           ),

@@ -1,16 +1,16 @@
 import 'package:flame/components.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+
 import '../../../pixel_adventure.dart';
 import '../../game/content/levelBasics/player.dart';
 
 class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
-
   // Constructor and attributes
   final double controlSize;
-  CustomJoystick({
-    required this.controlSize,
-  });
+  final Vector2 positionFromParent;
+  double leftMargin;
+
+  CustomJoystick({required this.controlSize, required this.positionFromParent, required this.leftMargin});
 
   // Logic to manage the joystick
   late JoystickComponent joystick;
@@ -37,16 +37,13 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   void _addJoystick() {
     joystick = JoystickComponent(
       priority: 15,
-      knob: SpriteComponent(
-        sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')),
-        size: Vector2.all(controlSize),
-      ),
+      knob: SpriteComponent(sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')), size: Vector2.all(controlSize)),
       knobRadius: 40,
       background: SpriteComponent(
         sprite: Sprite(game.images.fromCache('GUI/HUD/Joystick.png')),
         size: Vector2.all(controlSize * 2),
       ),
-      margin: const EdgeInsets.only(left: 32, bottom: 32),
+      margin: EdgeInsets.only(left: leftMargin, bottom: 32),
     );
     game.add(joystick);
   }

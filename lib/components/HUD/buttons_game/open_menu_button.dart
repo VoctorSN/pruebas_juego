@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+
 import '../../../pixel_adventure.dart';
 
 class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
-
   late final String button;
   final double buttonSize;
 

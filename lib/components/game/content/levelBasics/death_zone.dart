@@ -3,12 +3,8 @@ import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
 class DeathZone extends PositionComponent with CollisionCallbacks {
-
   // Constructor
-  DeathZone({
-    required Vector2 position,
-    required Vector2 size,
-  }) {
+  DeathZone({required Vector2 position, required Vector2 size}) {
     this.position = position;
     this.size = size;
   }
@@ -16,10 +12,12 @@ class DeathZone extends PositionComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    add(RectangleHitbox()
-      ..collisionType = CollisionType.active
-      ..position = position
-      ..size = size);
+    add(
+      RectangleHitbox()
+        ..collisionType = CollisionType.active
+        ..position = position
+        ..size = size,
+    );
   }
 
   @override

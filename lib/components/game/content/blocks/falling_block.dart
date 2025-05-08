@@ -3,16 +3,16 @@ import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../../util/utils.dart';
 import 'collision_block.dart';
 
-class FallingBlock extends CollisionBlock
-    with HasGameReference<PixelAdventure> {
-
+class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> {
   // Constructor and atributes
   int fallingDuration;
   final Vector2 initialPosition;
   bool isSideSensible;
+
   FallingBlock({
     required Vector2 position,
     required this.fallingDuration,
@@ -39,22 +39,14 @@ class FallingBlock extends CollisionBlock
   get fallingAnimation {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Traps/Falling Platforms/Off.png'),
-      SpriteAnimationData.sequenced(
-        amount: 1,
-        stepTime: 1,
-        textureSize: Vector2(32, 10),
-      ),
+      SpriteAnimationData.sequenced(amount: 1, stepTime: 1, textureSize: Vector2(32, 10)),
     );
   }
 
   get idleAnimation {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Traps/Falling Platforms/On (32x10).png'),
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 0.75,
-        textureSize: Vector2(32, 10),
-      ),
+      SpriteAnimationData.sequenced(amount: 4, stepTime: 0.75, textureSize: Vector2(32, 10)),
     );
   }
 
@@ -70,7 +62,6 @@ class FallingBlock extends CollisionBlock
   void update(double dt) {
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
-
       // Check if the player is on the platform then start falling
       if (!isFalling && _checkPlayerOnPlatform() && !isOnGround) {
         _startFalling();
@@ -114,12 +105,7 @@ class FallingBlock extends CollisionBlock
 
   void _comeBack() async {
     await Future.delayed(Duration(seconds: 3));
-    add(
-      MoveToEffect(
-        initialPosition,
-        EffectController(duration: 1.0, curve: Curves.easeInOut),
-      ),
-    );
+    add(MoveToEffect(initialPosition, EffectController(duration: 1.0, curve: Curves.easeInOut)));
     isOnGround = false;
     isFalling = false;
     hasCollided = false;
@@ -129,15 +115,12 @@ class FallingBlock extends CollisionBlock
   // Check if the player is on the platform (exactly on top, not on the sides)
   bool _checkPlayerOnPlatform() {
     final realPlayerX = getPlayerXPosition(player);
-    final isWithinX;
+    final bool isWithinX;
     if (isFalling || isSideSensible) {
-      isWithinX = realPlayerX + player.hitbox.width > position.x &&
-          realPlayerX < position.x + size.x;
+      isWithinX = realPlayerX + player.hitbox.width > position.x && realPlayerX < position.x + size.x;
     } else {
-      isWithinX = realPlayerX  > position.x &&
-          realPlayerX < position.x + size.x - player.hitbox.width;
+      isWithinX = realPlayerX > position.x && realPlayerX < position.x + size.x - player.hitbox.width;
     }
-
 
     final playerBottom = player.position.y + player.hitbox.offsetY + player.hitbox.height;
     final isOnTop = (playerBottom - position.y).abs() < 1; // Margin of 1 px
@@ -153,12 +136,9 @@ class FallingBlock extends CollisionBlock
         final blockTop = block.position.y;
 
         final intersectsHorizontally =
-            (position.x + size.x > block.position.x) &&
-                (position.x < block.position.x + block.size.x);
+            (position.x + size.x > block.position.x) && (position.x < block.position.x + block.size.x);
 
-        final intersectsVertically =
-            futureBottom >= blockTop &&
-                position.y + size.y <= blockTop;
+        final intersectsVertically = futureBottom >= blockTop && position.y + size.y <= blockTop;
 
         if (intersectsHorizontally && intersectsVertically) {
           return true;
