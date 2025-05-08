@@ -420,7 +420,7 @@ class Player extends SpriteAnimationGroupComponent
     position = Vector2.all(-640);
 
     const waitToChangeDuration = Duration(seconds: 3);
-    Future.delayed(waitToChangeDuration, () => game.loadNextLevel());
+    Future.delayed(waitToChangeDuration, () => game.completeLevel());
   }
 
   void collidedWithEnemy() {

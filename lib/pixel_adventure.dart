@@ -60,7 +60,9 @@ class PixelAdventure extends FlameGame
     'level-07',
     'level-08',
   ];
-  int currentLevelIndex = 3;
+  int currentLevelIndex = 0;
+  List<int> unlockedLevels = [1, 2, 3, 4]; //tutorial levels
+  List<int> completedLevels = [];
 
   // Logic to manage the sounds
   bool isMusicActive = false;
@@ -118,7 +120,7 @@ class PixelAdventure extends FlameGame
     pauseEngine();
 
     // Load the first level
-    _loadLevel();
+    _loadActualLevel();
 
     return super.onLoad();
   }
@@ -143,13 +145,13 @@ class PixelAdventure extends FlameGame
       game: this,
       totalLevels: levelNames.length,
       onLevelSelected: (level) {
-        game.overlays.remove(LevelSelectionMenu.id);
-        game.resumeEngine();
-        currentLevelIndex = level - 2;
-        loadNextLevel();
+        overlays.remove(LevelSelectionMenu.id);
+        resumeEngine();
+        currentLevelIndex = level - 1;
+        _loadActualLevel();
       },
-      unlockedLevels: [1, 2, 3, 4],
-      completedLevels: [],
+      unlockedLevels: unlockedLevels,
+      completedLevels: completedLevels,
     ));
   }
 
@@ -191,19 +193,27 @@ class PixelAdventure extends FlameGame
     }
   }
 
-  void loadNextLevel() {
+  void completeLevel() {
+    final level = currentLevelIndex + 1;
     removeWhere((component) => component is Level);
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;
-      _loadLevel();
+      _loadActualLevel();
+      if (!completedLevels.contains(level)) {
+        completedLevels.add(level);
+      }
+      if (!unlockedLevels.contains(level + 1)) {
+        unlockedLevels.add(level + 1);
+      }
     } else {
       //Game Finished - Reload the first level (for the moment)
       currentLevelIndex = 0;
-      _loadLevel();
+      _loadActualLevel();
     }
   }
 
-  void _loadLevel() {
+  void _loadActualLevel() {
+    removeWhere((component) => component is Level);
     if (isMusicActive) {
       FlameAudio.bgm.stop();
       FlameAudio.bgm.play('background_music.mp3');
