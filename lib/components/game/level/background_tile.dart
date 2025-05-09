@@ -17,7 +17,7 @@ class BackgroundTile extends ParallaxComponent {
     size = Vector2.all(64);
     parallax = await game.loadParallax(
       [ParallaxImageData('Background/$color.png')],
-      baseVelocity: Vector2(scrollSpeed, scrollSpeed),
+      baseVelocity: Vector2(scrollSpeed - 20, scrollSpeed),
       repeat: ImageRepeat.repeat,
       fill: LayerFill.none,
     );

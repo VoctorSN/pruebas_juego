@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../../../pixel_adventure.dart';
+import '../style/text_style_singleton.dart';
 import 'level_card.dart';
 
 class LevelSelectionMenu extends StatelessWidget {
@@ -27,58 +30,69 @@ class LevelSelectionMenu extends StatelessWidget {
     final Color borderColor = const Color(0xFF5A5672);
     final Color textColor = const Color(0xFFE1E0F5);
 
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: cardColor,
+      foregroundColor: textColor,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: BorderSide(color: borderColor, width: 2),
+      ),
+      elevation: 8,
+    );
+
     return Scaffold(
-      backgroundColor: baseColor,
+      backgroundColor: Colors.transparent,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Select Level',
-                style: TextStyle(
-                  fontSize: 36,
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Wrap(
-                spacing: 20,
-                runSpacing: 20,
-                alignment: WrapAlignment.center,
-                children: List.generate(totalLevels, (index) {
-                  final level = index + 1;
-                  final isUnlocked = unlockedLevels.contains(level);
-                  final isCompleted = completedLevels.contains(level);
-                  return LevelCard(
-                    levelNumber: level,
-                    onTap: isUnlocked ? () => onLevelSelected(level) : null,
-                    cardColor: cardColor,
-                    borderColor: borderColor,
-                    textColor: textColor,
-                    isLocked: !isUnlocked,
-                    isCompleted: isCompleted,
-                  );
-                }),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: cardColor,
-                  foregroundColor: textColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: borderColor, width: 2),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: baseColor.withAlpha((0.95 * 255).toInt()),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: borderColor, width: 2),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select Level',
+                  style: TextStyleSingleton().style.copyWith(
+                    fontSize: 32,
+                    color: textColor,
+                    shadows: [const Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
                   ),
                 ),
-                onPressed: onBack,
-                icon: const Icon(Icons.arrow_back),
-                label: const Text('Back'),
-              ),
-            ],
+                const SizedBox(height: 30),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 20,
+                  alignment: WrapAlignment.center,
+                  children: List.generate(totalLevels, (index) {
+                    final level = index + 1;
+                    final isUnlocked = unlockedLevels.contains(level);
+                    final isCompleted = completedLevels.contains(level);
+                    return LevelCard(
+                      levelNumber: level,
+                      onTap: isUnlocked ? () => onLevelSelected(level) : null,
+                      cardColor: cardColor,
+                      borderColor: borderColor,
+                      textColor: textColor,
+                      isLocked: !isUnlocked,
+                      isCompleted: isCompleted,
+                    );
+                  }),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton.icon(
+                  style: buttonStyle,
+                  onPressed: onBack,
+                  icon: Icon(Icons.arrow_back, color: textColor),
+                  label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
+                ),
+              ],
+            ),
           ),
         ),
       ),

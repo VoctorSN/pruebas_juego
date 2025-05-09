@@ -7,6 +7,7 @@ import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 import '../../../../pixel_adventure.dart';
 import '../level_selection_menu.dart';
 
+/// TODO extract the background and add a if to pc or mobile to move the buttons and title
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';
   final PixelAdventure game;
@@ -139,6 +140,7 @@ class _MainMenuState extends State<MainMenu>
               const SizedBox(height: 12),
               _menuButton('SETTINGS', Icons.settings, () {
                 // TODO open settings menu (with the data from the bbdd)
+                // open settings (with gif background) and come back to menu
               }),
               const SizedBox(height: 12),
               _menuButton('QUIT', Icons.exit_to_app, () {

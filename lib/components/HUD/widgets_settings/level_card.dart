@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../style/text_style_singleton.dart';
 
 class LevelCard extends StatefulWidget {
   final int levelNumber;
@@ -57,7 +58,7 @@ class _LevelCardState extends State<LevelCard> {
                 border: Border.all(color: widget.borderColor, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withOpacity(0.6),
                     blurRadius: 6,
                     offset: const Offset(2, 4),
                   ),
@@ -66,10 +67,12 @@ class _LevelCardState extends State<LevelCard> {
               alignment: Alignment.center,
               child: Text(
                 '${widget.levelNumber}',
-                style: TextStyle(
-                  fontSize: 24,
+                style: TextStyleSingleton().style.copyWith(
+                  fontSize: 22,
                   color: widget.isLocked ? Colors.grey[300] : widget.textColor,
-                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    const Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 2)
+                  ],
                 ),
               ),
             ),
