@@ -43,100 +43,99 @@ class SettingsMenu extends StatelessWidget {
       elevation: 6,
     );
 
-    return Center(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          color: baseColor.withOpacity(0.85),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 90),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Título centrado
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
-                    child: Text(
-                      'Settings',
-                      style: TextStyleSingleton().style.copyWith(
-                        fontSize: 46,
-                        color: textColor,
-                      ),
-                    ),
-                  ),
-
-                  // Controles alineados a la izquierda
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Wrap(
-                      direction: Axis.vertical,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      spacing: 18,
-                      children: [
-                        ToggleMusicVolumeWidget(
-                          game: game,
-                          updateMusicVolume: updateMusicVolume,
-                        ),
-                        ToggleGameVolumeWidget(
-                          game: game,
-                          updateGameVolume: updateGameVolume,
-                        ),
-                        ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
-                        ResizeControls(game: game, updateSizeControls: updateSizeControls),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 30),
-
-                  // Botones centrados
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20), // 👈 Márgenes adicionales
+        child: Center(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              color: baseColor.withOpacity(0.85),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 90),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      ElevatedButton.icon(
-                        style: buttonStyle,
-                        onPressed: () {
-                          game.overlays.remove(SettingsMenu.id);
-                          game.overlays.add(PauseMenu.id);
-                        },
-                        icon: const Icon(Icons.arrow_back, size: 20, color: Colors.white),
-                        label: Text(
-                          'Back',
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 30),
+                        child: Text(
+                          'Settings',
                           style: TextStyleSingleton().style.copyWith(
-                            fontSize: 20,
+                            fontSize: 46,
                             color: textColor,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 24),
-                      ElevatedButton.icon(
-                        style: buttonStyle,
-                        onPressed: () {
-                          game.overlays.remove(SettingsMenu.id);
-                          game.overlays.add(PauseMenu.id);
-                          game.hudSize = sizeHUD;
-                          game.controlSize = sizeControls;
-                          game.reloadAllButtons();
-                          game.gameSoundVolume = gameVolume;
-                          game.musicSoundVolume = musicVolume;
-                        },
-                        icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
-                        label: Text(
-                          'Apply',
-                          style: TextStyleSingleton().style.copyWith(
-                            fontSize: 20,
-                            color: textColor,
-                          ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          spacing: 18,
+                          children: [
+                            ToggleMusicVolumeWidget(
+                              game: game,
+                              updateMusicVolume: updateMusicVolume,
+                            ),
+                            ToggleGameVolumeWidget(
+                              game: game,
+                              updateGameVolume: updateGameVolume,
+                            ),
+                            ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
+                            ResizeControls(game: game, updateSizeControls: updateSizeControls),
+                          ],
                         ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton.icon(
+                            style: buttonStyle,
+                            onPressed: () {
+                              game.overlays.remove(SettingsMenu.id);
+                              game.overlays.add(PauseMenu.id);
+                            },
+                            icon: const Icon(Icons.arrow_back, size: 20, color: Colors.white),
+                            label: Text(
+                              'Back',
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 20,
+                                color: textColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 24),
+                          ElevatedButton.icon(
+                            style: buttonStyle,
+                            onPressed: () {
+                              game.overlays.remove(SettingsMenu.id);
+                              game.overlays.add(PauseMenu.id);
+                              game.hudSize = sizeHUD;
+                              game.controlSize = sizeControls;
+                              game.reloadAllButtons();
+                              game.gameSoundVolume = gameVolume;
+                              game.musicSoundVolume = musicVolume;
+                            },
+                            icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
+                            label: Text(
+                              'Apply',
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 20,
+                                color: textColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
