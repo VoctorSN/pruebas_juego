@@ -5,6 +5,7 @@ import '../../../pixel_adventure.dart';
 import '../style/text_style_singleton.dart';
 import 'level_card.dart';
 
+// TODO when you press back button, it close the menu and resume the game or go to the main menu depending on the game state
 class LevelSelectionMenu extends StatelessWidget {
   static const String id = 'level_selection_menu';
 

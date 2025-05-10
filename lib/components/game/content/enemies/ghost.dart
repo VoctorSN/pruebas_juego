@@ -1,2 +1,129 @@
-///TODO aman hazlo
-///TODO el nievel 9 hay que hacerlo tambien
+import 'dart:async';
+import 'dart:async' as async;
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
+import '../../util/utils.dart';
+import '../levelBasics/player.dart';
+
+enum GhostState { appearing, moving, disappearing }
+
+class Ghost extends SpriteAnimationGroupComponent
+    with CollisionCallbacks, HasGameReference<PixelAdventure> {
+
+  // Constructor and attributes
+  final int spawnIn;
+  Ghost({super.position, super.size, this.spawnIn = 0});
+
+  // Animations logic
+  late final SpriteAnimation _appearingAnimation;
+  late final SpriteAnimation _movingAnimation;
+  late final SpriteAnimation _disappearingAnimation;
+  static final Vector2 spriteSize = Vector2(44, 30);
+  static const stepTime = 0.1;
+
+  // Movement logic and interactions with player
+  late final Player player = game.player;
+  final double speed = 0.5;
+  late final initialPosition = position.clone();
+  bool isLookingRight = false;
+
+  @override
+  FutureOr<void> onLoad() {
+    add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
+
+    _loadAllAnimations();
+
+    async.Future.delayed(Duration(seconds: spawnIn), _spawn);
+
+    return super.onLoad();
+  }
+
+  void _spawn() async {
+    current = GhostState.appearing;
+    await animationTicker?.completed;
+    current = GhostState.moving;
+    // add appearing sound
+    // if (game.isGameSoundsActive) SoundManager().startRockheadAttackingLoop(game.gameSoundVolume);
+  }
+
+  void respawn() async {
+    current = GhostState.disappearing;
+    await animationTicker?.completed;
+    // add disappearing sound
+    // if (game.isGameSoundsActive) SoundManager().startRockheadAttackingLoop(game.gameSoundVolume);
+    position = initialPosition;
+    async.Future.delayed(Duration(seconds: spawnIn), _spawn);
+  }
+
+  void _loadAllAnimations() {
+    _appearingAnimation = _spriteAnimation('Appear', 4)..loop = false;
+    _movingAnimation = _spriteAnimation('Idle', 10);
+    _disappearingAnimation = _spriteAnimation('Disappear', 4)..loop = false;
+
+    animations = {
+      GhostState.appearing: _appearingAnimation,
+      GhostState.moving: _movingAnimation,
+      GhostState.disappearing: _disappearingAnimation,
+    };
+  }
+
+  void update(double dt) {
+    super.update(dt);
+    if (current == GhostState.moving) {
+      _move();
+    }
+  }
+
+  void _move() {
+
+    if (getPlayerXPosition(player) > position.x) {
+      // Ghost goes to the right
+
+      position.x += speed;
+      if(!isLookingRight) {
+        flipHorizontallyAroundCenter();
+        isLookingRight = true;
+      }
+    } else if (getPlayerXPosition(player) + player.size.x / 2 < position.x) {
+      // Ghost goes to the left
+
+      position.x -= speed;
+      // Face left: set scale.x to negative
+      if(isLookingRight) {
+        flipHorizontallyAroundCenter();
+        isLookingRight = false;
+      }
+    }
+
+    // Vertical movement
+    if (player.position.y > position.y) {
+      position.y += speed;
+    } else if (player.position.y < position.y) {
+      position.y -= speed;
+    }
+  }
+
+  SpriteAnimation _spriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Enemies/Ghost/$state (44x30).png'),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: spriteSize,
+      ),
+    );
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    //if (other is Player) other.collidedWithEnemy();
+    if (other is Ghost) {
+      // Only the ghost with the lower x-coordinate will respawn
+      if (position.x < other.position.x) {
+        respawn();
+      }
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+}

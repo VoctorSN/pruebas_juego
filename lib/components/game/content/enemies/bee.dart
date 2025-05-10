@@ -13,6 +13,7 @@ import '../levelBasics/player.dart';
 
 enum BeeState { idle, attack, hit }
 
+/// TODO the bee doesnt stop exactly on top of the player
 class Bee extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameReference<PixelAdventure> {
   // Constructor and attributes

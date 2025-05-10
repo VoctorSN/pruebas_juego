@@ -45,7 +45,9 @@ class SettingsMenu extends StatelessWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20), // 👈 Márgenes adicionales
+        padding: const EdgeInsets.symmetric(vertical: 20),
+
+
         child: Center(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),

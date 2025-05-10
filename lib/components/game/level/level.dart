@@ -20,6 +20,7 @@ import '../content/blocks/alterning_block.dart';
 import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
+import '../content/enemies/ghost.dart';
 import '../content/traps/fan.dart';
 import '../content/traps/spike.dart';
 import 'background_tile.dart';
@@ -87,6 +88,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is GameText ||
           component is Fan ||
           component is Bee ||
+          component is Ghost ||
           component is FireBlock ||
           component is Rockhead,
     );
@@ -172,6 +174,14 @@ class Level extends World with HasGameReference<PixelAdventure> {
               addSpawnPoint: addSpawnPoint,
             );
             add(bee);
+            break;
+          case 'Ghost':
+            final ghost = Ghost(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              spawnIn: spawnPoint.properties.getValue('spawnIn'),
+            );
+            add(ghost);
             break;
           case 'Trampoline':
             final trampoline = Trampoline(
