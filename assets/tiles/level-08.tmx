@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="530">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="532">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -62,9 +62,19 @@
   <object id="523" name="Apple" type="Fruit" x="453.281" y="180.732" width="32" height="32"/>
   <object id="524" name="Apple" type="Fruit" x="593.15" y="72.8889" width="32" height="32"/>
   <object id="525" name="Apple" type="Fruit" x="589.882" y="190.536" width="32" height="32"/>
-  <object id="527" name="Ghost" type="Ghost" x="259.268" y="120.758" width="32" height="32">
+  <object id="527" name="Ghost" type="Ghost" x="340.967" y="37.0979" width="32" height="32">
    <properties>
     <property name="spawnIn" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="530" name="Ghost" type="Ghost" x="376.81" y="251.32" width="32" height="32">
+   <properties>
+    <property name="spawnIn" type="int" value="4"/>
+   </properties>
+  </object>
+  <object id="531" name="Ghost" type="Ghost" x="29.098" y="40.8627" width="32" height="32">
+   <properties>
+    <property name="spawnIn" type="int" value="8"/>
    </properties>
   </object>
  </objectgroup>

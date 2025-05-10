@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:async' as async;
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/particles.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum GhostState { appearing, moving, disappearing }
 
+/// TODO refactor the flip of the ghost, now work perfectly but the code is too bad
+/// TODO add the sound of the ghost and particles
 class Ghost extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameReference<PixelAdventure> {
 
@@ -19,6 +22,7 @@ class Ghost extends SpriteAnimationGroupComponent
   late final SpriteAnimation _appearingAnimation;
   late final SpriteAnimation _movingAnimation;
   late final SpriteAnimation _disappearingAnimation;
+  late Sprite trailSprite;
   static final Vector2 spriteSize = Vector2(44, 30);
   static const stepTime = 0.1;
 
@@ -53,7 +57,7 @@ class Ghost extends SpriteAnimationGroupComponent
     // add disappearing sound
     // if (game.isGameSoundsActive) SoundManager().startRockheadAttackingLoop(game.gameSoundVolume);
     position = initialPosition;
-    async.Future.delayed(Duration(seconds: spawnIn), _spawn);
+    async.Future.delayed(const Duration(seconds: 2), _spawn);
   }
 
   void _loadAllAnimations() {
@@ -66,14 +70,38 @@ class Ghost extends SpriteAnimationGroupComponent
       GhostState.moving: _movingAnimation,
       GhostState.disappearing: _disappearingAnimation,
     };
+
+    trailSprite = Sprite(game.images.fromCache('Enemies/Ghost/Gost Particles (48x16).png'));
   }
 
   void update(double dt) {
     super.update(dt);
     if (current == GhostState.moving) {
       _move();
+      _flipCorrectly();
+      //_emitTrailParticle();
     }
   }
+
+  /*void _emitTrailParticle() {
+    final particle = ParticleSystemComponent(
+      position: position.clone() + size / 2,
+      particle: Particle.generate(
+        count: 1,
+        lifespan: 0.4,
+        generator: (i) => AcceleratedParticle(
+          acceleration: Vector2(0, 5),
+          speed: Vector2.random() * 10 - Vector2.all(5),
+          position: Vector2.zero(),
+          child: SpriteParticle(
+            sprite: trailSprite,
+            size: Vector2(48,16),
+          ),
+        ),
+      ),
+    );
+    parent?.add(particle);
+  }*/
 
   void _move() {
 
@@ -89,7 +117,6 @@ class Ghost extends SpriteAnimationGroupComponent
       // Ghost goes to the left
 
       position.x -= speed;
-      // Face left: set scale.x to negative
       if(isLookingRight) {
         flipHorizontallyAroundCenter();
         isLookingRight = false;
@@ -101,6 +128,22 @@ class Ghost extends SpriteAnimationGroupComponent
       position.y += speed;
     } else if (player.position.y < position.y) {
       position.y -= speed;
+    }
+  }
+
+  void _flipCorrectly() {
+    if (getPlayerXPosition(player) > position.x - 5) {
+      // Ghost goes to the right
+      if(!isLookingRight) {
+        flipHorizontallyAroundCenter();
+        isLookingRight = true;
+      }
+    } else if (getPlayerXPosition(player) < position.x) {
+      // Ghost goes to the left
+      if(isLookingRight) {
+        flipHorizontallyAroundCenter();
+        isLookingRight = false;
+      }
     }
   }
 
