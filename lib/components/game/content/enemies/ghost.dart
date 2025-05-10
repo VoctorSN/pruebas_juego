@@ -77,7 +77,7 @@ class Ghost extends SpriteAnimationGroupComponent
 
   void _move() {
 
-    if (getPlayerXPosition(player) > position.x) {
+    if (getPlayerXPosition(player) > position.x - 10) {
       // Ghost goes to the right
 
       position.x += speed;
@@ -85,7 +85,7 @@ class Ghost extends SpriteAnimationGroupComponent
         flipHorizontallyAroundCenter();
         isLookingRight = true;
       }
-    } else if (getPlayerXPosition(player) + player.size.x / 2 < position.x) {
+    } else if (getPlayerXPosition(player) < position.x) {
       // Ghost goes to the left
 
       position.x -= speed;
@@ -117,7 +117,7 @@ class Ghost extends SpriteAnimationGroupComponent
 
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    //if (other is Player) other.collidedWithEnemy();
+    if (other is Player) other.collidedWithEnemy();
     if (other is Ghost) {
       // Only the ghost with the lower x-coordinate will respawn
       if (position.x < other.position.x) {
