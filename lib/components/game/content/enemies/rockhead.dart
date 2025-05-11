@@ -136,7 +136,6 @@ class Rockhead extends SpriteAnimationGroupComponent with HasGameReference<Pixel
     current = State.atacking;
   }
 
-  // TODO refactor this to use EffectController
   void comeBack() async {
     if (game.isGameSoundsActive) {
       SoundManager().stopRockheadAttackingLoop();

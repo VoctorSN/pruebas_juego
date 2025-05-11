@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import '../../../pixel_adventure.dart';
 
-// TODO update the image of the button
 class LevelSelection extends SpriteComponent
     with HasGameReference<PixelAdventure>, TapCallbacks {
 

@@ -10,8 +10,8 @@ import 'air_effect.dart';
 
 enum FanState { off, on }
 
-/// TODO: add vertical fan
-/// TODO: add a attribute to add windForce
+/// TODO: add vertical fan (could skip)
+/// TODO: add a attribute to add windForce (could skip)
 class Fan extends SpriteAnimationGroupComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   // Constructor and attributes
   final bool directionRight;

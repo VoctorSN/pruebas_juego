@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame_audio/flame_audio.dart';
 
-/// TODO add background music?
 class SoundManager {
   // Unique instance singleton
   static final SoundManager _instance = SoundManager._internal();

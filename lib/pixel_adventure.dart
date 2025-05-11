@@ -137,7 +137,6 @@ class PixelAdventure extends FlameGame
     jumpButton = JumpButton(controlSize);
   }
 
-  // TODO: Extract list of complete levels and unlocked levels
   void addOverlays() {
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));

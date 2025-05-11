@@ -6,6 +6,8 @@ import '../style/text_style_singleton.dart';
 import 'level_card.dart';
 
 // TODO when you press back button, it close the menu and resume the game or go to the main menu depending on the game state
+// TODO adapt the size of this widget to the screen size
+// TODO refactor folders structure (widgets)
 class LevelSelectionMenu extends StatelessWidget {
   static const String id = 'level_selection_menu';
 
