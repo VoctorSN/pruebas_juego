@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="389">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="391">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -48,172 +48,28 @@
   <object id="343" type="GameText" x="208" y="128" width="160" height="64">
    <text fontfamily="ArcadeClassic" wrap="1" color="#ffffff" halign="center">GET   ALL   FRUITS   TO   PASS   THE   LEVEL    🤫</text>
   </object>
-  <object id="353" name="Fire" type="FireBlock" x="176" y="272" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Up"/>
-    <property name="startIn" type="int" value="4"/>
-   </properties>
-  </object>
-  <object id="362" name="Fire" type="FireBlock" x="16" y="144" width="32" height="16">
+  <object id="377" name="Fire" type="FireBlock" x="16" y="144" width="32" height="16">
    <properties>
     <property name="fireDirection" value="Right"/>
     <property name="startIn" type="int" value="1"/>
    </properties>
   </object>
-  <object id="363" name="Fire" type="FireBlock" x="416" y="112" width="16" height="32">
+  <object id="380" name="Fire" type="FireBlock" x="112" y="112" width="32" height="16">
+   <properties>
+    <property name="fireDirection" value="Left"/>
+    <property name="startIn" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="389" name="Fire" type="FireBlock" x="16" y="160" width="16" height="32">
+   <properties>
+    <property name="fireDirection" value="Up"/>
+    <property name="startIn" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="390" name="Fire" type="FireBlock" x="128" y="128" width="16" height="32">
    <properties>
     <property name="fireDirection" value="Down"/>
-    <property name="startIn" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="364" name="Fire" type="FireBlock" x="384" y="192" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="365" name="Fire" type="FireBlock" x="192" y="256" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Up"/>
-    <property name="startIn" type="int" value="4"/>
-   </properties>
-  </object>
-  <object id="366" name="Fire" type="FireBlock" x="208" y="272" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Up"/>
-    <property name="startIn" type="int" value="4"/>
-   </properties>
-  </object>
-  <object id="367" name="Fire" type="FireBlock" x="32" y="160" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="368" name="Fire" type="FireBlock" x="16" y="176" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="369" name="Fire" type="FireBlock" x="368" y="208" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="370" name="Fire" type="FireBlock" x="384" y="224" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="371" name="Fire" type="FireBlock" x="432" y="128" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Down"/>
-    <property name="startIn" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="372" name="Fire" type="FireBlock" x="448" y="112" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Down"/>
-    <property name="startIn" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="373" name="Fire" type="FireBlock" x="16" y="128" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="374" name="Fire" type="FireBlock" x="16" y="112" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="375" name="Fire" type="FireBlock" x="16" y="96" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="376" name="Fire" type="FireBlock" x="16" y="80" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="377" name="Fire" type="FireBlock" x="16" y="64" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="378" name="Fire" type="FireBlock" x="224" y="272" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Up"/>
-    <property name="startIn" type="int" value="4"/>
-   </properties>
-  </object>
-  <object id="379" name="Fire" type="FireBlock" x="160" y="272" width="16" height="32">
-   <properties>
-    <property name="fireDirection" value="Up"/>
-    <property name="startIn" type="int" value="4"/>
-   </properties>
-  </object>
-  <object id="380" name="Fire" type="FireBlock" x="192" y="160" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="381" name="Fire" type="FireBlock" x="192" y="176" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="382" name="Fire" type="FireBlock" x="192" y="192" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="383" name="Fire" type="FireBlock" x="192" y="208" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="384" name="Fire" type="FireBlock" x="192" y="224" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Left"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="385" name="Fire" type="FireBlock" x="128" y="80" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="386" name="Fire" type="FireBlock" x="128" y="96" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="387" name="Fire" type="FireBlock" x="128" y="112" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="388" name="Fire" type="FireBlock" x="128" y="128" width="32" height="16">
-   <properties>
-    <property name="fireDirection" value="Right"/>
-    <property name="startIn" type="int" value="1"/>
+    <property name="startIn" type="int" value="5"/>
    </properties>
   </object>
  </objectgroup>

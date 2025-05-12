@@ -11,7 +11,7 @@ import '../levelBasics/player.dart';
 
 enum GhostState { appearing, moving, disappearing }
 
-/// TODO: Refactor the flipHorizontal logic
+/// TODO: Refactor the flipHorizontal logic (Victor)
 class Ghost extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameReference<PixelAdventure> {
   // Constructor and attributes

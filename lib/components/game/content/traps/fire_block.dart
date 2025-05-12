@@ -5,11 +5,14 @@ import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
+import '../../level/sound_manager.dart';
 import '../../util/utils.dart';
 import '../blocks/collision_block.dart';
 
 enum FireBlockState { on, off }
 
+/// TODO fix sound of the fire (Victor)
+/// TODO why the fire sounds on the start of the game and the pause? (Victor)
 class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   // Constructor and attributes
   final int startIn;
@@ -129,6 +132,11 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
   void _startPeriodicToggle() {
     async.Timer.periodic(const Duration(seconds: 2), (_) {
       isOn = !isOn;
+      if (game.isGameSoundsActive && isOn) {
+        //SoundManager().startFireLoop(game.gameSoundVolume);
+      } else {
+        SoundManager().stopFireLoop();
+      }
       fireSprite.current = isOn ? FireBlockState.on : FireBlockState.off;
     });
   }

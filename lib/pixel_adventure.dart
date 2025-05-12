@@ -16,6 +16,7 @@ import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
 import 'components/HUD/widgets_settings/character_selection.dart';
 import 'components/HUD/widgets_settings/level_selection_menu.dart';
+import 'components/HUD/widgets_settings/main_menu/game_selector.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
 import 'components/game/content/levelBasics/player.dart';
@@ -62,7 +63,7 @@ class PixelAdventure extends FlameGame
     'level-08',
     'level-99',
   ];
-  int currentLevelIndex = 12;
+  int currentLevelIndex = 0;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
 
@@ -118,8 +119,8 @@ class PixelAdventure extends FlameGame
     addOverlays();
 
     // Open the main menu
-    overlays.add(MainMenu.id);
     pauseEngine();
+    overlays.add(MainMenu.id);
 
     // Load the first level
     _loadActualLevel();
@@ -142,6 +143,7 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
     overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
+    overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(LevelSelectionMenu.id, (context, game) => LevelSelectionMenu(
       game: this,
       totalLevels: levelNames.length,

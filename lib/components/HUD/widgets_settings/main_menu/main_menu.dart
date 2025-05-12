@@ -1,13 +1,15 @@
-import 'dart:async';
 import 'dart:ui';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 import '../../../../pixel_adventure.dart';
-import '../level_selection_menu.dart';
+import 'dart:io' show Platform;
 
-/// TODO extract the background and add a if to pc or mobile to move the buttons and title
+import 'background_gif.dart';
+import 'game_selector.dart';
+
 class MainMenu extends StatefulWidget {
   static const String id = 'MainMenu';
   final PixelAdventure game;
@@ -20,13 +22,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu>
     with SingleTickerProviderStateMixin {
-  final List<String> gifPaths = List.generate(
-    7,
-        (i) => 'assets/gifsMainMenu/gif${i + 1}.gif',
-  );
-  int _currentGif = 0;
-  late Timer _gifTimer;
-  late AnimationController _logoController;
+  late final AnimationController _logoController;
 
   final Color baseColor = const Color(0xFF212030);
   final Color buttonColor = const Color(0xFF3A3750);
@@ -34,6 +30,13 @@ class _MainMenuState extends State<MainMenu>
   final Color textColor = const Color(0xFFE1E0F5);
 
   late final ButtonStyle buttonStyle;
+
+  bool get isMobile {
+    if (kIsWeb) {
+      return MediaQuery.of(context).size.width < 600; // Typical mobile width threshold
+    }
+    return Platform.isAndroid || Platform.isIOS;
+  }
 
   @override
   void initState() {
@@ -45,12 +48,6 @@ class _MainMenuState extends State<MainMenu>
       lowerBound: 0.95,
       upperBound: 1.05,
     )..repeat(reverse: true);
-
-    _gifTimer = Timer.periodic(const Duration(seconds: 6), (_) {
-      setState(() {
-        _currentGif = (_currentGif + 1) % gifPaths.length;
-      });
-    });
 
     buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
@@ -66,7 +63,6 @@ class _MainMenuState extends State<MainMenu>
 
   @override
   void dispose() {
-    _gifTimer.cancel();
     _logoController.dispose();
     super.dispose();
   }
@@ -88,69 +84,105 @@ class _MainMenuState extends State<MainMenu>
 
   @override
   Widget build(BuildContext context) {
+    final double topPadding = MediaQuery.of(context).padding.top + 18;
+
     return Stack(
+      fit: StackFit.expand,
       children: [
-        // Background made of gifs
-        Positioned.fill(
-          child: Image.asset(gifPaths[_currentGif], fit: BoxFit.cover),
-        ),
-
-        // Made the background a bit translucent
-        Positioned.fill(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-            child: Container(color: baseColor.withOpacity(0.4)),
-          ),
-        ),
-
-        // Title and buttons
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 18,
-          left: 34,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ScaleTransition(
-                scale: _logoController,
-                child: Text(
-                  'FRUIT COLLECTOR',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 48,
-                    color: textColor,
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black,
-                        offset: Offset(3, 3),
-                        blurRadius: 6,
+        const BackgroundWidget(),
+        Padding(
+          padding: EdgeInsets.only(top: topPadding),
+          child: isMobile
+              ? Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ScaleTransition(
+                    scale: _logoController,
+                    child: Text(
+                      'FRUIT COLLECTOR',
+                      textAlign: TextAlign.center,
+                      style: TextStyleSingleton().style.copyWith(
+                        fontSize: 48,
+                        color: textColor,
+                        shadows: const [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(3, 3),
+                            blurRadius: 6,
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
+                  const SizedBox(height: 24),
+                  _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
+                  const SizedBox(height: 12),
+                  _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
+                  const SizedBox(height: 12),
+                  _menuButton('QUIT', Icons.exit_to_app, () {
+                    FlameAudio.bgm.stop();
+                    SystemNavigator.pop();
+                  }),
+                ],
+              ),
+            ),
+          )
+              : Padding(
+            padding: const EdgeInsets.only(left: 34),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(top: topPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ScaleTransition(
+                      scale: _logoController,
+                      child: Text(
+                        'FRUIT COLLECTOR',
+                        style: TextStyleSingleton().style.copyWith(
+                          fontSize: 48,
+                          color: textColor,
+                          shadows: const [
+                            Shadow(
+                              color: Colors.black,
+                              offset: Offset(3, 3),
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
+                    const SizedBox(height: 12),
+                    _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
+                    const SizedBox(height: 12),
+                    _menuButton('QUIT', Icons.exit_to_app, () {
+                      FlameAudio.bgm.stop();
+                      SystemNavigator.pop();
+                    }),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              _menuButton('NEW GAME', Icons.play_arrow, () {
-                widget.game.overlays.remove(MainMenu.id);
-                widget.game.resumeEngine();
-              }),
-              const SizedBox(height: 12),
-              _menuButton('LEVELS', Icons.map, () {
-                widget.game.overlays.remove(MainMenu.id);
-                widget.game.overlays.add(LevelSelectionMenu.id);
-              }),
-              const SizedBox(height: 12),
-              _menuButton('SETTINGS', Icons.settings, () {
-                // TODO open settings menu (with the data from the bbdd)
-                // open settings (with gif background) and come back to menu
-              }),
-              const SizedBox(height: 12),
-              _menuButton('QUIT', Icons.exit_to_app, () {
-                FlameAudio.bgm.stop();
-                SystemNavigator.pop();
-              }),
-            ],
+            ),
           ),
         ),
       ],
     );
+  }
+
+  void _onContinuePressed() {
+    // TODO (BBDD) -> implement bbdd info
+    widget.game.overlays.remove(MainMenu.id);
+    widget.game.resumeEngine();
+  }
+
+  void _onLoadGamePressed() {
+    widget.game.overlays.remove(MainMenu.id);
+    widget.game.overlays.add(GameSelector.id);
   }
 }

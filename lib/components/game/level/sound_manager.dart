@@ -21,11 +21,14 @@ class SoundManager {
   late AudioPool rockheadAttackingPool;
   late AudioPool appearGhostPool;
   late AudioPool disappearGhostPool;
+  late AudioPool firePool;
 
   bool _initialized = false;
 
   // Timers to control sounds in loop
   Timer? _rockheadLoopTimer;
+  Timer? _fireLoopTimer;
+  bool isPlayingFireLoop = false;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -40,6 +43,7 @@ class SoundManager {
     rockheadAttackingPool = await AudioPool.createFromAsset(path: 'audio/rockHeadAttacking.wav', maxPlayers: 2);
     appearGhostPool = await AudioPool.createFromAsset(path: 'audio/appearGhost.mp3', maxPlayers: 4);
     disappearGhostPool = await AudioPool.createFromAsset(path: 'audio/disappearGhost.mp3', maxPlayers: 4);
+    firePool = await AudioPool.createFromAsset(path: 'audio/fire.mp3', maxPlayers: 4);
   }
 
   void playCollectFruit(volume) => collectFruitPool.start(volume: volume);
@@ -51,6 +55,24 @@ class SoundManager {
   void playRockheadAttacking(volume) => rockheadAttackingPool.start(volume: volume);
   void playAppearGhost(volume) => appearGhostPool.start(volume: volume);
   void playDisappearGhost(volume) => disappearGhostPool.start(volume: volume);
+  void playFire(volume) => firePool.start(volume: volume);
+
+  void startFireLoop(double volume, {Duration interval = const Duration(milliseconds: 600)}) {
+    if (!isPlayingFireLoop) {
+      stopFireLoop();
+      playFire(volume);
+      isPlayingFireLoop = true;
+      _fireLoopTimer = Timer.periodic(interval, (_) {
+        playFire(volume);
+      });
+    }
+  }
+
+  void stopFireLoop() {
+    _fireLoopTimer?.cancel();
+    _fireLoopTimer = null;
+    isPlayingFireLoop = false;
+  }
 
   void startRockheadAttackingLoop(double volume, {Duration interval = const Duration(milliseconds: 500)}) {
     stopRockheadAttackingLoop();

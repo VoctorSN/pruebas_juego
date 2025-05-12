@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level-08.tmx",
+    "activeFile": "tutorial-01.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -243,8 +243,8 @@
             "scale": 1.53,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 218.62745098039215,
-                "y": 125.49019607843135
+                "x": 208.82352941176467,
+                "y": 128.4313725490196
             }
         },
         "level-08.tmx#Pixel Adventure": {
@@ -260,14 +260,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                4,
-                2
+                2,
+                4
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 319.6666666666667,
-                "y": 184
+                "y": 183.66666666666663
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -335,13 +335,13 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "level-08.tmx"
+        "tutorial-01.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "level-08.tmx",
         "tutorial-01.tmx",
+        "level-08.tmx",
         "level-06.tmx",
         "tutorial-02.tmx",
         "tutorial-05.tmx",

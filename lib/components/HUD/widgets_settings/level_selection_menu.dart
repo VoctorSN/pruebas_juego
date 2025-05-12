@@ -5,9 +5,6 @@ import '../../../pixel_adventure.dart';
 import '../style/text_style_singleton.dart';
 import 'level_card.dart';
 
-// TODO when you press back button, it close the menu and resume the game or go to the main menu depending on the game state
-// TODO adapt the size of this widget to the screen size
-// TODO refactor folders structure (widgets)
 class LevelSelectionMenu extends StatelessWidget {
   static const String id = 'level_selection_menu';
 
@@ -49,53 +46,87 @@ class LevelSelectionMenu extends StatelessWidget {
       body: Center(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: baseColor.withAlpha((0.95 * 255).toInt()),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor, width: 2),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Select Level',
-                  style: TextStyleSingleton().style.copyWith(
-                    fontSize: 32,
-                    color: textColor,
-                    shadows: [const Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final maxWidth =
+                  constraints.maxWidth > 500
+                      ? 500.0
+                      : constraints.maxWidth * 0.95;
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: maxWidth),
+                    child: Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: baseColor.withOpacity(0.95),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: borderColor, width: 2),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Select Level',
+                            style: TextStyleSingleton().style.copyWith(
+                              fontSize: 32,
+                              color: textColor,
+                              shadows: [
+                                const Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            alignment: WrapAlignment.center,
+                            children: List.generate(totalLevels, (index) {
+                              final level = index + 1;
+                              final isUnlocked = unlockedLevels.contains(level);
+                              final isCompleted = completedLevels.contains(
+                                level,
+                              );
+                              return LevelCard(
+                                levelNumber: level,
+                                onTap:
+                                    isUnlocked
+                                        ? () => onLevelSelected(level)
+                                        : null,
+                                cardColor: cardColor,
+                                borderColor: borderColor,
+                                textColor: textColor,
+                                isLocked: !isUnlocked,
+                                isCompleted: isCompleted,
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 40),
+                          ElevatedButton.icon(
+                            style: buttonStyle,
+                            onPressed: onBack,
+                            icon: Icon(Icons.arrow_back, color: textColor),
+                            label: Text(
+                              'BACK',
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 14,
+                                color: textColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 30),
-                Wrap(
-                  spacing: 20,
-                  runSpacing: 20,
-                  alignment: WrapAlignment.center,
-                  children: List.generate(totalLevels, (index) {
-                    final level = index + 1;
-                    final isUnlocked = unlockedLevels.contains(level);
-                    final isCompleted = completedLevels.contains(level);
-                    return LevelCard(
-                      levelNumber: level,
-                      onTap: isUnlocked ? () => onLevelSelected(level) : null,
-                      cardColor: cardColor,
-                      borderColor: borderColor,
-                      textColor: textColor,
-                      isLocked: !isUnlocked,
-                      isCompleted: isCompleted,
-                    );
-                  }),
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton.icon(
-                  style: buttonStyle,
-                  onPressed: onBack,
-                  icon: Icon(Icons.arrow_back, color: textColor),
-                  label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
-                ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
