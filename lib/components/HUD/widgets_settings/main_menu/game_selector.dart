@@ -65,7 +65,7 @@ class GameSelector extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'SELECT SAVE SLOT',
+                      'SELECT  SAVE  SLOT',
                       textAlign: TextAlign.center,
                       style: TextStyleSingleton().style.copyWith(
                         fontSize: 32,

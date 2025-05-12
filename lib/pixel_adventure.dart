@@ -10,6 +10,7 @@ import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
+import 'components/HUD/buttons_game/achievements.dart';
 import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
@@ -82,6 +83,7 @@ class PixelAdventure extends FlameGame
   late final ChangePlayerSkinButton changeSkinButton;
   late final OpenMenuButton menuButton;
   late final LevelSelection levelSelectionButton;
+  late final AchievementsButton achievementsButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
   late final Vector2 rightControlPosition = Vector2(
@@ -133,8 +135,9 @@ class PixelAdventure extends FlameGame
       changeCharacter: openChangeCharacterMenu,
       buttonSize: hudSize,
     );
-    menuButton = OpenMenuButton(button: 'menuButton', buttonSize: hudSize);
+    menuButton = OpenMenuButton(buttonSize: hudSize);
     levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
+    achievementsButton = AchievementsButton(buttonSize: hudSize);
     jumpButton = JumpButton(controlSize);
   }
 
@@ -164,6 +167,7 @@ class PixelAdventure extends FlameGame
       (component) =>
           component is ChangePlayerSkinButton ||
           component is LevelSelection ||
+          component is AchievementsButton ||
           component is OpenMenuButton,
     )) {
       component.removeFromParent();
@@ -183,12 +187,14 @@ class PixelAdventure extends FlameGame
 
   void addAllButtons() {
     changeSkinButton.size = Vector2.all(hudSize);
+    achievementsButton.size = Vector2.all(hudSize);
     levelSelectionButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
+    achievementsButton.position = Vector2(size.x - (hudSize * 4) - 50, 10);
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
     levelSelectionButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
-    addAll([changeSkinButton, levelSelectionButton, menuButton]);
+    addAll([changeSkinButton, levelSelectionButton, menuButton, achievementsButton]);
     if (showControls) {
       jumpButton.size = Vector2.all(controlSize * 2);
       add(jumpButton);
