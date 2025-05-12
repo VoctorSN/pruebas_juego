@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
+import '../widgets_settings/achievements_menu.dart';
 
 class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
@@ -22,6 +23,8 @@ class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdve
 
   @override
   void onTapDown(TapDownEvent event) {
+    game.pauseEngine();
+    game.overlays.add(AchievementMenu.id);
     super.onTapDown(event);
   }
 }

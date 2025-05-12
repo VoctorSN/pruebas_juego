@@ -10,11 +10,12 @@ import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
-import 'components/HUD/buttons_game/achievements.dart';
+import 'components/HUD/buttons_game/achievementsButton.dart';
 import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
+import 'components/HUD/widgets_settings/achievements_menu.dart';
 import 'components/HUD/widgets_settings/character_selection.dart';
 import 'components/HUD/widgets_settings/level_selection_menu.dart';
 import 'components/HUD/widgets_settings/main_menu/game_selector.dart';
@@ -145,6 +146,7 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
     overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(LevelSelectionMenu.id, (context, game) => LevelSelectionMenu(
