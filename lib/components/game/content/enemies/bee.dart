@@ -13,15 +13,14 @@ import '../levelBasics/player.dart';
 
 enum BeeState { idle, attack, hit }
 
-/// TODO the bee doesnt stop exactly on top of the player
 class Bee extends SpriteAnimationGroupComponent
     with CollisionCallbacks, HasGameReference<PixelAdventure> {
+  
   // Constructor and attributes
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;
   Function(dynamic) addSpawnPoint;
-
   Bee({
     super.position,
     super.size,
@@ -185,10 +184,13 @@ class Bee extends SpriteAnimationGroupComponent
   }
 
   bool playerBelow() {
-    double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
-    double halfOfBee = width / 2;
-    return player.x + playerOffset <= position.x + halfOfBee &&
-        player.x + playerOffset >= position.x - halfOfBee &&
+    double playerRight = getPlayerXPosition(player) + player.hitbox.width;
+    double playerLeft = getPlayerXPosition(player);
+    double midBeeX = position.x + width / 2;
+
+    // player.hitbox.offsetX in second condition
+    return playerRight >= midBeeX &&
+        playerLeft <= midBeeX &&
         player.y + player.height > position.y;
   }
 
