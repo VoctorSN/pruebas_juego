@@ -15,12 +15,17 @@ import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
+import 'components/HUD/widgets_settings/achievement_toast.dart';
 import 'components/HUD/widgets_settings/achievements_menu.dart';
 import 'components/HUD/widgets_settings/character_selection.dart';
 import 'components/HUD/widgets_settings/level_selection_menu.dart';
 import 'components/HUD/widgets_settings/main_menu/game_selector.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
+import 'components/bbdd/achievement.dart';
+import 'components/bbdd/achievement_manager.dart';
+import 'components/bbdd/game_stats.dart';
+import 'components/bbdd/info.dart';
 import 'components/game/content/levelBasics/player.dart';
 import 'components/game/level/level.dart';
 
@@ -97,6 +102,16 @@ class PixelAdventure extends FlameGame
     32 - controlSize,
   );
 
+  // Logic to manage achievements
+  late final AchievementManager achievementManager = AchievementManager(achievements,
+    game: this,
+  );
+  Achievement? currentAchievement;
+  int totalDeaths = 0;
+  int totalTime = 0;
+  Map<int, int> levelTimes = {};
+  Map<int, int> levelDeaths = {};
+
   @override
   FutureOr<void> onLoad() async {
 
@@ -150,6 +165,12 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
+    overlays.addEntry(AchievementToast.id, (context, game) {
+      final pixelAdventure = game as PixelAdventure;
+      return pixelAdventure.currentAchievement == null
+          ? const SizedBox.shrink()
+          : AchievementToast(achievement: pixelAdventure.currentAchievement!);
+    });
     overlays.addEntry(LevelSelectionMenu.id, (context, game) => LevelSelectionMenu(
       game: this,
       totalLevels: levelNames.length,
@@ -206,23 +227,55 @@ class PixelAdventure extends FlameGame
     }
   }
 
+  GameStats getGameStats() {
+
+    return GameStats(
+      currentLevel: currentLevelIndex + 1,
+      levelName: level.levelName,
+      unlockedLevels: List.from(unlockedLevels),
+      completedLevels: List.from(completedLevels),
+      starsPerLevel: Map.from(starsPerLevel),
+      totalDeaths: totalDeaths,
+      totalTime: totalTime,
+      levelTimes: Map.from(levelTimes),
+      levelDeaths: Map.from(levelDeaths),
+    );
+  }
+
+  void updateGlobalStats() {
+    totalTime += level.levelTime;
+    totalDeaths += level.deathCount;
+    levelTimes[currentLevelIndex + 1] = level.levelTime;
+    levelDeaths[currentLevelIndex + 1] = level.deathCount;
+  }
+
   void completeLevel() {
-    final level = currentLevelIndex + 1;
+
+    final levelNumber = currentLevelIndex + 1;
+
+    level.stopLevelTimer();
+    Info(this).getLevel(level);
+
+    updateGlobalStats();
+
     removeWhere((component) => component is Level);
+
     if (currentLevelIndex < levelNames.length - 1) {
       currentLevelIndex++;
       _loadActualLevel();
-      if (!completedLevels.contains(level)) {
-        completedLevels.add(level);
+      if (!completedLevels.contains(levelNumber)) {
+        completedLevels.add(levelNumber);
       }
-      if (!unlockedLevels.contains(level + 1)) {
-        unlockedLevels.add(level + 1);
+      if (!unlockedLevels.contains(levelNumber + 1)) {
+        unlockedLevels.add(levelNumber + 1);
       }
     } else {
-      //Game Finished - Reload the first level (for the moment)
+      // TODO : Show the end screen
       currentLevelIndex = 0;
       _loadActualLevel();
     }
+
+    achievementManager.evaluate(getGameStats());
   }
 
   void _loadActualLevel() {

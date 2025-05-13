@@ -27,19 +27,28 @@ import '../content/traps/spike.dart';
 import 'background_tile.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
+
+  // Constructor and attributes
   final Player player;
   final String levelName;
-
   Level({required this.levelName, required this.player});
 
+  // Logic to load the level and the player
   late TiledComponent level;
   List<CollisionBlock> collisionBlocks = [];
+
+  // Logic to manage the achievements
+  late final Stopwatch _levelTimer;
+  int deathCount = 0;
+  int get levelTime => _levelTimer.elapsed.inSeconds;
+  bool _timerStarted = false;
 
   @override
   FutureOr<void> onLoad() async {
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
-
     add(level);
+
+    _startLevel();
 
     _scrollingBackground();
     _addCollisions();
@@ -47,6 +56,23 @@ class Level extends World with HasGameReference<PixelAdventure> {
     _addGameText();
 
     return super.onLoad();
+  }
+
+  void _startLevel() {
+    _levelTimer = Stopwatch()..start();
+    _timerStarted = false;
+    deathCount = 0;
+  }
+
+  void registerDeath() {
+    deathCount += 1;
+  }
+
+  void stopLevelTimer() {
+    if (!_timerStarted) {
+      _levelTimer.stop();
+      _timerStarted = true;
+    }
   }
 
   void _addGameText() {

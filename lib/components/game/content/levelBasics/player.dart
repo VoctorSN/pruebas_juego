@@ -368,6 +368,7 @@ class Player extends SpriteAnimationGroupComponent
     if (isRespawning) {
       return;
     }
+    game.level.registerDeath();
     isRespawning = true;
     if (game.isGameSoundsActive) SoundManager().playHit(game.gameSoundVolume);
     const inmobileDuration = Duration(milliseconds: 400);

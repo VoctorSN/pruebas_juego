@@ -27,6 +27,7 @@ class LevelCard extends StatefulWidget {
   State<LevelCard> createState() => _LevelCardState();
 }
 
+/// TODO: update completed appearance and difficulty
 class _LevelCardState extends State<LevelCard> {
   double scale = 1.0;
 

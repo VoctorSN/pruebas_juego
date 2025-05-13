@@ -2,17 +2,19 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 
-class Achievement {
+class AchievementToRefactr {
   final String description;
   final bool isCompleted;
   final int difficulty;
 
-  const Achievement({
+  const AchievementToRefactr({
     required this.description,
     required this.isCompleted,
     required this.difficulty,
   });
 }
+
+/// TODO: change stars to other icons and load achievements
 
 class AchievementMenu extends StatefulWidget {
   final dynamic game;
@@ -31,17 +33,17 @@ class _AchievementMenuState extends State<AchievementMenu> {
   static const double _rowHeight = 100;
   static const double _rowSpacing = 12;
 
-  final List<Achievement> _achievements = const [
-    Achievement(description: 'Complete the tutorial', isCompleted: true, difficulty: 1),
-    Achievement(description: 'Win a boss fight without taking damage', isCompleted: false, difficulty: 5),
-    Achievement(description: 'Collect 100 coins in a single level', isCompleted: true, difficulty: 3),
-    Achievement(description: 'Finish a level in under 30 seconds', isCompleted: false, difficulty: 4),
-    Achievement(description: 'Unlock all characters', isCompleted: true, difficulty: 4),
-    Achievement(description: 'Jump on 50 enemies', isCompleted: false, difficulty: 2),
-    Achievement(description: 'Die 10 times in the same level', isCompleted: true, difficulty: 1),
-    Achievement(description: 'Complete all levels', isCompleted: false, difficulty: 5),
-    Achievement(description: 'Find a secret area', isCompleted: true, difficulty: 3),
-    Achievement(description: 'Play for 3 hours total', isCompleted: true, difficulty: 2),
+  final List<AchievementToRefactr> _achievements = const [
+    AchievementToRefactr(description: 'Complete the tutorial', isCompleted: true, difficulty: 1),
+    AchievementToRefactr(description: 'Win a boss fight without taking damage', isCompleted: false, difficulty: 5),
+    AchievementToRefactr(description: 'Collect 100 coins in a single level', isCompleted: true, difficulty: 3),
+    AchievementToRefactr(description: 'Finish a level in under 30 seconds', isCompleted: false, difficulty: 4),
+    AchievementToRefactr(description: 'Unlock all characters', isCompleted: true, difficulty: 4),
+    AchievementToRefactr(description: 'Jump on 50 enemies', isCompleted: false, difficulty: 2),
+    AchievementToRefactr(description: 'Die 10 times in the same level', isCompleted: true, difficulty: 1),
+    AchievementToRefactr(description: 'Complete all levels', isCompleted: false, difficulty: 5),
+    AchievementToRefactr(description: 'Find a secret area', isCompleted: true, difficulty: 3),
+    AchievementToRefactr(description: 'Play for 3 hours total', isCompleted: true, difficulty: 2),
   ];
 
   void _scrollByRow({required bool forward}) {
@@ -120,7 +122,7 @@ class _AchievementMenuState extends State<AchievementMenu> {
                           itemCount: _achievements.length,
                           separatorBuilder: (_, __) => const SizedBox(height: _rowSpacing),
                           itemBuilder: (context, index) {
-                            final Achievement achievement = _achievements[index];
+                            final AchievementToRefactr achievement = _achievements[index];
                             final String trophyPath = achievement.isCompleted
                                 ? 'assets/images/GUI/HUD/trophy_gold.png'
                                 : 'assets/images/GUI/HUD/trophy_gray.png';
