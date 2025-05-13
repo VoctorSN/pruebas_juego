@@ -269,12 +269,15 @@ class PixelAdventure extends FlameGame
         unlockedLevels.add(levelNumber + 1);
       }
     } else {
-      // TODO : Show the end screen
+      _showEndScreen(); // Implemented method to show the end screen
       currentLevelIndex = 0;
       _loadActualLevel();
     }
 
     achievementManager.evaluate(getGameStats());
+  }
+
+  void _showEndScreen() {
   }
 
   void _loadActualLevel() {

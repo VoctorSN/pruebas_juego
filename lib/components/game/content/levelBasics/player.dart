@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -52,6 +53,7 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation doubleJumpingAnimation;
   late SpriteAnimation wallSlideAnimation;
   final double stepTime = 0.05;
+  late RectangleComponent blackScreen;
 
   // Movement logic
   final double _gravity = 9.8;
@@ -372,21 +374,26 @@ class Player extends SpriteAnimationGroupComponent
     game.level.registerDeath();
     isRespawning = true;
     if (game.isGameSoundsActive) SoundManager().playHit(game.gameSoundVolume);
-    const inmobileDuration = Duration(milliseconds: 400);
+    // Realizar el respawn
     gotHit = true;
     isOnSand = false;
     current = PlayerState.hit;
-
     await _animationRespawn();
-
     game.children.query<Level>().first.respawnObjects();
-
     velocity = Vector2.zero();
     position = statringPosition;
     _updatePlayerState();
-    Future.delayed(inmobileDuration, () => gotHit = false);
+    Future.delayed(const Duration(milliseconds: 400), () => gotHit = false);
     _jumpForce = 260;
     moveSpeed = 100;
+
+    // Aclarar la pantalla
+    for (double opacity = 1; opacity >= 0; opacity -= 0.1) {
+      blackScreen.paint.color = const Color(0xFF000000).withOpacity(opacity);
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    blackScreen.removeFromParent();
     isRespawning = false;
   }
 
@@ -395,6 +402,14 @@ class Player extends SpriteAnimationGroupComponent
     animationTicker?.reset();
     scale.x = 1;
     position = statringPosition - Vector2.all(32);
+
+    // Crear un componente de pantalla negra
+    blackScreen = RectangleComponent(
+        size: game.size,
+        paint: Paint()..color = const Color(0xFF000000),
+        priority: 1000,
+    );
+    game.add(blackScreen);
     current = PlayerState.appearing;
 
     await animationTicker?.completed;
