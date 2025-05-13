@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="391">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="395">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -72,6 +72,9 @@
     <property name="startIn" type="int" value="5"/>
    </properties>
   </object>
+  <object id="392" name="KeyUnlocker" type="KeyUnlocker" x="192" y="208" width="16" height="16"/>
+  <object id="393" name="KeyUnlocker" type="KeyUnlocker" x="368" y="208" width="16" height="16"/>
+  <object id="394" name="KeyUnlocker" type="KeyUnlocker" x="400" y="288" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="2" name="Collisions">
   <object id="6" x="0" y="192" width="160" height="176"/>

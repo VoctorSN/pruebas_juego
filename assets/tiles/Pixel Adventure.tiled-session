@@ -260,14 +260,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 319.6666666666667,
-                "y": 183.66666666666663
+                "x": 314.33333333333326,
+                "y": 178.33333333333337
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {

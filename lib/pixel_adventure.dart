@@ -68,6 +68,7 @@ class PixelAdventure extends FlameGame
   int currentLevelIndex = 0;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
+  Map<int,int> starsPerLevel = {};
 
   // Logic to manage the sounds
   bool isMusicActive = false;
@@ -160,6 +161,7 @@ class PixelAdventure extends FlameGame
       },
       unlockedLevels: unlockedLevels,
       completedLevels: completedLevels,
+      starsPerLevel: starsPerLevel,
     ));
   }
 

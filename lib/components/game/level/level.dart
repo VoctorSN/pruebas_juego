@@ -21,6 +21,7 @@ import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
+import '../content/levelExtras/key_unlocker.dart';
 import '../content/traps/fan.dart';
 import '../content/traps/spike.dart';
 import 'background_tile.dart';
@@ -90,6 +91,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
           component is Bee ||
           component is Ghost ||
           component is FireBlock ||
+          component is KeyUnlocker ||
           component is Rockhead,
     );
 
@@ -122,6 +124,13 @@ class Level extends World with HasGameReference<PixelAdventure> {
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
             add(fruit);
+            break;
+          case 'KeyUnlocker':
+            final star = KeyUnlocker(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+            );
+            add(star);
             break;
           case 'Saw':
             final isVertical = spawnPoint.properties.getValue('isVertical');

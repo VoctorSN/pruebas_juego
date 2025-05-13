@@ -9,6 +9,7 @@ class LevelCard extends StatefulWidget {
   final Color textColor;
   final bool isLocked;
   final bool isCompleted;
+  final int stars;
 
   const LevelCard({
     super.key,
@@ -19,6 +20,7 @@ class LevelCard extends StatefulWidget {
     required this.textColor,
     this.isLocked = false,
     this.isCompleted = false,
+    this.stars = 0,
   });
 
   @override
@@ -36,7 +38,7 @@ class _LevelCardState extends State<LevelCard> {
 
   @override
   Widget build(BuildContext context) {
-    final disabledColor = Colors.grey.withOpacity(0.4);
+    final Color disabledColor = Colors.grey.withOpacity(0.4);
 
     return GestureDetector(
       onTap: widget.isLocked ? null : widget.onTap,
@@ -46,45 +48,53 @@ class _LevelCardState extends State<LevelCard> {
       child: AnimatedScale(
         scale: scale,
         duration: const Duration(milliseconds: 120),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: widget.isLocked ? disabledColor : widget.cardColor,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: widget.borderColor, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.6),
-                    blurRadius: 6,
-                    offset: const Offset(2, 4),
-                  ),
-                ],
+        child: Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: widget.isLocked ? disabledColor : widget.cardColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: widget.borderColor, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.6),
+                blurRadius: 6,
+                offset: const Offset(2, 4),
               ),
-              alignment: Alignment.center,
-              child: Text(
+            ],
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
                 '${widget.levelNumber}',
                 style: TextStyleSingleton().style.copyWith(
                   fontSize: 22,
                   color: widget.isLocked ? Colors.grey[300] : widget.textColor,
-                  shadows: [
-                    const Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 2)
+                  shadows: const [
+                    Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 2),
                   ],
                 ),
               ),
-            ),
-            if (widget.isLocked)
-              const Icon(Icons.lock, size: 28, color: Colors.white70),
-            if (widget.isCompleted)
-              const Positioned(
-                bottom: 4,
-                right: 4,
-                child: Icon(Icons.star, size: 20, color: Colors.amber),
-              ),
-          ],
+              if (widget.isLocked)
+                const Icon(Icons.lock, size: 28, color: Colors.white70),
+              if (!widget.isLocked)
+                Positioned(
+                  bottom: 4,
+                  right: 4,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(3, (int index) {
+                      return Icon(
+                        Icons.star,
+                        color: index < widget.stars ? Colors.amber : Colors.grey,
+                        size: 16,
+                      );
+                    }),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

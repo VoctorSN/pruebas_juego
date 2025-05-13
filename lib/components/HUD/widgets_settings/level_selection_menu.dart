@@ -11,6 +11,7 @@ class LevelSelectionMenu extends StatefulWidget {
   final void Function(int) onLevelSelected;
   final List<int> unlockedLevels;
   final List<int> completedLevels;
+  final Map<int, int> starsPerLevel;
   final PixelAdventure game;
 
   const LevelSelectionMenu({
@@ -18,6 +19,7 @@ class LevelSelectionMenu extends StatefulWidget {
     required this.game,
     required this.totalLevels,
     required this.onLevelSelected,
+    required this.starsPerLevel,
     this.unlockedLevels = const [],
     this.completedLevels = const [],
   });
@@ -32,7 +34,6 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
   static const double _cardHeight = 100;
   static const double _cardSpacing = 12;
   static const double _minCardWidth = 80;
-  static const double _maxCardsPerRow = 6;
   static const double _minCardsPerRow = 3;
 
   void scrollByRow({required bool forward}) {
@@ -90,10 +91,9 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
               final double maxWidth = constraints.maxWidth * 0.8;
               final double maxHeight = constraints.maxHeight * 0.8;
 
-              // Calculate the number of cards per row based on available width
               final double availableWidth = maxWidth - 96;
               final double calculatedCardsPerRow = (availableWidth / (_minCardWidth + _cardSpacing)).floorToDouble();
-              final double cardsPerRow = calculatedCardsPerRow.clamp(_minCardsPerRow, _maxCardsPerRow);
+              final double cardsPerRow = calculatedCardsPerRow.clamp(_minCardsPerRow, double.infinity);
               final double cardWidth = (availableWidth - (_cardSpacing * (cardsPerRow - 1))) / cardsPerRow;
 
               return Container(
@@ -145,6 +145,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                       onTap: isUnlocked ? () => widget.onLevelSelected(level) : null,
                                       cardColor: cardColor,
                                       borderColor: borderColor,
+                                      stars: widget.starsPerLevel[level] ?? 0,
                                       textColor: textColor,
                                       isLocked: !isUnlocked,
                                       isCompleted: isCompleted,
@@ -156,6 +157,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                           ),
                           const SizedBox(width: 12),
                           Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               _buildScrollButton(
                                 icon: Icons.keyboard_arrow_up,
@@ -164,7 +166,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                 iconColor: textColor,
                                 borderColor: borderColor,
                               ),
-                              const Spacer(),
+                              const SizedBox(height: 8),
                               _buildScrollButton(
                                 icon: Icons.keyboard_arrow_down,
                                 onPressed: () => scrollByRow(forward: true),
