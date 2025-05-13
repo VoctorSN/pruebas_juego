@@ -186,6 +186,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
             final checkpoint = Checkpoint(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
+              isLastLevel: spawnPoint.properties.getValue('isLastLevel'),
             );
             add(checkpoint);
             break;

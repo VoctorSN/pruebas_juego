@@ -364,6 +364,7 @@ class Player extends SpriteAnimationGroupComponent
     }
   }
 
+  ///TODO add effect to respawn like mario uaaaaa
   void _respawn() async {
     if (isRespawning) {
       return;

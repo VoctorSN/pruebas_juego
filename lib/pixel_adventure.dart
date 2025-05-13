@@ -70,7 +70,7 @@ class PixelAdventure extends FlameGame
     'level-08',
     'level-99',
   ];
-  int currentLevelIndex = 0;
+  int currentLevelIndex = 4;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
   Map<int,int> starsPerLevel = {};
@@ -228,7 +228,6 @@ class PixelAdventure extends FlameGame
   }
 
   GameStats getGameStats() {
-
     return GameStats(
       currentLevel: currentLevelIndex + 1,
       levelName: level.levelName,

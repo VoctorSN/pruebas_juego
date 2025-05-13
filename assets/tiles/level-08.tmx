@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="532">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="533">
  <tileset firstgid="1" name="Pixel Adventure" tilewidth="16" tileheight="16" tilecount="242" columns="22">
   <image source="../images/Terrain/Terrain (16x16).png" width="352" height="176"/>
  </tileset>
@@ -39,7 +39,6 @@
   <object id="2" type="deathZone" x="0" y="368" width="640" height="48"/>
   <object id="3" type="deathZone" x="-48" y="0" width="48" height="416"/>
   <object id="4" name="Player" type="Player" x="32" y="256" width="32" height="32"/>
-  <object id="5" type="Checkpoint" x="560" y="224" width="64" height="64"/>
   <object id="44" type="deathZone" x="640" y="0" width="48" height="416"/>
   <object id="509" name="Trampoline" type="Trampoline" x="528" y="256" width="32" height="32">
    <properties>
@@ -75,6 +74,11 @@
   <object id="531" name="Ghost" type="Ghost" x="29.098" y="40.8627" width="32" height="32">
    <properties>
     <property name="spawnIn" type="int" value="8"/>
+   </properties>
+  </object>
+  <object id="532" type="Checkpoint" x="560" y="224" width="64" height="64">
+   <properties>
+    <property name="isLastLevel" type="bool" value="false"/>
    </properties>
   </object>
  </objectgroup>

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/bbdd/achievement.dart';
 
+/// TODO add styles
 class AchievementToast extends StatelessWidget {
 
   static const String id = 'achievement_toast';
