@@ -23,17 +23,7 @@ import '../traps/saw.dart';
 import 'checkpoint.dart';
 import 'fruit.dart';
 
-enum PlayerState {
-  idle,
-  running,
-  jumping,
-  doubleJumping,
-  falling,
-  hit,
-  appearing,
-  disappearing,
-  wallSlide,
-}
+enum PlayerState { idle, running, jumping, doubleJumping, falling, hit, appearing, disappearing, wallSlide }
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
@@ -88,24 +78,14 @@ class Player extends SpriteAnimationGroupComponent
 
   // Collision logic
   List<CollisionBlock> collisionBlocks = [];
-  CustomHitbox hitbox = CustomHitbox(
-    offsetX: 10,
-    offsetY: 4,
-    width: 14,
-    height: 28,
-  );
+  CustomHitbox hitbox = CustomHitbox(offsetX: 10, offsetY: 4, width: 14, height: 28);
 
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimations();
     // debugMode = true;
     statringPosition = Vector2(position.x, position.y);
-    add(
-      RectangleHitbox(
-        position: Vector2(hitbox.offsetX, hitbox.offsetY),
-        size: Vector2(hitbox.width, hitbox.height),
-      ),
-    );
+    add(RectangleHitbox(position: Vector2(hitbox.offsetX, hitbox.offsetY), size: Vector2(hitbox.width, hitbox.height)));
     _animationRespawn();
     return super.onLoad();
   }
@@ -134,11 +114,9 @@ class Player extends SpriteAnimationGroupComponent
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalMovement = 0;
     isLeftKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyA) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+        keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     isRightKeyPressed =
-        keysPressed.contains(LogicalKeyboardKey.keyD) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowRight);
+        keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     horizontalMovement += isLeftKeyPressed ? -1 : 0;
     horizontalMovement += isRightKeyPressed ? 1 : 0;
@@ -148,18 +126,13 @@ class Player extends SpriteAnimationGroupComponent
         keysPressed.contains(LogicalKeyboardKey.arrowUp) ||
         keysPressed.contains(LogicalKeyboardKey.keyW);
 
-    isDownPressed =
-        keysPressed.contains(LogicalKeyboardKey.arrowDown) ||
-        keysPressed.contains(LogicalKeyboardKey.keyS);
+    isDownPressed = keysPressed.contains(LogicalKeyboardKey.arrowDown) || keysPressed.contains(LogicalKeyboardKey.keyS);
 
     return super.onKeyEvent(event, keysPressed);
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!hasReached) {
       if (other is Fruit) other.collidedWithPlayer();
       if (other is Saw) _respawn();
@@ -212,23 +185,14 @@ class Player extends SpriteAnimationGroupComponent
   SpriteAnimation _spriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$character/$state.png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: Vector2.all(32),
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: Vector2.all(32)),
     );
   }
 
   SpriteAnimation _specialspriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$state (96x96).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: Vector2.all(96),
-        loop: false,
-      ),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: Vector2.all(96), loop: false),
     );
   }
 
@@ -268,8 +232,7 @@ class Player extends SpriteAnimationGroupComponent
 
     if (velocity.y < 0 && jumpCount < 2) playerState = PlayerState.jumping;
 
-    if (jumpCount == 2 && !isOnSand && !isRespawning)
-      playerState = PlayerState.doubleJumping;
+    if (jumpCount == 2 && !isOnSand && !isRespawning) playerState = PlayerState.doubleJumping;
 
     current = playerState;
   }
@@ -366,7 +329,6 @@ class Player extends SpriteAnimationGroupComponent
     }
   }
 
-  ///TODO add effect to respawn like mario uaaaaa
   void _respawn() async {
     if (isRespawning) {
       return;
@@ -387,41 +349,50 @@ class Player extends SpriteAnimationGroupComponent
     _jumpForce = 260;
     moveSpeed = 100;
 
-    // Aclarar la pantalla
-    for (double opacity = 1; opacity >= 0; opacity -= 0.1) {
-      blackScreen.paint.color = const Color(0xFF000000).withOpacity(opacity);
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    blackScreen.removeFromParent();
+    await removeBlackScreen();
     isRespawning = false;
   }
 
   Future<void> _animationRespawn() async {
     await animationTicker?.completed;
     animationTicker?.reset();
+    await addBlackScreen();
     scale.x = 1;
     position = statringPosition - Vector2.all(32);
 
-    // Crear un componente de pantalla negra
-    blackScreen = RectangleComponent(
-        size: game.size,
-        paint: Paint()..color = const Color(0xFF000000),
-        priority: 1000,
-    );
-    game.add(blackScreen);
     current = PlayerState.appearing;
 
     await animationTicker?.completed;
     animationTicker?.reset();
   }
 
+  Future<void> addBlackScreen() async {
+    blackScreen = RectangleComponent(
+      size: game.size,
+      paint: Paint()..color = const Color(0xFF000000).withAlpha(255),
+      priority: 1000,
+    );
+    game.add(blackScreen);
+    for (int alpha = 0; alpha < 255; alpha += 15) {
+      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+  }
+
+  Future<void> removeBlackScreen() async {
+    for (double opacity = 1; opacity >= 0; opacity -= 0.1) {
+      blackScreen.paint.color = const Color(0xFF000000).withOpacity(opacity);
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    blackScreen.removeFromParent();
+  }
+
   void _reachedCheckpoint(Checkpoint other) async {
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive)
-      SoundManager().playDisappear(game.gameSoundVolume);
+    if (game.isGameSoundsActive) SoundManager().playDisappear(game.gameSoundVolume);
 
     hasReached = true;
     if (scale.x > 0) {
