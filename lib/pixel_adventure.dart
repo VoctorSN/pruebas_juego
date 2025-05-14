@@ -9,6 +9,7 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
+import 'package:fruit_collector/components/game/level/death_screen.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
 import 'components/HUD/buttons_game/achievements_button.dart';
@@ -32,22 +33,27 @@ import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 
 class PixelAdventure extends FlameGame
-    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        HasCollisionDetection,
+        TapCallbacks {
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
-  final List<String> characters = ['1', '2', '3', 'Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
+  final List<String> characters = [
+    '1',
+    '2',
+    '3',
+    'Mask Dude',
+    'Ninja Frog',
+    'Pink Man',
+    'Virtual Guy',
+  ];
   int currentCharacterIndex = 0;
   late Player player;
   late Level level;
-  final random = Random();
-
-  late RectangleComponent blackScreen;
-
-  late TextComponent? defeatedTextComponent; // Store as class variable
-  late TextComponent? defeatedTextShadow; // Store as class variable
-  late List<TextComponent> xComponents = []; // Store "X" components
 
   // Logic to manage the levels
   static const List<String> levelNames = [
@@ -77,6 +83,17 @@ class PixelAdventure extends FlameGame
   bool isGameSoundsActive = true;
   double gameSoundVolume = 1.0;
 
+  late DeathScreen deathScreen = DeathScreen(
+    gameAdd: (component) {
+      add(component);
+    },
+    gameRemove: (component) {
+      remove(component);
+    },
+    size: size,
+    position: Vector2(0, 0),
+  )..priority = 1000;
+
   // Logic to manage the HUD, controls, size of the buttons and the positions
   late CustomJoystick customJoystick;
   bool showControls = false;
@@ -89,11 +106,20 @@ class PixelAdventure extends FlameGame
   late final AchievementsButton achievementsButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
-  late final Vector2 rightControlPosition = Vector2(size.x - 32 - controlSize, size.y - 32 - controlSize);
-  late final Vector2 leftControlPosition = Vector2(32 - controlSize, 32 - controlSize);
+  late final Vector2 rightControlPosition = Vector2(
+    size.x - 32 - controlSize,
+    size.y - 32 - controlSize,
+  );
+  late final Vector2 leftControlPosition = Vector2(
+    32 - controlSize,
+    32 - controlSize,
+  );
 
   // Logic to manage achievements
-  late final AchievementManager achievementManager = AchievementManager(achievements, game: this);
+  late final AchievementManager achievementManager = AchievementManager(
+    achievements,
+    game: this,
+  );
   Achievement? currentAchievement;
   int totalDeaths = 0;
   int totalTime = 0;
@@ -135,9 +161,15 @@ class PixelAdventure extends FlameGame
   }
 
   void initializateButtons() {
-    changeSkinButton = ChangePlayerSkinButton(changeCharacter: openChangeCharacterMenu, buttonSize: hudSize);
+    changeSkinButton = ChangePlayerSkinButton(
+      changeCharacter: openChangeCharacterMenu,
+      buttonSize: hudSize,
+    );
     menuButton = OpenMenuButton(buttonSize: hudSize);
-    levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
+    levelSelectionButton = LevelSelection(
+      buttonSize: hudSize,
+      onTap: openLevelSelectionMenu,
+    );
     achievementsButton = AchievementsButton(buttonSize: hudSize);
     jumpButton = JumpButton(controlSize);
   }
@@ -145,8 +177,14 @@ class PixelAdventure extends FlameGame
   void addOverlays() {
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
-    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
-    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this));
+    overlays.addEntry(
+      CharacterSelection.id,
+      (context, game) => CharacterSelection(this),
+    );
+    overlays.addEntry(
+      AchievementMenu.id,
+      (context, game) => AchievementMenu(this),
+    );
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -206,7 +244,12 @@ class PixelAdventure extends FlameGame
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
     levelSelectionButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
-    addAll([changeSkinButton, levelSelectionButton, menuButton, achievementsButton]);
+    addAll([
+      changeSkinButton,
+      levelSelectionButton,
+      menuButton,
+      achievementsButton,
+    ]);
     if (showControls) {
       jumpButton.size = Vector2.all(controlSize * 2);
       add(jumpButton);
@@ -267,162 +310,6 @@ class PixelAdventure extends FlameGame
 
   void _showEndScreen() {}
 
-  Future<void> addBlackScreen() async {
-    final xCount = level.deathCount;
-    blackScreen = RectangleComponent(
-      size: size,
-      paint: Paint()..color = const Color(0xFF000000).withAlpha(255),
-      priority: 1000,
-    );
-
-    // Create the "DEFEATED" text component with initial transparency
-    defeatedTextComponent = TextComponent(
-      text: 'DEFEATED',
-      textRenderer: TextPaint(
-        style: const TextStyle(color: Colors.red, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-      ),
-
-      anchor: Anchor.center,
-      position: size / 2,
-      priority: 1001,
-    );
-    defeatedTextShadow = TextComponent(
-      text: 'DEFEATED',
-      textRenderer: TextPaint(
-        style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-      ),
-
-      anchor: Anchor.center,
-      position:
-          (size / 2)
-            ..x -= 2
-            ..y += 2,
-      priority: 1000,
-    );
-
-    // Create a list to hold the "X" text components
-    xComponents.clear(); // Clear previous instances
-    final random = Random();
-    for (int i = 0; i < xCount; i++) {
-      final xComponent = TextComponent(
-        text: 'X',
-        textRenderer: TextPaint(
-          style: const TextStyle(color: Colors.red, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-        ),
-        anchor: Anchor.center,
-        position: Vector2(random.nextDouble() * size.x, random.nextDouble() * size.y),
-        priority: 1001,
-      );
-      xComponents.add(xComponent);
-    }
-
-    // Add the blackScreen and all text components to the game
-    add(blackScreen);
-    blackScreen.add(defeatedTextComponent!);
-    blackScreen.add(defeatedTextShadow!);
-    for (var xComponent in xComponents) {
-      blackScreen.add(xComponent);
-    }
-
-    // Fade-in effect with text opacity transition
-    final totalSteps = (255 / 15).ceil();
-    for (int step = 0; step <= totalSteps; step++) {
-      final alpha = (step * 15).clamp(0, 255);
-      final t = alpha / 255;
-
-      // Update blackScreen opacity
-      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
-
-      // Update "DEFEATED" text opacity
-      final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-      final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
-
-      defeatedTextComponent!.textRenderer = TextPaint(
-        style: TextStyle(color: defeatedTextColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-      );
-      defeatedTextShadow!.textRenderer = TextPaint(
-        style: TextStyle(color: defeatedShadowColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-      );
-
-      // Update "X" text opacity
-      for (var xComponent in xComponents) {
-        final xTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-        xComponent.textRenderer = TextPaint(
-          style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-        );
-      }
-
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    // Ensure final state
-    blackScreen.paint.color = Colors.black;
-    defeatedTextComponent!.textRenderer = TextPaint(
-      style: const TextStyle(color: Colors.red, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-    );
-    defeatedTextShadow!.textRenderer = TextPaint(
-      style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-    );
-    for (var xComponent in xComponents) {
-      xComponent.textRenderer = TextPaint(
-        style: const TextStyle(color: Colors.red, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-      );
-    }
-  }
-
-  Future<void> removeBlackScreen() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final totalSteps = (255 / 15).ceil();
-    for (int step = totalSteps; step >= 0; step--) {
-      final alpha = (step * 15).clamp(0, 255);
-      final t = alpha / 255;
-
-      // Update blackScreen opacity
-      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
-
-      // Update "DEFEATED" text opacity
-      if (defeatedTextComponent != null) {
-        final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-        defeatedTextComponent!.textRenderer = TextPaint(
-          style: TextStyle(color: defeatedTextColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-        );
-      }
-
-      // Update "DEFEATED" text opacity
-      if (defeatedTextShadow != null) {
-        final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
-        defeatedTextShadow!.textRenderer = TextPaint(
-          style: TextStyle(color: defeatedShadowColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-        );
-      }
-
-      // Update "X" text opacity
-      for (var xComponent in xComponents) {
-        if (xComponent != null) {
-          final xTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-          xComponent.textRenderer = TextPaint(
-            style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
-          );
-        }
-      }
-
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    // Clean up
-    if (defeatedTextComponent != null) defeatedTextComponent!.removeFromParent();
-    if (defeatedTextShadow != null) defeatedTextShadow!.removeFromParent();
-
-    for (var xComponent in xComponents) {
-      if (xComponent != null) xComponent.removeFromParent();
-    }
-    if (blackScreen != null) blackScreen.removeFromParent();
-    defeatedTextComponent = null;
-    defeatedTextShadow = null;
-
-    xComponents.clear();
-  }
-
   void removeAudios() {
     try {
       for (final component in level.children) {
@@ -444,7 +331,11 @@ class PixelAdventure extends FlameGame
     }
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
-    cam = CameraComponent.withFixedResolution(world: level, width: 640, height: 368);
+    cam = CameraComponent.withFixedResolution(
+      world: level,
+      width: 640,
+      height: 368,
+    );
 
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
@@ -485,5 +376,13 @@ class PixelAdventure extends FlameGame
   void switchHUDPosition() {
     if (!showControls) return;
     reloadAllButtons();
+  }
+
+  removeBlackScreen() {
+    deathScreen.removeBlackScreen();
+  }
+
+  addBlackScreen() {
+    deathScreen.addBlackScreen(totalDeaths + level.deathCount);
   }
 }
