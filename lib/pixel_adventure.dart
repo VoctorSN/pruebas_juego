@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -40,27 +41,13 @@ class PixelAdventure extends FlameGame
   int currentCharacterIndex = 0;
   late Player player;
   late Level level;
+  final random = Random();
 
   late RectangleComponent blackScreen;
 
-  /// TODO : Add cross per death randomly and relocate this initialization
-  // Create the "DEFEATED" text component
-  late final textComponent = TextComponent(
-    text: 'DEFEATED',
-    textRenderer: TextPaint(
-      style: const TextStyle(
-        color: Colors.red, // Using white for visibility on black background
-        fontSize: 48, // Adjust font size for title-like appearance
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Arial', // You can change the font if needed
-      ),
-    ),
-    anchor: Anchor.center,
-    // Center the text
-    position: size / 2,
-    // Position at the center of the screen
-    priority: 1001, // Ensure the text appears above the blackScreen
-  );
+  late TextComponent? defeatedTextComponent; // Store as class variable
+  late TextComponent? defeatedTextShadow; // Store as class variable
+  late List<TextComponent> xComponents = []; // Store "X" components
 
   // Logic to manage the levels
   static const List<String> levelNames = [
@@ -281,6 +268,7 @@ class PixelAdventure extends FlameGame
   void _showEndScreen() {}
 
   Future<void> addBlackScreen() async {
+    final xCount = level.deathCount;
     blackScreen = RectangleComponent(
       size: size,
       paint: Paint()..color = const Color(0xFF000000).withAlpha(255),
@@ -288,90 +276,161 @@ class PixelAdventure extends FlameGame
     );
 
     // Create the "DEFEATED" text component with initial transparency
-    final textComponent = TextComponent(
+    defeatedTextComponent = TextComponent(
       text: 'DEFEATED',
       textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Colors.red, // Fixed red color
-          fontSize: 48,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Arial',
-        ),
+        style: const TextStyle(color: Colors.red, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
       ),
+
       anchor: Anchor.center,
       position: size / 2,
       priority: 1001,
     );
+    defeatedTextShadow = TextComponent(
+      text: 'DEFEATED',
+      textRenderer: TextPaint(
+        style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      ),
 
-    // Add the blackScreen to the game and the textComponent as its child
-    add(blackScreen);
-    blackScreen.add(textComponent); // Add textComponent as a child of blackScreen
+      anchor: Anchor.center,
+      position:
+          (size / 2)
+            ..x -= 2
+            ..y += 2,
+      priority: 1000,
+    );
 
-    // Fade-in effect with text opacity transition
-    final totalSteps = (255 / 15).ceil(); // Number of steps for alpha (0 to 255 in steps of 15)
-    for (int step = 0; step <= totalSteps; step++) {
-      final alpha = (step * 15).clamp(0, 255); // Alpha value from 0 to 255
-      final t = alpha / 255; // Progress from 0.0 to 1.0
-
-      // Update blackScreen opacity
-      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
-
-      // Update text opacity (red with increasing alpha)
-      final textColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-      textComponent.textRenderer = TextPaint(
-        style: TextStyle(color: textColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+    // Create a list to hold the "X" text components
+    xComponents.clear(); // Clear previous instances
+    final random = Random();
+    for (int i = 0; i < xCount; i++) {
+      final xComponent = TextComponent(
+        text: 'X',
+        textRenderer: TextPaint(
+          style: const TextStyle(color: Colors.red, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+        ),
+        anchor: Anchor.center,
+        position: Vector2(random.nextDouble() * size.x, random.nextDouble() * size.y),
+        priority: 1001,
       );
-
-      await Future.delayed(const Duration(milliseconds: 50));
+      xComponents.add(xComponent);
     }
 
-    // Ensure final state
-    blackScreen.paint.color = Colors.black;
-    textComponent.textRenderer = TextPaint(
-      style: const TextStyle(
-        color: Colors.red, // Final color fully opaque
-        fontSize: 48,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Arial',
-      ),
-    );
-  }
+    // Add the blackScreen and all text components to the game
+    add(blackScreen);
+    blackScreen.add(defeatedTextComponent!);
+    blackScreen.add(defeatedTextShadow!);
+    for (var xComponent in xComponents) {
+      blackScreen.add(xComponent);
+    }
 
-  Future<void> removeBlackScreen() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final totalSteps = (255 / 15).ceil(); // Number of steps for alpha (255 to 0 in steps of 15)
-    for (int step = totalSteps; step >= 0; step--) {
-      final alpha = (step * 15).clamp(0, 255); // Alpha value from 255 to 0
-      final t = alpha / 255; // Progress from 1.0 to 0.0
+    // Fade-in effect with text opacity transition
+    final totalSteps = (255 / 15).ceil();
+    for (int step = 0; step <= totalSteps; step++) {
+      final alpha = (step * 15).clamp(0, 255);
+      final t = alpha / 255;
 
       // Update blackScreen opacity
       blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
 
-      // Update text opacity (red with decreasing alpha)
-      final textComponent = blackScreen.children.query<TextComponent>().firstOrNull;
-      if (textComponent != null) {
-        final textColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
-        textComponent.textRenderer = TextPaint(
-          style: TextStyle(color: textColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      // Update "DEFEATED" text opacity
+      final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+      final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
+
+      defeatedTextComponent!.textRenderer = TextPaint(
+        style: TextStyle(color: defeatedTextColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      );
+      defeatedTextShadow!.textRenderer = TextPaint(
+        style: TextStyle(color: defeatedShadowColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      );
+
+      // Update "X" text opacity
+      for (var xComponent in xComponents) {
+        final xTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+        xComponent.textRenderer = TextPaint(
+          style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
         );
       }
 
       await Future.delayed(const Duration(milliseconds: 50));
     }
 
+    // Ensure final state
+    blackScreen.paint.color = Colors.black;
+    defeatedTextComponent!.textRenderer = TextPaint(
+      style: const TextStyle(color: Colors.red, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+    );
+    defeatedTextShadow!.textRenderer = TextPaint(
+      style: const TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+    );
+    for (var xComponent in xComponents) {
+      xComponent.textRenderer = TextPaint(
+        style: const TextStyle(color: Colors.red, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      );
+    }
+  }
+
+  Future<void> removeBlackScreen() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final totalSteps = (255 / 15).ceil();
+    for (int step = totalSteps; step >= 0; step--) {
+      final alpha = (step * 15).clamp(0, 255);
+      final t = alpha / 255;
+
+      // Update blackScreen opacity
+      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
+
+      // Update "DEFEATED" text opacity
+      if (defeatedTextComponent != null) {
+        final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+        defeatedTextComponent!.textRenderer = TextPaint(
+          style: TextStyle(color: defeatedTextColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+        );
+      }
+
+      // Update "DEFEATED" text opacity
+      if (defeatedTextShadow != null) {
+        final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
+        defeatedTextShadow!.textRenderer = TextPaint(
+          style: TextStyle(color: defeatedShadowColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+        );
+      }
+
+      // Update "X" text opacity
+      for (var xComponent in xComponents) {
+        if (xComponent != null) {
+          final xTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+          xComponent.textRenderer = TextPaint(
+            style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+          );
+        }
+      }
+
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
     // Clean up
-    blackScreen.children.query<TextComponent>().forEach((text) => text.removeFromParent());
-    blackScreen.removeFromParent();
+    if (defeatedTextComponent != null) defeatedTextComponent!.removeFromParent();
+    if (defeatedTextShadow != null) defeatedTextShadow!.removeFromParent();
+
+    for (var xComponent in xComponents) {
+      if (xComponent != null) xComponent.removeFromParent();
+    }
+    if (blackScreen != null) blackScreen.removeFromParent();
+    defeatedTextComponent = null;
+    defeatedTextShadow = null;
+
+    xComponents.clear();
   }
 
   void removeAudios() {
-    try{
+    try {
       for (final component in level.children) {
         if (component is FireBlock) {
           component.removeSound();
         }
       }
-    }catch (e){
+    } catch (e) {
       /// When the leves isn't initialized we dont remove sound
     }
   }
