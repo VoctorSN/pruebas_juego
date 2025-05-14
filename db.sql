@@ -1,6 +1,10 @@
+DROP SCHEMA IF EXISTS FRUIT_COLLECTOR;
+CREATE SCHEMA FRUIT_COLLECTOR DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE FRUIT_COLLECTOR;
+
 CREATE TABLE `Users` (
                          `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                         `name` TEXT NULL,
+                         `name` VARCHAR(50) NULL,
                          UNIQUE KEY `user_name_unique` (`name`)
 );
 
@@ -30,15 +34,15 @@ CREATE TABLE `Settings` (
 
 CREATE TABLE `Achievements` (
                                 `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `title` TEXT NOT NULL,
-                                `description` LONGTEXT NOT NULL,
+                                `title`  VARCHAR(50) NOT NULL,
+                                `description`  VARCHAR(300) NOT NULL,
                                 `difficulty` SMALLINT NOT NULL,
                                 UNIQUE KEY `achievements_title_unique` (`title`)
 );
 
 CREATE TABLE `Levels` (
                           `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                          `name` TEXT NOT NULL,
+                          `name`  VARCHAR(50) NOT NULL,
                           `difficulty` SMALLINT NOT NULL
 );
 
@@ -209,6 +213,37 @@ BEGIN
     LIMIT 1;
 END$$
 
+CREATE PROCEDURE `get_or_create_game_by_space` (
+    IN `p_space` SMALLINT
+)
+BEGIN
+    DECLARE v_game_id BIGINT;
+
+    -- Check if game exists in the specified space
+    SELECT id INTO v_game_id
+    FROM Games
+    WHERE space = p_space
+    LIMIT 1;
+
+    -- If no game found, create one
+    IF v_game_id IS NULL THEN
+        CALL create_game_at_space(p_space);
+    END IF;
+
+    -- Return the game (newly created or existing)
+    SELECT
+        id,
+        created_at,
+        last_time_played,
+        space,
+        current_level,
+        total_deaths,
+        total_time
+    FROM Games
+    WHERE space = p_space
+    LIMIT 1;
+END$$
+
 CREATE PROCEDURE `get_game_levels_by_game_id` (
     IN `p_game_id` BIGINT UNSIGNED
 )
@@ -309,6 +344,20 @@ BEGIN
     WHERE
         ga.game_id = p_game_id AND
         a.title = p_title;
+END$$
+
+CREATE PROCEDURE `get_all_games`()
+BEGIN
+    SELECT
+        id,
+        created_at,
+        last_time_played,
+        space,
+        current_level,
+        total_deaths,
+        total_time
+    FROM Games
+    ORDER BY id;
 END$$
 
 DELIMITER ;

@@ -26,6 +26,7 @@ import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
 import 'components/bbdd/achievement.dart';
 import 'components/bbdd/achievement_manager.dart';
+import 'components/bbdd/db.dart';
 import 'components/bbdd/game_stats.dart';
 import 'components/bbdd/info.dart';
 import 'components/game/content/levelBasics/player.dart';
@@ -42,6 +43,22 @@ class PixelAdventure extends FlameGame
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
+  late final int _slot;
+
+  int get slot => _slot;
+
+  set slot(int value){
+    _slot = value;
+  }
+
+  late final int _gameId;
+
+  int get gameId => _gameId;
+
+  set gameId(int value) {
+    _gameId = value;
+  }
+
   final List<String> characters = [
     '1',
     '2',
@@ -126,6 +143,15 @@ class PixelAdventure extends FlameGame
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
 
+  Future<void> chargeSlot(int slot) async{
+    final game = await GameDatabaseService.instance.getOrCreateGameBySpace(2);
+    slot = game!['space'];
+    gameId = game['game_id'];
+    print(game);
+    print('Game ID: $gameId');
+    print('Slot: $slot');
+  }
+
   @override
   FutureOr<void> onLoad() async {
     FlameAudio.bgm.initialize();
@@ -158,6 +184,12 @@ class PixelAdventure extends FlameGame
     _loadActualLevel();
 
     return super.onLoad();
+  }
+
+  @override
+  void onDispose() {
+    GameDatabaseService.instance.close();
+    super.onDispose();
   }
 
   void initializateButtons() {

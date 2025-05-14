@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
-
 import '../../../../pixel_adventure.dart';
+import '../../../bbdd/db.dart';
 import 'background_gif.dart';
 import 'main_menu.dart';
 
-class GameSelector extends StatelessWidget {
+class GameSelector extends StatefulWidget {
   static const String id = 'GameSelector';
   final PixelAdventure game;
 
   const GameSelector(this.game, {super.key});
+
+  @override
+  State<GameSelector> createState() => _GameSelectorState();
+}
+
+class _GameSelectorState extends State<GameSelector> {
+  late Future<Map<String, dynamic>?> slot1;
+  late Future<Map<String, dynamic>?> slot2;
+  late Future<Map<String, dynamic>?> slot3;
+
+  @override
+  void initState() {
+    super.initState();
+    slot1 = GameDatabaseService.instance.getGameBySpace(1);
+    slot2 = GameDatabaseService.instance.getGameBySpace(2);
+    slot3 = GameDatabaseService.instance.getGameBySpace(3);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,37 +97,16 @@ class GameSelector extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    _slotButton(
-                      label: 'SAVE SLOT 1 - Level 3',
-                      icon: Icons.insert_drive_file,
-                      onPressed: () => _loadSlot(1, context),
-                      style: buttonStyle,
-                      textColor: textColor,
-                      isEmpty: false,
-                    ),
+                    _buildSlot(slot1, 1, buttonStyle, textColor),
                     const SizedBox(height: 5),
-                    _slotButton(
-                      label: 'SAVE SLOT 2 - Level 1',
-                      icon: Icons.insert_drive_file,
-                      onPressed: () => _loadSlot(2, context),
-                      style: buttonStyle,
-                      textColor: textColor,
-                      isEmpty: false,
-                    ),
+                    _buildSlot(slot2, 2, buttonStyle, textColor),
                     const SizedBox(height: 5),
-                    _slotButton(
-                      label: 'Empty',
-                      icon: Icons.insert_drive_file_outlined,
-                      onPressed: () => _loadSlot(3, context),
-                      style: buttonStyle,
-                      textColor: textColor,
-                      isEmpty: true,
-                    ),
+                    _buildSlot(slot3, 3, buttonStyle, textColor),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: () {
-                        game.overlays.remove(GameSelector.id);
-                        game.overlays.add(MainMenu.id);
+                        widget.game.overlays.remove(GameSelector.id);
+                        widget.game.overlays.add(MainMenu.id);
                       },
                       style: backButtonStyle,
                       child: Row(
@@ -135,6 +131,37 @@ class GameSelector extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSlot(
+      Future<Map<String, dynamic>?> future,
+      int slotNumber,
+      ButtonStyle style,
+      Color textColor,
+      ) {
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: future,
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+        final isEmpty = data == null;
+        final label = isEmpty
+            ? 'Empty'
+            : 'SAVE SLOT $slotNumber - Level ${data['current_level']}';
+
+        final icon = isEmpty
+            ? Icons.insert_drive_file_outlined
+            : Icons.insert_drive_file;
+
+        return _slotButton(
+          label: label,
+          icon: icon,
+          onPressed: () => _loadSlot(slotNumber, context),
+          style: style,
+          textColor: textColor,
+          isEmpty: isEmpty,
+        );
+      },
     );
   }
 
@@ -167,10 +194,9 @@ class GameSelector extends StatelessWidget {
     );
   }
 
-
-  void _loadSlot(int slot, BuildContext context) {
-    // TODO (BBDD) -> Load actual saved game state here
-    game.overlays.remove(GameSelector.id);
-    game.resumeEngine();
+  void _loadSlot(int slot, BuildContext context) async{
+    await widget.game.chargeSlot(slot);
+    widget.game.overlays.remove(GameSelector.id);
+    widget.game.resumeEngine();
   }
 }
