@@ -364,14 +364,19 @@ class PixelAdventure extends FlameGame
   }
 
   void removeAudios() {
-    for (final component in level.children) {
-      if (component is FireBlock) {
-        component.removeSound();
+    try{
+      for (final component in level.children) {
+        if (component is FireBlock) {
+          component.removeSound();
+        }
       }
+    }catch (e){
+      /// When the leves isn't initialized we dont remove sound
     }
   }
 
   void _loadActualLevel() {
+    removeAudios();
     removeWhere((component) => component is Level);
     if (isMusicActive) {
       FlameAudio.bgm.stop();

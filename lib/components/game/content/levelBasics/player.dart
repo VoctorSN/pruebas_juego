@@ -160,7 +160,7 @@ class Player extends SpriteAnimationGroupComponent
     hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     disappearingAnimation = _specialspriteAnimation('Desappearing', 7);
-    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6, stepTime: 0.3);
+    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6, stepTime: 0.03);
     wallSlideAnimation = _spriteAnimation('Wall Jump', 5);
 
     // List of all animations
