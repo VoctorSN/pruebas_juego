@@ -148,9 +148,9 @@ class PixelAdventure extends FlameGame
     final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
     slot = int.parse(game!['space']);
     gameId = int.parse(game['id']);
-    print(game);
-    print('Game ID: $gameId');
-    print('Slot: $slot');
+    totalDeaths = int.parse(game['total_deaths']);
+    totalTime = int.parse(game['total_time']);
+    currentLevelIndex = int.parse(game['current_level']) - 1;
   }
 
   @override
