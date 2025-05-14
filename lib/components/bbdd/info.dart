@@ -11,9 +11,10 @@ class Info {
     final bool isSoundEnabled = game.isGameSoundsActive;
     final bool isLeftHanded = game.isLeftHanded;
     final bool isShowControls = game.showControls;
-    final bool control = game.isMusicActive;
+    final bool isMusicActive = game.isMusicActive;
 
-    final double volume = game.gameSoundVolume;
+    final double gameVolume = game.gameSoundVolume;
+    final double musicVolume = game.musicSoundVolume;
     final double hudSize = game.hudSize;
     final double controlSize = game.controlSize;
   }
