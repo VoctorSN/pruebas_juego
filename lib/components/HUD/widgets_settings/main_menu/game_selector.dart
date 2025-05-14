@@ -16,16 +16,23 @@ class GameSelector extends StatefulWidget {
 }
 
 class _GameSelectorState extends State<GameSelector> {
-  late Future<Map<String, dynamic>?> slot1;
-  late Future<Map<String, dynamic>?> slot2;
-  late Future<Map<String, dynamic>?> slot3;
+  Map<String, dynamic>? slot1;
+  Map<String, dynamic>? slot2;
+  Map<String, dynamic>? slot3;
 
   @override
   void initState() {
     super.initState();
-    slot1 = GameDatabaseService.instance.getGameBySpace(1);
-    slot2 = GameDatabaseService.instance.getGameBySpace(2);
-    slot3 = GameDatabaseService.instance.getGameBySpace(3);
+    _loadSlots();
+  }
+
+  Future<void> _loadSlots() async {
+    slot1 = await GameDatabaseService.instance.getGameBySpace(1);
+    slot2 = await GameDatabaseService.instance.getGameBySpace(2);
+    slot3 = await GameDatabaseService.instance.getGameBySpace(3);
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -135,33 +142,26 @@ class _GameSelectorState extends State<GameSelector> {
   }
 
   Widget _buildSlot(
-      Future<Map<String, dynamic>?> future,
-      int slotNumber,
-      ButtonStyle style,
-      Color textColor,
-      ) {
-    return FutureBuilder<Map<String, dynamic>?>(
-      future: future,
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        final isEmpty = data == null;
-        final label = isEmpty
-            ? 'Empty'
-            : 'SAVE SLOT $slotNumber - Level ${data['current_level']}';
+    Map<String, dynamic>? data,
+    int slotNumber,
+    ButtonStyle style,
+    Color textColor,
+  ) {
+    final isEmpty = data == null;
+    final label = isEmpty
+        ? 'Empty'
+        : 'SAVE SLOT $slotNumber - Level ${data['current_level']}';
+    final icon = isEmpty
+        ? Icons.insert_drive_file_outlined
+        : Icons.insert_drive_file;
 
-        final icon = isEmpty
-            ? Icons.insert_drive_file_outlined
-            : Icons.insert_drive_file;
-
-        return _slotButton(
-          label: label,
-          icon: icon,
-          onPressed: () => _loadSlot(slotNumber, context),
-          style: style,
-          textColor: textColor,
-          isEmpty: isEmpty,
-        );
-      },
+    return _slotButton(
+      label: label,
+      icon: icon,
+      onPressed: () => _loadSlot(slotNumber, context),
+      style: style,
+      textColor: textColor,
+      isEmpty: isEmpty,
     );
   }
 
@@ -194,7 +194,7 @@ class _GameSelectorState extends State<GameSelector> {
     );
   }
 
-  void _loadSlot(int slot, BuildContext context) async{
+  void _loadSlot(int slot, BuildContext context) async {
     await widget.game.chargeSlot(slot);
     widget.game.overlays.remove(GameSelector.id);
     widget.game.resumeEngine();

@@ -10,8 +10,8 @@ CREATE TABLE `Users` (
 
 CREATE TABLE `Games` (
                          `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                         `created_at` DATETIME NULL,
-                         `last_time_played` DATETIME NULL,
+                         `created_at` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
+                         `last_time_played` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
                          `space` SMALLINT UNIQUE NOT NULL,
                          `current_level` INT NOT NULL DEFAULT 0,
                          `total_deaths` INT NOT NULL DEFAULT 0,
@@ -53,8 +53,8 @@ CREATE TABLE `GameLevel` (
                              `completed` BOOLEAN NOT NULL DEFAULT 0,
                              `unlocked` BOOLEAN NOT NULL DEFAULT false,
                              `stars` SMALLINT NOT NULL DEFAULT 0,
-                             `date_completed` DATETIME NULL,
-                             `last_time_completed` DATETIME NULL,
+                             `date_completed` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
+                             `last_time_completed` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
                              `time` BIGINT NULL,
                              `deaths` INT NOT NULL DEFAULT 0,
                              FOREIGN KEY (`level_id`) REFERENCES `Levels` (`id`),
@@ -65,7 +65,7 @@ CREATE TABLE `GameAchievement` (
                                    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                    `game_id` BIGINT UNSIGNED NOT NULL,
                                    `achievement_id` BIGINT UNSIGNED NOT NULL,
-                                   `date_achieved` DATETIME NULL,
+                                   `date_achieved` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
                                    `achieved` BOOLEAN NOT NULL DEFAULT false,
                                    FOREIGN KEY (`game_id`) REFERENCES `Games` (`id`) ON DELETE CASCADE,
                                    FOREIGN KEY (`achievement_id`) REFERENCES `Achievements` (`id`)
@@ -203,7 +203,7 @@ BEGIN
     SELECT
         id,
         created_at,
-        last_time_played,
+        COALESCE(last_time_played, '1970-01-01 00:00:00') AS last_time_played,
         space,
         current_level,
         total_deaths,
@@ -361,4 +361,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-

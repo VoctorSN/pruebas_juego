@@ -144,7 +144,7 @@ class PixelAdventure extends FlameGame
   Map<int, int> levelDeaths = {};
 
   Future<void> chargeSlot(int slot) async{
-    final game = await GameDatabaseService.instance.getOrCreateGameBySpace(2);
+    final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
     slot = game!['space'];
     gameId = game['game_id'];
     print(game);
@@ -188,7 +188,6 @@ class PixelAdventure extends FlameGame
 
   @override
   void onDispose() {
-    GameDatabaseService.instance.close();
     super.onDispose();
   }
 
