@@ -10,7 +10,7 @@ import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart
 import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
-import 'components/HUD/buttons_game/achievementsButton.dart';
+import 'components/HUD/buttons_game/achievements_button.dart';
 import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
@@ -27,6 +27,7 @@ import 'components/bbdd/achievement_manager.dart';
 import 'components/bbdd/game_stats.dart';
 import 'components/bbdd/info.dart';
 import 'components/game/content/levelBasics/player.dart';
+import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 
 class PixelAdventure extends FlameGame
@@ -70,7 +71,7 @@ class PixelAdventure extends FlameGame
     'level-08',
     'level-99',
   ];
-  int currentLevelIndex = 4;
+  int currentLevelIndex = 0;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
   Map<int,int> starsPerLevel = {};
@@ -257,6 +258,8 @@ class PixelAdventure extends FlameGame
 
     updateGlobalStats();
 
+    removeAudios();
+
     removeWhere((component) => component is Level);
 
     if (currentLevelIndex < levelNames.length - 1) {
@@ -278,6 +281,15 @@ class PixelAdventure extends FlameGame
   }
 
   void _showEndScreen() {
+  }
+
+
+  void removeAudios() {
+    for (final component in level.children) {
+      if (component is FireBlock) {
+        component.removeSound();
+      }
+    }
   }
 
   void _loadActualLevel() {

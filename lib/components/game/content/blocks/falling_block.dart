@@ -104,7 +104,7 @@ class FallingBlock extends CollisionBlock with HasGameReference<PixelAdventure> 
   }
 
   void _comeBack() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     add(MoveToEffect(initialPosition, EffectController(duration: 1.0, curve: Curves.easeInOut)));
     isOnGround = false;
     isFalling = false;

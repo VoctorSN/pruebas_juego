@@ -17,7 +17,6 @@ dependencies:
   flame_tiled: ^3.0.2
   flame_audio: ^2.11.5
   syncfusion_flutter_sliders: ^29.1.39
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

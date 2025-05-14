@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../utils/number_slider.dart';
 
@@ -62,9 +62,9 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: textPositionX),
+          const SizedBox(width: textPositionX),
           Text('Volume', style: TextStyleSingleton().style),
-          SizedBox(width: sliderPositionX),
+          const SizedBox(width: sliderPositionX),
           SizedBox(
             width: sliderWidth,
             child: NumberSlider(
@@ -74,7 +74,7 @@ class _ToggleGameVolumeWidgetState extends State<ToggleGameVolumeWidget> {
               isActive: isSliderActive,
             ),
           ),
-          SizedBox(width: buttonPositionX),
+          const SizedBox(width: buttonPositionX),
           IconButton(
             onPressed: changeState,
             icon: volumeImage,

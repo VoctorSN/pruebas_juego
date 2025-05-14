@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
@@ -62,12 +62,12 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: textPositionX),
+          const SizedBox(width: textPositionX),
           Text(
             'Music',
             style: TextStyleSingleton().style,
           ),
-          SizedBox(width: sliderPositionX),
+          const SizedBox(width: sliderPositionX),
           SizedBox(
             width: sliderWidth,
             child: NumberSlider(
@@ -77,7 +77,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
               isActive: isSliderActive,
             ),
           ),
-          SizedBox(width: buttonPositionX),
+          const SizedBox(width: buttonPositionX),
           IconButton(
             onPressed: changeState,
             icon: volumeImage,

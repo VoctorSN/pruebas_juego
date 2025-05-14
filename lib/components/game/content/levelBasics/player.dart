@@ -42,7 +42,7 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation disappearingAnimation;
   late SpriteAnimation doubleJumpingAnimation;
   late SpriteAnimation wallSlideAnimation;
-  final double stepTime = 0.05;
+  static const stepTime = 0.05;
   late RectangleComponent blackScreen;
 
   // Movement logic
@@ -162,7 +162,7 @@ class Player extends SpriteAnimationGroupComponent
     hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     disappearingAnimation = _specialspriteAnimation('Desappearing', 7);
-    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6);
+    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6, stepTime: 0.03);
     wallSlideAnimation = _spriteAnimation('Wall Jump', 5);
 
     // List of all animations
@@ -182,7 +182,7 @@ class Player extends SpriteAnimationGroupComponent
     current = PlayerState.idle;
   }
 
-  SpriteAnimation _spriteAnimation(String state, int amount) {
+  SpriteAnimation _spriteAnimation(String state, int amount, {double stepTime = stepTime}) {
     return SpriteAnimation.fromFrameData(
       game.images.fromCache('Main Characters/$character/$state.png'),
       SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: Vector2.all(32)),

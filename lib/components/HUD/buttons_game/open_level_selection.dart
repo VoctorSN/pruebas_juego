@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+
 import '../../../pixel_adventure.dart';
 
 class LevelSelection extends SpriteComponent
@@ -10,7 +12,7 @@ class LevelSelection extends SpriteComponent
   final Function onTap;
   LevelSelection({
     required this.onTap,
-    required double this.buttonSize,
+    required this.buttonSize,
   });
 
 

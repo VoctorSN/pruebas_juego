@@ -1,12 +1,12 @@
-import 'dart:ui';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/material.dart';
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/services.dart';
-import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
-import '../../../../pixel_adventure.dart';
 import 'dart:io' show Platform;
 
+import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
+import '../../../../pixel_adventure.dart';
 import 'background_gif.dart';
 import 'game_selector.dart';
 

@@ -71,7 +71,7 @@
     <property name="spawnIn" type="int" value="4"/>
    </properties>
   </object>
-  <object id="531" name="Ghost" type="Ghost" x="29.098" y="40.8627" width="32" height="32">
+  <object id="531" name="Ghost" type="Ghost" x="32" y="32" width="32" height="32">
    <properties>
     <property name="spawnIn" type="int" value="8"/>
    </properties>

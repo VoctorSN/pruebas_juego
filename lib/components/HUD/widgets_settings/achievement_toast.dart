@@ -26,7 +26,7 @@ class AchievementToast extends StatelessWidget {
           children: [
             const Text(
               '¡Logro desbloqueado!',
-              style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 4),
             Text(

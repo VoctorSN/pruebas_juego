@@ -27,10 +27,10 @@ import '../content/traps/spike.dart';
 import 'background_tile.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
-
   // Constructor and attributes
   final Player player;
   final String levelName;
+
   Level({required this.levelName, required this.player});
 
   // Logic to load the level and the player
@@ -40,8 +40,28 @@ class Level extends World with HasGameReference<PixelAdventure> {
   // Logic to manage the achievements
   late final Stopwatch _levelTimer;
   int deathCount = 0;
+
   int get levelTime => _levelTimer.elapsed.inSeconds;
   bool _timerStarted = false;
+
+  static const spawnPointClasses = [
+    Fruit,
+    Saw,
+    Checkpoint,
+    Chicken,
+    Trampoline,
+    DeathZone,
+    AlternatingBlock,
+    LootBox,
+    Spike,
+    GameText,
+    Fan,
+    Bee,
+    Ghost,
+    FireBlock,
+    KeyUnlocker,
+    Rockhead,
+  ];
 
   @override
   FutureOr<void> onLoad() async {
@@ -101,25 +121,9 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   void respawnObjects() {
-    removeWhere(
-      (component) =>
-          component is Fruit ||
-          component is Saw ||
-          component is Checkpoint ||
-          component is Chicken ||
-          component is Trampoline ||
-          component is DeathZone ||
-          component is AlternatingBlock ||
-          component is LootBox ||
-          component is Spike ||
-          component is GameText ||
-          component is Fan ||
-          component is Bee ||
-          component is Ghost ||
-          component is FireBlock ||
-          component is KeyUnlocker ||
-          component is Rockhead,
-    );
+    game.removeAudios();
+
+    removeWhere((component) => spawnPointClasses.contains(component.runtimeType));
 
     for (CollisionBlock block in collisionBlocks) {
       if (block.parent != null) {

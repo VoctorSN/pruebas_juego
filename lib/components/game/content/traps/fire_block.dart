@@ -11,8 +11,6 @@ import '../blocks/collision_block.dart';
 
 enum FireBlockState { on, off }
 
-/// TODO fix sound of the fire (Victor)
-/// TODO why the fire sounds on the start of the game and the pause? (Victor)
 class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>, CollisionCallbacks {
   // Constructor and attributes
   final int startIn;
@@ -39,6 +37,7 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
   // Player interaction logic
   late CollisionBlock collisionBlock;
   late RectangleHitbox attackHitbox;
+  late final async.Timer timer;
 
   // Rotation logic
   static const double halfRotation = 3.14159;
@@ -68,6 +67,10 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
     add(attackHitbox);
 
     rotate();
+
+    while (game.paused){
+      await async.Future.delayed(const Duration(milliseconds: 100));
+    }
 
     async.Future.delayed(Duration(seconds: startIn), _startPeriodicToggle);
   }
@@ -130,12 +133,10 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
 
   // The "_" ignores the parameter of the function
   void _startPeriodicToggle() {
-    async.Timer.periodic(const Duration(seconds: 2), (_) {
+    timer = async.Timer.periodic(const Duration(seconds: 2), (_) {
       isOn = !isOn;
       if (game.isGameSoundsActive && isOn) {
-        //SoundManager().startFireLoop(game.gameSoundVolume);
-      } else {
-        SoundManager().stopFireLoop();
+        SoundManager().playFire(game.gameSoundVolume);
       }
       fireSprite.current = isOn ? FireBlockState.on : FireBlockState.off;
     });
@@ -150,5 +151,11 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
       }
     }
     super.onCollision(intersectionPoints, other);
+  }
+
+  void removeSound(){
+    if (timer.isActive) {
+      timer.cancel();
+    }
   }
 }
