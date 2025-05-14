@@ -31,28 +31,35 @@ import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 
 class PixelAdventure extends FlameGame
-    with
-        HasKeyboardHandlerComponents,
-        DragCallbacks,
-        HasCollisionDetection,
-        TapCallbacks {
-
+    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
-  final List<String> characters = [
-    '1',
-    '2',
-    '3',
-    'Mask Dude',
-    'Ninja Frog',
-    'Pink Man',
-    'Virtual Guy',
-  ];
+  final List<String> characters = ['1', '2', '3', 'Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
   int currentCharacterIndex = 0;
   late Player player;
   late Level level;
+
+  late RectangleComponent blackScreen;
+
+  // Create the "DEFEATED" text component
+  late final textComponent = TextComponent(
+    text: 'DEFEATED',
+    textRenderer: TextPaint(
+      style: const TextStyle(
+        color: Colors.red, // Using white for visibility on black background
+        fontSize: 48, // Adjust font size for title-like appearance
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Arial', // You can change the font if needed
+      ),
+    ),
+    anchor: Anchor.center,
+    // Center the text
+    position: size / 2,
+    // Position at the center of the screen
+    priority: 1001, // Ensure the text appears above the blackScreen
+  );
 
   // Logic to manage the levels
   static const List<String> levelNames = [
@@ -74,7 +81,7 @@ class PixelAdventure extends FlameGame
   int currentLevelIndex = 0;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
-  Map<int,int> starsPerLevel = {};
+  Map<int, int> starsPerLevel = {};
 
   // Logic to manage the sounds
   bool isMusicActive = false;
@@ -94,19 +101,11 @@ class PixelAdventure extends FlameGame
   late final AchievementsButton achievementsButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
-  late final Vector2 rightControlPosition = Vector2(
-    size.x - 32 - controlSize,
-    size.y - 32 - controlSize,
-  );
-  late final Vector2 leftControlPosition = Vector2(
-    32 - controlSize,
-    32 - controlSize,
-  );
+  late final Vector2 rightControlPosition = Vector2(size.x - 32 - controlSize, size.y - 32 - controlSize);
+  late final Vector2 leftControlPosition = Vector2(32 - controlSize, 32 - controlSize);
 
   // Logic to manage achievements
-  late final AchievementManager achievementManager = AchievementManager(achievements,
-    game: this,
-  );
+  late final AchievementManager achievementManager = AchievementManager(achievements, game: this);
   Achievement? currentAchievement;
   int totalDeaths = 0;
   int totalTime = 0;
@@ -115,7 +114,6 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
-
     FlameAudio.bgm.initialize();
 
     // Load all the images and sounds in cache
@@ -149,10 +147,7 @@ class PixelAdventure extends FlameGame
   }
 
   void initializateButtons() {
-    changeSkinButton = ChangePlayerSkinButton(
-      changeCharacter: openChangeCharacterMenu,
-      buttonSize: hudSize,
-    );
+    changeSkinButton = ChangePlayerSkinButton(changeCharacter: openChangeCharacterMenu, buttonSize: hudSize);
     menuButton = OpenMenuButton(buttonSize: hudSize);
     levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
     achievementsButton = AchievementsButton(buttonSize: hudSize);
@@ -172,19 +167,22 @@ class PixelAdventure extends FlameGame
           ? const SizedBox.shrink()
           : AchievementToast(achievement: pixelAdventure.currentAchievement!);
     });
-    overlays.addEntry(LevelSelectionMenu.id, (context, game) => LevelSelectionMenu(
-      game: this,
-      totalLevels: levelNames.length,
-      onLevelSelected: (level) {
-        overlays.remove(LevelSelectionMenu.id);
-        resumeEngine();
-        currentLevelIndex = level - 1;
-        _loadActualLevel();
-      },
-      unlockedLevels: unlockedLevels,
-      completedLevels: completedLevels,
-      starsPerLevel: starsPerLevel,
-    ));
+    overlays.addEntry(
+      LevelSelectionMenu.id,
+      (context, game) => LevelSelectionMenu(
+        game: this,
+        totalLevels: levelNames.length,
+        onLevelSelected: (level) {
+          overlays.remove(LevelSelectionMenu.id);
+          resumeEngine();
+          currentLevelIndex = level - 1;
+          _loadActualLevel();
+        },
+        unlockedLevels: unlockedLevels,
+        completedLevels: completedLevels,
+        starsPerLevel: starsPerLevel,
+      ),
+    );
   }
 
   void reloadAllButtons() {
@@ -202,13 +200,13 @@ class PixelAdventure extends FlameGame
   }
 
   void removeControls() {
-      if (children.any((component) => component is JoystickComponent)) {
-        isJoystickAdded = false;
-        customJoystick.joystick.removeFromParent();
-      }
-      for (var component in children.whereType<JumpButton>()) {
-        component.removeFromParent();
-      }
+    if (children.any((component) => component is JoystickComponent)) {
+      isJoystickAdded = false;
+      customJoystick.joystick.removeFromParent();
+    }
+    for (var component in children.whereType<JumpButton>()) {
+      component.removeFromParent();
+    }
   }
 
   void addAllButtons() {
@@ -250,7 +248,6 @@ class PixelAdventure extends FlameGame
   }
 
   void completeLevel() {
-
     final levelNumber = currentLevelIndex + 1;
 
     level.stopLevelTimer();
@@ -280,9 +277,91 @@ class PixelAdventure extends FlameGame
     achievementManager.evaluate(getGameStats());
   }
 
-  void _showEndScreen() {
+  void _showEndScreen() {}
+
+  Future<void> addBlackScreen() async {
+    blackScreen = RectangleComponent(
+      size: size,
+      paint: Paint()..color = const Color(0xFF000000).withAlpha(255),
+      priority: 1000,
+    );
+
+    // Create the "DEFEATED" text component with initial transparency
+    final textComponent = TextComponent(
+      text: 'DEFEATED',
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          color: Colors.red, // Fixed red color
+          fontSize: 48,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Arial',
+        ),
+      ),
+      anchor: Anchor.center,
+      position: size / 2,
+      priority: 1001,
+    );
+
+    // Add the blackScreen to the game and the textComponent as its child
+    add(blackScreen);
+    blackScreen.add(textComponent); // Add textComponent as a child of blackScreen
+
+    // Fade-in effect with text opacity transition
+    final totalSteps = (255 / 15).ceil(); // Number of steps for alpha (0 to 255 in steps of 15)
+    for (int step = 0; step <= totalSteps; step++) {
+      final alpha = (step * 15).clamp(0, 255); // Alpha value from 0 to 255
+      final t = alpha / 255; // Progress from 0.0 to 1.0
+
+      // Update blackScreen opacity
+      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
+
+      // Update text opacity (red with increasing alpha)
+      final textColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+      textComponent.textRenderer = TextPaint(
+        style: TextStyle(color: textColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+      );
+
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    // Ensure final state
+    blackScreen.paint.color = Colors.black;
+    textComponent.textRenderer = TextPaint(
+      style: const TextStyle(
+        color: Colors.red, // Final color fully opaque
+        fontSize: 48,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Arial',
+      ),
+    );
   }
 
+  Future<void> removeBlackScreen() async {
+    await Future.delayed(const Duration(seconds: 1));
+    final totalSteps = (255 / 15).ceil(); // Number of steps for alpha (255 to 0 in steps of 15)
+    for (int step = totalSteps; step >= 0; step--) {
+      final alpha = (step * 15).clamp(0, 255); // Alpha value from 255 to 0
+      final t = alpha / 255; // Progress from 1.0 to 0.0
+
+      // Update blackScreen opacity
+      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
+
+      // Update text opacity (red with decreasing alpha)
+      final textComponent = blackScreen.children.query<TextComponent>().firstOrNull;
+      if (textComponent != null) {
+        final textColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+        textComponent.textRenderer = TextPaint(
+          style: TextStyle(color: textColor, fontSize: 48, fontWeight: FontWeight.bold, fontFamily: 'Arial'),
+        );
+      }
+
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+
+    // Clean up
+    blackScreen.children.query<TextComponent>().forEach((text) => text.removeFromParent());
+    blackScreen.removeFromParent();
+  }
 
   void removeAudios() {
     for (final component in level.children) {
@@ -296,15 +375,11 @@ class PixelAdventure extends FlameGame
     removeWhere((component) => component is Level);
     if (isMusicActive) {
       FlameAudio.bgm.stop();
-      FlameAudio.bgm.play('background_music.mp3',volume: musicSoundVolume);
+      FlameAudio.bgm.play('background_music.mp3', volume: musicSoundVolume);
     }
     level = Level(levelName: levelNames[currentLevelIndex], player: player);
 
-    cam = CameraComponent.withFixedResolution(
-      world: level,
-      width: 640,
-      height: 368,
-    );
+    cam = CameraComponent.withFixedResolution(world: level, width: 640, height: 368);
 
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
@@ -343,7 +418,7 @@ class PixelAdventure extends FlameGame
   }
 
   void switchHUDPosition() {
-    if(!showControls) return;
+    if (!showControls) return;
     reloadAllButtons();
   }
 }

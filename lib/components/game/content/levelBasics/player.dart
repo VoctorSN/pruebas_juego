@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -43,7 +42,6 @@ class Player extends SpriteAnimationGroupComponent
   late SpriteAnimation doubleJumpingAnimation;
   late SpriteAnimation wallSlideAnimation;
   static const stepTime = 0.05;
-  late RectangleComponent blackScreen;
 
   // Movement logic
   final double _gravity = 9.8;
@@ -162,7 +160,7 @@ class Player extends SpriteAnimationGroupComponent
     hitAnimation = _spriteAnimation('Hit', 7)..loop = false;
     appearingAnimation = _specialspriteAnimation('Appearing', 7);
     disappearingAnimation = _specialspriteAnimation('Desappearing', 7);
-    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6, stepTime: 0.03);
+    doubleJumpingAnimation = _spriteAnimation('Double Jump', 6, stepTime: 0.3);
     wallSlideAnimation = _spriteAnimation('Wall Jump', 5);
 
     // List of all animations
@@ -349,14 +347,14 @@ class Player extends SpriteAnimationGroupComponent
     _jumpForce = 260;
     moveSpeed = 100;
 
-    await removeBlackScreen();
+    await game.removeBlackScreen();
     isRespawning = false;
   }
 
   Future<void> _animationRespawn() async {
     await animationTicker?.completed;
     animationTicker?.reset();
-    await addBlackScreen();
+    await game.addBlackScreen();
     scale.x = 1;
     position = statringPosition - Vector2.all(32);
 
@@ -364,28 +362,6 @@ class Player extends SpriteAnimationGroupComponent
 
     await animationTicker?.completed;
     animationTicker?.reset();
-  }
-
-  Future<void> addBlackScreen() async {
-    blackScreen = RectangleComponent(
-      size: game.size,
-      paint: Paint()..color = const Color(0xFF000000).withAlpha(255),
-      priority: 1000,
-    );
-    game.add(blackScreen);
-    for (int alpha = 0; alpha < 255; alpha += 15) {
-      blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-  }
-
-  Future<void> removeBlackScreen() async {
-    for (double opacity = 1; opacity >= 0; opacity -= 0.1) {
-      blackScreen.paint.color = const Color(0xFF000000).withOpacity(opacity);
-      await Future.delayed(const Duration(milliseconds: 50));
-    }
-
-    blackScreen.removeFromParent();
   }
 
   void _reachedCheckpoint(Checkpoint other) async {

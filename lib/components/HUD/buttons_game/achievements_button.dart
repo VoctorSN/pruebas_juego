@@ -6,6 +6,8 @@ import 'package:flame/events.dart';
 import '../../../pixel_adventure.dart';
 import '../widgets_settings/achievements_menu.dart';
 
+///TODO cambiar de lado el boton de achievements
+///TODO cargar los logros de la bd
 class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
