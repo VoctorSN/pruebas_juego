@@ -43,6 +43,7 @@ class PixelAdventure extends FlameGame
 
   late RectangleComponent blackScreen;
 
+  /// TODO : Add cross per death randomly and relocate this initialization
   // Create the "DEFEATED" text component
   late final textComponent = TextComponent(
     text: 'DEFEATED',

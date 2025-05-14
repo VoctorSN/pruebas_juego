@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tutorial-01.tmx",
+    "activeFile": "tutorial-04.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -268,14 +268,14 @@
         },
         "tutorial-01.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 130.33333333333331,
-                "y": 168.66666666666666
+                "x": 323.6666666666667,
+                "y": 163.66666666666663
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -311,14 +311,14 @@
         },
         "tutorial-04.tmx": {
             "expandedObjectLayers": [
-                2,
-                4
+                4,
+                2
             ],
             "scale": 1.646171875,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 168.57292012718904,
-                "y": 179.20364481989466
+                "x": 62.26567320013288,
+                "y": 179.5073798111148
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -343,23 +343,27 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
-        "tutorial-01.tmx"
+        "tutorial-01.tmx",
+        "level-02.tmx",
+        "level-03.tmx",
+        "level-04.tmx",
+        "tutorial-04.tmx"
     ],
     "project": "Pixel Adventure.tiled-project",
     "property.type": "bool",
     "recentFiles": [
         "tutorial-01.tmx",
+        "level-02.tmx",
+        "level-03.tmx",
+        "level-04.tmx",
+        "tutorial-04.tmx",
         "level-08.tmx",
         "level-06.tmx",
         "tutorial-02.tmx",
         "tutorial-05.tmx",
         "tutorial-03.tmx",
-        "tutorial-04.tmx",
         "level-07.tmx",
-        "level-05.tmx",
-        "level-04.tmx",
-        "level-03.tmx",
-        "level-02.tmx"
+        "level-05.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

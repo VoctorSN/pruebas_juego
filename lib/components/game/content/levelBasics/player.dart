@@ -26,9 +26,9 @@ enum PlayerState { idle, running, jumping, doubleJumping, falling, hit, appearin
 
 class Player extends SpriteAnimationGroupComponent
     with HasGameReference<PixelAdventure>, KeyboardHandler, CollisionCallbacks {
+
   // Constructor and atributes
   String character;
-
   Player({super.position, this.character = 'Ninja Frog'});
 
   // Animations config
@@ -64,6 +64,7 @@ class Player extends SpriteAnimationGroupComponent
   // Double jump logic
   bool hasDoubleJumped = false;
   static const maxJumps = 2;
+  int lastWall = 0;
 
   // Death logic
   bool gotHit = false;
@@ -259,9 +260,16 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   _checkWallSlide(CollisionBlock block) {
+    final isOnRightWall = scale.x == 1;
+    final currentWall = isOnRightWall ? 1 : -1;
     if (velocity.y >= 0 && !isOnGround) {
       velocity.y = velocity.y * 0.7;
       current = PlayerState.wallSlide;
+    }
+    if (lastWall != currentWall) {
+      lastWall = currentWall;
+      jumpCount = 1;
+      lastWall = isOnRightWall ? 1 : -1;
     }
   }
 
