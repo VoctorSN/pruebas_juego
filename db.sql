@@ -100,14 +100,21 @@ INSERT INTO `Levels` (`name`, `difficulty`) VALUES
 
 DELIMITER $$
 
-CREATE PROCEDURE `create_game_at_space` (IN `space_value` SMALLINT)
+DELIMITER $$
+
+-- create_game_at_space
+DROP PROCEDURE IF EXISTS `create_game_at_space` $$
+CREATE PROCEDURE `create_game_at_space` (
+    IN `p_space_value` SMALLINT,
+    OUT `p_new_game_id` BIGINT
+)
 BEGIN
     DECLARE existing_game_id BIGINT;
 
     -- Check if there is already a game in the given space
     SELECT id INTO existing_game_id
     FROM Games
-    WHERE space = space_value
+    WHERE space = p_space_value
     LIMIT 1;
 
     -- If a game exists, delete it (related rows will be deleted via ON DELETE CASCADE)
@@ -121,26 +128,28 @@ BEGIN
         space
     )
     VALUES (
-               NOW(),
-               space_value
-           );
+        NOW(),
+        p_space_value
+    );
 
     -- Retrieve the ID of the newly inserted game
-    SET @new_game_id = LAST_INSERT_ID();
+    SET p_new_game_id = LAST_INSERT_ID();
 
     -- Insert default settings for the new game
     INSERT INTO Settings (game_id)
-    VALUES (@new_game_id);
+    VALUES (p_new_game_id);
 
     -- Populate GameLevel with all levels for the new game
     INSERT INTO GameLevel (game_id, level_id)
-    SELECT @new_game_id, id FROM Levels;
+    SELECT p_new_game_id, id FROM Levels;
 
     -- Populate GameAchievement with all achievements for the new game
     INSERT INTO GameAchievement (game_id, achievement_id)
-    SELECT @new_game_id, id FROM Achievements;
+    SELECT p_new_game_id, id FROM Achievements;
 END$$
 
+-- insert_settings_for_game
+DROP PROCEDURE IF EXISTS `insert_settings_for_game` $$
 CREATE PROCEDURE `insert_settings_for_game` (
     IN `p_game_id` BIGINT UNSIGNED,
     IN `p_HUD_size` DOUBLE,
@@ -150,7 +159,8 @@ CREATE PROCEDURE `insert_settings_for_game` (
     IN `p_is_music_active` BOOLEAN,
     IN `p_is_sound_enabled` BOOLEAN,
     IN `p_game_volume` DOUBLE,
-    IN `p_music_volume` DOUBLE
+    IN `p_music_volume` DOUBLE,
+    OUT `p_inserted_id` BIGINT UNSIGNED
 )
 BEGIN
     INSERT INTO Settings (
@@ -165,25 +175,38 @@ BEGIN
         music_volume
     )
     VALUES (
-               p_game_id,
-               p_HUD_size,
-               p_control_size,
-               p_is_left_handed,
-               p_show_controls,
-               p_is_music_active,
-               p_is_sound_enabled,
-               p_game_volume,
-               p_music_volume
-           );
+        p_game_id,
+        p_HUD_size,
+        p_control_size,
+        p_is_left_handed,
+        p_show_controls,
+        p_is_music_active,
+        p_is_sound_enabled,
+        p_game_volume,
+        p_music_volume
+    );
+
+    -- Return the ID of the newly inserted settings row
+    SET p_inserted_id = LAST_INSERT_ID();
 END$$
 
+-- get_settings_by_game_id
+DROP PROCEDURE IF EXISTS `get_settings_by_game_id` $$
 CREATE PROCEDURE `get_settings_by_game_id` (
-    IN `p_game_id` BIGINT UNSIGNED
+    IN `p_game_id` BIGINT UNSIGNED,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_HUD_size` DOUBLE,
+    OUT `p_control_size` DOUBLE,
+    OUT `p_is_left_handed` BOOLEAN,
+    OUT `p_show_controls` BOOLEAN,
+    OUT `p_is_music_active` BOOLEAN,
+    OUT `p_is_sound_enabled` BOOLEAN,
+    OUT `p_game_volume` DOUBLE,
+    OUT `p_music_volume` DOUBLE
 )
 BEGIN
     SELECT
         id,
-        game_id,
         HUD_size,
         control_size,
         is_left_handed,
@@ -192,29 +215,66 @@ BEGIN
         is_sound_enabled,
         game_volume,
         music_volume
+    INTO
+        p_id,
+        p_HUD_size,
+        p_control_size,
+        p_is_left_handed,
+        p_show_controls,
+        p_is_music_active,
+        p_is_sound_enabled,
+        p_game_volume,
+        p_music_volume
     FROM Settings
-    WHERE game_id = p_game_id;
+    WHERE game_id = p_game_id
+    LIMIT 1;
 END$$
 
+-- get_game_by_space
+DROP PROCEDURE IF EXISTS `get_game_by_space` $$
 CREATE PROCEDURE `get_game_by_space` (
-    IN `p_space` SMALLINT
+    IN `p_space` SMALLINT,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_created_at` DATETIME,
+    OUT `p_last_time_played` DATETIME,
+    OUT `p_space_out` SMALLINT,
+    OUT `p_current_level` INT,
+    OUT `p_total_deaths` INT,
+    OUT `p_total_time` BIGINT
 )
 BEGIN
     SELECT
         id,
         created_at,
-        COALESCE(last_time_played, '1970-01-01 00:00:00') AS last_time_played,
+        COALESCE(last_time_played, '1970-01-01 00:00:00'),
         space,
         current_level,
         total_deaths,
         total_time
+    INTO
+        p_id,
+        p_created_at,
+        p_last_time_played,
+        p_space_out,
+        p_current_level,
+        p_total_deaths,
+        p_total_time
     FROM Games
     WHERE space = p_space
     LIMIT 1;
 END$$
 
+-- get_or_create_game_by_space
+DROP PROCEDURE IF EXISTS `get_or_create_game_by_space` $$
 CREATE PROCEDURE `get_or_create_game_by_space` (
-    IN `p_space` SMALLINT
+    IN `p_space` SMALLINT,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_created_at` DATETIME,
+    OUT `p_last_time_played` DATETIME,
+    OUT `p_space_out` SMALLINT,
+    OUT `p_current_level` INT,
+    OUT `p_total_deaths` INT,
+    OUT `p_total_time` BIGINT
 )
 BEGIN
     DECLARE v_game_id BIGINT;
@@ -227,7 +287,7 @@ BEGIN
 
     -- If no game found, create one
     IF v_game_id IS NULL THEN
-        CALL create_game_at_space(p_space);
+        CALL create_game_at_space(p_space, v_game_id);
     END IF;
 
     -- Return the game (newly created or existing)
@@ -239,54 +299,135 @@ BEGIN
         current_level,
         total_deaths,
         total_time
+    INTO
+        p_id,
+        p_created_at,
+        p_last_time_played,
+        p_space_out,
+        p_current_level,
+        p_total_deaths,
+        p_total_time
     FROM Games
     WHERE space = p_space
     LIMIT 1;
 END$$
 
+-- get_game_levels_by_game_id
+-- Since this returns multiple rows, we'll simulate OUT parameters by selecting a single row at a time using a cursor
+DROP PROCEDURE IF EXISTS `get_game_levels_by_game_id` $$
 CREATE PROCEDURE `get_game_levels_by_game_id` (
-    IN `p_game_id` BIGINT UNSIGNED
+    IN `p_game_id` BIGINT UNSIGNED,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_level_id` BIGINT UNSIGNED,
+    OUT `p_level_name` VARCHAR(50),
+    OUT `p_level_difficulty` SMALLINT,
+    OUT `p_completed` BOOLEAN,
+    OUT `p_unlocked` BOOLEAN,
+    OUT `p_stars` SMALLINT,
+    OUT `p_date_completed` DATETIME,
+    OUT `p_last_time_completed` DATETIME,
+    OUT `p_time` BIGINT,
+    OUT `p_deaths` INT,
+    OUT `p_has_next` BOOLEAN
 )
 BEGIN
-    SELECT
-        gl.id,
-        gl.game_id,
-        gl.level_id,
-        l.name AS level_name,
-        l.difficulty AS level_difficulty,
-        gl.completed,
-        gl.unlocked,
-        gl.stars,
-        gl.date_completed,
-        gl.last_time_completed,
-        gl.time,
-        gl.deaths
-    FROM GameLevel gl
-             INNER JOIN Levels l ON gl.level_id = l.id
-    WHERE gl.game_id = p_game_id;
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR
+        SELECT
+            gl.id,
+            gl.level_id,
+            l.name,
+            l.difficulty,
+            gl.completed,
+            gl.unlocked,
+            gl.stars,
+            gl.date_completed,
+            gl.last_time_completed,
+            gl.time,
+            gl.deaths
+        FROM GameLevel gl
+        INNER JOIN Levels l ON gl.level_id = l.id
+        WHERE gl.game_id = p_game_id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+    FETCH cur INTO
+        p_id,
+        p_level_id,
+        p_level_name,
+        p_level_difficulty,
+        p_completed,
+        p_unlocked,
+        p_stars,
+        p_date_completed,
+        p_last_time_completed,
+        p_time,
+        p_deaths;
+
+    IF done = 1 THEN
+        SET p_has_next = FALSE;
+    ELSE
+        SET p_has_next = TRUE;
+    END IF;
+
+    CLOSE cur;
 END$$
 
+-- get_game_achievements_by_game_id
+-- Since this returns multiple rows, we'll use a cursor to simulate OUT parameters
+DROP PROCEDURE IF EXISTS `get_game_achievements_by_game_id` $$
 CREATE PROCEDURE `get_game_achievements_by_game_id` (
-    IN `p_game_id` BIGINT UNSIGNED
+    IN `p_game_id` BIGINT UNSIGNED,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_achievement_id` BIGINT UNSIGNED,
+    OUT `p_achievement_title` VARCHAR(50),
+    OUT `p_achievement_description` VARCHAR(300),
+    OUT `p_achievement_difficulty` SMALLINT,
+    OUT `p_date_achieved` DATETIME,
+    OUT `p_achieved` BOOLEAN,
+    OUT `p_has_next` BOOLEAN
 )
 BEGIN
-    SELECT
-        ga.id,
-        ga.game_id,
-        ga.achievement_id,
-        a.title AS achievement_title,
-        a.description AS achievement_description,
-        a.difficulty AS achievement_difficulty,
-        ga.date_achieved,
-        ga.achieved
-    FROM GameAchievement ga
-             INNER JOIN Achievements a ON ga.achievement_id = a.id
-    WHERE ga.game_id = p_game_id;
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR
+        SELECT
+            ga.id,
+            ga.achievement_id,
+            a.title,
+            a.description,
+            a.difficulty,
+            ga.date_achieved,
+            ga.achieved
+        FROM GameAchievement ga
+        INNER JOIN Achievements a ON ga.achievement_id = a.id
+        WHERE ga.game_id = p_game_id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+    FETCH cur INTO
+        p_id,
+        p_achievement_id,
+        p_achievement_title,
+        p_achievement_description,
+        p_achievement_difficulty,
+        p_date_achieved,
+        p_achieved;
+
+    IF done = 1 THEN
+        SET p_has_next = FALSE;
+    ELSE
+        SET p_has_next = TRUE;
+    END IF;
+
+    CLOSE cur;
 END$$
 
+-- mark_achievement_as_achieved
+DROP PROCEDURE IF EXISTS `mark_achievement_as_achieved` $$
 CREATE PROCEDURE `mark_achievement_as_achieved` (
     IN `p_game_id` BIGINT UNSIGNED,
-    IN `p_achievement_id` BIGINT UNSIGNED
+    IN `p_achievement_id` BIGINT UNSIGNED,
+    OUT `p_rows_affected` INT
 )
 BEGIN
     UPDATE GameAchievement
@@ -296,8 +437,12 @@ BEGIN
     WHERE
         game_id = p_game_id AND
         achievement_id = p_achievement_id;
+
+    SET p_rows_affected = ROW_COUNT();
 END$$
 
+-- update_game_level_by_game_id_and_level_name
+DROP PROCEDURE IF EXISTS `update_game_level_by_game_id_and_level_name` $$
 CREATE PROCEDURE `update_game_level_by_game_id_and_level_name` (
     IN `p_game_id` BIGINT UNSIGNED,
     IN `p_level_name` TEXT,
@@ -307,11 +452,12 @@ CREATE PROCEDURE `update_game_level_by_game_id_and_level_name` (
     IN `p_date_completed` DATETIME,
     IN `p_last_time_completed` DATETIME,
     IN `p_time` BIGINT,
-    IN `p_deaths` INT
+    IN `p_deaths` INT,
+    OUT `p_rows_affected` INT
 )
 BEGIN
     UPDATE GameLevel gl
-        INNER JOIN Levels l ON gl.level_id = l.id
+    INNER JOIN Levels l ON gl.level_id = l.id
     SET
         gl.completed = p_completed,
         gl.unlocked = p_unlocked,
@@ -323,41 +469,95 @@ BEGIN
     WHERE
         gl.game_id = p_game_id AND
         l.name = p_level_name;
+
+    SET p_rows_affected = ROW_COUNT();
 END$$
 
+-- get_game_achievement_by_title_and_game_id
+DROP PROCEDURE IF EXISTS `get_game_achievement_by_title_and_game_id` $$
 CREATE PROCEDURE `get_game_achievement_by_title_and_game_id` (
     IN `p_game_id` BIGINT UNSIGNED,
-    IN `p_title` TEXT
+    IN `p_title` TEXT,
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_achievement_id` BIGINT UNSIGNED,
+    OUT `p_achievement_title` VARCHAR(50),
+    OUT `p_description` VARCHAR(300),
+    OUT `p_difficulty` SMALLINT,
+    OUT `p_date_achieved` DATETIME,
+    OUT `p_achieved` BOOLEAN
 )
 BEGIN
     SELECT
         ga.id,
-        ga.game_id,
         ga.achievement_id,
         a.title,
         a.description,
         a.difficulty,
         ga.date_achieved,
         ga.achieved
+    INTO
+        p_id,
+        p_achievement_id,
+        p_achievement_title,
+        p_description,
+        p_difficulty,
+        p_date_achieved,
+        p_achieved
     FROM GameAchievement ga
-             INNER JOIN Achievements a ON ga.achievement_id = a.id
+    INNER JOIN Achievements a ON ga.achievement_id = a.id
     WHERE
         ga.game_id = p_game_id AND
-        a.title = p_title;
+        a.title = p_title
+    LIMIT 1;
 END$$
 
-CREATE PROCEDURE `get_all_games`()
+-- get_all_games
+-- Since this returns multiple rows, we'll use a cursor to simulate OUT parameters
+DROP PROCEDURE IF EXISTS `get_all_games` $$
+CREATE PROCEDURE `get_all_games` (
+    OUT `p_id` BIGINT UNSIGNED,
+    OUT `p_created_at` DATETIME,
+    OUT `p_last_time_played` DATETIME,
+    OUT `p_space` SMALLINT,
+    OUT `p_current_level` INT,
+    OUT `p_total_deaths` INT,
+    OUT `p_total_time` BIGINT,
+    OUT `p_has_next` BOOLEAN
+)
 BEGIN
-    SELECT
-        id,
-        created_at,
-        last_time_played,
-        space,
-        current_level,
-        total_deaths,
-        total_time
-    FROM Games
-    ORDER BY id;
+    DECLARE done INT DEFAULT 0;
+    DECLARE cur CURSOR FOR
+        SELECT
+            id,
+            created_at,
+            last_time_played,
+            space,
+            current_level,
+            total_deaths,
+            total_time
+        FROM Games
+        ORDER BY id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+    FETCH cur INTO
+        p_id,
+        p_created_at,
+        p_last_time_played,
+        p_space,
+        p_current_level,
+        p_total_deaths,
+        p_total_time;
+
+    IF done = 1 THEN
+        SET p_has_next = FALSE;
+    ELSE
+        SET p_has_next = TRUE;
+    END IF;
+
+    CLOSE cur;
 END$$
+
+DELIMITER ;
 
 DELIMITER ;

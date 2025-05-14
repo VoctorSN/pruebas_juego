@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
@@ -145,8 +146,8 @@ class PixelAdventure extends FlameGame
 
   Future<void> chargeSlot(int slot) async{
     final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
-    slot = game!['space'];
-    gameId = game['game_id'];
+    slot = int.parse(game!['space']);
+    gameId = int.parse(game['id']);
     print(game);
     print('Game ID: $gameId');
     print('Slot: $slot');

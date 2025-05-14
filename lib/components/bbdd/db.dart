@@ -47,114 +47,43 @@ class GameDatabaseService {
     }
     final conn = await _connect();
     try {
-      print('Executing query for space $space');
-      final results = await conn.execute(
-        'SELECT id, created_at, COALESCE(last_time_played, :default_time) AS last_time_played, space, current_level, total_deaths, total_time FROM Games WHERE space = :space LIMIT 1',
-        {
-          'space': space,
-          'default_time': '1970-01-01 00:00:00',
-        },
+      await conn.execute(
+        'SET @id = NULL, @created_at = NULL, @last_time_played = NULL, @current_level = NULL, @space_out = NULL, @total_deaths = NULL, @total_time = NULL',
       );
-      print('Query executed, results length: ${results.rows.length}');
-      if (results.rows.isEmpty) {
-        print('No game found for space $space');
+      await conn.execute(
+        'CALL get_game_by_space(:space, @id, @created_at, @last_time_played, @current_level, @space_out, @total_deaths, @total_time)',
+        {'space': space},
+      );
+      final result = await conn.execute(
+        'SELECT @id AS id, @created_at AS created_at, @last_time_played AS last_time_played, @space_out AS space_out, @current_level AS current_level, @total_deaths AS total_deaths, @total_time AS total_time',
+      );
+      if (result.rows.isEmpty || result.rows.first.colAt(0) == null)
         return null;
-      }
-      final row = results.rows.first.assoc();
-      print('Raw fields for space $space: $row');
-      return _sanitizeFields(row);
+      return _sanitizeFields(result.rows.first.assoc());
     } catch (e) {
-      print('Error in getGameBySpace for space $space: $e');
       throw Exception('Failed to get game by space $space: $e');
     }
   }
 
-  Future<void> createGameAtSpace(int space) async {
-    if (!_isValidSpace(space)) {
-      throw Exception('Invalid space value. Must be 1, 2, or 3.');
-    }
+  Future<Map<String, dynamic>?> getSettingsByGameId(int gameId) async {
+    if (gameId <= 0) throw Exception('Invalid gameId');
     final conn = await _connect();
     try {
-      await conn.execute('CALL create_game_at_space(:space)', {'space': space});
-    } catch (e) {
-      throw Exception('Failed to create game at space $space: $e');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getAllGames() async {
-    final conn = await _connect();
-    try {
-      final results = await conn.execute('CALL get_all_games()');
-      return results.rows.map((row) => _sanitizeFields(row.assoc())).toList();
-    } catch (e) {
-      throw Exception('Failed to get all games: $e');
-    }
-  }
-
-  Future<void> markAchievementAsAchieved(int gameId, int achievementId) async {
-    if (gameId <= 0 || achievementId <= 0) {
-      throw Exception('Invalid gameId or achievementId');
-    }
-    final conn = await _connect();
-    try {
+      await conn.execute('''
+      SET @hud = NULL, @ctrl = NULL, @left = NULL, @show = NULL, @music = NULL, @sound = NULL, @vol = NULL, @mvol = NULL
+    ''');
       await conn.execute(
-        'CALL mark_achievement_as_achieved(:gameId, :achievementId)',
-        {'gameId': gameId, 'achievementId': achievementId},
-      );
-    } catch (e) {
-      throw Exception(
-        'Failed to mark achievement $achievementId for game $gameId: $e',
-      );
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getSettingsByGameId(int gameId) async {
-    if (gameId <= 0) {
-      throw Exception('Invalid gameId');
-    }
-    final conn = await _connect();
-    try {
-      final results = await conn.execute(
-        'CALL get_settings_by_game_id(:gameId)',
+        'CALL get_settings_by_game_id(:gameId, @hud, @ctrl, @left, @show, @music, @sound, @vol, @mvol)',
         {'gameId': gameId},
       );
-      return results.rows.map((row) => _sanitizeFields(row.assoc())).toList();
+      final result = await conn.execute(
+        'SELECT @hud AS HUD_size, @ctrl AS control_size, @left AS is_left_handed, @show AS show_controls, @music AS is_music_active, @sound AS is_sound_enabled, @vol AS game_volume, @mvol AS music_volume',
+      );
+      return result.rows.isEmpty
+          ? null
+          : _sanitizeFields(result.rows.first.assoc());
     } catch (e) {
       throw Exception('Failed to get settings for game $gameId: $e');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getGameLevelsByGameId(int gameId) async {
-    if (gameId <= 0) {
-      throw Exception('Invalid gameId');
-    }
-    final conn = await _connect();
-    try {
-      final results = await conn.execute(
-        'CALL get_game_levels_by_game_id(:gameId)',
-        {'gameId': gameId},
-      );
-      return results.rows.map((row) => _sanitizeFields(row.assoc())).toList();
-    } catch (e) {
-      throw Exception('Failed to get game levels for game $gameId: $e');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> getGameAchievementsByGameId(
-    int gameId,
-  ) async {
-    if (gameId <= 0) {
-      throw Exception('Invalid gameId');
-    }
-    final conn = await _connect();
-    try {
-      final results = await conn.execute(
-        'CALL get_game_achievements_by_game_id(:gameId)',
-        {'gameId': gameId},
-      );
-      return results.rows.map((row) => _sanitizeFields(row.assoc())).toList();
-    } catch (e) {
-      throw Exception('Failed to get achievements for game $gameId: $e');
     }
   }
 
@@ -162,18 +91,23 @@ class GameDatabaseService {
     int gameId,
     String title,
   ) async {
-    if (gameId <= 0 || title.isEmpty) {
+    if (gameId <= 0 || title.isEmpty)
       throw Exception('Invalid gameId or title');
-    }
     final conn = await _connect();
     try {
-      final results = await conn.execute(
-        'CALL get_game_achievement_by_title_and_game_id(:gameId, :title)',
+      await conn.execute('''
+      SET @aid = NULL, @desc = NULL, @diff = NULL, @date = NULL, @achieved = NULL
+    ''');
+      await conn.execute(
+        'CALL get_game_achievement_by_title_and_game_id(:gameId, :title, @aid, @desc, @diff, @date, @achieved)',
         {'gameId': gameId, 'title': title},
       );
-      return results.rows.isEmpty
+      final result = await conn.execute(
+        'SELECT @aid AS achievement_id, @desc AS description, @diff AS difficulty, @date AS date_achieved, @achieved AS achieved',
+      );
+      return result.rows.isEmpty
           ? null
-          : _sanitizeFields(results.rows.first.assoc());
+          : _sanitizeFields(result.rows.first.assoc());
     } catch (e) {
       throw Exception('Failed to get achievement $title for game $gameId: $e');
     }
@@ -185,56 +119,21 @@ class GameDatabaseService {
     }
     final conn = await _connect();
     try {
-      final results = await conn.execute(
-        'CALL get_or_create_game_by_space(:space)',
+      await conn.execute(
+        'SET @id = NULL, @created_at = NULL, @last_time_played = NULL, @space_out = NULL, @current_level = NULL, @total_deaths = NULL, @total_time = NULL',
+      );
+      await conn.execute(
+        'CALL get_or_create_game_by_space(:space, @id, @created_at, @last_time_played, @space_out, @current_level, @total_deaths, @total_time)',
         {'space': space},
       );
-      return results.rows.isEmpty
-          ? null
-          : _sanitizeFields(results.rows.first.assoc());
+      final result = await conn.execute(
+        'SELECT @id AS id, @created_at AS created_at, @last_time_played AS last_time_played, @space_out AS space, @current_level AS current_level, @total_deaths AS total_deaths, @total_time AS total_time',
+      );
+      if (result.rows.isEmpty || result.rows.first.colAt(0) == null)
+        return null;
+      return _sanitizeFields(result.rows.first.assoc());
     } catch (e) {
       throw Exception('Failed to get or create game at space $space: $e');
-    }
-  }
-
-  Future<void> updateGameLevel({
-    required int gameId,
-    required String levelName,
-    required bool completed,
-    required bool unlocked,
-    required int stars,
-    required DateTime? dateCompleted,
-    required DateTime? lastTimeCompleted,
-    required int time,
-    required int deaths,
-  }) async {
-    if (gameId <= 0 ||
-        levelName.isEmpty ||
-        stars < 0 ||
-        time < 0 ||
-        deaths < 0) {
-      throw Exception('Invalid parameters for updateGameLevel');
-    }
-    final conn = await _connect();
-    try {
-      await conn.execute(
-        'CALL update_game_level_by_game_id_and_level_name(:gameId, :levelName, :completed, :unlocked, :stars, :dateCompleted, :lastTimeCompleted, :time, :deaths)',
-        {
-          'gameId': gameId,
-          'levelName': levelName,
-          'completed': completed ? 1 : 0,
-          'unlocked': unlocked ? 1 : 0,
-          'stars': stars,
-          'dateCompleted': dateCompleted?.toIso8601String() ?? '1970-01-01 00:00:00',
-          'lastTimeCompleted': lastTimeCompleted?.toIso8601String() ?? '1970-01-01 00:00:00',
-          'time': time,
-          'deaths': deaths,
-        },
-      );
-    } catch (e) {
-      throw Exception(
-        'Failed to update game level $levelName for game $gameId: $e',
-      );
     }
   }
 
@@ -243,7 +142,8 @@ class GameDatabaseService {
   Map<String, dynamic> _sanitizeFields(Map<String, dynamic> fields) {
     final sanitized = <String, dynamic>{};
     fields.forEach((key, value) {
-      if (value is String && (key == 'created_at' || key == 'last_time_played')) {
+      if (value is String &&
+          (key == 'created_at' || key == 'last_time_played')) {
         sanitized[key] = DateTime.tryParse(value) ?? DateTime(1970, 1, 1);
       } else if (value == null) {
         sanitized[key] = null;
