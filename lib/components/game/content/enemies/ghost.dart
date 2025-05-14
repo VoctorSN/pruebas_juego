@@ -1,23 +1,24 @@
-import 'dart:async';
 import 'dart:async' as async;
+import 'dart:async';
 import 'dart:math' as math;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
+
 import '../../level/sound_manager.dart';
 import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum GhostState { appearing, moving, disappearing }
 
-/// TODO: Refactor the flipHorizontal logic (Victor)
-class Ghost extends SpriteAnimationGroupComponent
-    with CollisionCallbacks, HasGameReference<PixelAdventure> {
+class Ghost extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGameReference<PixelAdventure> {
   // Constructor and attributes
   final int spawnIn;
+  final Vector2 initialPosition;
 
-  Ghost({super.position, super.size, this.spawnIn = 0});
+  Ghost({super.position, super.size, this.spawnIn = 0}) : initialPosition = position!.clone();
 
   // Animation
   late final SpriteAnimation _appearingAnimation;
@@ -36,6 +37,13 @@ class Ghost extends SpriteAnimationGroupComponent
   final double speed = 0.5;
   bool isLookingRight = false;
 
+  SpriteAnimation _spriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Enemies/Ghost/$state (44x30).png'),
+      SpriteAnimationData.sequenced(amount: amount, stepTime: stepTime, textureSize: spriteSize),
+    );
+  }
+
   @override
   FutureOr<void> onLoad() async {
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
@@ -47,17 +55,8 @@ class Ghost extends SpriteAnimationGroupComponent
   }
 
   Future<void> _loadTrailSprites() async {
-    final image = game.images.fromCache(
-      'Enemies/Ghost/Gost Particles (48x16).png',
-    );
-    trailSprites = List.generate(
-      4,
-      (i) => Sprite(
-        image,
-        srcPosition: Vector2(16.0 * i, 0),
-        srcSize: Vector2(16, 16),
-      ),
-    );
+    final image = game.images.fromCache('Enemies/Ghost/Gost Particles (48x16).png');
+    trailSprites = List.generate(4, (i) => Sprite(image, srcPosition: Vector2(16.0 * i, 0), srcSize: Vector2(16, 16)));
   }
 
   void _spawn() async {
@@ -75,6 +74,7 @@ class Ghost extends SpriteAnimationGroupComponent
     }
     current = GhostState.disappearing;
     await animationTicker?.completed;
+    position = initialPosition;
     async.Future.delayed(const Duration(seconds: 2), _spawn);
   }
 
@@ -94,8 +94,7 @@ class Ghost extends SpriteAnimationGroupComponent
   void update(double dt) {
     super.update(dt);
     if (current == GhostState.moving) {
-      _move();
-      _flipCorrectly();
+      _move(dt);
       _emitTrailParticle(dt);
     }
   }
@@ -115,14 +114,8 @@ class Ghost extends SpriteAnimationGroupComponent
             (i) => AcceleratedParticle(
               acceleration: Vector2(0, 5),
               speed: Vector2.random() * 10 - Vector2.all(5),
-              position: Vector2(
-                isLookingRight ? -size.x : 0,
-                (math.Random().nextDouble() * 20 - 10),
-              ),
-              child: SpriteParticle(
-                sprite: trailSprites[i % trailSprites.length],
-                size: Vector2(16, 16),
-              ),
+              position: Vector2(isLookingRight ? -size.x : 0, (math.Random().nextDouble() * 20 - 10)),
+              child: SpriteParticle(sprite: trailSprites[i % trailSprites.length], size: Vector2(16, 16)),
             ),
       ),
     );
@@ -130,60 +123,42 @@ class Ghost extends SpriteAnimationGroupComponent
     parent?.add(particle);
   }
 
-  void _move() {
-    if (getPlayerXPosition(player) > position.x - 10) {
-      position.x += speed;
-      if (!isLookingRight) {
-        flipHorizontallyAroundCenter();
-        isLookingRight = true;
-      }
-    } else if (getPlayerXPosition(player) < position.x) {
-      position.x -= speed;
-      if (isLookingRight) {
-        flipHorizontallyAroundCenter();
-        isLookingRight = false;
-      }
-    }
+  void _move(double dt) {
+    // Calculate player's X position once
+    final playerX = getPlayerXPosition(player);
+    final threshold = 10.0; // Threshold for X movement
+    double playerCenter = playerX + player.hitbox.width / 2;
+    double ghostCenter = position.x + ((scale.x > 0) ? width: -width) / 2;
 
-    if (player.position.y > position.y) {
-      position.y += speed;
-    } else if (player.position.y < position.y) {
-      position.y -= speed;
+    // X movement and direction
+    if (playerCenter > ghostCenter + threshold && !isLookingRight) {
+      lookRight();
+    } else if (playerCenter + threshold < ghostCenter && isLookingRight) {
+      lookLeft();
     }
+    position.x += speed * (playerCenter - ghostCenter).sign;
+
+    position.y += speed * (player.position.y - position.y).sign;
   }
 
-  void _flipCorrectly() {
-    if (getPlayerXPosition(player) > position.x - 5 && !isLookingRight) {
-      flipHorizontallyAroundCenter();
-      isLookingRight = true;
-    } else if (getPlayerXPosition(player) < position.x && isLookingRight) {
-      flipHorizontallyAroundCenter();
-      isLookingRight = false;
-    }
+  void lookLeft() {
+    flipHorizontallyAroundCenter();
+    isLookingRight = false;
   }
 
-  SpriteAnimation _spriteAnimation(String state, int amount) {
-    return SpriteAnimation.fromFrameData(
-      game.images.fromCache('Enemies/Ghost/$state (44x30).png'),
-      SpriteAnimationData.sequenced(
-        amount: amount,
-        stepTime: stepTime,
-        textureSize: spriteSize,
-      ),
-    );
+  void lookRight() {
+    flipHorizontallyAroundCenter();
+    isLookingRight = true;
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    if (other is Player) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Player && current == GhostState.moving) {
       other.collidedWithEnemy();
     }
-    if (other is Ghost && position.x < other.position.x) {
+    if (other is Ghost && position.x < other.position.x && current == GhostState.moving) {
       respawn();
     }
-    super.onCollisionStart(intersectionPoints, other);
+    super.onCollision(intersectionPoints, other);
   }
 }
