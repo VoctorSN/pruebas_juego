@@ -12,12 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mysql_client: ^0.0.13
   cupertino_icons: ^1.0.8
   flame: ^1.28.1
   flame_tiled: ^3.0.2
   flame_audio: ^2.11.5
   syncfusion_flutter_sliders: ^29.1.39
+  sqflite_common_ffi: ^2.3.5
+  sqlite3_flutter_libs: ^0.5.32
 dev_dependencies:
   flutter_test:
     sdk: flutter

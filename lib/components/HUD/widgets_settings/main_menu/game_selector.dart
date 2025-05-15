@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+
 import '../../../../pixel_adventure.dart';
-import '../../../bbdd/db.dart';
+import '../../../bbdd/models/game.dart';
+import '../../../bbdd/services/game_service.dart';
 import 'background_gif.dart';
 import 'main_menu.dart';
 
@@ -16,20 +18,23 @@ class GameSelector extends StatefulWidget {
 }
 
 class _GameSelectorState extends State<GameSelector> {
-  Map<String, dynamic>? slot1;
-  Map<String, dynamic>? slot2;
-  Map<String, dynamic>? slot3;
+  Game? slot1;
+  Game? slot2;
+  Game? slot3;
+
+  GameService? gameService;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _loadSlots();
   }
 
   Future<void> _loadSlots() async {
-    slot1 = await GameDatabaseService.instance.getGameBySpace(1);
-    slot2 = await GameDatabaseService.instance.getGameBySpace(2);
-    slot3 = await GameDatabaseService.instance.getGameBySpace(3);
+    await getGameService();
+    slot1 = await gameService!.getGameBySpace(space: 1);
+    slot2 = await gameService!.getGameBySpace(space: 2);
+    slot3 = await gameService!.getGameBySpace(space: 3);
     if (mounted) {
       setState(() {});
     }
@@ -142,15 +147,15 @@ class _GameSelectorState extends State<GameSelector> {
   }
 
   Widget _buildSlot(
-    Map<String, dynamic>? data,
+    Game? game,
     int slotNumber,
     ButtonStyle style,
     Color textColor,
   ) {
-    final isEmpty = data == null;
+    final isEmpty = game == null;
     final label = isEmpty
         ? 'Empty'
-        : 'SAVE SLOT $slotNumber - Level ${data['current_level']}';
+        : 'SAVE SLOT $slotNumber - Level ${game.currentLevel}';
     final icon = isEmpty
         ? Icons.insert_drive_file_outlined
         : Icons.insert_drive_file;
@@ -198,5 +203,9 @@ class _GameSelectorState extends State<GameSelector> {
     await widget.game.chargeSlot(slot);
     widget.game.overlays.remove(GameSelector.id);
     widget.game.resumeEngine();
+  }
+
+  Future<void> getGameService() async{
+    gameService ??= await GameService.getInstance();
   }
 }

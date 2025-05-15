@@ -1,156 +1,203 @@
-import 'package:mysql_client/mysql_client.dart';
+import 'dart:io';
 
-class GameDatabaseService {
-  static final GameDatabaseService instance = GameDatabaseService._internal();
+import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-  MySQLConnection? _connection;
+class DatabaseManager {
+  static DatabaseManager? _instance;
+  late final Database _database;
 
-  GameDatabaseService._internal();
+  DatabaseManager._internal();
 
-  Future<MySQLConnection> _connect() async {
-    try {
-      if (_connection != null) {
-        // Verifica si la conexión está viva
-        await _connection!.execute('SELECT 1');
-        return _connection!;
-      }
-      _connection = await MySQLConnection.createConnection(
-        host: '127.0.0.1',
-        port: 3306,
-        userName: 'root',
-        password: 'root',
-        databaseName: 'FRUIT_COLLECTOR',
-        secure: true, // Cambia a true si usas SSL
-      );
-      await _connection!.connect(timeoutMs: 10000);
-      return _connection!;
-    } catch (e) {
-      throw Exception('Failed to connect to database: $e');
+  static Future<DatabaseManager> getInstance() async {
+    if (_instance == null) {
+      final DatabaseManager manager = DatabaseManager._internal();
+      await manager._initDatabase();
+      _instance = manager;
     }
+    return _instance!;
   }
 
-  Future<void> close() async {
-    try {
-      if (_connection != null) {
-        await _connection!.close();
-      }
-    } catch (e) {
-      print('Error closing database connection: $e');
-    } finally {
-      _connection = null;
+  Future<void> _initDatabase() async {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
     }
+
+    final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
+
+    _database = await databaseFactory.openDatabase(
+      dbPath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (db, version) async {
+          // USERS
+          await initializeDB(db);
+        },
+      ),
+    );
   }
 
-  Future<Map<String, dynamic>?> getGameBySpace(int space) async {
-    if (!_isValidSpace(space)) {
-      throw Exception('Invalid space value. Must be 1, 2, or 3.');
-    }
-    final conn = await _connect();
-    try {
-      await conn.execute(
-        'SET @id = NULL, @created_at = NULL, @last_time_played = NULL, @current_level = NULL, @space_out = NULL, @total_deaths = NULL, @total_time = NULL',
-      );
-      await conn.execute(
-        'CALL get_game_by_space(:space, @id, @created_at, @last_time_played, @current_level, @space_out, @total_deaths, @total_time)',
-        {'space': space},
-      );
-      final result = await conn.execute(
-        'SELECT @id AS id, @created_at AS created_at, @last_time_played AS last_time_played, @space_out AS space_out, @current_level AS current_level, @total_deaths AS total_deaths, @total_time AS total_time',
-      );
-      if (result.rows.isEmpty || result.rows.first.colAt(0) == null)
-        return null;
-      return _sanitizeFields(result.rows.first.assoc());
-    } catch (e) {
-      throw Exception('Failed to get game by space $space: $e');
-    }
-  }
+  Future<void> initializeDB(Database db) async {
+    await db.execute('''
+    CREATE TABLE Users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT UNIQUE
+    );
+  ''');
 
-  Future<Map<String, dynamic>?> getSettingsByGameId(int gameId) async {
-    if (gameId <= 0) throw Exception('Invalid gameId');
-    final conn = await _connect();
-    try {
-      await conn.execute('''
-      SET @hud = NULL, @ctrl = NULL, @left = NULL, @show = NULL, @music = NULL, @sound = NULL, @vol = NULL, @mvol = NULL
-    ''');
-      await conn.execute(
-        'CALL get_settings_by_game_id(:gameId, @hud, @ctrl, @left, @show, @music, @sound, @vol, @mvol)',
-        {'gameId': gameId},
-      );
-      final result = await conn.execute(
-        'SELECT @hud AS HUD_size, @ctrl AS control_size, @left AS is_left_handed, @show AS show_controls, @music AS is_music_active, @sound AS is_sound_enabled, @vol AS game_volume, @mvol AS music_volume',
-      );
-      return result.rows.isEmpty
-          ? null
-          : _sanitizeFields(result.rows.first.assoc());
-    } catch (e) {
-      throw Exception('Failed to get settings for game $gameId: $e');
-    }
-  }
+    // GAMES
+    await db.execute('''
+        CREATE TABLE Games (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          created_at TEXT NOT NULL DEFAULT '1970-01-01 00:00:00',
+          last_time_played TEXT NOT NULL DEFAULT '1970-01-01 00:00:00',
+          space INTEGER NOT NULL UNIQUE,
+          current_level INTEGER NOT NULL DEFAULT 0,
+          total_deaths INTEGER NOT NULL DEFAULT 0,
+          total_time INTEGER NOT NULL DEFAULT 0
+        );
+      ''');
 
-  Future<Map<String, dynamic>?> getGameAchievementByTitle(
-    int gameId,
-    String title,
-  ) async {
-    if (gameId <= 0 || title.isEmpty)
-      throw Exception('Invalid gameId or title');
-    final conn = await _connect();
-    try {
-      await conn.execute('''
-      SET @aid = NULL, @desc = NULL, @diff = NULL, @date = NULL, @achieved = NULL
-    ''');
-      await conn.execute(
-        'CALL get_game_achievement_by_title_and_game_id(:gameId, :title, @aid, @desc, @diff, @date, @achieved)',
-        {'gameId': gameId, 'title': title},
-      );
-      final result = await conn.execute(
-        'SELECT @aid AS achievement_id, @desc AS description, @diff AS difficulty, @date AS date_achieved, @achieved AS achieved',
-      );
-      return result.rows.isEmpty
-          ? null
-          : _sanitizeFields(result.rows.first.assoc());
-    } catch (e) {
-      throw Exception('Failed to get achievement $title for game $gameId: $e');
-    }
-  }
+    // SETTINGS
+    await db.execute('''
+        CREATE TABLE Settings (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          game_id INTEGER NOT NULL,
+          HUD_size REAL NOT NULL DEFAULT 0.0,
+          control_size REAL NOT NULL DEFAULT 0.0,
+          is_left_handed INTEGER NOT NULL DEFAULT 0,
+          show_controls INTEGER NOT NULL DEFAULT 0,
+          is_music_active INTEGER NOT NULL DEFAULT 1,
+          is_sound_enabled INTEGER NOT NULL DEFAULT 1,
+          game_volume REAL NOT NULL DEFAULT 0.0,
+          music_volume REAL NOT NULL DEFAULT 0.0,
+          FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
+        );
+      ''');
 
-  Future<Map<String, dynamic>?> getOrCreateGameBySpace(int space) async {
-    if (!_isValidSpace(space)) {
-      throw Exception('Invalid space value. Must be 1, 2, or 3.');
-    }
-    final conn = await _connect();
-    try {
-      await conn.execute(
-        'SET @id = NULL, @created_at = NULL, @last_time_played = NULL, @space_out = NULL, @current_level = NULL, @total_deaths = NULL, @total_time = NULL',
-      );
-      await conn.execute(
-        'CALL get_or_create_game_by_space(:space, @id, @created_at, @last_time_played, @space_out, @current_level, @total_deaths, @total_time)',
-        {'space': space},
-      );
-      final result = await conn.execute(
-        'SELECT @id AS id, @created_at AS created_at, @last_time_played AS last_time_played, @space_out AS space, @current_level AS current_level, @total_deaths AS total_deaths, @total_time AS total_time',
-      );
-      if (result.rows.isEmpty || result.rows.first.colAt(0) == null)
-        return null;
-      return _sanitizeFields(result.rows.first.assoc());
-    } catch (e) {
-      throw Exception('Failed to get or create game at space $space: $e');
-    }
-  }
+    // ACHIEVEMENTS
+    await db.execute('''
+        CREATE TABLE Achievements (
+          id INTEGER PRIMARY KEY,
+          title TEXT NOT NULL UNIQUE,
+          description TEXT NOT NULL,
+          difficulty INTEGER NOT NULL
+        );
+      ''');
 
-  bool _isValidSpace(int space) => space >= 1 && space <= 3;
+    // LEVELS
+    await db.execute('''
+        CREATE TABLE Levels (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          difficulty INTEGER NOT NULL
+        );
+      ''');
 
-  Map<String, dynamic> _sanitizeFields(Map<String, dynamic> fields) {
-    final sanitized = <String, dynamic>{};
-    fields.forEach((key, value) {
-      if (value is String &&
-          (key == 'created_at' || key == 'last_time_played')) {
-        sanitized[key] = DateTime.tryParse(value) ?? DateTime(1970, 1, 1);
-      } else if (value == null) {
-        sanitized[key] = null;
-      } else {
-        sanitized[key] = value;
-      }
+    // GAMELEVEL
+    await db.execute('''
+        CREATE TABLE GameLevel (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          level_id INTEGER NOT NULL,
+          game_id INTEGER NOT NULL,
+          completed INTEGER NOT NULL DEFAULT 0,
+          unlocked INTEGER NOT NULL DEFAULT 0,
+          stars INTEGER NOT NULL DEFAULT 0,
+          date_completed TEXT NOT NULL DEFAULT '1970-01-01 00:00:00',
+          last_time_completed TEXT NOT NULL DEFAULT '1970-01-01 00:00:00',
+          time INTEGER,
+          deaths INTEGER NOT NULL DEFAULT 0,
+          FOREIGN KEY (level_id) REFERENCES Levels(id),
+          FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
+        );
+      ''');
+
+    // GAMEACHIEVEMENT
+    await db.execute('''
+        CREATE TABLE GameAchievement (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          game_id INTEGER NOT NULL,
+          achievement_id INTEGER NOT NULL,
+          date_achieved TEXT NOT NULL DEFAULT '1970-01-01 00:00:00',
+          achieved INTEGER NOT NULL DEFAULT 0,
+          FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE,
+          FOREIGN KEY (achievement_id) REFERENCES Achievements(id)
+        );
+      ''');
+
+    // INSERT INTO Achievements
+    await db.insert('Achievements', {
+      'id': 1001,
+      'title': 'Completa el nivel 1',
+      'description': 'Has completado el nivel 1',
+      'difficulty': 1,
     });
-    return sanitized;
+    await db.insert('Achievements', {
+      'id': 1002,
+      'title': 'Completa todos los niveles',
+      'description': 'Has completado todos los niveles',
+      'difficulty': 6,
+    });
+    await db.insert('Achievements', {
+      'id': 1003,
+      'title': 'Nivel 4 superado',
+      'description': 'Has completado el nivel 4',
+      'difficulty': 2,
+    });
+    await db.insert('Achievements', {
+      'id': 1004,
+      'title': 'Speedrunner',
+      'description': 'Acaba el juego en menos de 300 segundos',
+      'difficulty': 9,
+    });
+    await db.insert('Achievements', {
+      'id': 1005,
+      'title': 'Sin morir',
+      'description': 'Completa el juego sin morir',
+      'difficulty': 10,
+    });
+    await db.insert('Achievements', {
+      'id': 1006,
+      'title': 'Estrellas de nivel 5',
+      'description': 'Encuentra todas las estrellas en el nivel 5',
+      'difficulty': 5,
+    });
+    await db.insert('Achievements', {
+      'id': 1007,
+      'title': 'Nivel 2 perfecto',
+      'description': 'Pásate el nivel 2 sin morir',
+      'difficulty': 4,
+    });
+    await db.insert('Achievements', {
+      'id': 1008,
+      'title': 'Nivel 6 en 5 seg',
+      'description': 'Completa el nivel 6 en menos de 5 segundos',
+      'difficulty': 7,
+    });
+
+    // INSERT INTO Levels
+    final List<Map<String, Object>> levels = [
+      {'name': 'tutorial-01', 'difficulty': 1},
+      {'name': 'tutorial-02', 'difficulty': 1},
+      {'name': 'tutorial-03', 'difficulty': 2},
+      {'name': 'tutorial-04', 'difficulty': 2},
+      {'name': 'tutorial-05', 'difficulty': 3},
+      {'name': 'level-01', 'difficulty': 4},
+      {'name': 'level-02', 'difficulty': 4},
+      {'name': 'level-03', 'difficulty': 5},
+      {'name': 'level-04', 'difficulty': 5},
+      {'name': 'level-05', 'difficulty': 6},
+      {'name': 'level-06', 'difficulty': 6},
+      {'name': 'level-07', 'difficulty': 7},
+      {'name': 'level-08', 'difficulty': 8},
+      {'name': 'level-99', 'difficulty': 10},
+    ];
+
+    for (final level in levels) {
+      await db.insert('Levels', level);
+    }
   }
+
+  Database get database => _database;
 }

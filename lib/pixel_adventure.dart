@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -27,7 +25,6 @@ import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
 import 'components/bbdd/achievement.dart';
 import 'components/bbdd/achievement_manager.dart';
-import 'components/bbdd/db.dart';
 import 'components/bbdd/game_stats.dart';
 import 'components/bbdd/info.dart';
 import 'components/game/content/levelBasics/player.dart';
@@ -145,12 +142,12 @@ class PixelAdventure extends FlameGame
   Map<int, int> levelDeaths = {};
 
   Future<void> chargeSlot(int slot) async{
-    final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
-    slot = int.parse(game!['space']);
-    gameId = int.parse(game['id']);
-    totalDeaths = int.parse(game['total_deaths']);
-    totalTime = int.parse(game['total_time']);
-    currentLevelIndex = int.parse(game['current_level']) - 1;
+    // final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
+    // slot = int.parse(game!['space']);
+    // gameId = int.parse(game['id']);
+    // totalDeaths = int.parse(game['total_deaths']);
+    // totalTime = int.parse(game['total_time']);
+    // currentLevelIndex = int.parse(game['current_level']) - 1;
   }
 
   @override
