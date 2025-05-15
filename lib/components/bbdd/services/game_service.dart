@@ -26,9 +26,37 @@ class GameService {
   }
 
   Future<void> saveGameBySpace({required Game? game}) async {
-    if(game == null) return;
+    if (game == null) return;
     print('Saving game with space: ${game.space}');
     await _gameRepository.updateGameBySpace(game: game);
+  }
+
+  Future<Game> getLastPlayedOrCreate() async {
+    final List<Game?> games = await Future.wait([
+      _gameRepository.getGameBySpace(space: 1),
+      _gameRepository.getGameBySpace(space: 2),
+      _gameRepository.getGameBySpace(space: 3),
+    ]);
+
+    final DateTime epoch = DateTime.parse('1970-01-01 00:00:00');
+
+    // Filtrar juegos válidos con last_time_played real
+    final List<Game> validGames = games.whereType<Game>().where((g) => g.lastTimePlayed.isAfter(epoch)).toList();
+
+    if (validGames.isNotEmpty) {
+      validGames.sort((a, b) => b.lastTimePlayed.compareTo(a.lastTimePlayed));
+      return validGames.first;
+    }
+
+    // Buscar el primer espacio libre
+    for (int space = 1; space <= 3; space++) {
+      if (games[space - 1] == null) {
+        return await getOrCreateGameBySpace(space: space);
+      }
+    }
+
+    // Todos los slots existen pero sin partida real: sobrescribe el primero
+    return await getOrCreateGameBySpace(space: 1);
   }
 
   Future<Game> getOrCreateGameBySpace({required int space}) async {

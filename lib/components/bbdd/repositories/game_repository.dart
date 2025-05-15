@@ -39,11 +39,12 @@ class GameRepository {
   }
 
   Future<void> updateGameBySpace({required Game game}) async {
+    print('Updating game with space: ${game.space} and last_time_played: ${game.lastTimePlayed}');
     final int count = await _db.update(
       'Games',
       {
         'created_at': game.createdAt.toIso8601String(),
-        'last_time_played': game.lastTimePlayed.toIso8601String(),
+        'last_time_played': DateTime.now().toIso8601String(),
         'current_level': game.currentLevel,
         'total_deaths': game.totalDeaths,
         'total_time': game.totalTime,

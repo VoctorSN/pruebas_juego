@@ -107,9 +107,17 @@ class PixelAdventure extends FlameGame
 
   models.Game? gameData;
 
+  Future<void> chargeGame(models.Game game) async {
+    gameData = game;
+
+    ///load first level with data
+    _loadActualLevel();
+  }
+
   Future<void> chargeSlot(int slot) async {
     await getGameService();
     gameData = await gameService!.getOrCreateGameBySpace(space: slot);
+
     ///load first level with data
     _loadActualLevel();
   }
@@ -141,7 +149,6 @@ class PixelAdventure extends FlameGame
     // Open the main menu
     pauseEngine();
     overlays.add(MainMenu.id);
-
 
     return super.onLoad();
   }
@@ -177,7 +184,11 @@ class PixelAdventure extends FlameGame
       (context, game) => LevelSelectionMenu(
         game: this,
         totalLevels: levelNames.length,
-        onLevelSelected: (level) {
+        onLevelSelected: (level) async {
+          updateGlobalStats();
+          final GameService service = await GameService.getInstance();
+          await service.saveGameBySpace(game: gameData);
+
           overlays.remove(LevelSelectionMenu.id);
           resumeEngine();
           gameData?.currentLevel = level - 1;
@@ -248,6 +259,8 @@ class PixelAdventure extends FlameGame
   void updateGlobalStats() {
     if (gameData == null) return;
     gameData!.totalTime += level.levelTime;
+    print("level deaths: ${gameData!.totalDeaths}");
+    print("level deaths: ${level.deathCount}");
     gameData!.totalDeaths += level.deathCount;
     levelTimes[gameData!.currentLevel + 1] = level.levelTime;
     levelDeaths[gameData!.currentLevel + 1] = level.deathCount;
@@ -297,9 +310,8 @@ class PixelAdventure extends FlameGame
     }
   }
 
-  void _loadActualLevel() async{
-
-        final service = await GameService.getInstance();
+  void _loadActualLevel() async {
+    final service = await GameService.getInstance();
     service.saveGameBySpace(game: gameData);
     removeAudios();
     removeWhere((component) => component is Level);

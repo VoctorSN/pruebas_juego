@@ -81,7 +81,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
   void _startLevel() {
     _levelTimer = Stopwatch()..start();
     _timerStarted = false;
-    deathCount = game.gameData?.totalDeaths ?? 0;
+    deathCount = 0;
   }
 
   void registerDeath() {

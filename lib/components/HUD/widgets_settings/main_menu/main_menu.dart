@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
 
 import '../../../../pixel_adventure.dart';
+import '../../../bbdd/models/game.dart';
+import '../../../bbdd/services/game_service.dart';
 import 'background_gif.dart';
 import 'game_selector.dart';
 
@@ -20,8 +22,7 @@ class MainMenu extends StatefulWidget {
   State<MainMenu> createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu>
-    with SingleTickerProviderStateMixin {
+class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin {
   late final AnimationController _logoController;
 
   final Color baseColor = const Color(0xFF212030);
@@ -72,13 +73,7 @@ class _MainMenuState extends State<MainMenu>
       style: buttonStyle,
       onPressed: onPressed,
       icon: Icon(icon, color: textColor),
-      label: Text(
-        label,
-        style: TextStyleSingleton().style.copyWith(
-          fontSize: 14,
-          color: textColor,
-        ),
-      ),
+      label: Text(label, style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
     );
   }
 
@@ -92,91 +87,84 @@ class _MainMenuState extends State<MainMenu>
         const BackgroundWidget(),
         Padding(
           padding: EdgeInsets.only(top: topPadding),
-          child: isMobile
-              ? Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ScaleTransition(
-                    scale: _logoController,
-                    child: Text(
-                      'FRUIT COLLECTOR',
-                      textAlign: TextAlign.center,
-                      style: TextStyleSingleton().style.copyWith(
-                        fontSize: 48,
-                        color: textColor,
-                        shadows: const [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(3, 3),
-                            blurRadius: 6,
+          child:
+              isMobile
+                  ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ScaleTransition(
+                            scale: _logoController,
+                            child: Text(
+                              'FRUIT COLLECTOR',
+                              textAlign: TextAlign.center,
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 48,
+                                color: textColor,
+                                shadows: const [Shadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 6)],
+                              ),
+                            ),
                           ),
+                          const SizedBox(height: 24),
+                          _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
+                          const SizedBox(height: 12),
+                          _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
+                          const SizedBox(height: 12),
+                          _menuButton('QUIT', Icons.exit_to_app, () {
+                            FlameAudio.bgm.stop();
+                            SystemNavigator.pop();
+                          }),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
-                  const SizedBox(height: 12),
-                  _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
-                  const SizedBox(height: 12),
-                  _menuButton('QUIT', Icons.exit_to_app, () {
-                    FlameAudio.bgm.stop();
-                    SystemNavigator.pop();
-                  }),
-                ],
-              ),
-            ),
-          )
-              : Padding(
-            padding: const EdgeInsets.only(left: 34),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: EdgeInsets.only(top: topPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ScaleTransition(
-                      scale: _logoController,
-                      child: Text(
-                        'FRUIT COLLECTOR',
-                        style: TextStyleSingleton().style.copyWith(
-                          fontSize: 48,
-                          color: textColor,
-                          shadows: const [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(3, 3),
-                              blurRadius: 6,
+                  )
+                  : Padding(
+                    padding: const EdgeInsets.only(left: 34),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: topPadding),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ScaleTransition(
+                              scale: _logoController,
+                              child: Text(
+                                'FRUIT COLLECTOR',
+                                style: TextStyleSingleton().style.copyWith(
+                                  fontSize: 48,
+                                  color: textColor,
+                                  shadows: const [Shadow(color: Colors.black, offset: Offset(3, 3), blurRadius: 6)],
+                                ),
+                              ),
                             ),
+                            const SizedBox(height: 24),
+                            _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
+                            const SizedBox(height: 12),
+                            _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
+                            const SizedBox(height: 12),
+                            _menuButton('QUIT', Icons.exit_to_app, () {
+                              FlameAudio.bgm.stop();
+                              SystemNavigator.pop();
+                            }),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    _menuButton('CONTINUE', Icons.play_arrow, _onContinuePressed),
-                    const SizedBox(height: 12),
-                    _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
-                    const SizedBox(height: 12),
-                    _menuButton('QUIT', Icons.exit_to_app, () {
-                      FlameAudio.bgm.stop();
-                      SystemNavigator.pop();
-                    }),
-                  ],
-                ),
-              ),
-            ),
-          ),
+                  ),
         ),
       ],
     );
   }
 
-  void _onContinuePressed() {
-    // TODO (BBDD) -> implement bbdd info
+  void _onContinuePressed() async {
+    final GameService service = await GameService.getInstance();
+    final Game game = await service.getLastPlayedOrCreate();
+    print('Continuing game...$game');
+    widget.game.chargeGame(game);
+
     widget.game.overlays.remove(MainMenu.id);
     widget.game.resumeEngine();
   }
