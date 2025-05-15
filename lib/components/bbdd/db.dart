@@ -12,10 +12,19 @@ class DatabaseManager {
   static Future<DatabaseManager> getInstance() async {
     if (_instance == null) {
       final DatabaseManager manager = DatabaseManager._internal();
+
+      ///await manager._resetDatabase(); // ⚠️ Solo para desarrollo
       await manager._initDatabase();
       _instance = manager;
     }
     return _instance!;
+  }
+
+    ///For rebase de Database
+    ///await databaseFactory.deleteDatabase(dbPath);
+  Future<void> _resetDatabase() async {
+    final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
+    await databaseFactory.deleteDatabase(dbPath);
   }
 
   Future<void> _initDatabase() async {
@@ -55,7 +64,8 @@ class DatabaseManager {
           space INTEGER NOT NULL UNIQUE,
           current_level INTEGER NOT NULL DEFAULT 0,
           total_deaths INTEGER NOT NULL DEFAULT 0,
-          total_time INTEGER NOT NULL DEFAULT 0
+          total_time INTEGER NOT NULL DEFAULT 0,
+          current_character INTEGER NOT NULL DEFAULT 0
         );
       ''');
 

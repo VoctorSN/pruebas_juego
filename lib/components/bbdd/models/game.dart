@@ -1,11 +1,12 @@
 class Game {
   final int id;
   final DateTime createdAt;
-  final DateTime lastTimePlayed;
+  DateTime lastTimePlayed;
   final int space;
-  final int currentLevel;
-  final int totalDeaths;
-  final int totalTime;
+  int currentLevel;
+  int totalDeaths;
+  int totalTime;
+  int currentCharacter;
 
   Game({
     required this.id,
@@ -15,6 +16,7 @@ class Game {
     required this.currentLevel,
     required this.totalDeaths,
     required this.totalTime,
+    required this.currentCharacter,
   });
 
   Map<String, Object?> toMap() {
@@ -26,6 +28,7 @@ class Game {
       'current_level': currentLevel,
       'total_deaths': totalDeaths,
       'total_time': totalTime,
+      'current_character': currentCharacter,
     };
   }
 
@@ -38,6 +41,12 @@ class Game {
       currentLevel: map['current_level'] as int,
       totalDeaths: map['total_deaths'] as int,
       totalTime: map['total_time'] as int,
+      currentCharacter: map['current_character'] as int,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Game{id: $id, createdAt: $createdAt, lastTimePlayed: $lastTimePlayed, space: $space, currentLevel: $currentLevel, totalDeaths: $totalDeaths, totalTime: $totalTime}';
   }
 }

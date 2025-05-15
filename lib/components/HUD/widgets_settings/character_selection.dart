@@ -19,7 +19,7 @@ class CharacterSelection extends StatefulWidget {
 class _CharacterSelectionState extends State<CharacterSelection> {
   final PixelAdventure game;
 
-  late int selectedIndex = game.currentCharacterIndex;
+  late int selectedIndex = game.gameData?.currentCharacter ?? 0;
 
   final List<String> characterAssets = [
     'assets/images/Main Characters/1/Jump.png',

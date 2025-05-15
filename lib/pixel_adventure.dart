@@ -27,6 +27,8 @@ import 'components/bbdd/achievement.dart';
 import 'components/bbdd/achievement_manager.dart';
 import 'components/bbdd/game_stats.dart';
 import 'components/bbdd/info.dart';
+import 'components/bbdd/models/game.dart' as models;
+import 'components/bbdd/services/game_service.dart';
 import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
@@ -41,21 +43,8 @@ class PixelAdventure extends FlameGame
   @override
   Color backgroundColor() => const Color(0xFF211F30);
   late CameraComponent cam;
-  late final int _slot;
 
-  int get slot => _slot;
-
-  set slot(int value){
-    _slot = value;
-  }
-
-  late final int _gameId;
-
-  int get gameId => _gameId;
-
-  set gameId(int value) {
-    _gameId = value;
-  }
+  GameService? gameService;
 
   final List<String> characters = [
     '1',
@@ -66,7 +55,6 @@ class PixelAdventure extends FlameGame
     'Pink Man',
     'Virtual Guy',
   ];
-  int currentCharacterIndex = 0;
   late Player player;
   late Level level;
 
@@ -87,7 +75,6 @@ class PixelAdventure extends FlameGame
     'level-08',
     'level-99',
   ];
-  int currentLevelIndex = 0;
   List<int> unlockedLevels = [1, 2, 3, 4, 5]; //tutorial levels
   List<int> completedLevels = [];
   Map<int, int> starsPerLevel = {};
@@ -136,18 +123,15 @@ class PixelAdventure extends FlameGame
     game: this,
   );
   Achievement? currentAchievement;
-  int totalDeaths = 0;
-  int totalTime = 0;
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
 
+  models.Game? gameData;
+
   Future<void> chargeSlot(int slot) async{
-    // final game = await GameDatabaseService.instance.getOrCreateGameBySpace(slot);
-    // slot = int.parse(game!['space']);
-    // gameId = int.parse(game['id']);
-    // totalDeaths = int.parse(game['total_deaths']);
-    // totalTime = int.parse(game['total_time']);
-    // currentLevelIndex = int.parse(game['current_level']) - 1;
+
+    await getGameService();
+    gameData = await gameService!.getOrCreateGameBySpace(space: 1);
   }
 
   @override
@@ -159,7 +143,7 @@ class PixelAdventure extends FlameGame
     await SoundManager().init();
 
     // Load the player skin
-    player = Player(character: characters[currentCharacterIndex]);
+    player = Player(character: characters[gameData?.currentCharacter ?? 0]);
 
     // Detect if the device is a mobile device to show the controls
     try {
@@ -230,7 +214,7 @@ class PixelAdventure extends FlameGame
         onLevelSelected: (level) {
           overlays.remove(LevelSelectionMenu.id);
           resumeEngine();
-          currentLevelIndex = level - 1;
+          gameData?.currentLevel = level - 1;
           _loadActualLevel();
         },
         unlockedLevels: unlockedLevels,
@@ -288,27 +272,28 @@ class PixelAdventure extends FlameGame
 
   GameStats getGameStats() {
     return GameStats(
-      currentLevel: currentLevelIndex + 1,
+      currentLevel: gameData?.currentLevel ?? 0 + 1,
       levelName: level.levelName,
       unlockedLevels: List.from(unlockedLevels),
       completedLevels: List.from(completedLevels),
       starsPerLevel: Map.from(starsPerLevel),
-      totalDeaths: totalDeaths,
-      totalTime: totalTime,
+      totalDeaths: gameData?.totalDeaths ?? 0,
+      totalTime: gameData?.totalTime ?? 0,
       levelTimes: Map.from(levelTimes),
       levelDeaths: Map.from(levelDeaths),
     );
   }
 
   void updateGlobalStats() {
-    totalTime += level.levelTime;
-    totalDeaths += level.deathCount;
-    levelTimes[currentLevelIndex + 1] = level.levelTime;
-    levelDeaths[currentLevelIndex + 1] = level.deathCount;
+    if(gameData == null) return;
+    gameData!.totalTime += level.levelTime;
+    gameData!.totalDeaths += level.deathCount;
+    levelTimes[gameData!.currentLevel + 1] = level.levelTime;
+    levelDeaths[gameData!.currentLevel + 1] = level.deathCount;
   }
 
   void completeLevel() {
-    final levelNumber = currentLevelIndex + 1;
+    final levelNumber = gameData?.currentLevel ?? 0 + 1;
 
     level.stopLevelTimer();
     Info(this).getLevel(level);
@@ -319,8 +304,8 @@ class PixelAdventure extends FlameGame
 
     removeWhere((component) => component is Level);
 
-    if (currentLevelIndex < levelNames.length - 1) {
-      currentLevelIndex++;
+    if (gameData != null && (gameData!.currentLevel < levelNames.length - 1)) {
+      gameData!.currentLevel++;
       _loadActualLevel();
       if (!completedLevels.contains(levelNumber)) {
         completedLevels.add(levelNumber);
@@ -330,7 +315,7 @@ class PixelAdventure extends FlameGame
       }
     } else {
       _showEndScreen(); // Implemented method to show the end screen
-      currentLevelIndex = 0;
+      gameData!.currentLevel = 0;
       _loadActualLevel();
     }
 
@@ -358,7 +343,7 @@ class PixelAdventure extends FlameGame
       FlameAudio.bgm.stop();
       FlameAudio.bgm.play('background_music.mp3', volume: musicSoundVolume);
     }
-    level = Level(levelName: levelNames[currentLevelIndex], player: player);
+    level = Level(levelName: levelNames[gameData?.currentLevel ?? 0], player: player);
 
     cam = CameraComponent.withFixedResolution(
       world: level,
@@ -383,8 +368,9 @@ class PixelAdventure extends FlameGame
   }
 
   void selectedCharacterIndex(int index) {
-    currentCharacterIndex = index;
-    player.updateCharacter(characters[currentCharacterIndex]);
+    if(gameData == null) return;
+    gameData!.currentCharacter = index;
+    player.updateCharacter(characters[index]);
   }
 
   void openChangeCharacterMenu() {
@@ -412,6 +398,10 @@ class PixelAdventure extends FlameGame
   }
 
   addBlackScreen() {
-    deathScreen.addBlackScreen(totalDeaths + level.deathCount);
+    deathScreen.addBlackScreen(gameData?.totalDeaths ?? 0 + level.deathCount);
+  }
+
+  Future<void> getGameService() async{
+    gameService ??= await GameService.getInstance();
   }
 }

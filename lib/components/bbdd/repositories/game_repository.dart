@@ -37,4 +37,18 @@ class GameRepository {
 
     return Game.fromMap(result.first);
   }
+
+  Future<int> insertGame({required int space}) async {
+  final int gameId = await _db.insert('Games', {
+    'created_at': DateTime.now().toIso8601String(),
+    'last_time_played': DateTime.now().toIso8601String(),
+    'space': space,
+    'current_level': 0,
+    'total_deaths': 0,
+    'total_time': 0,
+    'current_character': 0,
+  });
+  return gameId;
+}
+
 }

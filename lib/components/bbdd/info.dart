@@ -24,7 +24,7 @@ class Info {
   }
 
   void getMenuLevel() {
-    final int currentLevelIndex = game.currentLevelIndex;
+    final int currentLevelIndex = game.gameData?.currentLevel ?? 0;
     final List<int> unlockedLevels = game.unlockedLevels;
     final List<int> completedLevels = game.completedLevels;
     final Map<int,int> starsPerLevel = game.starsPerLevel;
@@ -33,7 +33,7 @@ class Info {
   void getLevel(Level level) {
     // Id level (currentLevelIndex), bool completado, int stars, int time, numero muertes
     final String name = game.level.levelName;
-    final int currentLevelIndex = game.currentLevelIndex;
+    final int currentLevelIndex = game.gameData?.currentLevel ?? 1;
     final int stars = game.starsPerLevel[currentLevelIndex + 1] ?? 0;
     final int time = level.levelTime;
     final int deaths = level.deathCount;

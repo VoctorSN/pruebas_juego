@@ -32,7 +32,7 @@ class KeyUnlocker extends SpriteAnimationComponent with HasGameReference<PixelAd
         SpriteAnimationData.sequenced(amount: 6, stepTime: stepTime, textureSize: Vector2.all(32), loop: false),
       );
 
-      final currentLevel = game.currentLevelIndex + 1;
+      final currentLevel = game.gameData?.currentLevel ?? 0 + 1;
       game.starsPerLevel[currentLevel] = (game.starsPerLevel[currentLevel] ?? 0) + 1;
 
       await animationTicker?.completed;
