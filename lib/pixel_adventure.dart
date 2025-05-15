@@ -23,10 +23,9 @@ import 'components/HUD/widgets_settings/level_selection_menu.dart';
 import 'components/HUD/widgets_settings/main_menu/game_selector.dart';
 import 'components/HUD/widgets_settings/pause_menu.dart';
 import 'components/HUD/widgets_settings/settings/settings_menu.dart';
-import 'components/bbdd/achievement.dart';
-import 'components/bbdd/achievement_manager.dart';
-import 'components/bbdd/game_stats.dart';
-import 'components/bbdd/info.dart';
+import 'components/game/achievements/achievement.dart';
+import 'components/game/achievements/achievement_manager.dart';
+import 'components/game/achievements/game_stats.dart';
 import 'components/bbdd/models/game.dart' as models;
 import 'components/bbdd/services/game_service.dart';
 import 'components/game/content/levelBasics/player.dart';
@@ -178,7 +177,7 @@ class PixelAdventure extends FlameGame
       final pixelAdventure = game as PixelAdventure;
       return pixelAdventure.currentAchievement == null
           ? const SizedBox.shrink()
-          : AchievementToast(achievement: pixelAdventure.currentAchievement!);
+          : AchievementToast(achievement: pixelAdventure.currentAchievement!, onDismiss: () => overlays.remove(AchievementToast.id));
     });
     overlays.addEntry(
       LevelSelectionMenu.id,
@@ -186,7 +185,6 @@ class PixelAdventure extends FlameGame
         game: this,
         totalLevels: levelNames.length,
         onLevelSelected: (level) async {
-          updateGlobalStats();
           final GameService service = await GameService.getInstance();
           await service.saveGameBySpace(game: gameData);
 
@@ -260,18 +258,13 @@ class PixelAdventure extends FlameGame
   void updateGlobalStats() {
     if (gameData == null) return;
     gameData!.totalTime += level.levelTime;
-    print("level deaths: ${gameData!.totalDeaths}");
-    print("level deaths: ${level.deathCount}");
     gameData!.totalDeaths += level.deathCount;
-    levelTimes[gameData!.currentLevel + 1] = level.levelTime;
-    levelDeaths[gameData!.currentLevel + 1] = level.deathCount;
+    levelTimes[gameData!.currentLevel] = level.levelTime;
+    levelDeaths[gameData!.currentLevel] = level.deathCount;
   }
 
   void completeLevel() async {
-    final levelNumber = gameData?.currentLevel ?? 0 + 1;
-
     level.stopLevelTimer();
-    Info(this).getLevel(level);
 
     updateGlobalStats();
 
@@ -280,19 +273,22 @@ class PixelAdventure extends FlameGame
     removeWhere((component) => component is Level);
 
     if (gameData != null && (gameData!.currentLevel < levelNames.length - 1)) {
+      if (!completedLevels.contains(gameData!.currentLevel)) {
+        completedLevels.add(gameData!.currentLevel);
+      }
+      if (!unlockedLevels.contains(gameData!.currentLevel + 1)) {
+        unlockedLevels.add(gameData!.currentLevel + 1);
+      }
       gameData!.currentLevel++;
       _loadActualLevel();
-      if (!completedLevels.contains(levelNumber)) {
-        completedLevels.add(levelNumber);
-      }
-      if (!unlockedLevels.contains(levelNumber + 1)) {
-        unlockedLevels.add(levelNumber + 1);
-      }
     } else {
       _showEndScreen(); // Implemented method to show the end screen
       gameData!.currentLevel = 0;
       _loadActualLevel();
     }
+
+    print(completedLevels);
+    print(levelDeaths);
 
     achievementManager.evaluate(getGameStats());
   }
