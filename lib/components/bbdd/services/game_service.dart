@@ -15,7 +15,6 @@ class GameService {
 
   static Future<GameService> getInstance() async {
     if (_instance == null) {
-
       final GameService service = GameService._internal();
       service._gameRepository = await GameRepository.getInstance();
       service._settingsRepository = await SettingsRepository.getInstance();
@@ -24,6 +23,12 @@ class GameService {
       _instance = service;
     }
     return _instance!;
+  }
+
+  Future<void> saveGameBySpace({required Game? game}) async {
+    if(game == null) return;
+    print('Saving game with space: ${game.space}');
+    await _gameRepository.updateGameBySpace(game: game);
   }
 
   Future<Game> getOrCreateGameBySpace({required int space}) async {

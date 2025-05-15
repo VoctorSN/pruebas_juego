@@ -38,17 +38,36 @@ class GameRepository {
     return Game.fromMap(result.first);
   }
 
-  Future<int> insertGame({required int space}) async {
-  final int gameId = await _db.insert('Games', {
-    'created_at': DateTime.now().toIso8601String(),
-    'last_time_played': DateTime.now().toIso8601String(),
-    'space': space,
-    'current_level': 0,
-    'total_deaths': 0,
-    'total_time': 0,
-    'current_character': 0,
-  });
-  return gameId;
-}
+  Future<void> updateGameBySpace({required Game game}) async {
+    final int count = await _db.update(
+      'Games',
+      {
+        'created_at': game.createdAt.toIso8601String(),
+        'last_time_played': game.lastTimePlayed.toIso8601String(),
+        'current_level': game.currentLevel,
+        'total_deaths': game.totalDeaths,
+        'total_time': game.totalTime,
+        'current_character': game.currentCharacter,
+      },
+      where: 'space = ?',
+      whereArgs: [game.space],
+    );
 
+    if (count == 0) {
+      // throw Exception('No game found with space ${game.space}');
+    }
+  }
+
+  Future<int> insertGame({required int space}) async {
+    final int gameId = await _db.insert('Games', {
+      'created_at': DateTime.now().toIso8601String(),
+      'last_time_played': DateTime.now().toIso8601String(),
+      'space': space,
+      'current_level': 0,
+      'total_deaths': 0,
+      'total_time': 0,
+      'current_character': 0,
+    });
+    return gameId;
+  }
 }

@@ -34,11 +34,7 @@ import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 
 class PixelAdventure extends FlameGame
-    with
-        HasKeyboardHandlerComponents,
-        DragCallbacks,
-        HasCollisionDetection,
-        TapCallbacks {
+    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -46,15 +42,7 @@ class PixelAdventure extends FlameGame
 
   GameService? gameService;
 
-  final List<String> characters = [
-    '1',
-    '2',
-    '3',
-    'Mask Dude',
-    'Ninja Frog',
-    'Pink Man',
-    'Virtual Guy',
-  ];
+  final List<String> characters = ['1', '2', '3', 'Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
   late Player player;
   late Level level;
 
@@ -108,30 +96,22 @@ class PixelAdventure extends FlameGame
   late final AchievementsButton achievementsButton;
   late final JumpButton jumpButton;
   bool isJoystickAdded = false;
-  late final Vector2 rightControlPosition = Vector2(
-    size.x - 32 - controlSize,
-    size.y - 32 - controlSize,
-  );
-  late final Vector2 leftControlPosition = Vector2(
-    32 - controlSize,
-    32 - controlSize,
-  );
+  late final Vector2 rightControlPosition = Vector2(size.x - 32 - controlSize, size.y - 32 - controlSize);
+  late final Vector2 leftControlPosition = Vector2(32 - controlSize, 32 - controlSize);
 
   // Logic to manage achievements
-  late final AchievementManager achievementManager = AchievementManager(
-    achievements,
-    game: this,
-  );
+  late final AchievementManager achievementManager = AchievementManager(achievements, game: this);
   Achievement? currentAchievement;
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
 
   models.Game? gameData;
 
-  Future<void> chargeSlot(int slot) async{
-
+  Future<void> chargeSlot(int slot) async {
     await getGameService();
-    gameData = await gameService!.getOrCreateGameBySpace(space: 1);
+    gameData = await gameService!.getOrCreateGameBySpace(space: slot);
+    ///load first level with data
+    _loadActualLevel();
   }
 
   @override
@@ -162,8 +142,6 @@ class PixelAdventure extends FlameGame
     pauseEngine();
     overlays.add(MainMenu.id);
 
-    // Load the first level
-    _loadActualLevel();
 
     return super.onLoad();
   }
@@ -174,15 +152,9 @@ class PixelAdventure extends FlameGame
   }
 
   void initializateButtons() {
-    changeSkinButton = ChangePlayerSkinButton(
-      changeCharacter: openChangeCharacterMenu,
-      buttonSize: hudSize,
-    );
+    changeSkinButton = ChangePlayerSkinButton(changeCharacter: openChangeCharacterMenu, buttonSize: hudSize);
     menuButton = OpenMenuButton(buttonSize: hudSize);
-    levelSelectionButton = LevelSelection(
-      buttonSize: hudSize,
-      onTap: openLevelSelectionMenu,
-    );
+    levelSelectionButton = LevelSelection(buttonSize: hudSize, onTap: openLevelSelectionMenu);
     achievementsButton = AchievementsButton(buttonSize: hudSize);
     jumpButton = JumpButton(controlSize);
   }
@@ -190,14 +162,8 @@ class PixelAdventure extends FlameGame
   void addOverlays() {
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
-    overlays.addEntry(
-      CharacterSelection.id,
-      (context, game) => CharacterSelection(this),
-    );
-    overlays.addEntry(
-      AchievementMenu.id,
-      (context, game) => AchievementMenu(this),
-    );
+    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -257,12 +223,7 @@ class PixelAdventure extends FlameGame
     changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
     levelSelectionButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
-    addAll([
-      changeSkinButton,
-      levelSelectionButton,
-      menuButton,
-      achievementsButton,
-    ]);
+    addAll([changeSkinButton, levelSelectionButton, menuButton, achievementsButton]);
     if (showControls) {
       jumpButton.size = Vector2.all(controlSize * 2);
       add(jumpButton);
@@ -285,14 +246,14 @@ class PixelAdventure extends FlameGame
   }
 
   void updateGlobalStats() {
-    if(gameData == null) return;
+    if (gameData == null) return;
     gameData!.totalTime += level.levelTime;
     gameData!.totalDeaths += level.deathCount;
     levelTimes[gameData!.currentLevel + 1] = level.levelTime;
     levelDeaths[gameData!.currentLevel + 1] = level.deathCount;
   }
 
-  void completeLevel() {
+  void completeLevel() async {
     final levelNumber = gameData?.currentLevel ?? 0 + 1;
 
     level.stopLevelTimer();
@@ -336,7 +297,10 @@ class PixelAdventure extends FlameGame
     }
   }
 
-  void _loadActualLevel() {
+  void _loadActualLevel() async{
+
+        final service = await GameService.getInstance();
+    service.saveGameBySpace(game: gameData);
     removeAudios();
     removeWhere((component) => component is Level);
     if (isMusicActive) {
@@ -345,11 +309,7 @@ class PixelAdventure extends FlameGame
     }
     level = Level(levelName: levelNames[gameData?.currentLevel ?? 0], player: player);
 
-    cam = CameraComponent.withFixedResolution(
-      world: level,
-      width: 640,
-      height: 368,
-    );
+    cam = CameraComponent.withFixedResolution(world: level, width: 640, height: 368);
 
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
@@ -368,7 +328,7 @@ class PixelAdventure extends FlameGame
   }
 
   void selectedCharacterIndex(int index) {
-    if(gameData == null) return;
+    if (gameData == null) return;
     gameData!.currentCharacter = index;
     player.updateCharacter(characters[index]);
   }
@@ -398,10 +358,13 @@ class PixelAdventure extends FlameGame
   }
 
   addBlackScreen() {
-    deathScreen.addBlackScreen(gameData?.totalDeaths ?? 0 + level.deathCount);
+    final gameDeaths = gameData?.totalDeaths ?? 0;
+    print("total muertes");
+    print(gameDeaths + level.deathCount);
+    deathScreen.addBlackScreen(gameDeaths + level.deathCount);
   }
 
-  Future<void> getGameService() async{
+  Future<void> getGameService() async {
     gameService ??= await GameService.getInstance();
   }
 }
