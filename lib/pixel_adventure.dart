@@ -35,6 +35,7 @@ import 'components/game/level/level.dart';
 
 class PixelAdventure extends FlameGame
     with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
+
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -230,9 +231,9 @@ class PixelAdventure extends FlameGame
     achievementsButton.size = Vector2.all(hudSize);
     levelSelectionButton.size = Vector2.all(hudSize);
     menuButton.size = Vector2.all(hudSize);
-    achievementsButton.position = Vector2(size.x - (hudSize * 4) - 50, 10);
-    changeSkinButton.position = Vector2(size.x - (hudSize * 3) - 40, 10);
-    levelSelectionButton.position = Vector2(size.x - (hudSize * 2) - 30, 10);
+    achievementsButton.position = Vector2((hudSize * 3) - 10, 10);
+    changeSkinButton.position =  Vector2((hudSize * 2) - 20, 10);
+    levelSelectionButton.position = Vector2(hudSize - 30, 10);
     menuButton.position = Vector2(size.x - hudSize - 20, 10);
     addAll([changeSkinButton, levelSelectionButton, menuButton, achievementsButton]);
     if (showControls) {
@@ -371,8 +372,6 @@ class PixelAdventure extends FlameGame
 
   addBlackScreen() {
     final gameDeaths = gameData?.totalDeaths ?? 0;
-    print("total muertes");
-    print(gameDeaths + level.deathCount);
     deathScreen.addBlackScreen(gameDeaths + level.deathCount);
   }
 
