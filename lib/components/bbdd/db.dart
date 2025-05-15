@@ -28,25 +28,27 @@ class DatabaseManager {
   }
 
   Future<void> _initDatabase() async {
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
-    }
-
-    final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
-    print('Database path: $dbPath');
-
-    _database = await databaseFactory.openDatabase(
-      dbPath,
-      options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: (db, version) async {
-          // USERS
-          await initializeDB(db);
-        },
-      ),
-    );
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  } else {
+    databaseFactory = databaseFactory; // móvil usa la versión normal
   }
+
+  final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
+  print('Database path: $dbPath');
+
+  _database = await databaseFactory.openDatabase(
+    dbPath,
+    options: OpenDatabaseOptions(
+      version: 1,
+      onCreate: (db, version) async {
+        await initializeDB(db);
+      },
+    ),
+  );
+}
+
 
   Future<void> initializeDB(Database db) async {
     await db.execute('''
