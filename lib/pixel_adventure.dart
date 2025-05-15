@@ -23,6 +23,7 @@ import 'components/HUD/widgets/level_selection_menu.dart';
 import 'components/HUD/widgets/main_menu/game_selector.dart';
 import 'components/HUD/widgets/pause_menu.dart';
 import 'components/HUD/widgets/settings/settings_menu.dart';
+import 'components/bbdd/models/achievement.dart';
 import 'components/game/achievements/achievement.dart';
 import 'components/game/achievements/achievement_manager.dart';
 import 'components/game/achievements/game_stats.dart';
@@ -100,7 +101,7 @@ class PixelAdventure extends FlameGame
   late final Vector2 leftControlPosition = Vector2(32 - controlSize, 32 - controlSize);
 
   // Logic to manage achievements
-  late final AchievementManager achievementManager = AchievementManager(achievements, game: this);
+  late final AchievementManager achievementManager = AchievementManager(game: this);
   Achievement? currentAchievement;
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
@@ -170,7 +171,7 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
     overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
-    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this));
+    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this,achievementManager.allAchievements));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -291,7 +292,6 @@ class PixelAdventure extends FlameGame
     print(levelDeaths);
     print(starsPerLevel);
 
-    achievementManager.evaluate(getGameStats());
   }
 
   void _showEndScreen() {}
@@ -324,6 +324,7 @@ class PixelAdventure extends FlameGame
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
     addAll([cam, level]);
+    achievementManager.evaluate(getGameStats());
   }
 
   void addJoystick() {

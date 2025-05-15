@@ -1,25 +1,17 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
-
-class AchievementToRefactr {
-  final String description;
-  final bool isCompleted;
-  final int difficulty;
-
-  const AchievementToRefactr({
-    required this.description,
-    required this.isCompleted,
-    required this.difficulty,
-  });
-}
+import 'package:fruit_collector/components/bbdd/models/achievement.dart';
+import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 
 /// TODO: change stars to other icons and load achievements
 
 class AchievementMenu extends StatefulWidget {
-  final dynamic game;
+  final PixelAdventure game;
+  final List<Map<String, dynamic>> achievements;
 
-  const AchievementMenu(this.game, {super.key});
+  const AchievementMenu(this.game, this.achievements, {super.key});
 
   static const String id = 'achievement_menu';
 
@@ -33,23 +25,10 @@ class _AchievementMenuState extends State<AchievementMenu> {
   static const double _rowHeight = 100;
   static const double _rowSpacing = 12;
 
-  final List<AchievementToRefactr> _achievements = const [
-    AchievementToRefactr(description: 'Complete the tutorial', isCompleted: true, difficulty: 1),
-    AchievementToRefactr(description: 'Win a boss fight without taking damage', isCompleted: false, difficulty: 5),
-    AchievementToRefactr(description: 'Collect 100 coins in a single level', isCompleted: true, difficulty: 3),
-    AchievementToRefactr(description: 'Finish a level in under 30 seconds', isCompleted: false, difficulty: 4),
-    AchievementToRefactr(description: 'Unlock all characters', isCompleted: true, difficulty: 4),
-    AchievementToRefactr(description: 'Jump on 50 enemies', isCompleted: false, difficulty: 2),
-    AchievementToRefactr(description: 'Die 10 times in the same level', isCompleted: true, difficulty: 1),
-    AchievementToRefactr(description: 'Complete all levels', isCompleted: false, difficulty: 5),
-    AchievementToRefactr(description: 'Find a secret area', isCompleted: true, difficulty: 3),
-    AchievementToRefactr(description: 'Play for 3 hours total', isCompleted: true, difficulty: 2),
-  ];
-
   void _scrollByRow({required bool forward}) {
     final double currentOffset = _scrollController.offset;
     final int currentRow = (currentOffset / (_rowHeight + _rowSpacing)).round();
-    final int targetRow = forward ? currentRow + 1 : (currentRow - 1).clamp(0, _achievements.length - 1);
+    final int targetRow = forward ? currentRow + 1 : (currentRow - 1).clamp(0, widget.achievements.length - 1);
     final double targetOffset = targetRow * (_rowHeight + _rowSpacing);
 
     _scrollController.animateTo(
@@ -119,11 +98,13 @@ class _AchievementMenuState extends State<AchievementMenu> {
                       Expanded(
                         child: ListView.separated(
                           controller: _scrollController,
-                          itemCount: _achievements.length,
+                          itemCount: widget.achievements.length,
                           separatorBuilder: (_, __) => const SizedBox(height: _rowSpacing),
                           itemBuilder: (context, index) {
-                            final AchievementToRefactr achievement = _achievements[index];
-                            final String trophyPath = achievement.isCompleted
+                            final Map<String, dynamic> achievementData = widget.achievements[index];
+                            final Achievement achievement = achievementData['achievement'];
+                            final GameAchievement gameAchievement = achievementData['gameAchievement'];
+                            final String trophyPath = gameAchievement.achieved
                                 ? 'assets/images/GUI/HUD/trophy_gold.png'
                                 : 'assets/images/GUI/HUD/trophy_gray.png';
 
