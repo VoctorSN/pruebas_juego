@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/main_menu/main_menu.dart';
+import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/game/level/death_screen.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
@@ -16,13 +16,13 @@ import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
-import 'components/HUD/widgets_settings/achievement_toast.dart';
-import 'components/HUD/widgets_settings/achievements_menu.dart';
-import 'components/HUD/widgets_settings/character_selection.dart';
-import 'components/HUD/widgets_settings/level_selection_menu.dart';
-import 'components/HUD/widgets_settings/main_menu/game_selector.dart';
-import 'components/HUD/widgets_settings/pause_menu.dart';
-import 'components/HUD/widgets_settings/settings/settings_menu.dart';
+import 'components/HUD/widgets/achievement_toast.dart';
+import 'components/HUD/widgets/achievements_menu.dart';
+import 'components/HUD/widgets/character_selection.dart';
+import 'components/HUD/widgets/level_selection_menu.dart';
+import 'components/HUD/widgets/main_menu/game_selector.dart';
+import 'components/HUD/widgets/pause_menu.dart';
+import 'components/HUD/widgets/settings/settings_menu.dart';
 import 'components/game/achievements/achievement.dart';
 import 'components/game/achievements/achievement_manager.dart';
 import 'components/game/achievements/game_stats.dart';
@@ -289,6 +289,7 @@ class PixelAdventure extends FlameGame
 
     print(completedLevels);
     print(levelDeaths);
+    print(starsPerLevel);
 
     achievementManager.evaluate(getGameStats());
   }

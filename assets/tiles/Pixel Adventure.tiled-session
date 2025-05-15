@@ -269,8 +269,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 342.66666666666663,
-                "y": 183.66666666666669
+                "x": 319.6666666666667,
+                "y": 179.33333333333334
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -321,10 +321,10 @@
         },
         "tutorial-05.tmx": {
             "scale": 1.5882812499999999,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 319.5277914412199,
-                "y": 183.53172651254306
+                "y": 183.21692080668961
             }
         },
         "tutorial-05.tmx#Pixel Adventure": {

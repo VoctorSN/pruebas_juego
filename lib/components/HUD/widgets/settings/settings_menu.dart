@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/music_controller_widget.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/pause_menu.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/resize_HUD.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/resize_controls.dart';
-import 'package:fruit_collector/components/HUD/widgets_settings/settings/game_volume_controller_widget.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/music_controller_widget.dart';
+import 'package:fruit_collector/components/HUD/widgets/pause_menu.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/resize_HUD.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/resize_controls.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/game_volume_controller_widget.dart';
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 

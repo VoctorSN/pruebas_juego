@@ -1,8 +1,7 @@
 import 'package:fruit_collector/components/game/achievements/game_stats.dart';
 import 'package:fruit_collector/components/game/achievements/achievement.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
-
-import '../../HUD/widgets_settings/achievement_toast.dart';
+import '../../HUD/widgets/achievement_toast.dart';
 
 class AchievementManager {
 

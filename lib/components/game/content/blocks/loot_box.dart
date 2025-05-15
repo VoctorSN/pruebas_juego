@@ -4,7 +4,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/blocks/collision_block.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
-import 'package:fruit_collector/components/game/content/levelExtras/key_unlocker.dart';
+import 'package:fruit_collector/components/game/content/levelExtras/stars.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
 import '../../../../pixel_adventure.dart';
@@ -87,7 +87,7 @@ class LootBox extends SpriteAnimationGroupComponent with HasGameReference<PixelA
 
   void dropObject() {
     Vector2 keyPosition = position + (size / 2) - Vector2.all(8); // Centra el KeyUnlocker
-    KeyUnlocker key = KeyUnlocker(position: keyPosition, size: Vector2.all(16), name: objectInside);
+    Stars key = Stars(position: keyPosition, size: Vector2.all(16), name: objectInside);
     addSpawnPoint(key);
   }
 }
