@@ -155,14 +155,14 @@
         },
         "level-01.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.52890625,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 341.747572815534,
-                "y": 183.46448645886562
+                "x": 337.1691364333163,
+                "y": 178.23198773633112
             }
         },
         "level-01.tmx#Pixel Adventure": {
@@ -176,7 +176,7 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 320,
-                "y": 183.5
+                "y": 184
             }
         },
         "level-03.tmx": {
@@ -184,55 +184,55 @@
             "selectedLayer": 1,
             "viewCenter": {
                 "x": 320.1219512195122,
-                "y": 183.84146341463412
+                "y": 184.14634146341461
             }
         },
         "level-04.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.66,
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 319.8795180722892,
-                "y": 184.03614457831327
+                "y": 183.73493975903614
             }
         },
         "level-05.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.66,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 332.83132530120486,
-                "y": 184.03614457831327
+                "x": 319.8795180722892,
+                "y": 183.73493975903614
             }
         },
         "level-06.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.6666666666667,
-                "y": 182.99999999999997
+                "x": 320,
+                "y": 183.99999999999997
             }
         },
         "level-07.tmx": {
             "expandedObjectLayers": [
-                3,
-                2
+                2,
+                3
             ],
             "scale": 1.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 621,
-                "y": 181.66666666666663
+                "x": 320,
+                "y": 183.99999999999997
             }
         },
         "level-08.tmx": {
@@ -267,10 +267,10 @@
         },
         "tutorial-01.tmx": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 319.6666666666667,
-                "y": 179.33333333333334
+                "x": 320,
+                "y": 179.99999999999997
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
@@ -283,8 +283,8 @@
             "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 318.5,
-                "y": 182.5
+                "x": 320,
+                "y": 184
             }
         },
         "tutorial-02.tmx#Pixel Adventure": {
@@ -297,8 +297,8 @@
             "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 327.6666666666667,
-                "y": 214.99999999999997
+                "x": 320,
+                "y": 183.99999999999997
             }
         },
         "tutorial-03.tmx#Pixel Adventure": {
@@ -309,11 +309,11 @@
                 2,
                 4
             ],
-            "scale": 1.646171875,
-            "selectedLayer": 1,
+            "scale": 1.64,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 594.409377817854,
-                "y": 186.4932846091785
+                "x": 320.1219512195122,
+                "y": 184.14634146341461
             }
         },
         "tutorial-04.tmx#Pixel Adventure": {
@@ -321,10 +321,10 @@
         },
         "tutorial-05.tmx": {
             "scale": 1.5882812499999999,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 319.5277914412199,
-                "y": 183.21692080668961
+                "y": 183.53172651254306
             }
         },
         "tutorial-05.tmx#Pixel Adventure": {
