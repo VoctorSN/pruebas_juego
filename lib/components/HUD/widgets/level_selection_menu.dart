@@ -145,7 +145,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                       onTap: isUnlocked ? () => widget.onLevelSelected(level) : null,
                                       cardColor: cardColor,
                                       borderColor: borderColor,
-                                      stars: widget.starsPerLevel[level] ?? 0,
+                                      stars: widget.starsPerLevel[index] ?? 0,
                                       textColor: textColor,
                                       isLocked: !isUnlocked,
                                       isCompleted: isCompleted,

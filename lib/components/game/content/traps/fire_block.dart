@@ -25,14 +25,14 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
     super.size,
   });
 
-  // Animations logic
+  // Animations and sounds logic
   late final SpriteAnimation onAnimation;
   late final SpriteAnimation offAnimation;
   late final SpriteAnimationGroupComponent<FireBlockState> fireSprite;
-
   static const stepTime = 0.05;
   static const double tileSize = 16.0;
   bool isOn = false;
+  static final Map<int, int> _fireBlockCounters = {};
 
   // Player interaction logic
   late CollisionBlock collisionBlock;
@@ -67,6 +67,8 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
     add(attackHitbox);
 
     rotate();
+
+    _fireBlockCounters[startIn] = (_fireBlockCounters[startIn] ?? 0) + 1;
 
     while (game.paused){
       await async.Future.delayed(const Duration(milliseconds: 100));
@@ -133,9 +135,12 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
 
   // The "_" ignores the parameter of the function
   void _startPeriodicToggle() {
+    _fireBlockCounters[startIn] = (_fireBlockCounters[startIn]! - 1);
+    final isFirstInstance = _fireBlockCounters[startIn] == 0;
+
     timer = async.Timer.periodic(const Duration(seconds: 2), (_) {
       isOn = !isOn;
-      if (game.isGameSoundsActive && isOn) {
+      if (game.isGameSoundsActive && isOn && isFirstInstance) {
         SoundManager().playFire(game.gameSoundVolume);
       }
       fireSprite.current = isOn ? FireBlockState.on : FireBlockState.off;

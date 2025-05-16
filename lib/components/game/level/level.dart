@@ -21,16 +21,16 @@ import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
-import '../content/levelExtras/key_unlocker.dart';
+import '../content/levelExtras/stars.dart';
 import '../content/traps/fan.dart';
 import '../content/traps/spike.dart';
 import 'background_tile.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
+
   // Constructor and attributes
   final Player player;
   final String levelName;
-
   Level({required this.levelName, required this.player});
 
   // Logic to load the level and the player
@@ -40,9 +40,13 @@ class Level extends World with HasGameReference<PixelAdventure> {
   // Logic to manage the achievements
   late final Stopwatch _levelTimer;
   int deathCount = 0;
+  int maxStarsCollected = 0;
 
   int get levelTime => _levelTimer.elapsed.inSeconds;
   bool _timerStarted = false;
+
+  // Logic of stars
+  int starsCollected = 0;
 
   static const spawnPointClasses = [
     Fruit,
@@ -59,7 +63,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     Bee,
     Ghost,
     FireBlock,
-    KeyUnlocker,
+    Stars,
     Rockhead,
   ];
 
@@ -156,7 +160,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
             add(fruit);
             break;
           case 'KeyUnlocker':
-            final star = KeyUnlocker(
+            final star = Stars(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
             );
