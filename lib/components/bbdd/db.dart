@@ -49,7 +49,6 @@ class DatabaseManager {
   );
 }
 
-
   Future<void> initializeDB(Database db) async {
     await db.execute('''
     CREATE TABLE Users (
@@ -212,5 +211,5 @@ class DatabaseManager {
     }
   }
 
-  Database get database => _database;
+  Database get database => _database!;
 }

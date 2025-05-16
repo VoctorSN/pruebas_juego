@@ -47,13 +47,12 @@ class Stars extends SpriteAnimationComponent with HasGameReference<PixelAdventur
         ),
       );
 
-      final currentLevel = (game.gameData?.currentLevel ?? 0);
-      final previousBest = game.starsPerLevel[currentLevel] ?? 0;
-      game.level.starsCollected++;
-      final newStars = game.level.starsCollected;
+      final previousBest = game.level.getStars();
+      game.level.starCollected();
+      final newStars = game.level.getActualStars();
 
       if (newStars > previousBest && newStars <= maxStarsPerLevel) {
-        game.starsPerLevel[currentLevel] = newStars;
+        game.level.levelData!.stars = newStars;
       }
 
       await animationTicker?.completed;

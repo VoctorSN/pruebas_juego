@@ -8,6 +8,8 @@ class GameLevelRepository {
 
   GameLevelRepository._internal();
 
+  num get defaultUnlockedLevels => 5;
+
   static Future<GameLevelRepository> getInstance() async {
     if (_instance == null) {
       final repo = GameLevelRepository._internal();
@@ -20,12 +22,13 @@ class GameLevelRepository {
 
   Future<void> insertLevelsForGame({required int gameId}) async {
     final List<Map<String, Object?>> levels = await _db.query('Levels');
-    for (final level in levels) {
+    for (int i = 0; i < levels.length; i++) {
+      final level = levels[i];
       await _db.insert('GameLevel', {
         'game_id': gameId,
         'level_id': level['id'],
         'completed': 0,
-        'unlocked': 0,
+        'unlocked': i < defaultUnlockedLevels ? 1 : 0, // Desbloquear los primeros 5 niveles
         'stars': 0,
         'date_completed': '1970-01-01 00:00:00',
         'last_time_completed': '1970-01-01 00:00:00',

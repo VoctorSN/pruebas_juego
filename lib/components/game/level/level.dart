@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/bbdd/services/level_service.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/bee.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
@@ -16,6 +17,7 @@ import 'package:fruit_collector/components/game/content/traps/fire_block.dart';
 import 'package:fruit_collector/components/game/content/traps/saw.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
+import '../../bbdd/models/game_level.dart';
 import '../content/blocks/alterning_block.dart';
 import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
@@ -27,10 +29,10 @@ import '../content/traps/spike.dart';
 import 'background_tile.dart';
 
 class Level extends World with HasGameReference<PixelAdventure> {
-
   // Constructor and attributes
   final Player player;
   final String levelName;
+
   Level({required this.levelName, required this.player});
 
   // Logic to load the level and the player
@@ -40,13 +42,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
   // Logic to manage the achievements
   late final Stopwatch _levelTimer;
   int deathCount = 0;
-  int maxStarsCollected = 0;
+  int starsCollected = 0;
 
   int get levelTime => _levelTimer.elapsed.inSeconds;
   bool _timerStarted = false;
-
-  // Logic of stars
-  int starsCollected = 0;
 
   static const spawnPointClasses = [
     Fruit,
@@ -67,8 +66,12 @@ class Level extends World with HasGameReference<PixelAdventure> {
     Rockhead,
   ];
 
+  GameLevel? levelData;
+
   @override
   FutureOr<void> onLoad() async {
+    print('Loading level: $levelName');
+    print('from: ${game.gameData!.id}');
     level = await TiledComponent.load('$levelName.tmx', Vector2.all(16));
     add(level);
 
@@ -79,7 +82,20 @@ class Level extends World with HasGameReference<PixelAdventure> {
     _spawningObjects();
     _addGameText();
 
+    final LevelService service = await LevelService.getInstance();
+    chargeLevel(
+      await service.getGameLevelByGameAndLevelName(
+        gameId: game.gameData!.id,
+        levelName: levelName,
+      ),
+    );
+
     return super.onLoad();
+  }
+
+  Future<void> chargeLevel(GameLevel? level) async {
+    print('Charging Level: ${level?.levelId}');
+    levelData = level;
   }
 
   void _startLevel() {
@@ -108,7 +124,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
     if (textObjects != null) {
       for (final textObject in textObjects) {
         final text = textObject.text?.text.toString() ?? '';
-        final position = Vector2(textObject.x + textObject.width / 2, textObject.y + textObject.height / 2);
+        final position = Vector2(
+          textObject.x + textObject.width / 2,
+          textObject.y + textObject.height / 2,
+        );
 
         final gameText = GameText(
           text: text,
@@ -127,7 +146,9 @@ class Level extends World with HasGameReference<PixelAdventure> {
   void respawnObjects() {
     game.removeAudios();
 
-    removeWhere((component) => spawnPointClasses.contains(component.runtimeType));
+    removeWhere(
+      (component) => spawnPointClasses.contains(component.runtimeType),
+    );
 
     for (CollisionBlock block in collisionBlocks) {
       if (block.parent != null) {
@@ -287,6 +308,25 @@ class Level extends World with HasGameReference<PixelAdventure> {
     }
   }
 
+  Future<void> saveLevel() async {
+    if (levelData != null) {
+      LevelService service = await LevelService.getInstance();
+      service.completeLevel(
+        gameId: game.gameData!.id,
+        levelId: levelData!.levelId,
+        stars: levelData!.stars,
+        time: levelTime,
+        deaths: deathCount,
+      );
+    }
+  }
+
+  void starCollected() {
+    if (levelData != null) {
+      starsCollected++;
+    }
+  }
+
   void _addCollisions() {
     final collisionsLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
     if (collisionsLayer != null) {
@@ -298,7 +338,9 @@ class Level extends World with HasGameReference<PixelAdventure> {
                 position: Vector2(collision.x, collision.y),
                 size: Vector2(collision.width, collision.height),
                 isPlatform: true,
-                fallingDuration: collision.properties.getValue('fallingDurationMillSec'),
+                fallingDuration: collision.properties.getValue(
+                  'fallingDurationMillSec',
+                ),
                 isSideSensible: collision.properties.getValue('isSideSensible'),
               );
               collisionBlocks.add(fallingPlatform);
@@ -371,9 +413,22 @@ class Level extends World with HasGameReference<PixelAdventure> {
   void _scrollingBackground() {
     final backgroundLayer = level.tileMap.getLayer('Background');
     if (backgroundLayer != null) {
-      final backgroundColor = backgroundLayer.properties.getValue('BackgroundColor');
-      final backgroundTile = BackgroundTile(color: backgroundColor ?? 'Gray', position: Vector2(0, 0));
+      final backgroundColor = backgroundLayer.properties.getValue(
+        'BackgroundColor',
+      );
+      final backgroundTile = BackgroundTile(
+        color: backgroundColor ?? 'Gray',
+        position: Vector2(0, 0),
+      );
       add(backgroundTile);
     }
+  }
+
+  getActualStars() {
+    return starsCollected;
+  }
+
+  getStars() {
+    return levelData?.stars ?? 0;
   }
 }
