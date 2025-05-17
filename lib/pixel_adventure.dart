@@ -31,7 +31,6 @@ import 'components/game/achievements/achievement_manager.dart';
 import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
-import 'components/game/level/loadingBanana.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -140,8 +139,6 @@ class PixelAdventure extends FlameGame
     ///load first level with data
     _loadActualLevel();
   }
-
-  final banana = LoadingBanana();
 
   @override
   FutureOr<void> onLoad() async {
@@ -294,8 +291,6 @@ class PixelAdventure extends FlameGame
   }
 
   void completeLevel() async {
-
-    await banana.show();
 
     level.stopLevelTimer();
 
