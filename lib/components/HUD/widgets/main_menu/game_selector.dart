@@ -155,7 +155,7 @@ class _GameSelectorState extends State<GameSelector> {
     final isEmpty = game == null;
     final label = isEmpty
         ? 'Empty'
-        : 'SAVE SLOT $slotNumber - Level ${game.currentLevel}';
+        : 'SAVE SLOT $slotNumber - Level ${game.currentLevel + 1}';
     final icon = isEmpty
         ? Icons.insert_drive_file_outlined
         : Icons.insert_drive_file;

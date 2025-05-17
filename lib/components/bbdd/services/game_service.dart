@@ -76,4 +76,14 @@ class GameService {
   Future<Game?> getGameBySpace({required int space}) {
     return _gameRepository.getGameBySpace(space: space);
   }
+  Future<void> deleteGameBySpace({required int space}) async {
+    final Game? game = await _gameRepository.getGameBySpace(space: space);
+    if (game == null) {
+      throw Exception('No game found for space $space');
+    }
+
+    print('Deleting game with space: $space');
+    await _gameRepository.deleteGameBySpace(space: space);
+    // ON DELETE CASCADE will remove related GameLevel, Settings, and GameAchievement records
+  }
 }

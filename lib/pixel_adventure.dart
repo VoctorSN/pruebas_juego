@@ -229,9 +229,6 @@ class PixelAdventure extends FlameGame
           gameData?.currentLevel = level - 1;
           _loadActualLevel();
         },
-        unlockedLevels: unlockedLevelIndices,
-        completedLevels: completedLevelIndices,
-        starsPerLevel: starsPerLevel,
       ),
     );
   }
@@ -315,6 +312,7 @@ class PixelAdventure extends FlameGame
 
   if (gameData != null) {
     final int currentLevel = gameData!.currentLevel + 1;
+    levels[currentLevel-1]['gameLevel'].stars = level.starsCollected;
 
     // Mark the current level as completed
     GameLevel currentGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;

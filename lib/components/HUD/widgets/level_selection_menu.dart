@@ -11,9 +11,6 @@ class LevelSelectionMenu extends StatefulWidget {
 
   final int totalLevels;
   final void Function(int) onLevelSelected;
-  final List<int> unlockedLevels;
-  final List<int> completedLevels;
-  final Map<int, int> starsPerLevel;
   final PixelAdventure game;
 
   const LevelSelectionMenu({
@@ -21,9 +18,6 @@ class LevelSelectionMenu extends StatefulWidget {
     required this.game,
     required this.totalLevels,
     required this.onLevelSelected,
-    required this.starsPerLevel,
-    this.unlockedLevels = const [],
-    this.completedLevels = const [],
   });
 
   @override
@@ -136,8 +130,8 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                 alignment: WrapAlignment.center,
                                 children: List.generate(widget.totalLevels, (index) {
                                   final int level = index + 1;
-                                  final bool isUnlocked = widget.unlockedLevels.contains(level);
-                                  final bool isCompleted = widget.completedLevels.contains(level);
+                                  final bool isUnlocked = widget.game.unlockedLevelIndices.contains(level);
+                                  final bool isCompleted = widget.game.completedLevelIndices.contains(level);
 
                                   return SizedBox(
                                     height: _cardHeight,
@@ -147,7 +141,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                       onTap: isUnlocked ? () => widget.onLevelSelected(level) : null,
                                       cardColor: cardColor,
                                       borderColor: borderColor,
-                                      stars: widget.starsPerLevel[index] ?? 0,
+                                      stars: widget.game.starsPerLevel[index] ?? 0,
                                       textColor: textColor,
                                       isLocked: !isUnlocked,
                                       isCompleted: isCompleted,
