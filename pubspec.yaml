@@ -66,6 +66,7 @@ flutter:
     - assets/images/Traps/Fan/
     - assets/images/Traps/Fire/
     - assets/icon/
+    - assets/loadingBanana/
 
 flutter_launcher_icons:
   android: true

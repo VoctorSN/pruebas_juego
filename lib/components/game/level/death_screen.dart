@@ -3,14 +3,16 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
 import '../../../pixel_adventure.dart';
 
-class DeathScreen extends RectangleComponent
-with HasGameReference<PixelAdventure> {
-final Function gameAdd;
-final Function gameRemove;
-  DeathScreen({required this.gameAdd,required this.gameRemove,required super.size, required super.position});
+class DeathScreen extends RectangleComponent {
+
+  final Function gameAdd;
+  final Function gameRemove;
+  final PixelAdventure game;
+  DeathScreen({required this.gameAdd,required this.gameRemove,required super.size, required this.game, required super.position});
 
   final random = Random();
 
@@ -21,6 +23,11 @@ final Function gameRemove;
   late List<TextComponent> xComponents = []; // Store "X" components
 
   Future<void> addBlackScreen(int deaths) async {
+
+    if (game.settings.isSoundEnabled) {
+      SoundManager().playGlitch(game.settings.gameVolume);
+    }
+
     final xCount = deaths;
     blackScreen = RectangleComponent(
       size: size,
@@ -71,7 +78,7 @@ final Function gameRemove;
         text: 'X',
         textRenderer: TextPaint(
           style: const TextStyle(
-            color: Colors.red,
+            color: Color.fromARGB(255, 224, 119, 119),
             fontSize: 32,
             fontWeight: FontWeight.bold,
             fontFamily: 'ArcadeClassic',
@@ -82,7 +89,7 @@ final Function gameRemove;
           random.nextDouble() * size.x,
           random.nextDouble() * size.y,
         ),
-        priority: 1001,
+        priority: 999,
       );
       xComponents.add(xComponent);
     }
@@ -131,7 +138,7 @@ final Function gameRemove;
 
       // Update "X" text opacity
       for (var xComponent in xComponents) {
-        final xTextColor = Colors.red.withAlpha(
+        final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha(
           (255 * t).round().clamp(0, 255),
         );
         xComponent.textRenderer = TextPaint(
@@ -168,13 +175,14 @@ final Function gameRemove;
     for (var xComponent in xComponents) {
       xComponent.textRenderer = TextPaint(
         style: const TextStyle(
-          color: Colors.red,
+          color: Color.fromARGB(255, 224, 119, 119),
           fontSize: 32,
           fontWeight: FontWeight.bold,
           fontFamily: 'ArcadeClassic',
         ),
       );
     }
+
   }
 
   Future<void> removeBlackScreen() async {
@@ -220,7 +228,7 @@ final Function gameRemove;
       // Update "X" text opacity
       for (var xComponent in xComponents) {
         if (xComponent != null) {
-          final xTextColor = Colors.red.withAlpha(
+          final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha(
             (255 * t).round().clamp(0, 255),
           );
           xComponent.textRenderer = TextPaint(

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -13,7 +11,6 @@ import 'package:fruit_collector/components/bbdd/services/level_service.dart';
 import 'package:fruit_collector/components/bbdd/services/settings_service.dart';
 import 'package:fruit_collector/components/game/level/death_screen.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
-
 import 'components/HUD/buttons_game/achievements_button.dart';
 import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
@@ -35,6 +32,7 @@ import 'components/game/achievements/game_stats.dart';
 import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
+import 'components/game/level/loadingBanana.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -42,6 +40,7 @@ class PixelAdventure extends FlameGame
         DragCallbacks,
         HasCollisionDetection,
         TapCallbacks {
+
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -88,6 +87,7 @@ class PixelAdventure extends FlameGame
   );
 
   late DeathScreen deathScreen = DeathScreen(
+    game: this,
     gameAdd: (component) {
       add(component);
     },
@@ -141,6 +141,8 @@ class PixelAdventure extends FlameGame
     ///load first level with data
     _loadActualLevel();
   }
+
+  final banana = LoadingBanana();
 
   @override
   FutureOr<void> onLoad() async {
@@ -307,42 +309,45 @@ class PixelAdventure extends FlameGame
   }
 
   void completeLevel() async {
-  level.stopLevelTimer();
 
-  updateGlobalStats();
+    await banana.show();
 
-  removeAudios();
+    level.stopLevelTimer();
 
-  removeWhere((component) => component is Level);
+    updateGlobalStats();
 
-  if (gameData != null) {
-    final int currentLevel = gameData!.currentLevel + 1;
-    levels[currentLevel-1]['gameLevel'].stars = level.starsCollected;
+    removeAudios();
 
-    // Mark the current level as completed
-    GameLevel currentGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
-    currentGameLevel.completed = true;
-    print('Level $currentLevel marked as completed!');
+    removeWhere((component) => component is Level);
 
-    // Unlock the next level if it exists
-    if (currentLevel < levels.length) {
-      GameLevel nextGameLevel = levels[currentLevel + 1]['gameLevel'] as GameLevel;
-      nextGameLevel.unlocked = true;
-      print('Level ${currentLevel + 1} unlocked!');
-      gameData!.currentLevel = currentLevel;
-      _loadActualLevel();
-    } else {
-      // If it's the last level, show the end screen
-      _showEndScreen();
-      gameData!.currentLevel = 0;
-      _loadActualLevel();
+    if (gameData != null) {
+      final int currentLevel = gameData!.currentLevel + 1;
+      levels[currentLevel-1]['gameLevel'].stars = level.starsCollected;
+
+      // Mark the current level as completed
+      GameLevel currentGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
+      currentGameLevel.completed = true;
+      print('Level $currentLevel marked as completed!');
+
+      // Unlock the next level if it exists
+      if (currentLevel < levels.length) {
+        GameLevel nextGameLevel = levels[currentLevel + 1]['gameLevel'] as GameLevel;
+        nextGameLevel.unlocked = true;
+        print('Level ${currentLevel + 1} unlocked!');
+        gameData!.currentLevel = currentLevel;
+        _loadActualLevel();
+      } else {
+        // If it's the last level, show the end screen
+        _showEndScreen();
+        gameData!.currentLevel = 0;
+        _loadActualLevel();
+      }
     }
-  }
 
-  await level.saveLevel();
+    await level.saveLevel();
 
-  print(levelDeaths);
-  print(starsPerLevel);
+    print(levelDeaths);
+    print(starsPerLevel);
 }
 
   void _showEndScreen() {}

@@ -23,6 +23,7 @@ class SoundManager {
   late AudioPool appearGhostPool;
   late AudioPool disappearGhostPool;
   late AudioPool firePool;
+  late AudioPool glitchPool;
 
   bool _initialized = false;
 
@@ -43,6 +44,7 @@ class SoundManager {
     appearGhostPool = await AudioPool.createFromAsset(path: 'audio/appearGhost.mp3', maxPlayers: 4);
     disappearGhostPool = await AudioPool.createFromAsset(path: 'audio/disappearGhost.mp3', maxPlayers: 4);
     firePool = await AudioPool.createFromAsset(path: 'audio/fire.wav', maxPlayers: 8);
+    glitchPool = await AudioPool.createFromAsset(path: 'audio/glitchedSound.wav', maxPlayers: 2);
   }
 
   void playCollectFruit(volume) => collectFruitPool.start(volume: volume);
@@ -64,6 +66,8 @@ class SoundManager {
   void playDisappearGhost(volume) => disappearGhostPool.start(volume: volume);
 
   void playFire(volume) => firePool.start(volume: volume);
+
+  void playGlitch(volume) => glitchPool.start(volume: volume);
 
   void startRockheadAttackingLoop(double volume, {Duration interval = const Duration(milliseconds: 500)}) {
     stopRockheadAttackingLoop();
