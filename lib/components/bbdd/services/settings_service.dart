@@ -16,6 +16,10 @@ class SettingsService {
     return _instance!;
   }
 
+  Future<void> updateSettings(Settings settings) async {
+    await _settingsRepository.updateSettings(settings);
+  }
+
   Future<Settings?> getSettingsForGame(int gameId) async {
     return await _settingsRepository.getSettings(gameId);
   }

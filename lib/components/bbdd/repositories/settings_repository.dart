@@ -33,6 +33,16 @@ class SettingsRepository {
     });
   }
 
+
+  Future<void> updateSettings(Settings settings) async {
+    await _db.update(
+      'Settings',
+      settings.toMap(),
+      where: 'id = ?',
+      whereArgs: [settings.id],
+    );
+  }
+
   Future<Settings?> getSettings(int gameId) async {
     final List<Map<String, Object?>> result = await _db.query(
       'Settings',

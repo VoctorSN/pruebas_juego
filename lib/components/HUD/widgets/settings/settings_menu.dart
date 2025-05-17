@@ -6,6 +6,7 @@ import 'package:fruit_collector/components/HUD/widgets/settings/game_volume_cont
 import 'package:fruit_collector/components/HUD/widgets/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_HUD.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_controls.dart';
+import 'package:fruit_collector/components/bbdd/services/settings_service.dart';
 
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
@@ -117,7 +118,7 @@ class SettingsMenu extends StatelessWidget {
                           const SizedBox(width: 24),
                           ElevatedButton.icon(
                             style: buttonStyle,
-                            onPressed: () {
+                            onPressed: () async {
                               game.overlays.remove(SettingsMenu.id);
                               game.overlays.add(PauseMenu.id);
                               game.hudSize = sizeHUD;
@@ -125,6 +126,8 @@ class SettingsMenu extends StatelessWidget {
                               game.reloadAllButtons();
                               game.settings.gameVolume = gameVolume;
                               game.settings.musicVolume = musicVolume;
+                              game.settingsService!.updateSettings(game.settings);
+
                             },
                             icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
                             label: Text(
