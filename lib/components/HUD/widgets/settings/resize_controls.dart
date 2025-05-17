@@ -42,7 +42,7 @@ class _ResizeControlsState extends State<ResizeControls> {
   });
 
   late double value;
-  bool isLeftHanded = false;
+  late bool isLeftHanded = game.settings.showControls;
 
   Image get eyeImage {
     return game.settings.showControls

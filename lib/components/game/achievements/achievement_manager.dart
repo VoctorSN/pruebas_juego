@@ -64,6 +64,9 @@ class AchievementManager {
         final condition = achievementConditions[achievement.title];
         if (condition != null && condition(game)) {
           _showAchievementUnlocked(achievement);
+          game.achievements.where((ga) => ga['gameAchievement'].id == gameAchievement.id).forEach((gameAchievement) {
+            gameAchievement['gameAchievement'].achieved = true;
+          });
           achievementService.unlockAchievement(
             game.gameData!.id,
             gameAchievement.achievementId,
