@@ -51,7 +51,7 @@ class CustomJoystick extends Component with HasGameReference<PixelAdventure> {
   void update(double dt) {
     super.update(dt);
 
-    if (game.showControls && movementDirections.contains(joystick.direction)) {
+    if (game.settings.showControls && movementDirections.contains(joystick.direction)) {
       wasIdle = false;
       _updateJoystick();
     } else if (!wasIdle && joystick.direction == JoystickDirection.idle) {

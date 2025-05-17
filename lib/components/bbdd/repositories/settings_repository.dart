@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../db.dart';
@@ -22,10 +24,10 @@ class SettingsRepository {
   Future<void> insertDefaultsForGame({required int gameId}) async {
     await _db.insert('Settings', {
       'game_id': gameId,
-      'HUD_size': 1.0,
-      'control_size': 1.0,
+      'HUD_size': 50.0,
+      'control_size': 50.0,
       'is_left_handed': 0,
-      'show_controls': 1,
+      'show_controls': Platform.isAndroid || Platform.isIOS ? 1 : 0,
       'is_music_active': 1,
       'is_sound_enabled': 1,
       'game_volume': 0.5,

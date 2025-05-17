@@ -43,7 +43,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
 
   @override
   Widget build(BuildContext context) {
-    value = game.hudSize;
+    value = game.settings.hudSize;
 
     return SizedBox(
       width: rowWidth,

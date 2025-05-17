@@ -45,7 +45,7 @@ class _ResizeControlsState extends State<ResizeControls> {
   bool isLeftHanded = false;
 
   Image get eyeImage {
-    return game.showControls
+    return game.settings.showControls
         ? Image.asset(
       'assets/images/GUI/HUD/openEye.png',
       fit: BoxFit.cover,
@@ -57,7 +57,7 @@ class _ResizeControlsState extends State<ResizeControls> {
   }
 
   Image get arrowImage {
-    return game.isLeftHanded
+    return game.settings.isLeftHanded
         ? Image.asset(
       'assets/images/GUI/HUD/arrowsFacingEachother.png',
       fit: BoxFit.cover,
@@ -70,7 +70,7 @@ class _ResizeControlsState extends State<ResizeControls> {
 
   @override
   Widget build(BuildContext context) {
-    value = game.controlSize;
+    value = game.settings.controlSize;
 
     return SizedBox(
       width: rowWidth,
@@ -89,14 +89,14 @@ class _ResizeControlsState extends State<ResizeControls> {
               game: game,
               value: value,
               onChanged: onChanged,
-              isActive: game.showControls,
+              isActive: game.settings.showControls,
             ),
           ),
           const SizedBox(width: iconSpacing),
           IconButton(
             onPressed: () {
               setState(() {
-                game.showControls = !game.showControls;
+                game.settings.showControls = !game.settings.showControls;
                 game.reloadAllButtons();
               });
             },
@@ -107,7 +107,7 @@ class _ResizeControlsState extends State<ResizeControls> {
             onPressed: () {
               setState(() {
                 isLeftHanded = !isLeftHanded;
-                game.isLeftHanded = isLeftHanded;
+                game.settings.isLeftHanded = isLeftHanded;
                 game.switchHUDPosition();
               });
             },

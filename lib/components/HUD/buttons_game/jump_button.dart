@@ -15,7 +15,7 @@ class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, 
     priority = 15;
     sprite = Sprite(game.images.fromCache('GUI/HUD/jumpButton.png'));
     size = Vector2.all(buttonSize * 2);
-    position = Vector2(game.isLeftHanded ? 32 : game.size.x - size.x - 32, game.size.y - size.y - 32);
+    position = Vector2(game.settings.isLeftHanded ? 32 : game.size.x - size.x - 32, game.size.y - size.y - 32);
 
     return super.onLoad();
   }
@@ -26,7 +26,7 @@ class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, 
     super.onGameResize(gameSize);
     // Update the position of the button when the game is resized
     position =
-        game.isLeftHanded
+        game.settings.isLeftHanded
             ? Vector2(32, gameSize.y - size.y - 32)
             : Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
   }

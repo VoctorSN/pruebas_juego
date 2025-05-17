@@ -22,7 +22,7 @@ class DatabaseManager {
 
     ///For rebase de Database
     ///await databaseFactory.deleteDatabase(dbPath);
-  Future<void> _resetDatabase() async {
+  Future<void> resetDatabase() async {
     final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
     await databaseFactory.deleteDatabase(dbPath);
   }
@@ -76,14 +76,14 @@ class DatabaseManager {
         CREATE TABLE Settings (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           game_id INTEGER NOT NULL,
-          HUD_size REAL NOT NULL DEFAULT 0.0,
-          control_size REAL NOT NULL DEFAULT 0.0,
+          HUD_size REAL NOT NULL DEFAULT 50.0,
+          control_size REAL NOT NULL DEFAULT 50.0,
           is_left_handed INTEGER NOT NULL DEFAULT 0,
           show_controls INTEGER NOT NULL DEFAULT 0,
           is_music_active INTEGER NOT NULL DEFAULT 1,
           is_sound_enabled INTEGER NOT NULL DEFAULT 1,
-          game_volume REAL NOT NULL DEFAULT 0.0,
-          music_volume REAL NOT NULL DEFAULT 0.0,
+          game_volume REAL NOT NULL DEFAULT 0.5,
+          music_volume REAL NOT NULL DEFAULT 0.5,
           FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE
         );
       ''');

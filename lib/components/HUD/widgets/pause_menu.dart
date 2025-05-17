@@ -90,6 +90,7 @@ class PauseMenu extends StatelessWidget {
               ElevatedButton.icon(
                 style: buttonStyle,
                 onPressed: () {
+                  game.removeControls();
                   game.overlays.remove(PauseMenu.id);
                   game.overlays.add(MainMenu.id);
                   game.pauseEngine();

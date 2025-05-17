@@ -100,23 +100,19 @@ class PixelAdventure extends FlameGame
 
   // Logic to manage the HUD, controls, size of the buttons and the positions
   late CustomJoystick customJoystick;
-  bool showControls = false;
-  double hudSize = 50;
-  double controlSize = 50;
-  bool isLeftHanded = false;
-  late final ChangePlayerSkinButton changeSkinButton;
-  late final OpenMenuButton menuButton;
-  late final LevelSelection levelSelectionButton;
-  late final AchievementsButton achievementsButton;
-  late final JumpButton jumpButton;
+  ChangePlayerSkinButton? changeSkinButton;
+  OpenMenuButton? menuButton;
+  LevelSelection? levelSelectionButton;
+  AchievementsButton? achievementsButton;
+  JumpButton? jumpButton;
   bool isJoystickAdded = false;
   late final Vector2 rightControlPosition = Vector2(
-    size.x - 32 - controlSize,
-    size.y - 32 - controlSize,
+    size.x - 32 - settings.controlSize,
+    size.y - 32 - settings.controlSize,
   );
   late final Vector2 leftControlPosition = Vector2(
-    32 - controlSize,
-    32 - controlSize,
+    32 - settings.controlSize,
+    32 - settings.controlSize,
   );
 
   // Logic to manage achievements
@@ -137,6 +133,10 @@ class PixelAdventure extends FlameGame
     levels = await levelService!.getLevelsForGame(gameData!.id);
     settings = await settingsService!.getSettingsForGame(gameData!.id) as Settings;
     print('change settings  : $settings');
+    print('Levels  : $levels');
+    print('Current Level  : ${gameData?.currentLevel}');
+
+    loadButtonsAndHud();
 
     ///load first level with data
     _loadActualLevel();
@@ -153,17 +153,6 @@ class PixelAdventure extends FlameGame
     // Load the player skin
     player = Player(character: characters[gameData?.currentCharacter ?? 0]);
 
-    // Detect if the device is a mobile device to show the controls
-    try {
-      showControls = Platform.isAndroid || Platform.isIOS;
-    } catch (e) {
-      showControls = false;
-    }
-
-    initializateButtons();
-
-    addAllButtons();
-
     addOverlays();
 
     // Open the main menu
@@ -173,23 +162,31 @@ class PixelAdventure extends FlameGame
     return super.onLoad();
   }
 
+  void loadButtonsAndHud() {
+    print('settings : $settings');
+
+    initializateButtons();
+
+    addAllButtons();
+  }
+
   @override
   void onDispose() {
     super.onDispose();
   }
 
   void initializateButtons() {
-    changeSkinButton = ChangePlayerSkinButton(
+    changeSkinButton = changeSkinButton?? ChangePlayerSkinButton(
       changeCharacter: openChangeCharacterMenu,
-      buttonSize: hudSize,
+      buttonSize: settings.hudSize,
     );
-    menuButton = OpenMenuButton(buttonSize: hudSize);
-    levelSelectionButton = LevelSelection(
-      buttonSize: hudSize,
+    menuButton = menuButton?? OpenMenuButton(buttonSize: settings.hudSize);
+    levelSelectionButton = levelSelectionButton?? LevelSelection(
+      buttonSize: settings.hudSize,
       onTap: openLevelSelectionMenu,
     );
-    achievementsButton = AchievementsButton(buttonSize: hudSize);
-    jumpButton = JumpButton(controlSize);
+    achievementsButton = achievementsButton?? AchievementsButton(buttonSize: settings.hudSize);
+    jumpButton = JumpButton(settings.controlSize);
   }
 
   void addOverlays() {
@@ -258,23 +255,31 @@ class PixelAdventure extends FlameGame
   }
 
   void addAllButtons() {
-    changeSkinButton.size = Vector2.all(hudSize);
-    achievementsButton.size = Vector2.all(hudSize);
-    levelSelectionButton.size = Vector2.all(hudSize);
-    menuButton.size = Vector2.all(hudSize);
-    achievementsButton.position = Vector2((hudSize * 3) - 10, 10);
-    changeSkinButton.position = Vector2((hudSize * 2) - 20, 10);
-    levelSelectionButton.position = Vector2(hudSize - 30, 10);
-    menuButton.position = Vector2(size.x - hudSize - 20, 10);
+    print('adding Buttons');
+    if (changeSkinButton == null ||
+        levelSelectionButton == null ||
+        achievementsButton == null ||
+        jumpButton == null ||
+        menuButton == null) {
+      initializateButtons();
+    }
+    changeSkinButton!.size = Vector2.all(settings.hudSize);
+    achievementsButton!.size = Vector2.all(settings.hudSize);
+    levelSelectionButton!.size = Vector2.all(settings.hudSize);
+    menuButton!.size = Vector2.all(settings.hudSize);
+    achievementsButton!.position = Vector2((settings.hudSize * 3) - 10, 10);
+    changeSkinButton!.position = Vector2((settings.hudSize * 2) - 20, 10);
+    levelSelectionButton!.position = Vector2(settings.hudSize - 30, 10);
+    menuButton!.position = Vector2(size.x - settings.hudSize - 20, 10);
     addAll([
-      changeSkinButton,
-      levelSelectionButton,
-      menuButton,
-      achievementsButton,
+      changeSkinButton!,
+      levelSelectionButton!,
+      menuButton!,
+      achievementsButton!,
     ]);
-    if (showControls) {
-      jumpButton.size = Vector2.all(controlSize * 2);
-      add(jumpButton);
+    if (settings.showControls) {
+      jumpButton!.size = Vector2.all(settings.controlSize * 2);
+      add(jumpButton!);
       addJoystick();
     }
   }
@@ -320,7 +325,7 @@ class PixelAdventure extends FlameGame
     print('Level $currentLevel marked as completed!');
 
     // Unlock the next level if it exists
-    if (currentLevel < levels.length - 1) {
+    if (currentLevel < levels.length) {
       GameLevel nextGameLevel = levels[currentLevel + 1]['gameLevel'] as GameLevel;
       nextGameLevel.unlocked = true;
       print('Level ${currentLevel + 1} unlocked!');
@@ -387,8 +392,8 @@ class PixelAdventure extends FlameGame
     if (!isJoystickAdded) {
       isJoystickAdded = true;
       customJoystick = CustomJoystick(
-        controlSize: controlSize,
-        leftMargin: isLeftHanded ? size.x - 32 - controlSize * 2 : 32,
+        controlSize: settings.controlSize,
+        leftMargin: settings.isLeftHanded ? size.x - 32 - settings.controlSize * 2 : 32,
       );
       add(customJoystick);
     }
@@ -416,7 +421,7 @@ class PixelAdventure extends FlameGame
   }
 
   void switchHUDPosition() {
-    if (!showControls) return;
+    if (!settings.showControls) return;
     reloadAllButtons();
   }
 

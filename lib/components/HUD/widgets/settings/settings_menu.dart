@@ -18,8 +18,8 @@ class SettingsMenu extends StatelessWidget {
 
   SettingsMenu(this.game, {super.key});
 
-  late double sizeHUD = game.hudSize;
-  late double sizeControls = game.controlSize;
+  late double sizeHUD = game.settings.hudSize;
+  late double sizeControls = game.settings.controlSize;
   late double gameVolume = game.settings.gameVolume;
   late double musicVolume = game.settings.musicVolume;
 
@@ -121,8 +121,8 @@ class SettingsMenu extends StatelessWidget {
                             onPressed: () async {
                               game.overlays.remove(SettingsMenu.id);
                               game.overlays.add(PauseMenu.id);
-                              game.hudSize = sizeHUD;
-                              game.controlSize = sizeControls;
+                              game.settings.hudSize = sizeHUD;
+                              game.settings.controlSize = sizeControls;
                               game.reloadAllButtons();
                               game.settings.gameVolume = gameVolume;
                               game.settings.musicVolume = musicVolume;
