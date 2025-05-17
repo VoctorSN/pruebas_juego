@@ -1,5 +1,5 @@
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
-import 'package:fruit_collector/components/game/achievements/game_stats.dart';
+import 'package:fruit_collector/components/bbdd/models/game_level.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../HUD/widgets/achievement_toast.dart';
@@ -14,53 +14,55 @@ class AchievementManager {
 
   // Logic of unlocking achievements
   List<Map<String, dynamic>> allAchievements = [];
-  final Set<int> unlockedAchievements = {};
 
   late final Map<String, Function> achievementConditions = {
-    'Completa el nivel 1': (stats) => stats.completedLevels.contains(0),
-    'Completa el nivel 1 sin morir':
-        (stats) =>
-            stats.completedLevels.contains(0) && stats.levelDeaths[0] == 0,
-    'Completa el nivel 2': (stats) => stats.completedLevels.contains(1),
-    'Nivel 4 superado': (stats) => stats.completedLevels.contains(3),
-    'Estrellas de nivel 5': (stats) => stats.starsPerLevel[4] == 3,
-    'Nivel 6 en 5 seg':
-        (stats) => stats.levelTimes[5] != null && stats.levelTimes[5]! < 5,
-    'Completa todos los niveles':
-        (stats) => stats.completedLevels.length >= game.levels.length,
-    'Speedrunner':
-        (stats) =>
-            stats.totalTime < 300 &&
-            stats.completedLevels.length == game.levels.length,
-    'Sin morir':
-        (stats) =>
-            stats.totalDeaths == 0 &&
-            stats.completedLevels.length == game.levels.length,
+    'Completa el nivel 1': (PixelAdventure game) => (game.levels[0]['gameLevel'] as GameLevel).completed,
+    'Nivel 2 perfecto':
+        (PixelAdventure game) =>
+            (game.levels[1]['gameLevel'] as GameLevel).completed && (game.levels[1]['gameLevel'] as GameLevel).deaths == 0,
+    'Nivel 6 en 15 seg': (PixelAdventure game) => (game.levels[5]['gameLevel'] as GameLevel).time != null && (game.levels[5]['gameLevel'] as GameLevel).time! <= 15,
+    'Nivel 4 superado': (PixelAdventure game) => (game.levels[3]['gameLevel'] as GameLevel).completed,
+    'Estrellas de nivel 5': (PixelAdventure game) => (game.levels[4]['gameLevel'] as GameLevel).stars == 3,
+    // 'Nivel 6 en 5 seg':
+    //     (PixelAdventure game) => stats.levelTimes[5] != null && stats.levelTimes[5]! < 5,
+    // 'Completa todos los niveles':
+    //     (PixelAdventure game) => stats.completedLevels.length >= game.levels.length,
+    // 'Speedrunner':
+    //     (PixelAdventure game) =>
+    //         stats.totalTime < 300 &&
+    //         stats.completedLevels.length == game.levels.length,
+    // 'Sin morir':
+    //     (PixelAdventure game) =>
+    //         stats.totalDeaths == 0 &&
+    //         stats.completedLevels.length == game.levels.length,
   };
 
   // Logic to show achievements
   final List<Achievement> _pendingToasts = [];
   bool _isShowingToast = false;
 
-  void evaluate(GameStats stats) async {
+  void evaluate() async {
     final achievementService = await AchievementService.getInstance();
     allAchievements.clear();
     if (game.gameData == null) return;
     final achievementData = await achievementService.getAchievementsForGame(
       game.gameData!.id,
     );
+    final unlockedAchievements = await achievementService.getUnlockedAchievementsForGame(
+      game.gameData!.id,
+    );
+    print('unlockedAchievements $unlockedAchievements');
     allAchievements.addAll(achievementData);
+    print('stats ${game.levels}');
 
     for (final achievementData in allAchievements) {
       Achievement achievement = achievementData['achievement'];
       GameAchievement gameAchievement = achievementData['gameAchievement'];
-      final alreadyUnlocked = unlockedAchievements.contains(gameAchievement.id);
+      final alreadyUnlocked = unlockedAchievements.contains(gameAchievement.achievementId);
 
       if (!alreadyUnlocked) {
         final condition = achievementConditions[achievement.title];
-        if (condition != null && condition(stats)) {
-          gameAchievement.achieved = true;
-          unlockedAchievements.add(gameAchievement.id);
+        if (condition != null && condition(game)) {
           _showAchievementUnlocked(achievement);
           achievementService.unlockAchievement(
             game.gameData!.id,
@@ -91,24 +93,5 @@ class AchievementManager {
       _isShowingToast = false;
       _tryShowNextToast();
     });
-  }
-
-  void resetAchievements() async {
-    final achievementService = await AchievementService.getInstance();
-    for (final achievement in allAchievements) {
-      achievement['gameAchievement'].achieved = false;
-    }
-    unlockedAchievements.clear();
-    achievementService.resetAchievementsForGame(game.gameData?.id ?? 0);
-  }
-
-  List<Map<String, dynamic>> getUnlockedAchievements() {
-    return allAchievements.where((a) => a['gameAchievement'].achieved).toList();
-  }
-
-  List<Map<String, dynamic>> getLockedAchievements() {
-    return allAchievements
-        .where((a) => !a['gameAchievement'].achieved)
-        .toList();
   }
 }

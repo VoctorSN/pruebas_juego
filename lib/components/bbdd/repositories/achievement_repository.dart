@@ -94,4 +94,14 @@ class AchievementRepository {
       },
     );
   }
+
+  Future<Iterable<Object?>> getUnlockedAchievementsForGame(int id) {
+    return _db.query(
+      'GameAchievement',
+      where: 'game_id = ? AND achieved = 1',
+      whereArgs: [id],
+    ).then((value) {
+      return value.map((e) => e['achievement_id']);
+    });
+  }
 }

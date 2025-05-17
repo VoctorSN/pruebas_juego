@@ -56,6 +56,6 @@ class GameLevel {
 
   @override
   String toString() {
-    return 'GameLevel{id: $id, levelId: $levelId, gameId: $gameId, completed: $completed, stars: $stars}';
+    return 'GameLevel{id: $id, levelId: $levelId, gameId: $gameId, completed: $completed, stars: $stars, unlocked: $unlocked, deaths: $deaths} \n';
   }
 }
