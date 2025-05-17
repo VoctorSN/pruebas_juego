@@ -136,7 +136,7 @@ class Chicken extends SpriteAnimationGroupComponent with CollisionCallbacks, Has
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
-      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
+      if (game.settings.isSoundEnabled) SoundManager().playBounce(game.settings.gameVolume);
       gotStomped = true;
       current = ChickenState.hit;
       player.velocity.y = -_bounceHeight;

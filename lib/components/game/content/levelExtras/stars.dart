@@ -33,8 +33,8 @@ class Stars extends SpriteAnimationComponent with HasGameReference<PixelAdventur
     if (!collected) {
       collected = true;
 
-      if (game.isGameSoundsActive) {
-        SoundManager().playCollectFruit(game.gameSoundVolume);
+      if (game.settings.isSoundEnabled) {
+        SoundManager().playCollectFruit(game.settings.gameVolume);
       }
 
       animation = SpriteAnimation.fromFrameData(

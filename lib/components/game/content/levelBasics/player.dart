@@ -206,7 +206,7 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
-    if (game.isGameSoundsActive) SoundManager().playJump(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) SoundManager().playJump(game.settings.gameVolume);
 
     jumpCount++;
     velocity.y = jumpCount == 2 ? -_jumpForce * 0.8 : -_jumpForce;
@@ -341,7 +341,7 @@ class Player extends SpriteAnimationGroupComponent
     }
     game.level.registerDeath();
     isRespawning = true;
-    if (game.isGameSoundsActive) SoundManager().playHit(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) SoundManager().playHit(game.settings.gameVolume);
     // Realizar el respawn
     gotHit = true;
     isOnSand = false;
@@ -376,7 +376,7 @@ class Player extends SpriteAnimationGroupComponent
     if (!other.isAbled) {
       return;
     }
-    if (game.isGameSoundsActive) SoundManager().playDisappear(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) SoundManager().playDisappear(game.settings.gameVolume);
 
     hasReached = true;
     if (scale.x > 0) {

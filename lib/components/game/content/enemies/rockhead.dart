@@ -128,8 +128,8 @@ class Rockhead extends SpriteAnimationGroupComponent with HasGameReference<Pixel
 
   void attack(int direction) {
     if (isComingBack) return;
-    if (game.isGameSoundsActive) {
-      SoundManager().startRockheadAttackingLoop(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) {
+      SoundManager().startRockheadAttackingLoop(game.settings.gameVolume);
     }
     isAtacking = true;
     velocity.y = attackVelocity * direction;
@@ -137,9 +137,9 @@ class Rockhead extends SpriteAnimationGroupComponent with HasGameReference<Pixel
   }
 
   void comeBack() async {
-    if (game.isGameSoundsActive) {
+    if (game.settings.isSoundEnabled) {
       SoundManager().stopRockheadAttackingLoop();
-      SoundManager().playSmash(game.gameSoundVolume);
+      SoundManager().playSmash(game.settings.gameVolume);
     }
     Future.delayed(inmobileDuration, () => velocity.y = isReversed ? comeBackVelocity : -comeBackVelocity);
     current = isReversed ? State.atackTop : State.atackDown;

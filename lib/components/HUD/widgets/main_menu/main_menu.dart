@@ -163,7 +163,7 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
     final GameService service = await GameService.getInstance();
     final Game game = await service.getLastPlayedOrCreate();
     print('Continuing game...$game');
-    widget.game.chargeGame(game);
+    widget.game.chargeSlot(game.space);
 
     widget.game.overlays.remove(MainMenu.id);
     widget.game.resumeEngine();

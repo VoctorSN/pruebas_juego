@@ -140,8 +140,8 @@ class FireBlock extends PositionComponent with HasGameReference<PixelAdventure>,
 
     timer = async.Timer.periodic(const Duration(seconds: 2), (_) {
       isOn = !isOn;
-      if (game.isGameSoundsActive && isOn && isFirstInstance) {
-        SoundManager().playFire(game.gameSoundVolume);
+      if (game.settings.isSoundEnabled && isOn && isFirstInstance) {
+        SoundManager().playFire(game.settings.gameVolume);
       }
       fireSprite.current = isOn ? FireBlockState.on : FireBlockState.off;
     });

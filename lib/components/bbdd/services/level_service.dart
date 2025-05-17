@@ -1,5 +1,4 @@
 import '../models/game_level.dart';
-import '../models/level.dart';
 import '../repositories/level_repository.dart';
 
 class LevelService {
@@ -89,7 +88,7 @@ class LevelService {
         levelId: gameLevel.levelId,
         gameId: gameLevel.gameId,
         completed: true,
-        unlocked: gameLevel.unlocked, // Preserve existing unlocked status
+        unlocked: true,
         stars: stars,
         dateCompleted: gameLevel.completed ? gameLevel.dateCompleted : now, // Keep first completion date
         lastTimeCompleted: now,

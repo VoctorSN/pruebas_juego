@@ -39,8 +39,8 @@ class Fruit extends SpriteAnimationComponent with HasGameReference<PixelAdventur
   void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
-      //if (game.isGameSoundsActive) collect_fruit.start(volume: game.gameSoundVolume);
-      if (game.isGameSoundsActive) SoundManager().playCollectFruit(game.gameSoundVolume);
+      //if (game.settings.isSoundEnabled) collect_fruit.start(volume: game.settings.gameVolume);
+      if (game.settings.isSoundEnabled) SoundManager().playCollectFruit(game.settings.gameVolume);
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache('Items/Fruits/Collected.png'),
         SpriteAnimationData.sequenced(amount: 6, stepTime: stepTime, textureSize: Vector2.all(32), loop: false),

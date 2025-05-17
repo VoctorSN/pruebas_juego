@@ -1,6 +1,7 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/game/achievements/achievement.dart';
+
 import '../../bbdd/models/achievement.dart';
 import '../style/text_style_singleton.dart';
 

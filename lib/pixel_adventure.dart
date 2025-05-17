@@ -10,6 +10,7 @@ import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart
 import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
 import 'package:fruit_collector/components/bbdd/services/level_service.dart';
+import 'package:fruit_collector/components/bbdd/services/settings_service.dart';
 import 'package:fruit_collector/components/game/level/death_screen.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 
@@ -27,6 +28,7 @@ import 'components/HUD/widgets/pause_menu.dart';
 import 'components/HUD/widgets/settings/settings_menu.dart';
 import 'components/bbdd/models/achievement.dart';
 import 'components/bbdd/models/game.dart' as models;
+import 'components/bbdd/models/settings.dart';
 import 'components/bbdd/services/game_service.dart';
 import 'components/game/achievements/achievement_manager.dart';
 import 'components/game/achievements/game_stats.dart';
@@ -47,6 +49,7 @@ class PixelAdventure extends FlameGame
 
   GameService? gameService;
   LevelService? levelService;
+  SettingsService? settingsService;
 
   final List<String> characters = [
     '1',
@@ -59,6 +62,8 @@ class PixelAdventure extends FlameGame
   ];
   late Player player;
   late Level level;
+
+  late Settings settings;
 
   List<Map<String, dynamic>> levels = [];
 
@@ -81,12 +86,6 @@ class PixelAdventure extends FlameGame
   Map<int, int> get starsPerLevel => levels.asMap().map(
     (index, level) => MapEntry(index, ((level['gameLevel'] as GameLevel).stars)),
   );
-
-  // Logic to manage the sounds
-  bool isMusicActive = false;
-  double musicSoundVolume = 1.0;
-  bool isGameSoundsActive = true;
-  double gameSoundVolume = 1.0;
 
   late DeathScreen deathScreen = DeathScreen(
     gameAdd: (component) {
@@ -130,25 +129,14 @@ class PixelAdventure extends FlameGame
 
   models.Game? gameData;
 
-  Future<void> chargeGame(models.Game game) async {
-    print('chargeGame');
-    gameData = game;
-
-    levelService = await LevelService.getInstance();
-    levels = await levelService!.getLevelsForGame(gameData!.id);
-    print('levels : $levels');
-
-    ///load first level with data
-    _loadActualLevel();
-  }
-
   Future<void> chargeSlot(int slot) async {
     await getGameService();
+    await getLevelService();
+    await getSettingsService();
     gameData = await gameService!.getOrCreateGameBySpace(space: slot);
-
-    levelService = await LevelService.getInstance();
     levels = await levelService!.getLevelsForGame(gameData!.id);
-    print('levels : $levels');
+    settings = await settingsService!.getSettingsForGame(gameData!.id) as Settings;
+    print('change settings  : $settings');
 
     ///load first level with data
     _loadActualLevel();
@@ -326,7 +314,7 @@ class PixelAdventure extends FlameGame
   removeWhere((component) => component is Level);
 
   if (gameData != null) {
-    final int currentLevel = gameData!.currentLevel;
+    final int currentLevel = gameData!.currentLevel + 1;
 
     // Mark the current level as completed
     GameLevel currentGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
@@ -338,7 +326,7 @@ class PixelAdventure extends FlameGame
       GameLevel nextGameLevel = levels[currentLevel + 1]['gameLevel'] as GameLevel;
       nextGameLevel.unlocked = true;
       print('Level ${currentLevel + 1} unlocked!');
-      gameData!.currentLevel = currentLevel + 1;
+      gameData!.currentLevel = currentLevel;
       _loadActualLevel();
     } else {
       // If it's the last level, show the end screen
@@ -373,9 +361,12 @@ class PixelAdventure extends FlameGame
     service.saveGameBySpace(game: gameData);
     removeAudios();
     removeWhere((component) => component is Level);
-    if (isMusicActive) {
+    if (settings.isMusicActive) {
       FlameAudio.bgm.stop();
-      FlameAudio.bgm.play('background_music.mp3', volume: musicSoundVolume);
+      FlameAudio.bgm.play('background_music.mp3', volume: settings.musicVolume);
+                    print('Playing music with volume: ${settings}');
+    } else {
+      FlameAudio.bgm.stop();
     }
     level = Level(
       levelName: levels[gameData?.currentLevel ?? 0]['level'].name,
@@ -442,5 +433,13 @@ class PixelAdventure extends FlameGame
 
   Future<void> getGameService() async {
     gameService ??= await GameService.getInstance();
+  }
+
+  Future<void> getLevelService() async {
+    levelService ??= await LevelService.getInstance();
+  }
+
+  Future<void> getSettingsService() async {
+    settingsService ??= await SettingsService.getInstance();
   }
 }

@@ -211,5 +211,5 @@ class DatabaseManager {
     }
   }
 
-  Database get database => _database!;
+  Database get database => _database;
 }

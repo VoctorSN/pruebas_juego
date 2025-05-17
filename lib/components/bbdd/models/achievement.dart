@@ -1,4 +1,4 @@
-import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
+
 
 class Achievement {
   final int id;

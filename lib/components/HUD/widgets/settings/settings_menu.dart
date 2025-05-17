@@ -1,10 +1,12 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:fruit_collector/components/HUD/widgets/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets/pause_menu.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/game_volume_controller_widget.dart';
+import 'package:fruit_collector/components/HUD/widgets/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_HUD.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_controls.dart';
-import 'package:fruit_collector/components/HUD/widgets/settings/game_volume_controller_widget.dart';
+
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 
@@ -17,8 +19,8 @@ class SettingsMenu extends StatelessWidget {
 
   late double sizeHUD = game.hudSize;
   late double sizeControls = game.controlSize;
-  late double gameVolume = game.gameSoundVolume;
-  late double musicVolume = game.musicSoundVolume;
+  late double gameVolume = game.settings.gameVolume;
+  late double musicVolume = game.settings.musicVolume;
 
   updateSizeHUD(double newValue) => sizeHUD = newValue;
   updateSizeControls(double newValue) => sizeControls = newValue;
@@ -121,8 +123,8 @@ class SettingsMenu extends StatelessWidget {
                               game.hudSize = sizeHUD;
                               game.controlSize = sizeControls;
                               game.reloadAllButtons();
-                              game.gameSoundVolume = gameVolume;
-                              game.musicSoundVolume = musicVolume;
+                              game.settings.gameVolume = gameVolume;
+                              game.settings.musicVolume = musicVolume;
                             },
                             icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
                             label: Text(

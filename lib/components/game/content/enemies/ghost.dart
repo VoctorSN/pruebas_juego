@@ -78,8 +78,8 @@ class Ghost extends SpriteAnimationGroupComponent
   }
 
   void _spawn() async {
-    if (game.isGameSoundsActive) {
-      SoundManager().playAppearGhost(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) {
+      SoundManager().playAppearGhost(game.settings.gameVolume);
     }
     current = GhostState.appearing;
     await animationTicker?.completed;
@@ -87,8 +87,8 @@ class Ghost extends SpriteAnimationGroupComponent
   }
 
   void respawn() async {
-    if (game.isGameSoundsActive) {
-      SoundManager().playDisappearGhost(game.gameSoundVolume);
+    if (game.settings.isSoundEnabled) {
+      SoundManager().playDisappearGhost(game.settings.gameVolume);
     }
     current = GhostState.disappearing;
     await animationTicker?.completed;

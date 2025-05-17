@@ -16,7 +16,7 @@ class PauseMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (game.isMusicActive) {
+    if (game.settings.isMusicActive) {
       FlameAudio.bgm.stop();
     }
 
@@ -64,8 +64,11 @@ class PauseMenu extends StatelessWidget {
                 onPressed: () {
                   game.overlays.remove(PauseMenu.id);
                   game.resumeEngine();
-                  if (game.isMusicActive) {
-                    FlameAudio.bgm.play('background_music.mp3', volume: game.musicSoundVolume);
+                  if (game.settings.isMusicActive) {
+                    FlameAudio.bgm.play('background_music.mp3', volume: game.settings.musicVolume);
+                    print('Playing music with volume: ${game.settings}');
+                  } else {
+                    FlameAudio.bgm.stop();
                   }
                 },
                 icon: Icon(Icons.play_arrow, color: textColor),
@@ -90,9 +93,14 @@ class PauseMenu extends StatelessWidget {
                   game.overlays.remove(PauseMenu.id);
                   game.overlays.add(MainMenu.id);
                   game.pauseEngine();
-                  if (game.isMusicActive) {
-                    FlameAudio.bgm.play('background_music.mp3', volume: game.musicSoundVolume);
-                  }
+                  /// no music for the main menu, uncomment de code below to make it sound
+                  FlameAudio.bgm.stop();
+                  // if (game.settings.isMusicActive) {
+                  //   FlameAudio.bgm.play('background_music.mp3', volume: game.settings.musicVolume);
+                  //   print('Playing music with volume: ${game.settings}');
+                  // } else {
+                  //   FlameAudio.bgm.stop();
+                  // }
                 },
                 icon: Icon(Icons.home, color: textColor),
                 label: Text('MAIN MENU', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),

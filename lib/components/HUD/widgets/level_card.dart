@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../style/text_style_singleton.dart';
 
 class LevelCard extends StatefulWidget {

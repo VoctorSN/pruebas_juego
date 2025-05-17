@@ -70,7 +70,7 @@ class LootBox extends SpriteAnimationGroupComponent with HasGameReference<PixelA
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       hp--;
-      if (game.isGameSoundsActive) SoundManager().playBounce(game.gameSoundVolume);
+      if (game.settings.isSoundEnabled) SoundManager().playBounce(game.settings.gameVolume);
       current = LootBoxState.hit;
       player.velocity.y = -_bounceHeight;
       await animationTicker?.completed;

@@ -1,6 +1,7 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../db.dart';
+import '../models/settings.dart';
 
 class SettingsRepository {
   static SettingsRepository? _instance;
@@ -30,5 +31,18 @@ class SettingsRepository {
       'game_volume': 0.5,
       'music_volume': 0.5,
     });
+  }
+
+  Future<Settings?> getSettings(int gameId) async {
+    final List<Map<String, Object?>> result = await _db.query(
+      'Settings',
+      where: 'game_id = ?',
+      whereArgs: [gameId],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+
+    return Settings.fromMap(result.first);
   }
 }

@@ -37,14 +37,14 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
   _ToggleMusicVolumeWidgetState({
     required this.game,
     required this.updateMusicVolume,
-  }) : isSliderActive = game.isMusicActive;
+  }) : isSliderActive = game.settings.isMusicActive;
 
   bool isMuted = false;
   late double value;
   bool isSliderActive;
 
   Image get volumeImage {
-    return game.isMusicActive
+    return game.settings.isMusicActive
         ? Image.asset(
       'assets/images/GUI/HUD/soundOnButton.png',
       fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
             width: sliderWidth,
             child: NumberSlider(
               game: game,
-              value: game.musicSoundVolume * 50,
+              value: game.settings.musicVolume * 50,
               onChanged: onChanged,
               isActive: isSliderActive,
             ),
@@ -88,7 +88,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
   }
 
   double? onChanged(dynamic value) {
-    if (!game.isMusicActive) {
+    if (!game.settings.isMusicActive) {
       return null;
     }
 
@@ -98,7 +98,7 @@ class _ToggleMusicVolumeWidgetState extends State<ToggleMusicVolumeWidget> {
 
   void changeState() {
     setState(() {
-      game.isMusicActive = !game.isMusicActive;
+      game.settings.isMusicActive = !game.settings.isMusicActive;
       isSliderActive = !isSliderActive;
     });
   }
