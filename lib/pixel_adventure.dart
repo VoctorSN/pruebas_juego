@@ -31,7 +31,6 @@ import 'components/bbdd/models/game.dart' as models;
 import 'components/bbdd/models/settings.dart';
 import 'components/bbdd/services/game_service.dart';
 import 'components/game/achievements/achievement_manager.dart';
-import 'components/game/achievements/game_stats.dart';
 import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
@@ -282,20 +281,6 @@ class PixelAdventure extends FlameGame
       add(jumpButton!);
       addJoystick();
     }
-  }
-
-  GameStats getGameStats() {
-    return GameStats(
-      currentLevel: gameData?.currentLevel ?? 0,
-      levelName: level.levelName,
-      unlockedLevels: List.from(unlockedLevelIndices),
-      completedLevels: List.from(completedLevelIndices),
-      starsPerLevel: Map.from(starsPerLevel),
-      totalDeaths: gameData?.totalDeaths ?? 0,
-      totalTime: gameData?.totalTime ?? 0,
-      levelTimes: Map.from(levelTimes),
-      levelDeaths: Map.from(levelDeaths),
-    );
   }
 
   void updateGlobalStats() {

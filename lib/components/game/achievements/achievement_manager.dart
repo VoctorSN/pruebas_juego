@@ -1,6 +1,5 @@
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
-import 'package:fruit_collector/components/game/achievements/game_stats.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../HUD/widgets/achievement_toast.dart';
