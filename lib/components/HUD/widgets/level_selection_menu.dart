@@ -129,7 +129,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                 runSpacing: _cardSpacing,
                                 alignment: WrapAlignment.center,
                                 children: List.generate(widget.totalLevels, (index) {
-                                  final int level = index + 1;
+                                  final int level = index;
                                   final bool isUnlocked = widget.game.unlockedLevelIndices.contains(level);
                                   final bool isCompleted = widget.game.completedLevelIndices.contains(level);
 

@@ -223,7 +223,7 @@ class PixelAdventure extends FlameGame
 
           overlays.remove(LevelSelectionMenu.id);
           resumeEngine();
-          gameData?.currentLevel = level - 1;
+          gameData?.currentLevel = level;
           _loadActualLevel();
         },
       ),
@@ -286,7 +286,7 @@ class PixelAdventure extends FlameGame
 
   GameStats getGameStats() {
     return GameStats(
-      currentLevel: gameData?.currentLevel ?? 0 + 1,
+      currentLevel: gameData?.currentLevel ?? 0,
       levelName: level.levelName,
       unlockedLevels: List.from(unlockedLevelIndices),
       completedLevels: List.from(completedLevelIndices),
@@ -320,13 +320,13 @@ class PixelAdventure extends FlameGame
     levels[currentLevel-1]['gameLevel'].stars = level.starsCollected;
 
     // Mark the current level as completed
-    GameLevel currentGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
+    GameLevel currentGameLevel = levels[currentLevel-1]['gameLevel'] as GameLevel;
     currentGameLevel.completed = true;
     print('Level $currentLevel marked as completed!');
 
     // Unlock the next level if it exists
     if (currentLevel < levels.length) {
-      GameLevel nextGameLevel = levels[currentLevel + 1]['gameLevel'] as GameLevel;
+      GameLevel nextGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
       nextGameLevel.unlocked = true;
       print('Level ${currentLevel + 1} unlocked!');
       gameData!.currentLevel = currentLevel;
@@ -385,7 +385,10 @@ class PixelAdventure extends FlameGame
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
     addAll([cam, level]);
-    achievementManager.evaluate(getGameStats());
+  }
+
+  void evaluateAchievements() {
+    achievementManager.evaluate();
   }
 
   void addJoystick() {

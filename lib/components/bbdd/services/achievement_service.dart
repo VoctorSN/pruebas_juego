@@ -24,6 +24,7 @@ class AchievementService {
     );
 
     if (gameAchievement == null) {
+      print('GameAchievement not found for gameId: $gameId, achievementId: $achievementId');
       throw Exception('GameAchievement not found');
     }
     // Update to mark as achieved
@@ -65,5 +66,9 @@ class AchievementService {
 
       return {'achievement': achievement, 'gameAchievement': gameAchievement};
     }).toList();
+  }
+
+  Future<Iterable<Object?>> getUnlockedAchievementsForGame(int id) {
+    return _achievementRepository.getUnlockedAchievementsForGame(id);
   }
 }

@@ -69,7 +69,7 @@ class _LevelCardState extends State<LevelCard> {
             alignment: Alignment.center,
             children: [
               Text(
-                '${widget.levelNumber}',
+                '${widget.levelNumber + 1}',
                 style: TextStyleSingleton().style.copyWith(
                   fontSize: 22,
                   color: widget.isLocked ? Colors.grey[300] : widget.textColor,

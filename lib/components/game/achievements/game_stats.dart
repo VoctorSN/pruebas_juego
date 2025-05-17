@@ -20,4 +20,12 @@ class GameStats {
     required this.levelTimes,
     required this.levelDeaths,
   });
+
+  @override
+  String toString() {
+    return 'GameStats{currentLevel: $currentLevel, levelName: $levelName, '
+        'unlockedLevels: $unlockedLevels, completedLevels: $completedLevels, '
+        'starsPerLevel: $starsPerLevel, totalDeaths: $totalDeaths, '
+        'totalTime: $totalTime, levelTimes: $levelTimes, levelDeaths: $levelDeaths}';
+  }
 }
