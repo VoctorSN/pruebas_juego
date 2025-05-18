@@ -20,6 +20,7 @@ class Stars extends SpriteAnimationComponent with HasGameReference<PixelAdventur
 
   @override
   FutureOr<void> onLoad() {
+    priority = -1;
     add(RectangleHitbox(collisionType: CollisionType.passive));
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('Gems/$name.png'),

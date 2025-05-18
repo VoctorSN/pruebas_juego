@@ -82,6 +82,7 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   FutureOr<void> onLoad() {
+    priority = -1;
     _loadAllAnimations();
     // debugMode = true;
     statringPosition = Vector2(position.x, position.y);
@@ -95,9 +96,6 @@ class Player extends SpriteAnimationGroupComponent
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
       if (!gotHit && !hasReached) {
-        if (isOnSand) {
-          priority = -1;
-        }
         _updatePlayerState();
         _updatePlayerMovement(fixedDeltaTime);
         _checkHorizontalCollisions();
