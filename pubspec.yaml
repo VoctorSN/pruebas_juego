@@ -42,6 +42,7 @@ flutter:
     - assets/tiles/
     - assets/images/Gems/
     - assets/images/Terrain/
+    - assets/images/difficulty/
     - assets/images/GUI/HUD/
     - assets/images/Items/Fruits/
     - assets/images/Items/Boxes/Box2/

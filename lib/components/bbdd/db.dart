@@ -20,34 +20,34 @@ class DatabaseManager {
     return _instance!;
   }
 
-    ///For rebase de Database
-    ///await databaseFactory.deleteDatabase(dbPath);
+  ///For rebase de Database
+  ///await databaseFactory.deleteDatabase(dbPath);
   Future<void> resetDatabase() async {
     final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
     await databaseFactory.deleteDatabase(dbPath);
   }
 
   Future<void> _initDatabase() async {
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  } else {
-    databaseFactory = databaseFactory; // móvil usa la versión normal
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    } else {
+      databaseFactory = databaseFactory; // móvil usa la versión normal
+    }
+
+    final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
+    print('Database path: $dbPath');
+
+    _database = await databaseFactory.openDatabase(
+      dbPath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (db, version) async {
+          await initializeDB(db);
+        },
+      ),
+    );
   }
-
-  final String dbPath = join(await databaseFactory.getDatabasesPath(), 'fruit_collector.db');
-  print('Database path: $dbPath');
-
-  _database = await databaseFactory.openDatabase(
-    dbPath,
-    options: OpenDatabaseOptions(
-      version: 1,
-      onCreate: (db, version) async {
-        await initializeDB(db);
-      },
-    ),
-  );
-}
 
   Future<void> initializeDB(Database db) async {
     await db.execute('''
@@ -141,51 +141,59 @@ class DatabaseManager {
     // INSERT INTO Achievements
     await db.insert('Achievements', {
       'id': 1001,
-      'title': 'Completa el nivel 1',
-      'description': 'Has completado el nivel 1',
+      'title': 'It Begins',
+      'description':
+          'Has completado tu primer nivel. Todo viaje empieza con un pequeño paso, incluso si pisas una trampa nada más empezar.',
       'difficulty': 1,
     });
     await db.insert('Achievements', {
       'id': 1002,
-      'title': 'Completa todos los niveles',
-      'description': 'Has completado todos los niveles',
-      'difficulty': 6,
+      'title': 'The Chosen One',
+      'description':
+          'Has completado todos los niveles. Has cruzado valles, junglas y bugs sin miedo. Ya puedes pedirle respeto a tu teclado.',
+      'difficulty': 3,
     });
     await db.insert('Achievements', {
       'id': 1003,
-      'title': 'Nivel 4 superado',
-      'description': 'Has completado el nivel 4',
+      'title': 'Level 4: Reloaded',
+      'description':
+          'Derrotaste el nivel 4. Has visto cosas que no creerías: plataformas en llamas, frutas imposibles... y aún así, sigues en pie.',
       'difficulty': 2,
     });
     await db.insert('Achievements', {
       'id': 1004,
-      'title': 'Speedrunner',
-      'description': 'Acaba el juego en menos de 300 segundos',
-      'difficulty': 9,
-    });
-    await db.insert('Achievements', {
-      'id': 1005,
-      'title': 'Sin morir',
-      'description': 'Completa el juego sin morir',
-      'difficulty': 10,
-    });
-    await db.insert('Achievements', {
-      'id': 1006,
-      'title': 'Estrellas de nivel 5',
-      'description': 'Encuentra todas las estrellas en el nivel 5',
-      'difficulty': 5,
-    });
-    await db.insert('Achievements', {
-      'id': 1007,
-      'title': 'Nivel 2 perfecto',
-      'description': 'Pásate el nivel 2 sin morir',
+      'title': 'Gotta Go Fast!',
+      'description':
+          'Acabaste el juego en menos de 300 segundos. ¿Eres humano? ¿Un robot? ¿Un speedrunner con los reflejos de un gato ninja?',
       'difficulty': 4,
     });
     await db.insert('Achievements', {
+      'id': 1005,
+      'title': 'Untouchable',
+      'description':
+          'Completaste el juego sin morir ni una sola vez. Increíble. Te vamos a pedir pruebas... y una partida grabada.',
+      'difficulty': 5,
+    });
+    await db.insert('Achievements', {
+      'id': 1006,
+      'title': 'Shiny Hunter',
+      'description':
+          'Encontraste todas las estrellas ocultas del nivel 5. Tu OCD está orgulloso de ti. Y nosotros también.',
+      'difficulty': 3,
+    });
+    await db.insert('Achievements', {
+      'id': 1007,
+      'title': 'No Hit Run: Nivel 2',
+      'description':
+          'Completaste el nivel 2 sin recibir daño ni morir. ¿Estrategia? ¿Memoria? ¿Magia oscura? Sea como sea, funcionó.',
+      'difficulty': 3,
+    });
+    await db.insert('Achievements', {
       'id': 1008,
-      'title': 'Nivel 6 en 5 seg',
-      'description': 'Completa el nivel 6 en menos de 5 segundos',
-      'difficulty': 7,
+      'title': 'Flashpoint',
+      'description':
+          'Terminaste el nivel 6 en menos de 5 segundos. Literalmente rompiste el espacio-tiempo. Barry Allen estaría orgulloso.',
+      'difficulty': 5,
     });
 
     // INSERT INTO Levels

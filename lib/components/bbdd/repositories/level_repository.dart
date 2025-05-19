@@ -2,7 +2,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../db.dart';
 import '../models/game_level.dart';
-import '../models/level.dart';
+import '../models/levelModel.dart';
 
 class LevelRepository {
   static LevelRepository? _instance;
