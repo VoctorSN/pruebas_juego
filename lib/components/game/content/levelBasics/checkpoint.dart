@@ -48,6 +48,9 @@ class Checkpoint extends SpriteAnimationComponent
   }
 
   void _reachedCheckpoint() async {
+
+    game.level.stopLevelTimer();
+
     animation = _flagOutAnimation;
 
     await animationTicker?.completed;

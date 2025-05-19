@@ -335,12 +335,14 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _respawn() async {
-    if (isRespawning) {
-      return;
-    }
+
+    if (isRespawning) return;
+
     game.level.registerDeath();
     isRespawning = true;
+
     if (game.settings.isSoundEnabled) SoundManager().playHit(game.settings.gameVolume);
+
     // Realizar el respawn
     gotHit = true;
     isOnSand = false;
@@ -350,8 +352,10 @@ class Player extends SpriteAnimationGroupComponent
     velocity = Vector2.zero();
     position = statringPosition;
     _updatePlayerState();
+
     Future.delayed(const Duration(milliseconds: 1400), () => gotHit = false);
     await game.removeBlackScreen();
+
     _jumpForce = 260;
     moveSpeed = 100;
     isRespawning = false;

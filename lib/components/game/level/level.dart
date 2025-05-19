@@ -322,6 +322,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
    return lastTime;
   }
 
+  int get minorDeaths {
+   final int lastDeathCount = deathCount;
+   if (levelData != null) {
+     if (lastDeathCount < levelData!.deaths) {
+       levelData!.deaths = lastDeathCount;
+     }
+   }
+   return lastDeathCount;
+  }
+
   Future<void> saveLevel() async {
     if (levelData != null) {
       LevelService service = await LevelService.getInstance();

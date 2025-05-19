@@ -18,7 +18,6 @@ class GameSelector extends StatefulWidget {
 }
 
 class _GameSelectorState extends State<GameSelector> {
-
   Game? slot1;
   Game? slot2;
   Game? slot3;
@@ -28,7 +27,7 @@ class _GameSelectorState extends State<GameSelector> {
   int? slotToDelete;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _loadSlots();
   }
@@ -76,7 +75,7 @@ class _GameSelectorState extends State<GameSelector> {
     );
 
     final double topPadding = MediaQuery.of(context).padding.top + 18;
-    
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -89,10 +88,7 @@ class _GameSelectorState extends State<GameSelector> {
               child: Container(
                 padding: const EdgeInsets.all(24),
                 width: 400,
-                decoration: BoxDecoration(
-                  color: baseColor.withOpacity(0.75),
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                decoration: BoxDecoration(color: baseColor.withOpacity(0.75), borderRadius: BorderRadius.circular(8)),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -102,13 +98,7 @@ class _GameSelectorState extends State<GameSelector> {
                       style: TextStyleSingleton().style.copyWith(
                         fontSize: 32,
                         color: textColor,
-                        shadows: const [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(2, 2),
-                            blurRadius: 4,
-                          ),
-                        ],
+                        shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4)],
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -129,13 +119,7 @@ class _GameSelectorState extends State<GameSelector> {
                         children: [
                           const Icon(Icons.arrow_back, size: 18),
                           const SizedBox(width: 8),
-                          Text(
-                            'BACK',
-                            style: TextStyleSingleton().style.copyWith(
-                              fontSize: 13,
-                              color: textColor,
-                            ),
-                          ),
+                          Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 13, color: textColor)),
                         ],
                       ),
                     ),
@@ -145,27 +129,15 @@ class _GameSelectorState extends State<GameSelector> {
             ),
           ),
         ),
-        if (slotToDelete != null)
-          Center(
-            child: _buildCustomModal(slotToDelete!),
-          ),
+        if (slotToDelete != null) Center(child: _buildCustomModal(slotToDelete!)),
       ],
     );
   }
 
-  Widget _buildSlot(
-    Game? game,
-    int slotNumber,
-    ButtonStyle style,
-    Color textColor,
-  ) {
+  Widget _buildSlot(Game? game, int slotNumber, ButtonStyle style, Color textColor) {
     final isEmpty = game == null;
-    final label = isEmpty
-        ? 'Empty'
-        : 'SAVE SLOT $slotNumber - Level ${game.currentLevel + 1}';
-    final icon = isEmpty
-        ? Icons.insert_drive_file_outlined
-        : Icons.insert_drive_file;
+    final label = isEmpty ? 'Empty' : 'SAVE SLOT $slotNumber - Level ${game.currentLevel + 1}';
+    final icon = isEmpty ? Icons.insert_drive_file_outlined : Icons.insert_drive_file;
 
     return _slotButton(
       label: label,
@@ -205,39 +177,32 @@ class _GameSelectorState extends State<GameSelector> {
               ),
             ),
           ),
-          if (showDelete && onDelete != null)
-            _buildDeleteIcon(onDelete),
+          if (showDelete && onDelete != null) _buildDeleteIcon(onDelete),
         ],
       ),
     );
   }
 
   Widget _buildDeleteIcon(VoidCallback onDelete) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        bool isHovering = false;
-
-        return MouseRegion(
-          onEnter: (_) => setState(() => isHovering = true),
-          onExit: (_) => setState(() => isHovering = false),
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: onDelete,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.delete_outline,
-                color: Colors.white,
-                size: 18,
-              ),
-            ),
-          ),
-        );
-      },
+    final Color redColor = const Color.fromARGB(255, 199, 89, 89);
+    return GestureDetector(
+      onTap: onDelete,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.15),
+          border: Border.all(color: redColor),
+          borderRadius: BorderRadius.circular(3),
+        ),
+        child: Icon(
+          Icons.delete_outline,
+          color: redColor,
+          size: 18,
+        ),
+      ),
     );
   }
-  
+
   void _confirmDelete(int slot) {
     setState(() {
       slotToDelete = slot;
@@ -265,19 +230,13 @@ class _GameSelectorState extends State<GameSelector> {
             children: [
               Text(
                 'DELETE  SLOT  $slot',
-                style: TextStyleSingleton().style.copyWith(
-                  fontSize: 22,
-                  color: Colors.redAccent,
-                ),
+                style: TextStyleSingleton().style.copyWith(fontSize: 22, color: Colors.redAccent),
               ),
               const SizedBox(height: 16),
               Text(
                 'Are  you  sure  you  want  to  delete  this slot?\nThis  action  cannot  be  undone.',
                 textAlign: TextAlign.center,
-                style: TextStyleSingleton().style.copyWith(
-                  fontSize: 14,
-                  color: textColor,
-                ),
+                style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
               ),
               const SizedBox(height: 24),
               Row(
@@ -294,10 +253,7 @@ class _GameSelectorState extends State<GameSelector> {
                       ),
                     ),
                     icon: const Icon(Icons.close, size: 16),
-                    label: Text(
-                      'Cancel',
-                      style: TextStyleSingleton().style.copyWith(fontSize: 14),
-                    ),
+                    label: Text('Cancel', style: TextStyleSingleton().style.copyWith(fontSize: 14)),
                   ),
                   ElevatedButton.icon(
                     onPressed: () async {
@@ -314,10 +270,7 @@ class _GameSelectorState extends State<GameSelector> {
                       ),
                     ),
                     icon: const Icon(Icons.delete_forever, size: 16),
-                    label: Text(
-                      'Delete',
-                      style: TextStyleSingleton().style.copyWith(fontSize: 14),
-                    ),
+                    label: Text('Delete', style: TextStyleSingleton().style.copyWith(fontSize: 14)),
                   ),
                 ],
               ),
@@ -334,7 +287,7 @@ class _GameSelectorState extends State<GameSelector> {
     widget.game.resumeEngine();
   }
 
-  Future<void> getGameService() async{
+  Future<void> getGameService() async {
     gameService ??= await GameService.getInstance();
   }
 }

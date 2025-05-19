@@ -320,6 +320,7 @@ class PixelAdventure extends FlameGame
           levels[currentLevel - 1]['gameLevel'] as GameLevel;
       currentGameLevel.completed = true;
       currentGameLevel.time = level.levelTime;
+      currentGameLevel.deaths = level.deathCount;
       print('Level $currentLevel marked as completed!');
 
       // Unlock the next level if it exists

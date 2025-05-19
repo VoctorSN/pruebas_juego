@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../pixel_adventure.dart';
 import '../style/text_style_singleton.dart';
@@ -169,19 +170,38 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      style: buttonStyle,
-                      onPressed: onBack,
-                      icon: Icon(Icons.arrow_back, color: textColor),
-                      label: Text(
-                        'BACK',
-                        style: TextStyleSingleton().style.copyWith(
-                          fontSize: 14,
-                          color: textColor,
-                        ),
+                    const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.skull, size: 12, color: Colors.white),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${widget.game.gameData?.totalDeaths ?? 0}',
+                            style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
+                          ),
+                        ],
                       ),
-                    ),
+                      ElevatedButton.icon(
+                        style: buttonStyle,
+                        onPressed: onBack,
+                        icon: Icon(Icons.arrow_back, color: textColor),
+                        label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${widget.game.gameData?.totalTime ?? 0}',
+                            style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor,),
+                          ),
+                          const SizedBox(width: 6),
+                          Icon(Icons.access_time, size: 18, color: textColor),
+                        ],
+                      ),
+                    ],
+                  ),
                   ],
                 ),
               );
