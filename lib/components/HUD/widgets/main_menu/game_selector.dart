@@ -18,11 +18,14 @@ class GameSelector extends StatefulWidget {
 }
 
 class _GameSelectorState extends State<GameSelector> {
+
   Game? slot1;
   Game? slot2;
   Game? slot3;
 
   GameService? gameService;
+
+  int? slotToDelete;
 
   @override
   void initState(){
@@ -73,7 +76,7 @@ class _GameSelectorState extends State<GameSelector> {
     );
 
     final double topPadding = MediaQuery.of(context).padding.top + 18;
-
+    
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -142,6 +145,10 @@ class _GameSelectorState extends State<GameSelector> {
             ),
           ),
         ),
+        if (slotToDelete != null)
+          Center(
+            child: _buildCustomModal(slotToDelete!),
+          ),
       ],
     );
   }
@@ -167,6 +174,8 @@ class _GameSelectorState extends State<GameSelector> {
       style: style,
       textColor: textColor,
       isEmpty: isEmpty,
+      showDelete: !isEmpty,
+      onDelete: () => _confirmDelete(slotNumber),
     );
   }
 
@@ -177,6 +186,8 @@ class _GameSelectorState extends State<GameSelector> {
     required ButtonStyle style,
     required Color textColor,
     required bool isEmpty,
+    bool showDelete = false,
+    VoidCallback? onDelete,
   }) {
     return ElevatedButton(
       style: style,
@@ -194,7 +205,125 @@ class _GameSelectorState extends State<GameSelector> {
               ),
             ),
           ),
+          if (showDelete && onDelete != null)
+            _buildDeleteIcon(onDelete),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDeleteIcon(VoidCallback onDelete) {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        bool isHovering = false;
+
+        return MouseRegion(
+          onEnter: (_) => setState(() => isHovering = true),
+          onExit: (_) => setState(() => isHovering = false),
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onDelete,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(8),
+              child: const Icon(
+                Icons.delete_outline,
+                color: Colors.white,
+                size: 18,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  void _confirmDelete(int slot) {
+    setState(() {
+      slotToDelete = slot;
+    });
+  }
+
+  Widget _buildCustomModal(int slot) {
+    final Color baseColor = const Color(0xFF212030);
+    final Color borderColor = const Color(0xFF5A5672);
+    final Color textColor = const Color(0xFFE1E0F5);
+
+    return Material(
+      color: Colors.black.withOpacity(0.6),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          width: 360,
+          decoration: BoxDecoration(
+            color: baseColor.withOpacity(0.95),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: borderColor, width: 2),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'DELETE  SLOT  $slot',
+                style: TextStyleSingleton().style.copyWith(
+                  fontSize: 22,
+                  color: Colors.redAccent,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Are  you  sure  you  want  to  delete  this slot?\nThis  action  cannot  be  undone.',
+                textAlign: TextAlign.center,
+                style: TextStyleSingleton().style.copyWith(
+                  fontSize: 14,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () => setState(() => slotToDelete = null),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey.shade700,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        side: BorderSide(color: borderColor),
+                      ),
+                    ),
+                    icon: const Icon(Icons.close, size: 16),
+                    label: Text(
+                      'Cancel',
+                      style: TextStyleSingleton().style.copyWith(fontSize: 14),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      setState(() => slotToDelete = null);
+                      await gameService?.deleteGameBySpace(space: slot);
+                      await _loadSlots();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        side: BorderSide(color: borderColor),
+                      ),
+                    ),
+                    icon: const Icon(Icons.delete_forever, size: 16),
+                    label: Text(
+                      'Delete',
+                      style: TextStyleSingleton().style.copyWith(fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

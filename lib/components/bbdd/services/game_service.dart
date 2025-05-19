@@ -84,6 +84,7 @@ class GameService {
 
     print('Deleting game with space: $space');
     await _gameRepository.deleteGameBySpace(space: space);
+    /// TODO: THE DELETE ON CASCADE DOESNT WORK
     // ON DELETE CASCADE will remove related GameLevel, Settings, and GameAchievement records
   }
 }
