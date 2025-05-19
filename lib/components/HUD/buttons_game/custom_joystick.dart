@@ -86,11 +86,13 @@ class CustomJoystick extends PositionComponent
       case JoystickDirection.upLeft:
       case JoystickDirection.downLeft:
         player.horizontalMovement = -1;
+        player.isDownPressed = false;
         break;
       case JoystickDirection.right:
       case JoystickDirection.upRight:
       case JoystickDirection.downRight:
         player.horizontalMovement = 1;
+        player.isDownPressed = false;
         break;
       case JoystickDirection.down:
         player.isDownPressed = true;
