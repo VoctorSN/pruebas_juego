@@ -18,7 +18,7 @@ class LevelSelection extends SpriteComponent
 
   @override
   FutureOr<void> onLoad() {
-    priority = 100;
+    priority = 102;
     sprite = Sprite(game.images.fromCache('GUI/HUD/levelButton.png'));
     size = Vector2.all(buttonSize);
     position = Vector2(10, 10);

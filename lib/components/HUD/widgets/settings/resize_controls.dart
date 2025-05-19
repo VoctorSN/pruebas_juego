@@ -5,8 +5,8 @@ import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
 // TODO: When you press it doesnt depends on applyButton (showControls and leftHanded)
+// TODO: You have to press the button isLeftHanded two times to change the image (only pair of times)
 
-// Constantes para definir el tamaño y la posición
 const double rowWidth = 475.0;
 const double textPositionX = 15.0;
 const double sliderPositionX = 0.0;

@@ -13,7 +13,7 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
 
   @override
   FutureOr<void> onLoad() {
-    priority = 100;
+    priority = 102;
     sprite = Sprite(game.images.fromCache('GUI/HUD/menuButton.png'));
     size = Vector2.all(buttonSize);
     position = Vector2(game.size.x - buttonSize - 20, 10);

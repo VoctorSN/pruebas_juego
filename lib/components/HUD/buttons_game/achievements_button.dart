@@ -14,7 +14,7 @@ class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdve
 
   @override
   FutureOr<void> onLoad() {
-    priority = 100;
+    priority = 102;
     sprite = Sprite(game.images.fromCache('GUI/HUD/achievementsButton.png'));
     size = Vector2.all(buttonSize);
     position = Vector2((buttonSize * 2) + 30, 10);

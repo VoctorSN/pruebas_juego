@@ -5,30 +5,49 @@ import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
 
-class JumpButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
+class JumpButton extends PositionComponent
+    with HasGameReference<PixelAdventure>, TapCallbacks {
   final double buttonSize;
+  late SpriteComponent buttonSprite;
 
   JumpButton(this.buttonSize);
 
   @override
   FutureOr<void> onLoad() {
-    priority = 15;
-    sprite = Sprite(game.images.fromCache('GUI/HUD/jumpButton.png'));
-    size = Vector2.all(buttonSize * 2);
-    position = Vector2(game.settings.isLeftHanded ? 32 : game.size.x - size.x - 32, game.size.y - size.y - 32);
+    priority = 101;
+
+    _setSizeAndPosition(game.size);
+
+    buttonSprite = SpriteComponent(
+      sprite: Sprite(game.images.fromCache('GUI/HUD/jumpButton.png')),
+      size: Vector2.all(buttonSize * 2),
+      anchor: Anchor.bottomLeft,
+      position: game.settings.isLeftHanded
+          ? Vector2(32, size.y - 32)
+          : Vector2(size.x - buttonSize * 2 - 32, size.y - 32),
+    );
+
+    add(buttonSprite);
 
     return super.onLoad();
   }
 
   @override
-  // ignore: avoid_renaming_method_parameters
   void onGameResize(Vector2 gameSize) {
     super.onGameResize(gameSize);
-    // Update the position of the button when the game is resized
-    position =
-        game.settings.isLeftHanded
-            ? Vector2(32, gameSize.y - size.y - 32)
-            : Vector2(gameSize.x - size.x - 32, gameSize.y - size.y - 32);
+
+    _setSizeAndPosition(gameSize);
+
+    buttonSprite.position = game.settings.isLeftHanded
+        ? Vector2(32, size.y - 32)
+        : Vector2(size.x - buttonSprite.size.x - 32, size.y - 32);
+  }
+
+  void _setSizeAndPosition(Vector2 gameSize) {
+    size = Vector2(gameSize.x / 2, gameSize.y / 2);
+    position = game.settings.isLeftHanded
+        ? Vector2(0, gameSize.y / 2) // inferior izquierdo
+        : Vector2(gameSize.x / 2, gameSize.y / 2); // inferior derecho
   }
 
   @override
