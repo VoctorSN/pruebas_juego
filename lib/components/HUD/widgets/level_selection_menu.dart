@@ -27,26 +27,18 @@ class LevelSelectionMenu extends StatefulWidget {
 class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
   final ScrollController _scrollController = ScrollController();
 
-  static const double _cardHeight = 100;
   static const double _cardSpacing = 12;
-  static const double _minCardWidth = 80;
+  static const double _minCardSize = 90;
   static const double _minCardsPerRow = 3;
 
-  void scrollByRow({required bool forward}) {
-    // Calculate the total height of one row (card height + spacing)
-    const double rowHeight = _cardHeight + _cardSpacing;
-
-    // Determine the current row based on the scroll offset
+  void scrollByRow({required bool forward, required double rowSize}) {
+    final double rowHeight = rowSize + _cardSpacing;
     final double currentOffset = _scrollController.offset;
     final int currentRow = (currentOffset / rowHeight).round();
 
-    // Calculate the target row (next or previous)
     final int targetRow = forward ? currentRow + 1 : (currentRow - 1).clamp(0, double.infinity).toInt();
-
-    // Calculate the target offset for the top of the target row
     final double targetOffset = targetRow * rowHeight;
 
-    // Animate to the target offset
     _scrollController.animateTo(
       targetOffset,
       duration: const Duration(milliseconds: 250),
@@ -88,9 +80,9 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
               final double maxHeight = constraints.maxHeight * 0.8;
 
               final double availableWidth = maxWidth - 96;
-              final double calculatedCardsPerRow = (availableWidth / (_minCardWidth + _cardSpacing)).floorToDouble();
+              final double calculatedCardsPerRow = (availableWidth / (_minCardSize + _cardSpacing)).floorToDouble();
               final double cardsPerRow = calculatedCardsPerRow.clamp(_minCardsPerRow, double.infinity);
-              final double cardWidth = (availableWidth - (_cardSpacing * (cardsPerRow - 1))) / cardsPerRow;
+              final double cardSize = (availableWidth - (_cardSpacing * (cardsPerRow - 1))) / cardsPerRow;
 
               return Container(
                 width: maxWidth,
@@ -134,17 +126,19 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                                   final bool isCompleted = widget.game.completedLevelIndices.contains(level);
 
                                   return SizedBox(
-                                    height: _cardHeight,
-                                    width: cardWidth,
+                                    height: cardSize,
+                                    width: cardSize,
                                     child: LevelCard(
                                       levelNumber: level,
                                       onTap: isUnlocked ? () => widget.onLevelSelected(level) : null,
                                       cardColor: cardColor,
-                                      borderColor: borderColor,
                                       stars: widget.game.starsPerLevel[index] ?? 0,
                                       textColor: textColor,
                                       isLocked: !isUnlocked,
                                       isCompleted: isCompleted,
+                                      difficulty: widget.game.levels[index]['level'].difficulty ?? 0,
+                                      deaths: widget.game.levels[index]['gameLevel'].deaths ?? 0,
+                                      duration: widget.game.levels[index]['gameLevel'].time ?? 0,
                                     ),
                                   );
                                 }),
@@ -157,7 +151,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                             children: [
                               _buildScrollButton(
                                 icon: Icons.keyboard_arrow_up,
-                                onPressed: () => scrollByRow(forward: false),
+                                onPressed: () => scrollByRow(forward: false, rowSize: cardSize),
                                 color: cardColor,
                                 iconColor: textColor,
                                 borderColor: borderColor,
@@ -165,7 +159,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
                               const SizedBox(height: 8),
                               _buildScrollButton(
                                 icon: Icons.keyboard_arrow_down,
-                                onPressed: () => scrollByRow(forward: true),
+                                onPressed: () => scrollByRow(forward: true, rowSize: cardSize),
                                 color: cardColor,
                                 iconColor: textColor,
                                 borderColor: borderColor,
