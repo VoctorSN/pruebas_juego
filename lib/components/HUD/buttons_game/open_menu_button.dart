@@ -17,6 +17,7 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
     sprite = Sprite(game.images.fromCache('GUI/HUD/menuButton.png'));
     size = Vector2.all(buttonSize);
     position = Vector2(game.size.x - buttonSize - 20, 10);
+    anchor = Anchor.topRight;
     return super.onLoad();
   }
 
@@ -24,7 +25,7 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     // Update the position of the button when the game is resized
-    position = Vector2(size.x - buttonSize - 20, 10);
+    position = Vector2(game.size.x - 10, 10);
   }
 
   @override

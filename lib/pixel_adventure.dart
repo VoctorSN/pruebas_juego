@@ -279,10 +279,9 @@ class PixelAdventure extends FlameGame
     achievementsButton!.size = Vector2.all(settings.hudSize);
     levelSelectionButton!.size = Vector2.all(settings.hudSize);
     menuButton!.size = Vector2.all(settings.hudSize);
-    achievementsButton!.position = Vector2((settings.hudSize * 3) - 10, 10);
-    changeSkinButton!.position = Vector2((settings.hudSize * 2) - 20, 10);
-    levelSelectionButton!.position = Vector2(settings.hudSize - 30, 10);
-    menuButton!.position = Vector2(size.x - settings.hudSize - 20, 10);
+    achievementsButton!.position = Vector2((settings.hudSize * 2) + 30, 10);
+    changeSkinButton!.position = Vector2(settings.hudSize + 20, 10);
+    levelSelectionButton!.position = Vector2(10, 10);
     addAll([
       changeSkinButton!,
       levelSelectionButton!,

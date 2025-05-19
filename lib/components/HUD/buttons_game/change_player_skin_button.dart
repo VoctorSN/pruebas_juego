@@ -16,7 +16,7 @@ class ChangePlayerSkinButton extends SpriteComponent with HasGameReference<Pixel
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/characterButton.png'));
     size = Vector2.all(buttonSize);
-    position = Vector2((buttonSize * 2) - 20, 10);
+    position = Vector2(buttonSize + 20, 10);
     return super.onLoad();
   }
 

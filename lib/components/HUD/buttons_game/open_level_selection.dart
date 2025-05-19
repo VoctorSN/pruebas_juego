@@ -21,7 +21,7 @@ class LevelSelection extends SpriteComponent
     priority = 100;
     sprite = Sprite(game.images.fromCache('GUI/HUD/levelButton.png'));
     size = Vector2.all(buttonSize);
-    position = Vector2(buttonSize - 30, 10);
+    position = Vector2(10, 10);
 
     return super.onLoad();
   }

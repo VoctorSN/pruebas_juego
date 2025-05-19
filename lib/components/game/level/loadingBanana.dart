@@ -7,34 +7,29 @@ class LoadingBanana extends SpriteAnimationComponent
   final PixelAdventure game;
   LoadingBanana(this.game) : super(priority: 10);
 
+  late final buttonSize = game.settings.hudSize;
+
   Future<void> show() async {
-    try {
-      priority = 111111;
+    priority = 100;
 
-      final image = game.images.fromCache('loadingBanana/loadingBanana.png');
+    final image = game.images.fromCache('loadingBanana/loadingBanana.png');
 
-      animation = SpriteAnimation.fromFrameData(
-        image,
-        SpriteAnimationData.sequenced(
-          amount: 9,
-          stepTime: 0.25,
-          loop: false,
-          textureSize: Vector2(32, 32),
-        ),
-      );
+    animation = SpriteAnimation.fromFrameData(
+      image,
+      SpriteAnimationData.sequenced(
+        amount: 9,
+        stepTime: 0.25,
+        loop: false,
+        textureSize: Vector2.all(32),
+      ),
+    );
 
-      size = Vector2.all(70);
-      position = position = Vector2(game.size.x/2, 50);
-      anchor = Anchor.center;
+    size = Vector2.all(buttonSize);
+    position = Vector2(game.size.x - buttonSize*2 - 20, 10);
 
-      game.add(this);
+    game.add(this);
 
-      await animationTicker?.completed;
-      removeFromParent();
-
-    } catch (e, stack) {
-      print('Error en LoadingBanana.show(): $e');
-      print(stack);
-    }
+    await animationTicker?.completed;
+    removeFromParent();
   }
 }
