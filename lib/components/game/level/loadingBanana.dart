@@ -32,4 +32,10 @@ class LoadingBanana extends SpriteAnimationComponent
     await animationTicker?.completed;
     removeFromParent();
   }
+
+  @override
+  void onGameResize(Vector2 size) {
+    position = Vector2(game.size.x - buttonSize*2 - 20, 10);
+    super.onGameResize(size);
+  }
 }
