@@ -21,6 +21,7 @@ class SettingsRepository {
     return _instance!;
   }
 
+  /// TODO VOLVER A ACTIVAR EL SONIDO
   Future<void> insertDefaultsForGame({required int gameId}) async {
     await _db.insert('Settings', {
       'game_id': gameId,
@@ -28,8 +29,8 @@ class SettingsRepository {
       'control_size': 50.0,
       'is_left_handed': 0,
       'show_controls': Platform.isAndroid || Platform.isIOS ? 1 : 0,
-      'is_music_active': 1,
-      'is_sound_enabled': 1,
+      'is_music_active': 0,
+      'is_sound_enabled': 0,
       'game_volume': 0.5,
       'music_volume': 0.5,
     });

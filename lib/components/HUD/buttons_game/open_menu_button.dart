@@ -21,6 +21,13 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
   }
 
   @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    // Update the position of the button when the game is resized
+    position = Vector2(size.x - buttonSize - 20, 10);
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     // Stop the game engine and pause the game
     game.pauseEngine();
