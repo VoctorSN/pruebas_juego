@@ -267,7 +267,6 @@ class PixelAdventure extends FlameGame
   }
 
   void addAllButtons() {
-    print('adding Buttons');
     if (changeSkinButton == null ||
         levelSelectionButton == null ||
         achievementsButton == null ||

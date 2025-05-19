@@ -72,6 +72,14 @@ class CustomJoystick extends PositionComponent
     }
   }
 
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    leftMargin = !game.settings.isLeftHanded ? 32 : size.x - controlSize * 2 - 32;
+    joystick.position = Vector2(leftMargin + controlSize, size.y - 32 - controlSize);
+  }
+
+
   void _updateJoystick() {
     switch (joystick.direction) {
       case JoystickDirection.left:
