@@ -38,6 +38,8 @@ class JumpButton extends PositionComponent
 
     _setSizeAndPosition(gameSize);
 
+    buttonSprite.size = Vector2.all(game.settings.controlSize * 2);
+
     buttonSprite.position = game.settings.isLeftHanded
         ? Vector2(32, size.y - 32)
         : Vector2(size.x - buttonSprite.size.x - 32, size.y - 32);

@@ -6,7 +6,6 @@ import 'package:fruit_collector/components/HUD/widgets/settings/game_volume_cont
 import 'package:fruit_collector/components/HUD/widgets/settings/music_controller_widget.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_HUD.dart';
 import 'package:fruit_collector/components/HUD/widgets/settings/resize_controls.dart';
-import 'package:fruit_collector/components/bbdd/services/settings_service.dart';
 
 import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';

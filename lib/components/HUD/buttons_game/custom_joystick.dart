@@ -46,7 +46,7 @@ class CustomJoystick extends PositionComponent
         sprite: Sprite(game.images.fromCache('GUI/HUD/Knob.png')),
         size: Vector2.all(controlSize),
       ),
-      knobRadius: 40,
+      knobRadius: controlSize,
       background: SpriteComponent(
         sprite: Sprite(game.images.fromCache('GUI/HUD/Joystick.png')),
         size: Vector2.all(controlSize * 2),

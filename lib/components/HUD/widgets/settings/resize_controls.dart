@@ -90,6 +90,7 @@ class _ResizeControlsState extends State<ResizeControls> {
               value: value,
               onChanged: onChanged,
               isActive: game.settings.showControls,
+              minValue: 15.0,
             ),
           ),
           const SizedBox(width: iconSpacing),

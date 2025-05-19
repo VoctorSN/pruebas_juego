@@ -6,10 +6,11 @@ import '../../../../pixel_adventure.dart';
 class NumberSlider extends StatefulWidget {
   final PixelAdventure game;
   final double value;
+  final minValue;
   final Function(dynamic) onChanged;
   final bool isActive;
 
-  const NumberSlider({super.key, required this.game, required this.value, required this.onChanged, required this.isActive});
+  const NumberSlider({super.key, required this.game, required this.value, required this.onChanged, required this.isActive, this.minValue = 0.0});
 
   @override
   _NumberSliderState createState() {
@@ -46,7 +47,7 @@ class _NumberSliderState extends State<NumberSlider> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SfSlider(
-        min: 0.0,
+        min: widget.minValue,
         max: 100.0,
         value: value,
         interval: 50,

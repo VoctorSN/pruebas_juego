@@ -59,6 +59,7 @@ class _ResizeHUDState extends State<ResizeHUD> {
           SizedBox(
             width: sliderWidth,
             child: NumberSlider(
+              minValue: 15.0,
               game: game,
               value: value,
               onChanged: onChanged,
