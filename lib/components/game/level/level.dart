@@ -308,6 +308,20 @@ class Level extends World with HasGameReference<PixelAdventure> {
     }
   }
 
+  int get minorLevelTime {
+   final int lastTime = levelTime;
+   if (levelData != null) {
+     if (levelData!.time != null) {
+       if (lastTime < levelData!.time!) {
+         levelData!.time = lastTime;
+       }
+     } else {
+       levelData!.time = lastTime;
+     }
+   }
+   return lastTime;
+  }
+
   Future<void> saveLevel() async {
     if (levelData != null) {
       LevelService service = await LevelService.getInstance();
@@ -315,7 +329,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
         gameId: game.gameData!.id,
         levelId: levelData!.levelId,
         stars: levelData!.stars,
-        time: levelTime,
+        time: minorLevelTime,
         deaths: deathCount,
       );
     }

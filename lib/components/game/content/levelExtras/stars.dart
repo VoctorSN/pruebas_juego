@@ -29,7 +29,6 @@ class Stars extends SpriteAnimationComponent with HasGameReference<PixelAdventur
     return super.onLoad();
   }
 
-  /// TODO hacer q las estrellas no se actualicen en la lista de levels hasta pasarte el level
   void collidedWithPlayer() async {
     if (!collected) {
       collected = true;
