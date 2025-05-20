@@ -22,7 +22,7 @@ class CreditsScreen extends Component {
 
   Future<void> show() async {
     screenSize = game.size;
-
+    game.lockWindowResize();
     _startFadeOverlay();
     _spawnCreditLines();
   }
@@ -57,7 +57,7 @@ class CreditsScreen extends Component {
 
   void _spawnCreditLines() {
     final List<String> lines = [
-      '<FRUIT COLLECTOR>',
+      '< - - - FRUIT COLLECTOR - - - >',
       '',
       'Developed   by:',
       'Amán   Lama   &   Víctor   Sánchez',
@@ -235,7 +235,7 @@ class CreditsScreen extends Component {
     _fadeUpdateComponent.removeFromParent();
 
     creditLines.clear();
-
+    game.unlockWindowResize();
     game.overlays.add(MainMenu.id);
   }
 }

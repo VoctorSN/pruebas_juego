@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -13,6 +14,7 @@ import 'package:fruit_collector/components/bbdd/services/level_service.dart';
 import 'package:fruit_collector/components/bbdd/services/settings_service.dart';
 import 'package:fruit_collector/components/game/level/screens/death_screen.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
+import 'package:window_size/window_size.dart';
 
 import 'components/HUD/buttons_game/achievements_button.dart';
 import 'components/HUD/buttons_game/change_player_skin_button.dart';
@@ -35,14 +37,10 @@ import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
-import 'components/game/level/screens/credists_screen.dart';
+import 'components/game/level/screens/credits_screen.dart';
 
 class PixelAdventure extends FlameGame
-    with
-        HasKeyboardHandlerComponents,
-        DragCallbacks,
-        HasCollisionDetection,
-        TapCallbacks {
+    with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, TapCallbacks {
   // Logic to load the level and the player
   @override
   Color backgroundColor() => const Color(0xFF211F30);
@@ -53,15 +51,7 @@ class PixelAdventure extends FlameGame
   SettingsService? settingsService;
   AchievementService? achievementService;
 
-  final List<String> characters = [
-    '1',
-    '2',
-    '3',
-    'Mask Dude',
-    'Ninja Frog',
-    'Pink Man',
-    'Virtual Guy',
-  ];
+  final List<String> characters = ['1', '2', '3', 'Mask Dude', 'Ninja Frog', 'Pink Man', 'Virtual Guy'];
   late Player player;
   late Level level;
 
@@ -86,10 +76,8 @@ class PixelAdventure extends FlameGame
           .map((entry) => entry.key)
           .toList();
 
-  Map<int, int> get starsPerLevel => levels.asMap().map(
-    (index, level) =>
-        MapEntry(index, ((level['gameLevel'] as GameLevel).stars)),
-  );
+  Map<int, int> get starsPerLevel =>
+      levels.asMap().map((index, level) => MapEntry(index, ((level['gameLevel'] as GameLevel).stars)));
 
   // Screens initializations
   late final DeathScreen deathScreen = DeathScreen(
@@ -128,15 +116,10 @@ class PixelAdventure extends FlameGame
     size.x - 32 - settings.controlSize,
     size.y - 32 - settings.controlSize,
   );
-  late final Vector2 leftControlPosition = Vector2(
-    32 - settings.controlSize,
-    32 - settings.controlSize,
-  );
+  late final Vector2 leftControlPosition = Vector2(32 - settings.controlSize, 32 - settings.controlSize);
 
   // Logic to manage achievements
-  late final AchievementManager achievementManager = AchievementManager(
-    game: this,
-  );
+  late final AchievementManager achievementManager = AchievementManager(game: this);
   Achievement? currentAchievement;
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
@@ -150,11 +133,8 @@ class PixelAdventure extends FlameGame
     await getAchievementService();
     gameData = await gameService!.getOrCreateGameBySpace(space: slot);
     levels = await levelService!.getLevelsForGame(gameData!.id);
-    settings =
-        await settingsService!.getSettingsForGame(gameData!.id) as Settings;
-    achievements = await achievementService!.getAchievementsForGame(
-      gameData!.id,
-    );
+    settings = await settingsService!.getSettingsForGame(gameData!.id) as Settings;
+    achievements = await achievementService!.getAchievementsForGame(gameData!.id);
     print('change settings  : $settings');
     print('Levels  : $levels');
     print('Current Level  : ${gameData?.currentLevel}');
@@ -201,33 +181,19 @@ class PixelAdventure extends FlameGame
   void initializateButtons() {
     changeSkinButton =
         changeSkinButton ??
-        ChangePlayerSkinButton(
-          changeCharacter: openChangeCharacterMenu,
-          buttonSize: settings.hudSize,
-        );
+        ChangePlayerSkinButton(changeCharacter: openChangeCharacterMenu, buttonSize: settings.hudSize);
     menuButton = menuButton ?? OpenMenuButton(buttonSize: settings.hudSize);
     levelSelectionButton =
-        levelSelectionButton ??
-        LevelSelection(
-          buttonSize: settings.hudSize,
-          onTap: openLevelSelectionMenu,
-        );
-    achievementsButton =
-        achievementsButton ?? AchievementsButton(buttonSize: settings.hudSize);
+        levelSelectionButton ?? LevelSelection(buttonSize: settings.hudSize, onTap: openLevelSelectionMenu);
+    achievementsButton = achievementsButton ?? AchievementsButton(buttonSize: settings.hudSize);
     jumpButton = JumpButton(settings.controlSize);
   }
 
   void addOverlays() {
     overlays.addEntry(PauseMenu.id, (context, game) => PauseMenu(this));
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
-    overlays.addEntry(
-      CharacterSelection.id,
-      (context, game) => CharacterSelection(this),
-    );
-    overlays.addEntry(
-      AchievementMenu.id,
-      (context, game) => AchievementMenu(this, achievements),
-    );
+    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this, achievements));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -296,12 +262,7 @@ class PixelAdventure extends FlameGame
     achievementsButton!.position = Vector2((settings.hudSize * 2) + 30, 10);
     changeSkinButton!.position = Vector2(settings.hudSize + 20, 10);
     levelSelectionButton!.position = Vector2(10, 10);
-    addAll([
-      changeSkinButton!,
-      levelSelectionButton!,
-      menuButton!,
-      achievementsButton!,
-    ]);
+    addAll([changeSkinButton!, levelSelectionButton!, menuButton!, achievementsButton!]);
     if (settings.showControls) {
       jumpButton!.size = Vector2.all(settings.controlSize * 2);
       add(jumpButton!);
@@ -333,8 +294,7 @@ class PixelAdventure extends FlameGame
       levels[currentLevel - 1]['gameLevel'].stars = level.starsCollected;
 
       // Marcar el nivel como completado
-      GameLevel currentGameLevel =
-          levels[currentLevel - 1]['gameLevel'] as GameLevel;
+      GameLevel currentGameLevel = levels[currentLevel - 1]['gameLevel'] as GameLevel;
       currentGameLevel.completed = true;
       currentGameLevel.time = level.levelTime;
       currentGameLevel.deaths = level.deathCount;
@@ -342,8 +302,7 @@ class PixelAdventure extends FlameGame
 
       // Unlock the next level if exists
       if (currentLevel < levels.length) {
-        GameLevel nextGameLevel =
-            levels[currentLevel]['gameLevel'] as GameLevel;
+        GameLevel nextGameLevel = levels[currentLevel]['gameLevel'] as GameLevel;
         nextGameLevel.unlocked = true;
         print('Level ${currentLevel + 1} unlocked!');
         gameData!.currentLevel = currentLevel;
@@ -383,16 +342,9 @@ class PixelAdventure extends FlameGame
     } else {
       FlameAudio.bgm.stop();
     }
-    level = Level(
-      levelName: levels[gameData?.currentLevel ?? 0]['level'].name,
-      player: player,
-    );
+    level = Level(levelName: levels[gameData?.currentLevel ?? 0]['level'].name, player: player);
 
-    cam = CameraComponent.withFixedResolution(
-      world: level,
-      width: 640,
-      height: 368,
-    );
+    cam = CameraComponent.withFixedResolution(world: level, width: 640, height: 368);
 
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
@@ -408,8 +360,7 @@ class PixelAdventure extends FlameGame
       isJoystickAdded = true;
       customJoystick = CustomJoystick(
         controlSize: settings.controlSize,
-        leftMargin:
-            settings.isLeftHanded ? size.x - 32 - settings.controlSize * 2 : 32,
+        leftMargin: settings.isLeftHanded ? size.x - 32 - settings.controlSize * 2 : 32,
       );
       add(customJoystick);
     }
@@ -464,5 +415,22 @@ class PixelAdventure extends FlameGame
 
   Future<void> getSettingsService() async {
     settingsService ??= await SettingsService.getInstance();
+  }
+
+  void lockWindowResize() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      final double width = size.x;
+      final double height = size.y;
+      final Size fixedSize = Size(width, height);
+      setWindowMinSize(fixedSize);
+      setWindowMaxSize(fixedSize);
+    }
+  }
+
+  void unlockWindowResize() {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      setWindowMinSize(const Size(800, 600));
+      setWindowMaxSize(Size.infinite);
+    }
   }
 }
