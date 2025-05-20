@@ -104,9 +104,10 @@ class PixelAdventure extends FlameGame
     position: Vector2(0, 0),
   )..priority = 1000;
 
-  late final changeLevelScreen = ChangeLevelScreen(
+  late var changeLevelScreen = ChangeLevelScreen(
     onCollapseEnd: () {
       overlays.add('level_summary');
+      removeWhere((component) => component is Level);
     },
     onExpandEnd: () {
       gameData!.currentLevel++;
@@ -336,8 +337,6 @@ class PixelAdventure extends FlameGame
 
     removeAudios();
 
-    removeWhere((component) => component is Level);
-
     if (gameData != null) {
       final int currentLevel = gameData!.currentLevel + 1;
       GameLevel currentGameLevel =
@@ -465,6 +464,16 @@ class PixelAdventure extends FlameGame
   }
 
   addLevelSummaryScreen() {
+    changeLevelScreen = ChangeLevelScreen(
+      onCollapseEnd: () {
+        overlays.add('level_summary');
+        removeWhere((component) => component is Level);
+      },
+      onExpandEnd: () {
+        gameData!.currentLevel++;
+        _loadActualLevel(); // o lo que uses para cargar el siguiente
+      },
+    );
     add(changeLevelScreen);
   }
 

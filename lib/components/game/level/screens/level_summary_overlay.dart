@@ -54,7 +54,7 @@ class LevelSummaryOverlay extends StatelessWidget {
                 _infoRow(Icons.whatshot, 'Dificultad', '★' * difficulty, textStyle),
                 _infoRow(Icons.sell, 'Muertes', '$deaths', textStyle),
                 _infoRow(Icons.star, 'Estrellas', '$stars', textStyle),
-                _infoRow(Icons.timer, 'Tiempo', '${(time / 1000).toStringAsFixed(2)}s', textStyle),
+                _infoRow(Icons.timer, 'Tiempo', '$time', textStyle),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: onContinue,

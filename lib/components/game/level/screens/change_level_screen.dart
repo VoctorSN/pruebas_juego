@@ -2,9 +2,11 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
+import '../../../../pixel_adventure.dart';
+
 enum TransitionPhase { contracting, expanding, idle }
 
-class ChangeLevelScreen extends PositionComponent with HasGameRef {
+class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdventure> {
   final double durationMs;
   final VoidCallback onCollapseEnd;
   final VoidCallback onExpandEnd;
@@ -25,15 +27,15 @@ class ChangeLevelScreen extends PositionComponent with HasGameRef {
 
   @override
   Future<void> onLoad() async {
-    center = gameRef.size / 2;
-    maxRadius = gameRef.size.length;
+    center = game.size / 2;
+    maxRadius = game.size.length;
     radius = maxRadius;
     startContract(); // Al cargarse, comienza el cierre
   }
 
   @override
   void render(Canvas canvas) {
-    final Size screenSize = gameRef.size.toSize();
+    final Size screenSize = game.size.toSize();
     final Path path = Path()..addRect(Rect.fromLTWH(0, 0, screenSize.width, screenSize.height));
     path.addOval(Rect.fromCircle(center: Offset(center.x, center.y), radius: radius));
     path.fillType = PathFillType.evenOdd;
