@@ -35,6 +35,7 @@ import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
+import 'components/game/level/screens/level_summary_overlay.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -103,10 +104,14 @@ class PixelAdventure extends FlameGame
     position: Vector2(0, 0),
   )..priority = 1000;
 
-  late final LevelCompleteScreen levelCompleteScreen = LevelCompleteScreen(
-    gameAdd: (component) => add(component),
-    gameRemove: (component) => remove(component),
-    game: this,
+  late final changeLevelScreen = ChangeLevelScreen(
+    onCollapseEnd: () {
+      overlays.add('level_summary');
+    },
+    onExpandEnd: () {
+      gameData!.currentLevel++;
+      _loadActualLevel(); // o lo que uses para cargar el siguiente
+    },
   );
 
   // Logic to manage the HUD, controls, size of the buttons and the positions
@@ -221,6 +226,20 @@ class PixelAdventure extends FlameGame
       AchievementMenu.id,
       (context, game) => AchievementMenu(this, achievements),
     );
+    overlays.addEntry(
+      'level_summary',
+          (context, game) => LevelSummaryOverlay(
+        levelName: level.levelName,
+        difficulty: levels[gameData!.currentLevel]['level'].difficulty,
+        deaths: level.minorDeaths,
+        stars: level.starsCollected,
+        time: level.minorLevelTime,
+        onContinue: () {
+          overlays.remove('level_summary');
+          changeLevelScreen.startExpand(); // Animación inversa
+        },
+      ),
+    );
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -321,17 +340,19 @@ class PixelAdventure extends FlameGame
 
     if (gameData != null) {
       final int currentLevel = gameData!.currentLevel + 1;
+      GameLevel currentGameLevel =
+      levels[currentLevel - 1]['gameLevel'] as GameLevel;
+
       levels[currentLevel - 1]['gameLevel'].stars = level.starsCollected;
 
       // Marcar el nivel como completado
-      GameLevel currentGameLevel =
-          levels[currentLevel - 1]['gameLevel'] as GameLevel;
       currentGameLevel.completed = true;
       currentGameLevel.time = level.levelTime;
       currentGameLevel.deaths = level.deathCount;
       print('Level $currentLevel marked as completed!');
 
-      await levelCompleteScreen.show();
+
+
 
       // Desbloquear siguiente nivel si existe
       if (currentLevel < levels.length) {
@@ -339,8 +360,7 @@ class PixelAdventure extends FlameGame
             levels[currentLevel]['gameLevel'] as GameLevel;
         nextGameLevel.unlocked = true;
         print('Level ${currentLevel + 1} unlocked!');
-        gameData!.currentLevel = currentLevel;
-        _loadActualLevel();
+        addLevelSummaryScreen();
       } else {
         _showEndScreen();
         gameData!.currentLevel = 0;
@@ -349,9 +369,6 @@ class PixelAdventure extends FlameGame
     }
 
     await level.saveLevel();
-
-    print(levelDeaths);
-    print(starsPerLevel);
   }
 
   void _showEndScreen() {}
@@ -445,6 +462,10 @@ class PixelAdventure extends FlameGame
   addBlackScreen() {
     final gameDeaths = gameData?.totalDeaths ?? 0;
     deathScreen.addBlackScreen(gameDeaths + level.deathCount);
+  }
+
+  addLevelSummaryScreen() {
+    add(changeLevelScreen);
   }
 
   Future<void> getGameService() async {
