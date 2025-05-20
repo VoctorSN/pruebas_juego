@@ -143,56 +143,63 @@ class DatabaseManager {
       'id': 1001,
       'title': 'It Begins',
       'description':
-          'Has completado tu primer nivel. Todo viaje empieza con un pequeño paso, incluso si pisas una trampa nada más empezar.',
+          'Complete your first level. Every journey starts with a single step, even if that step lands directly on a spike trap. Unlock this achievement by finishing level 1 for the very first time.',
       'difficulty': 1,
     });
+
     await db.insert('Achievements', {
       'id': 1002,
       'title': 'The Chosen One',
       'description':
-          'Has completado todos los niveles. Has cruzado valles, junglas y bugs sin miedo. Ya puedes pedirle respeto a tu teclado.',
+          'Conquer every single level in the game. You’ve crossed valleys, jumped through jungles, and survived countless bugs. Complete all available levels to earn this ultimate badge of honor.',
       'difficulty': 3,
     });
+
     await db.insert('Achievements', {
       'id': 1003,
       'title': 'Level 4: Reloaded',
       'description':
-          'Derrotaste el nivel 4. Has visto cosas que no creerías: plataformas en llamas, frutas imposibles... y aún así, sigues en pie.',
+          'Overcome the chaos of level 4. You’ve witnessed fire traps, vanishing platforms, and physics-defying fruit. Survive all the hazards of level 4 and make it to the exit to unlock this.',
       'difficulty': 2,
     });
+
     await db.insert('Achievements', {
       'id': 1004,
       'title': 'Gotta Go Fast!',
       'description':
-          'Acabaste el juego en menos de 300 segundos. ¿Eres humano? ¿Un robot? ¿Un speedrunner con los reflejos de un gato ninja?',
+          'Finish the entire game in under 300 seconds. Speed through every level with lightning reflexes, memorized routes, and zero hesitation. Only true speedrunners will claim this.',
       'difficulty': 4,
     });
+
     await db.insert('Achievements', {
       'id': 1005,
       'title': 'Untouchable',
       'description':
-          'Completaste el juego sin morir ni una sola vez. Increíble. Te vamos a pedir pruebas... y una partida grabada.',
+          'Complete the full game without dying a single time. From start to finish, no deaths, no second chances. This requires absolute precision and deep knowledge of every level.',
       'difficulty': 5,
     });
+
     await db.insert('Achievements', {
       'id': 1006,
       'title': 'Shiny Hunter',
       'description':
-          'Encontraste todas las estrellas ocultas del nivel 5. Tu OCD está orgulloso de ti. Y nosotros también.',
+          'Find every hidden star in level 5. Some are visible, others are hidden behind fake walls or require risky jumps. Explore thoroughly and leave no tile unturned.',
       'difficulty': 3,
     });
+
     await db.insert('Achievements', {
       'id': 1007,
-      'title': 'No Hit Run: Nivel 2',
+      'title': 'No Hit Run: Level 2',
       'description':
-          'Completaste el nivel 2 sin recibir daño ni morir. ¿Estrategia? ¿Memoria? ¿Magia oscura? Sea como sea, funcionó.',
+          'Complete level 2 without taking any damage or dying. Avoid every trap, enemy, and hazard flawlessly. Timing, positioning, and nerves of steel are required.',
       'difficulty': 3,
     });
+
     await db.insert('Achievements', {
       'id': 1008,
       'title': 'Flashpoint',
       'description':
-          'Terminaste el nivel 6 en menos de 5 segundos. Literalmente rompiste el espacio-tiempo. Barry Allen estaría orgulloso.',
+          'Clear level 6 in less than 5 seconds. Use perfect movement and any shortcuts you can find to defy space and time. This one demands absolute mastery.',
       'difficulty': 5,
     });
 
