@@ -133,19 +133,14 @@ class _AchievementMenuState extends State<AchievementMenu> {
                                             ),
                                           ),
                                           const SizedBox(width: 10),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: List.generate(achievement.difficulty.clamp(0, 5), (index) {
-                                              return Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 1),
-                                                child: Image.asset(
-                                                  'assets/images/difficulty/skull.png',
-                                                  width: 20,
-                                                  height: 20,
-                                                  fit: BoxFit.contain,
-                                                ),
-                                              );
-                                            }),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                                            child: Image.asset(
+                                              'assets/images/difficulty/difficulty${achievement.difficulty.clamp(1, 10)}-Photoroom.png',
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.contain,
+                                            ),
                                           ),
                                         ],
                                       ),
