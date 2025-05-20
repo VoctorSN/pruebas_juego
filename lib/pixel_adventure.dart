@@ -91,7 +91,8 @@ class PixelAdventure extends FlameGame
           .toList();
 
   Map<int, int> get starsPerLevel =>
-      levels.asMap().map((index, level) => MapEntry(index, ((level['gameLevel'] as GameLevel).stars)));
+      levels.asMap().map((index, level) =>
+          MapEntry(index, ((level['gameLevel'] as GameLevel).stars)));
 
   // Screens initializations
   late final DeathScreen deathScreen = DeathScreen(
@@ -104,7 +105,8 @@ class PixelAdventure extends FlameGame
     },
     size: size,
     position: Vector2(0, 0),
-  )..priority = 1000;
+  )
+    ..priority = 1000;
 
   late var changeLevelScreen = ChangeLevelScreen(
     onCollapseEnd: () {
@@ -158,7 +160,7 @@ class PixelAdventure extends FlameGame
     gameData = await gameService!.getOrCreateGameBySpace(space: slot);
     levels = await levelService!.getLevelsForGame(gameData!.id);
     settings =
-        await settingsService!.getSettingsForGame(gameData!.id) as Settings;
+    await settingsService!.getSettingsForGame(gameData!.id) as Settings;
     achievements = await achievementService!.getAchievementsForGame(
       gameData!.id,
     );
@@ -208,17 +210,17 @@ class PixelAdventure extends FlameGame
   void initializateButtons() {
     changeSkinButton =
         changeSkinButton ??
-        ChangePlayerSkinButton(
-          changeCharacter: openChangeCharacterMenu,
-          buttonSize: settings.hudSize,
-        );
+            ChangePlayerSkinButton(
+              changeCharacter: openChangeCharacterMenu,
+              buttonSize: settings.hudSize,
+            );
     menuButton = menuButton ?? OpenMenuButton(buttonSize: settings.hudSize);
     levelSelectionButton =
         levelSelectionButton ??
-        LevelSelection(
-          buttonSize: settings.hudSize,
-          onTap: openLevelSelectionMenu,
-        );
+            LevelSelection(
+              buttonSize: settings.hudSize,
+              onTap: openLevelSelectionMenu,
+            );
     achievementsButton =
         achievementsButton ?? AchievementsButton(buttonSize: settings.hudSize);
     jumpButton = JumpButton(settings.controlSize);
@@ -229,28 +231,31 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(SettingsMenu.id, (context, game) => SettingsMenu(this));
     overlays.addEntry(
       CharacterSelection.id,
-      (context, game) => CharacterSelection(this),
+          (context, game) => CharacterSelection(this),
     );
     overlays.addEntry(
       AchievementMenu.id,
-      (context, game) => AchievementMenu(this, achievements),
+          (context, game) => AchievementMenu(this, achievements),
     );
     overlays.addEntry(
       'level_summary',
-          (context, game) => LevelSummaryOverlay(
-        levelName: level.levelName,
-        difficulty: levels[gameData!.currentLevel]['level'].difficulty,
-        deaths: level.minorDeaths,
-        stars: level.starsCollected,
-        time: level.minorLevelTime,
-        onContinue: () {
-          overlays.remove('level_summary');
-          changeLevelScreen.startExpand(); // Animación inversa
-        },
-      ),
+          (context, game) =>
+          LevelSummaryOverlay(
+            levelName: level.levelName,
+            difficulty: levels[gameData!.currentLevel]['level'].difficulty,
+            deaths: level.minorDeaths,
+            stars: level.starsCollected,
+            time: level.minorLevelTime,
+            onContinue: () {
+              overlays.remove('level_summary');
+              changeLevelScreen.startExpand(); // Animación inversa
+            },
+          ),
     );
-    overlays.addEntry(CharacterSelection.id, (context, game) => CharacterSelection(this));
-    overlays.addEntry(AchievementMenu.id, (context, game) => AchievementMenu(this, achievements));
+    overlays.addEntry(
+        CharacterSelection.id, (context, game) => CharacterSelection(this));
+    overlays.addEntry(AchievementMenu.id, (context, game) =>
+        AchievementMenu(this, achievements));
     overlays.addEntry(MainMenu.id, (context, game) => MainMenu(this));
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
@@ -258,33 +263,34 @@ class PixelAdventure extends FlameGame
       return pixelAdventure.currentAchievement == null
           ? const SizedBox.shrink()
           : AchievementToast(
-            achievement: pixelAdventure.currentAchievement!,
-            onDismiss: () => overlays.remove(AchievementToast.id),
-          );
+        achievement: pixelAdventure.currentAchievement!,
+        onDismiss: () => overlays.remove(AchievementToast.id),
+      );
     });
     overlays.addEntry(
       LevelSelectionMenu.id,
-      (context, game) => LevelSelectionMenu(
-        game: this,
-        totalLevels: levels.length,
-        onLevelSelected: (level) async {
-          final GameService service = await GameService.getInstance();
-          await service.saveGameBySpace(game: gameData);
+          (context, game) =>
+          LevelSelectionMenu(
+            game: this,
+            totalLevels: levels.length,
+            onLevelSelected: (level) async {
+              final GameService service = await GameService.getInstance();
+              await service.saveGameBySpace(game: gameData);
 
-          overlays.remove(LevelSelectionMenu.id);
-          resumeEngine();
-          gameData?.currentLevel = level;
-          _loadActualLevel();
-        },
-      ),
+              overlays.remove(LevelSelectionMenu.id);
+              resumeEngine();
+              gameData?.currentLevel = level;
+              _loadActualLevel();
+            },
+          ),
     );
   }
 
   void reloadAllButtons() {
     removeControls();
     for (var component in children.where(
-      (component) =>
-          component is ChangePlayerSkinButton ||
+          (component) =>
+      component is ChangePlayerSkinButton ||
           component is LevelSelection ||
           component is AchievementsButton ||
           component is OpenMenuButton,
@@ -319,7 +325,12 @@ class PixelAdventure extends FlameGame
     achievementsButton!.position = Vector2((settings.hudSize * 2) + 30, 10);
     changeSkinButton!.position = Vector2(settings.hudSize + 20, 10);
     levelSelectionButton!.position = Vector2(10, 10);
-    addAll([changeSkinButton!, levelSelectionButton!, menuButton!, achievementsButton!]);
+    addAll([
+      changeSkinButton!,
+      levelSelectionButton!,
+      menuButton!,
+      achievementsButton!
+    ]);
     if (settings.showControls) {
       jumpButton!.size = Vector2.all(settings.controlSize * 2);
       add(jumpButton!);
@@ -392,9 +403,11 @@ class PixelAdventure extends FlameGame
     } else {
       FlameAudio.bgm.stop();
     }
-    level = Level(levelName: levels[gameData?.currentLevel ?? 0]['level'].name, player: player);
+    level = Level(levelName: levels[gameData?.currentLevel ?? 0]['level'].name,
+        player: player);
 
-    cam = CameraComponent.withFixedResolution(world: level, width: 640, height: 368);
+    cam = CameraComponent.withFixedResolution(
+        world: level, width: 640, height: 368);
 
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
@@ -410,7 +423,8 @@ class PixelAdventure extends FlameGame
       isJoystickAdded = true;
       customJoystick = CustomJoystick(
         controlSize: settings.controlSize,
-        leftMargin: settings.isLeftHanded ? size.x - 32 - settings.controlSize * 2 : 32,
+        leftMargin: settings.isLeftHanded ? size.x - 32 -
+            settings.controlSize * 2 : 32,
       );
       add(customJoystick);
     }
