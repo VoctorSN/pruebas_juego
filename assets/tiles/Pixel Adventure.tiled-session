@@ -250,11 +250,11 @@
             "scaleInDock": 1
         },
         "level-99.tmx": {
-            "scale": 1.5318749999999999,
+            "scale": 1.53,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 627.6621787025704,
-                "y": 186.046511627907
+                "x": 627.7777777777778,
+                "y": 186.27450980392157
             }
         },
         "level_01.tmx": {
@@ -266,11 +266,11 @@
             }
         },
         "tutorial-01.tmx": {
-            "scale": 3,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 151.5,
-                "y": 255
+                "x": 314.33333333333326,
+                "y": 202.66666666666666
             }
         },
         "tutorial-01.tmx#Pixel Adventure": {
