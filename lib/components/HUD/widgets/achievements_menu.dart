@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
+import 'package:fruit_collector/components/HUD/widgets/achievement_details.dart';
 import 'package:fruit_collector/components/bbdd/models/achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
@@ -24,8 +25,6 @@ class _AchievementMenuState extends State<AchievementMenu> {
 
   static const double _rowHeight = 70;
   static const double _rowSpacing = 6;
-
-  Achievement? selectedAchievement;
 
   void _scrollByRow({required bool forward}) {
     final double currentOffset = _scrollController.offset;
@@ -108,7 +107,8 @@ class _AchievementMenuState extends State<AchievementMenu> {
                                   return GestureDetector(
                                     onTap:
                                         () => setState(() {
-                                          selectedAchievement = achievement;
+                                          widget.game.currentAchievement = achievement;
+                                          widget.game.overlays.add(AchievementDetails.id);
                                         }),
                                     child: Container(
                                       height: 70,
@@ -219,78 +219,7 @@ class _AchievementMenuState extends State<AchievementMenu> {
             ),
           ),
         ),
-        if (selectedAchievement != null) _buildAchievementModal(selectedAchievement!),
       ],
-    );
-  }
-
-  Widget _buildAchievementModal(Achievement achievement) {
-    const Color modalBackground = Color(0xFF3A3750);
-    const Color borderColor = Color(0xFF5A5672);
-    const Color terminalBackground = Color(0xFF1A1A1A);
-    const Color terminalTextColor = Colors.white;
-
-    final bool unlocked =
-        widget.achievements.firstWhere((a) => a['achievement'].id == achievement.id)['gameAchievement'].achieved;
-
-    final TextStyle terminalTextStyle = const TextStyle(
-      fontFamily: 'SourceCodePro',
-      fontSize: 13,
-      color: terminalTextColor,
-      height: 1.4,
-    );
-
-    return Material(
-      color: Colors.black.withOpacity(0.6),
-      child: Center(
-        child: Container(
-          width: 400,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: modalBackground.withOpacity(0.95),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: borderColor, width: 2),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(color: terminalBackground, borderRadius: BorderRadius.circular(6)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTerminalRow(label: 'title', value: achievement.title),
-                    const SizedBox(height: 4),
-                    _buildTerminalRow(label: 'description', value: achievement.description),
-                    const SizedBox(height: 4),
-                    _buildTerminalRow(label: 'difficulty', value: achievement.difficulty.toString()),
-                    const SizedBox(height: 4),
-                    _buildTerminalRow(label: 'unlocked', value: unlocked.toString()),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () => setState(() => selectedAchievement = null),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: modalBackground,
-                  foregroundColor: terminalTextColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    side: const BorderSide(color: borderColor, width: 2),
-                  ),
-                  elevation: 6,
-                ),
-                icon: const Icon(Icons.arrow_back, size: 16, color: terminalTextColor),
-                label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: terminalTextColor)),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 

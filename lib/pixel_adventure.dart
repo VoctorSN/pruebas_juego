@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
+import 'package:fruit_collector/components/HUD/widgets/achievement_details.dart';
 import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
 import 'package:fruit_collector/components/bbdd/services/achievement_service.dart';
@@ -236,6 +237,10 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(
       AchievementMenu.id,
           (context, game) => AchievementMenu(this, achievements),
+    );
+    overlays.addEntry(
+      AchievementDetails.id,
+          (context, game) => AchievementDetails(this, currentAchievement!),
     );
     overlays.addEntry(
       'level_summary',
