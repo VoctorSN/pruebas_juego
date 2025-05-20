@@ -29,4 +29,15 @@ class GameAchievementRepository {
       });
     }
   }
+
+  deleteGameAchievementByGameId({required int gameId}) async {
+    final rowsAffected = await _db.delete(
+      'GameAchievement',
+      where: 'game_id = ?',
+      whereArgs: [gameId],
+    );
+    if (rowsAffected == 0) {
+      throw Exception('No achievement found for gameId $gameId');
+    }
+  }
 }

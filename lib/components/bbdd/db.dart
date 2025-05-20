@@ -144,7 +144,7 @@ class DatabaseManager {
       'title': 'It Begins',
       'description':
           'Complete your first level. Every journey starts with a single step, even if that step lands directly on a spike trap. Unlock this achievement by finishing level 1 for the very first time.',
-      'difficulty': 1,
+      'difficulty': 10,
     });
 
     await db.insert('Achievements', {
@@ -168,7 +168,7 @@ class DatabaseManager {
       'title': 'Gotta Go Fast!',
       'description':
           'Finish the entire game in under 300 seconds. Speed through every level with lightning reflexes, memorized routes, and zero hesitation. Only true speedrunners will claim this.',
-      'difficulty': 4,
+      'difficulty': 8,
     });
 
     await db.insert('Achievements', {
@@ -192,7 +192,7 @@ class DatabaseManager {
       'title': 'No Hit Run: Level 2',
       'description':
           'Complete level 2 without taking any damage or dying. Avoid every trap, enemy, and hazard flawlessly. Timing, positioning, and nerves of steel are required.',
-      'difficulty': 3,
+      'difficulty': 6,
     });
 
     await db.insert('Achievements', {
