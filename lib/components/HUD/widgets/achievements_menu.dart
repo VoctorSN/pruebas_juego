@@ -68,8 +68,8 @@ class _AchievementMenuState extends State<AchievementMenu> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Container(
-                  width: 600,
-                  height: 500,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.6,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: baseColor.withOpacity(0.95),

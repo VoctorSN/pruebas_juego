@@ -21,9 +21,7 @@ class AchievementDetails extends StatefulWidget {
 }
 
 class _AchievementDetailsState extends State<AchievementDetails> {
-
   Achievement? selectedAchievement;
-
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +33,13 @@ class _AchievementDetailsState extends State<AchievementDetails> {
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
       foregroundColor: textColor,
-      minimumSize: const Size(220, 48),
+      minimumSize: Size(MediaQuery.of(context).size.width * 0.1, MediaQuery.of(context).size.height * 0.0625),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
         side: const BorderSide(color: borderColor, width: 2),
       ),
       elevation: 8,
     );
-
 
     return Stack(
       children: [
@@ -54,8 +51,8 @@ class _AchievementDetailsState extends State<AchievementDetails> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Container(
-                  width: 600,
-                  height: 500,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: baseColor.withOpacity(0.95),
@@ -72,37 +69,46 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                           shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Text(
-                          widget.achievement.description,
-                          style: TextStyleSingleton().style.copyWith(
-                            fontSize: 14,
-                            color: textColor,
-                            shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
                             child: Text(
-                              'Difficulty: ${widget.achievement.difficulty}',
+                              widget.achievement.description,
+                              textAlign: TextAlign.center,
                               style: TextStyleSingleton().style.copyWith(
-                                fontSize: 14,
+                                fontSize: 18,
                                 color: textColor,
                                 shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: Text(
-                              'Achieved: ${widget.gameAchievement.achieved}',
-                              style: TextStyleSingleton().style.copyWith(
-                                fontSize: 14,
-                                color: textColor,
-                                shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              child: Image.asset(
+                                'assets/images/difficulty/difficulty${widget.achievement.difficulty.clamp(1, 10)}-Photoroom.png',
+                                width: MediaQuery.of(context).size.width * 0.0625,
+                                height: MediaQuery.of(context).size.width * 0.0625,
+                                fit: BoxFit.contain,
                               ),
+
+                          ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              child: Image.asset(
+                                widget.gameAchievement.achieved
+                                    ? 'assets/images/Trophys/Achieved.png'
+                                    : 'assets/images/Trophys/Not Achieved.png',
+                                width: MediaQuery.of(context).size.width * 0.0625,
+                                height: MediaQuery.of(context).size.width * 0.0625,
+                                fit: BoxFit.contain,
+
                             ),
                           ),
                         ],
@@ -111,10 +117,7 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                         style: buttonStyle,
                         onPressed: _onBack,
                         icon: const Icon(Icons.arrow_back, color: textColor),
-                        label: Text(
-                          'BACK',
-                          style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
-                        ),
+                        label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
                       ),
                     ],
                   ),
@@ -129,6 +132,5 @@ class _AchievementDetailsState extends State<AchievementDetails> {
 
   void _onBack() {
     widget.game.overlays.remove(AchievementDetails.id);
-
   }
 }
