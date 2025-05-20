@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="198">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="200">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -14,7 +14,7 @@
 113,0,0,0,0,0,0,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,0,0,0,0,0,0,0,0,0,111,
-113,189,190,191,0,0,189,190,191,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,0,0,0,62,64,0,0,0,0,111,
+113,189,190,191,0,0,189,190,191,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,0,0,0,62,63,63,63,64,0,111,
 113,0,0,0,0,0,0,0,0,214,0,0,214,215,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,214,64,0,0,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,214,0,0,214,215,0,214,0,0,214,0,0,214,0,0,214,0,0,214,0,0,0,0,0,0,0,0,0,0,0,111,
@@ -61,17 +61,17 @@
     <property name="offPos" type="float" value="0"/>
    </properties>
   </object>
-  <object id="100" name="Orange" type="Fruit" x="160" y="64" width="32" height="32"/>
-  <object id="101" name="Apple" type="Fruit" x="208" y="64" width="32" height="32"/>
-  <object id="102" name="Bananas" type="Fruit" x="256" y="64" width="32" height="32"/>
-  <object id="103" name="Cherries" type="Fruit" x="304" y="64" width="32" height="32"/>
-  <object id="104" name="Kiwi" type="Fruit" x="352" y="64" width="32" height="32"/>
+  <object id="100" name="Orange" type="Fruit" x="80" y="32" width="32" height="32"/>
+  <object id="101" name="Apple" type="Fruit" x="48" y="32" width="32" height="32"/>
+  <object id="102" name="Bananas" type="Fruit" x="48" y="64" width="32" height="32"/>
+  <object id="103" name="Cherries" type="Fruit" x="48" y="96" width="32" height="32"/>
+  <object id="104" name="Kiwi" type="Fruit" x="112" y="32" width="32" height="32"/>
   <object id="164" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="165" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="166" type="deathZone" x="-48" y="0" width="48" height="368"/>
   <object id="167" type="deathZone" x="640" y="0" width="48" height="368"/>
   <object id="169" name="deathzone" type="deathZone" x="21.4634" y="309.073" width="595.488" height="34.2927"/>
-  <object id="197" type="Checkpoint" x="512" y="64" width="64" height="64">
+  <object id="199" type="Checkpoint" x="80" y="64" width="64" height="64">
    <properties>
     <property name="isLastLevel" type="bool" value="true"/>
    </properties>
@@ -261,7 +261,7 @@
     <property name="falls" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="155" type="Platform" x="528" y="128" width="32" height="16">
+  <object id="155" type="Platform" x="528" y="128" width="80" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
    </properties>

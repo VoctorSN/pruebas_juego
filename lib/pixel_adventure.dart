@@ -35,6 +35,7 @@ import 'components/game/content/levelBasics/player.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
+import 'components/game/level/screens/credists_screen.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -104,6 +105,12 @@ class PixelAdventure extends FlameGame
   )..priority = 1000;
 
   late final LevelCompleteScreen levelCompleteScreen = LevelCompleteScreen(
+    gameAdd: (component) => add(component),
+    gameRemove: (component) => remove(component),
+    game: this,
+  );
+
+  late final creditsScreen = CreditsScreen(
     gameAdd: (component) => add(component),
     gameRemove: (component) => remove(component),
     game: this,
@@ -317,6 +324,8 @@ class PixelAdventure extends FlameGame
 
     removeAudios();
 
+    creditsScreen.show();
+
     removeWhere((component) => component is Level);
 
     if (gameData != null) {
@@ -331,9 +340,7 @@ class PixelAdventure extends FlameGame
       currentGameLevel.deaths = level.deathCount;
       print('Level $currentLevel marked as completed!');
 
-      await levelCompleteScreen.show();
-
-      // Desbloquear siguiente nivel si existe
+      // Unlock the next level if exists
       if (currentLevel < levels.length) {
         GameLevel nextGameLevel =
             levels[currentLevel]['gameLevel'] as GameLevel;
@@ -342,9 +349,7 @@ class PixelAdventure extends FlameGame
         gameData!.currentLevel = currentLevel;
         _loadActualLevel();
       } else {
-        _showEndScreen();
-        gameData!.currentLevel = 0;
-        _loadActualLevel();
+        await creditsScreen.show();
       }
     }
 
@@ -353,8 +358,6 @@ class PixelAdventure extends FlameGame
     print(levelDeaths);
     print(starsPerLevel);
   }
-
-  void _showEndScreen() {}
 
   void removeAudios() {
     try {
