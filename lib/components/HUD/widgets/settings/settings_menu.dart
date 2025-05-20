@@ -21,11 +21,20 @@ class SettingsMenu extends StatelessWidget {
   late double sizeControls = game.settings.controlSize;
   late double gameVolume = game.settings.gameVolume;
   late double musicVolume = game.settings.musicVolume;
+  late bool isLeftHanded = game.settings.isLeftHanded;
+  late bool showControls = game.settings.showControls;
 
   updateSizeHUD(double newValue) => sizeHUD = newValue;
+
   updateSizeControls(double newValue) => sizeControls = newValue;
+
   updateMusicVolume(double newValue) => musicVolume = newValue;
+
   updateGameVolume(double newValue) => gameVolume = newValue;
+
+  updateIsLeftHanded(bool newValue) => isLeftHanded = newValue;
+
+  updateShowControls(bool newValue) => showControls = newValue;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +70,8 @@ class SettingsMenu extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 90),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 50, horizontal: 90),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -91,7 +101,10 @@ class SettingsMenu extends StatelessWidget {
                               updateGameVolume: updateGameVolume,
                             ),
                             ResizeHUD(game: game, updateSizeHUD: updateSizeHUD),
-                            ResizeControls(game: game, updateSizeControls: updateSizeControls),
+                            ResizeControls(game: game,
+                                updateSizeControls: updateSizeControls,
+                                updateIsLeftHanded: updateIsLeftHanded,
+                                updateShowControls: updateShowControls),
                           ],
                         ),
                       ),
@@ -105,7 +118,8 @@ class SettingsMenu extends StatelessWidget {
                               game.overlays.remove(SettingsMenu.id);
                               game.overlays.add(PauseMenu.id);
                             },
-                            icon: const Icon(Icons.arrow_back, size: 20, color: Colors.white),
+                            icon: const Icon(Icons.arrow_back, size: 20,
+                                color: Colors.white),
                             label: Text(
                               'Back',
                               style: TextStyleSingleton().style.copyWith(
@@ -122,13 +136,17 @@ class SettingsMenu extends StatelessWidget {
                               game.overlays.add(PauseMenu.id);
                               game.settings.hudSize = sizeHUD;
                               game.settings.controlSize = sizeControls;
+                              game.settings.isLeftHanded = isLeftHanded;
+                              game.settings.showControls = showControls;
                               game.reloadAllButtons();
                               game.settings.gameVolume = gameVolume;
                               game.settings.musicVolume = musicVolume;
-                              game.settingsService!.updateSettings(game.settings);
-
+                              game.settingsService!.updateSettings(
+                                  game.settings);
                             },
-                            icon: const Icon(Icons.check_circle_outline, size: 20, color: Colors.white),
+                            icon: const Icon(
+                                Icons.check_circle_outline, size: 20,
+                                color: Colors.white),
                             label: Text(
                               'Apply',
                               style: TextStyleSingleton().style.copyWith(
