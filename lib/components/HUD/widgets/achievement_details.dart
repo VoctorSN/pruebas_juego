@@ -10,8 +10,9 @@ import 'package:fruit_collector/pixel_adventure.dart';
 class AchievementDetails extends StatefulWidget {
   final PixelAdventure game;
   final Achievement achievement;
+  final GameAchievement gameAchievement;
 
-  const AchievementDetails(this.game, this.achievement, {super.key});
+  const AchievementDetails(this.game, this.achievement, this.gameAchievement, {super.key});
 
   static const String id = 'achievement_details';
 
@@ -28,7 +29,20 @@ class _AchievementDetailsState extends State<AchievementDetails> {
   Widget build(BuildContext context) {
     const Color baseColor = Color(0xFF212030);
     const Color borderColor = Color(0xFF5A5672);
+    final Color buttonColor = const Color(0xFF3A3750);
     const Color textColor = Color(0xFFE1E0F5);
+
+    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: buttonColor,
+      foregroundColor: textColor,
+      minimumSize: const Size(220, 48),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+        side: const BorderSide(color: borderColor, width: 2),
+      ),
+      elevation: 8,
+    );
+
 
     return Stack(
       children: [
@@ -51,11 +65,55 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                   child: Column(
                     children: [
                       Text(
-                        'ACHIEVEMENTS',
+                        widget.achievement.title,
                         style: TextStyleSingleton().style.copyWith(
                           fontSize: 28,
                           color: textColor,
                           shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Text(
+                          widget.achievement.description,
+                          style: TextStyleSingleton().style.copyWith(
+                            fontSize: 14,
+                            color: textColor,
+                            shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Difficulty: ${widget.achievement.difficulty}',
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 14,
+                                color: textColor,
+                                shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Achieved: ${widget.gameAchievement.achieved}',
+                              style: TextStyleSingleton().style.copyWith(
+                                fontSize: 14,
+                                color: textColor,
+                                shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      ElevatedButton.icon(
+                        style: buttonStyle,
+                        onPressed: _onBack,
+                        icon: const Icon(Icons.arrow_back, color: textColor),
+                        label: Text(
+                          'BACK',
+                          style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
                         ),
                       ),
                     ],
@@ -67,5 +125,10 @@ class _AchievementDetailsState extends State<AchievementDetails> {
         ),
       ],
     );
+  }
+
+  void _onBack() {
+    widget.game.overlays.remove(AchievementDetails.id);
+
   }
 }

@@ -108,6 +108,7 @@ class _AchievementMenuState extends State<AchievementMenu> {
                                     onTap:
                                         () => setState(() {
                                           widget.game.currentAchievement = achievement;
+                                          widget.game.currentGameAchievement = gameAchievement;
                                           widget.game.overlays.add(AchievementDetails.id);
                                         }),
                                     child: Container(

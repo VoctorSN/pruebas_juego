@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
 import 'package:fruit_collector/components/HUD/widgets/achievement_details.dart';
 import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
+import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
 import 'package:fruit_collector/components/bbdd/services/achievement_service.dart';
 import 'package:fruit_collector/components/bbdd/services/level_service.dart';
@@ -147,7 +148,9 @@ class PixelAdventure extends FlameGame
   late final AchievementManager achievementManager = AchievementManager(
     game: this,
   );
+  Achievement? currentShowedAchievement;
   Achievement? currentAchievement;
+  GameAchievement? currentGameAchievement;
   Map<int, int> levelTimes = {};
   Map<int, int> levelDeaths = {};
 
@@ -240,7 +243,7 @@ class PixelAdventure extends FlameGame
     );
     overlays.addEntry(
       AchievementDetails.id,
-          (context, game) => AchievementDetails(this, currentAchievement!),
+          (context, game) => AchievementDetails(this, currentAchievement!, currentGameAchievement!),
     );
     overlays.addEntry(
       'level_summary',
@@ -265,10 +268,10 @@ class PixelAdventure extends FlameGame
     overlays.addEntry(GameSelector.id, (context, game) => GameSelector(this));
     overlays.addEntry(AchievementToast.id, (context, game) {
       final pixelAdventure = game as PixelAdventure;
-      return pixelAdventure.currentAchievement == null
+      return pixelAdventure.currentShowedAchievement == null
           ? const SizedBox.shrink()
           : AchievementToast(
-        achievement: pixelAdventure.currentAchievement!,
+        achievement: pixelAdventure.currentShowedAchievement!,
         onDismiss: () => overlays.remove(AchievementToast.id),
       );
     });
