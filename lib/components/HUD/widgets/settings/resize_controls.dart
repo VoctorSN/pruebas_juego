@@ -4,9 +4,6 @@ import '../../../../pixel_adventure.dart';
 import '../../style/text_style_singleton.dart';
 import '../utils/number_slider.dart';
 
-// TODO: When you press it doesnt depends on applyButton (showControls and leftHanded)
-// TODO: You have to press the button isLeftHanded two times to change the image (only pair of times)
-
 const double rowWidth = 475.0;
 const double textPositionX = 15.0;
 const double sliderPositionX = 0.0;
@@ -16,11 +13,15 @@ const double iconSpacing = 0.0;
 class ResizeControls extends StatefulWidget {
   final PixelAdventure game;
   final Function updateSizeControls;
+  final Function updateIsLeftHanded;
+  final Function updateShowControls;
 
   ResizeControls({
     super.key,
     required this.game,
     required this.updateSizeControls,
+    required this.updateIsLeftHanded,
+    required this.updateShowControls,
   });
 
   @override
@@ -28,6 +29,8 @@ class ResizeControls extends StatefulWidget {
     return _ResizeControlsState(
       game: game,
       updateSizeControls: updateSizeControls,
+      updateIsLeftHanded: updateIsLeftHanded,
+      updateShowControls: updateShowControls,
     );
   }
 }
@@ -35,17 +38,22 @@ class ResizeControls extends StatefulWidget {
 class _ResizeControlsState extends State<ResizeControls> {
   final PixelAdventure game;
   final Function updateSizeControls;
+  final Function updateIsLeftHanded;
+  final Function updateShowControls;
 
   _ResizeControlsState({
     required this.game,
     required this.updateSizeControls,
+    required this.updateIsLeftHanded,
+    required this.updateShowControls,
   });
 
   late double value;
-  late bool isLeftHanded = game.settings.showControls;
+  late bool isLeftHanded = game.settings.isLeftHanded;
+  late bool showControls = game.settings.showControls;
 
   Image get eyeImage {
-    return game.settings.showControls
+    return showControls
         ? Image.asset(
       'assets/images/GUI/HUD/openEye.png',
       fit: BoxFit.cover,
@@ -57,7 +65,7 @@ class _ResizeControlsState extends State<ResizeControls> {
   }
 
   Image get arrowImage {
-    return game.settings.isLeftHanded
+    return isLeftHanded
         ? Image.asset(
       'assets/images/GUI/HUD/arrowsFacingEachother.png',
       fit: BoxFit.cover,
@@ -89,7 +97,7 @@ class _ResizeControlsState extends State<ResizeControls> {
               game: game,
               value: value,
               onChanged: onChanged,
-              isActive: game.settings.showControls,
+              isActive: showControls,
               minValue: 15.0,
             ),
           ),
@@ -97,8 +105,8 @@ class _ResizeControlsState extends State<ResizeControls> {
           IconButton(
             onPressed: () {
               setState(() {
-                game.settings.showControls = !game.settings.showControls;
-                game.reloadAllButtons();
+                showControls = !showControls;
+                updateShowControls(showControls);
               });
             },
             icon: eyeImage,
@@ -108,8 +116,7 @@ class _ResizeControlsState extends State<ResizeControls> {
             onPressed: () {
               setState(() {
                 isLeftHanded = !isLeftHanded;
-                game.settings.isLeftHanded = isLeftHanded;
-                game.switchHUDPosition();
+                updateIsLeftHanded(isLeftHanded);
               });
             },
             icon: arrowImage,
