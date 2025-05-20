@@ -16,13 +16,13 @@ class AchievementManager {
   List<Map<String, dynamic>> allAchievements = [];
 
   late final Map<String, Function> achievementConditions = {
-    'Completa el nivel 1': (PixelAdventure game) => (game.levels[0]['gameLevel'] as GameLevel).completed,
-    'Nivel 2 perfecto':
+    'It Begins': (PixelAdventure game) => (game.levels[0]['gameLevel'] as GameLevel).completed,
+    'No Hit Run: Level 2':
         (PixelAdventure game) =>
             (game.levels[1]['gameLevel'] as GameLevel).completed && (game.levels[1]['gameLevel'] as GameLevel).deaths == 0,
-    'Nivel 6 en 15 seg': (PixelAdventure game) => (game.levels[5]['gameLevel'] as GameLevel).time != null && (game.levels[5]['gameLevel'] as GameLevel).time! <= 15,
-    'Nivel 4 superado': (PixelAdventure game) => (game.levels[3]['gameLevel'] as GameLevel).completed,
-    'Estrellas de nivel 5': (PixelAdventure game) => (game.levels[4]['gameLevel'] as GameLevel).stars == 3,
+    'Flashpoint': (PixelAdventure game) => (game.levels[5]['gameLevel'] as GameLevel).time != null && (game.levels[5]['gameLevel'] as GameLevel).time! <= 15,
+    'Level 4: Reloaded': (PixelAdventure game) => (game.levels[3]['gameLevel'] as GameLevel).completed,
+    'Shiny Hunter': (PixelAdventure game) => (game.levels[4]['gameLevel'] as GameLevel).stars == 3,
     // 'Nivel 6 en 5 seg':
     //     (PixelAdventure game) => stats.levelTimes[5] != null && stats.levelTimes[5]! < 5,
     // 'Completa todos los niveles':
@@ -87,12 +87,12 @@ class AchievementManager {
     _isShowingToast = true;
     final nextAchievement = _pendingToasts.removeAt(0);
 
-    game.currentAchievement = nextAchievement;
+    game.currentShowedAchievement = nextAchievement;
     game.overlays.add(AchievementToast.id);
 
     Future.delayed(const Duration(seconds: 3), () {
       game.overlays.remove(AchievementToast.id);
-      game.currentAchievement = null;
+      game.currentShowedAchievement = null;
       _isShowingToast = false;
       _tryShowNextToast();
     });

@@ -199,7 +199,7 @@ class DatabaseManager {
       'id': 1008,
       'title': 'Flashpoint',
       'description':
-          'Clear level 6 in less than 5 seconds. Use perfect movement and any shortcuts you can find to defy space and time. This one demands absolute mastery.',
+          'Clear level 6 in less than 15 seconds. Use perfect movement and any shortcuts you can find to defy space and time. This one demands absolute mastery.',
       'difficulty': 5,
     });
 
