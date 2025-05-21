@@ -5,6 +5,7 @@ import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
 import '../content/enemies/bee.dart';
+import '../content/enemies/radish.dart';
 import '../content/enemies/rock.dart';
 import '../content/enemies/snail.dart';
 

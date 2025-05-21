@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
-import '../widgets/achievements_menu.dart';
+import '../widgets/achievements/page/achievements_menu.dart';
 
 class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 

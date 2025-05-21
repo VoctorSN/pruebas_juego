@@ -2,7 +2,7 @@ import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
-import '../../HUD/widgets/achievement_toast.dart';
+import '../../HUD/widgets/achievements/page/achievement_toast.dart';
 import '../../bbdd/models/achievement.dart';
 import '../../bbdd/services/achievement_service.dart';
 

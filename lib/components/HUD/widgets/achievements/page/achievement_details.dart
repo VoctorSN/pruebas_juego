@@ -7,7 +7,7 @@ import 'package:fruit_collector/components/bbdd/models/achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
-class AchievementDetails extends StatefulWidget {
+class AchievementDetails extends StatelessWidget {
   final PixelAdventure game;
   final Achievement achievement;
   final GameAchievement gameAchievement;
@@ -17,19 +17,14 @@ class AchievementDetails extends StatefulWidget {
   static const String id = 'achievement_details';
 
   @override
-  State<AchievementDetails> createState() => _AchievementDetailsState();
-}
-
-class _AchievementDetailsState extends State<AchievementDetails> {
-  Achievement? selectedAchievement;
-
-  @override
   Widget build(BuildContext context) {
+    // Define static UI colors
     const Color baseColor = Color(0xFF212030);
     const Color borderColor = Color(0xFF5A5672);
     final Color buttonColor = const Color(0xFF3A3750);
     const Color textColor = Color(0xFFE1E0F5);
 
+    // Configure button style
     final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
       backgroundColor: buttonColor,
       foregroundColor: textColor,
@@ -52,7 +47,7 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.6,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: baseColor.withOpacity(0.95),
@@ -60,64 +55,79 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                     border: Border.all(color: borderColor, width: 2),
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Achievement title
                       Text(
-                        widget.achievement.title,
+                        achievement.title,
                         style: TextStyleSingleton().style.copyWith(
                           fontSize: 28,
                           color: textColor,
-                          shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                          shadows: const [
+                            Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)
+                          ],
                         ),
                       ),
+
+                      // Achievement description
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.2,
                         child: SingleChildScrollView(
                           child: Padding(
                             padding: const EdgeInsets.all(32.0),
                             child: Text(
-                              widget.achievement.description,
+                              achievement.description,
                               textAlign: TextAlign.center,
                               style: TextStyleSingleton().style.copyWith(
                                 fontSize: 18,
                                 color: textColor,
-                                shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                                shadows: const [
+                                  Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
+
+                      // Difficulty and status icons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 1),
-                              child: Image.asset(
-                                'assets/images/difficulty/difficulty${widget.achievement.difficulty.clamp(1, 10)}-Photoroom.png',
-                                width: MediaQuery.of(context).size.width * 0.0625,
-                                height: MediaQuery.of(context).size.width * 0.0625,
-                                fit: BoxFit.contain,
-                              ),
-
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            child: Image.asset(
+                              'assets/images/difficulty/difficulty${achievement.difficulty.clamp(1, 10)}-Photoroom.png',
+                              width: MediaQuery.of(context).size.width * 0.0625,
+                              height: MediaQuery.of(context).size.width * 0.0625,
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 1),
-                              child: Image.asset(
-                                widget.gameAchievement.achieved
-                                    ? 'assets/images/Trophys/Achieved.png'
-                                    : 'assets/images/Trophys/Not Achieved.png',
-                                width: MediaQuery.of(context).size.width * 0.0625,
-                                height: MediaQuery.of(context).size.width * 0.0625,
-                                fit: BoxFit.contain,
-
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 1),
+                            child: Image.asset(
+                              gameAchievement.achieved
+                                  ? 'assets/images/Trophys/Achieved.png'
+                                  : 'assets/images/Trophys/Not Achieved.png',
+                              width: MediaQuery.of(context).size.width * 0.0625,
+                              height: MediaQuery.of(context).size.width * 0.0625,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ],
                       ),
+
+                      // Back button
                       ElevatedButton.icon(
                         style: buttonStyle,
-                        onPressed: _onBack,
+                        onPressed: () {
+                          game.overlays.remove(AchievementDetails.id);
+                        },
                         icon: const Icon(Icons.arrow_back, color: textColor),
-                        label: Text('BACK', style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor)),
+                        label: Text(
+                          'BACK',
+                          style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
+                        ),
                       ),
                     ],
                   ),
@@ -128,9 +138,5 @@ class _AchievementDetailsState extends State<AchievementDetails> {
         ),
       ],
     );
-  }
-
-  void _onBack() {
-    widget.game.overlays.remove(AchievementDetails.id);
   }
 }

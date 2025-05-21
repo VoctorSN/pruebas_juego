@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../../bbdd/models/achievement.dart';
-import '../style/text_style_singleton.dart';
+import '../../../../bbdd/models/achievement.dart';
+import '../../../style/text_style_singleton.dart';
 
 class AchievementToast extends StatelessWidget {
   static const String id = 'achievement_toast';

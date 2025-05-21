@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../style/text_style_singleton.dart';
+import '../../../style/text_style_singleton.dart';
 
 class LevelCard extends StatefulWidget {
   final int levelNumber;
