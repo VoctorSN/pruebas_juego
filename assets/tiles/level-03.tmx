@@ -44,12 +44,12 @@
   <object id="37" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="38" type="deathZone" x="-48" y="0" width="48" height="368"/>
   <object id="39" type="deathZone" x="640" y="0" width="48" height="368"/>
-  <object id="42" name="rockHead" type="rockHead" x="352" y="192" width="48" height="48">
+  <object id="42" name="spikeHead" type="spikeHead" x="352" y="192" width="48" height="48">
    <properties>
     <property name="isReversed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="58" name="rockHead" type="rockHead" x="368" y="112" width="48" height="48">
+  <object id="58" name="spikeHead" type="spikeHead" x="368" y="112" width="48" height="48">
    <properties>
     <property name="isReversed" type="bool" value="true"/>
    </properties>
