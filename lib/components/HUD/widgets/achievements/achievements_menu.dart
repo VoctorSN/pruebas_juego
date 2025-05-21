@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fruit_collector/components/HUD/style/text_style_singleton.dart';
-import 'package:fruit_collector/components/HUD/widgets/achievement_details.dart';
+import 'package:fruit_collector/components/HUD/widgets/achievements/achievement_details.dart';
 import 'package:fruit_collector/components/bbdd/models/achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/pixel_adventure.dart';

@@ -7,7 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/buttons_game/custom_joystick.dart';
-import 'package:fruit_collector/components/HUD/widgets/achievement_details.dart';
+import 'package:fruit_collector/components/HUD/widgets/achievements/achievement_details.dart';
 import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
 import 'package:fruit_collector/components/bbdd/models/game_achievement.dart';
 import 'package:fruit_collector/components/bbdd/models/game_level.dart';
@@ -23,10 +23,10 @@ import 'components/HUD/buttons_game/change_player_skin_button.dart';
 import 'components/HUD/buttons_game/jump_button.dart';
 import 'components/HUD/buttons_game/open_level_selection.dart';
 import 'components/HUD/buttons_game/open_menu_button.dart';
-import 'components/HUD/widgets/achievement_toast.dart';
-import 'components/HUD/widgets/achievements_menu.dart';
+import 'components/HUD/widgets/achievements/achievement_toast.dart';
+import 'components/HUD/widgets/achievements/achievements_menu.dart';
 import 'components/HUD/widgets/character_selection.dart';
-import 'components/HUD/widgets/level_selection_menu.dart';
+import 'components/HUD/widgets/level_selector/level_selection_menu.dart';
 import 'components/HUD/widgets/main_menu/game_selector.dart';
 import 'components/HUD/widgets/pause_menu.dart';
 import 'components/HUD/widgets/settings/settings_menu.dart';
@@ -41,7 +41,6 @@ import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
 import 'components/game/level/screens/credits_screen.dart';
 import 'components/game/level/screens/level_summary_overlay.dart';
-import 'components/game/level/screens/credits_screen.dart';
 
 class PixelAdventure extends FlameGame
     with

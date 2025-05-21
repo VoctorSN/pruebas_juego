@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../pixel_adventure.dart';
-import '../style/text_style_singleton.dart';
+import '../../../../pixel_adventure.dart';
+import '../../style/text_style_singleton.dart';
 import 'level_card.dart';
 
 class LevelSelectionMenu extends StatefulWidget {
