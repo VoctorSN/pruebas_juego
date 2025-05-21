@@ -2,17 +2,18 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
+import 'package:fruit_collector/components/game/content/enemies/radish.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
 import '../content/enemies/bee.dart';
 import '../content/enemies/rock.dart';
 import '../content/enemies/snail.dart';
 
-bool checkCollisionSnail(Snail player, block) {
-  final hitbox = player.hitbox;
+bool checkCollisionSnail(Snail snail, block) {
+  final hitbox = snail.hitbox;
 
-  final playerX = player.position.x + hitbox.offsetX;
-  final playerY = player.position.y + hitbox.offsetY;
+  final playerX = snail.position.x + hitbox.offsetX;
+  final playerY = snail.position.y + hitbox.offsetY;
   final playerWidth = hitbox.width;
   final playerHeight = hitbox.height;
 
@@ -21,7 +22,7 @@ bool checkCollisionSnail(Snail player, block) {
   final blockWidth = block.width;
   final blockHeight = block.height;
 
-  final fixedX = player.scale.x < 0 ? playerX - (hitbox.offsetX * 2) - playerWidth : playerX;
+  final fixedX = snail.scale.x < 0 ? playerX - (hitbox.offsetX * 2) - playerWidth : playerX;
   final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
 
   return (fixedY < blockY + blockHeight &&
@@ -30,11 +31,11 @@ bool checkCollisionSnail(Snail player, block) {
       fixedX + playerWidth > blockX);
 }
 
-bool checkCollisionRock(Rock player, block) {
-  final hitbox = player.hitbox;
+bool checkCollisionRock(Rock rock, block) {
+  final hitbox = rock.hitbox;
 
-  final playerX = player.position.x;
-  final playerY = player.position.y;
+  final playerX = rock.position.x;
+  final playerY = rock.position.y;
   final playerWidth = hitbox.width;
   final playerHeight = hitbox.height;
 
@@ -43,7 +44,7 @@ bool checkCollisionRock(Rock player, block) {
   final blockWidth = block.width;
   final blockHeight = block.height;
 
-  final fixedX = player.scale.x < 0 ? playerX - playerWidth : playerX;
+  final fixedX = rock.scale.x < 0 ? playerX - playerWidth : playerX;
   final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
 
   return (fixedY < blockY + blockHeight &&
@@ -51,6 +52,29 @@ bool checkCollisionRock(Rock player, block) {
       fixedX < blockX + blockWidth &&
       fixedX + playerWidth > blockX);
 }
+
+bool checkCollisionRadish(Radish radish, block) {
+  final hitbox = radish.hitbox;
+
+  final playerX = radish.position.x;
+  final playerY = radish.position.y;
+  final playerWidth = hitbox.width;
+  final playerHeight = hitbox.height;
+
+  final blockX = block.x;
+  final blockY = block.y;
+  final blockWidth = block.width;
+  final blockHeight = block.height;
+
+  final fixedX = radish.scale.x < 0 ? playerX - playerWidth : playerX;
+  final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
+
+  return (fixedY < blockY + blockHeight &&
+      playerY + playerHeight > blockY &&
+      fixedX < blockX + blockWidth &&
+      fixedX + playerWidth > blockX);
+}
+
 
 bool checkCollision(Player player, block) {
   final hitbox = player.hitbox;

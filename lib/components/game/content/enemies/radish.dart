@@ -9,6 +9,7 @@ import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../content/blocks/collision_block.dart';
+import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum RadishState { flying, idle, run, hit }
@@ -37,29 +38,37 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
   late final SpriteAnimation _hitAnimation;
   static const stepTime = 0.05;
   static final textureSize = Vector2(30, 38);
+  late RectangleHitbox hitbox = RectangleHitbox(position: Vector2.zero(), size: Vector2(30, 38));
 
-  // Movement logic
+  // Movement logic (on air)
   static const tileSize = 16;
   late final rangeNeg = spawnPosition.x - offNeg * tileSize;
   late final rangePos = spawnPosition.x + 32 + offPos * tileSize;
   double moveDirection = -1;
   static const flySpeed = 45;
   double sineTime = 0;
+  bool isFlying = true;
+  Vector2 velocity = Vector2.zero();
 
+  // Movement logic (on ground)
+  final double _gravity = 9.8;
+  final double _maximunVelocity = 1000;
+  final double _terminalVelocity = 300;
+  final double groundSpeed = 80;
+
+  // Death logic
   static const _bounceHeight = 260.0;
-
-  double targetDirection = 1;
-  bool gotStomped = false;
   late final Player player;
+  bool gotStomped = false;
+
+  // Delta time logic
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
-
-  Vector2 velocity = Vector2.zero();
 
   @override
   FutureOr<void> onLoad() {
     player = game.player;
-    add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
+    add(hitbox);
     _loadAllAnimations();
     return super.onLoad();
   }
@@ -92,14 +101,34 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
     accumulatedTime += dt;
     while (accumulatedTime >= fixedDeltaTime) {
       if (!gotStomped) {
-        _fly(fixedDeltaTime);
-        // _movement(fixedDeltaTime);
-        // _updateState();
-        // _checkHorizontalCollisions();
+        if (isFlying) {
+          _fly(fixedDeltaTime);
+        } else {
+          _applyGravity(fixedDeltaTime);
+          _movement(fixedDeltaTime);
+          _checkVerticalCollisions();
+          _checkHorizontalCollisions();
+        }
       }
       accumulatedTime -= fixedDeltaTime;
     }
     super.update(dt);
+  }
+
+  void _checkVerticalCollisions() {
+    for (final block in collisionBlocks) {
+      if (checkCollisionRadish(this, block)) {
+        if (velocity.y > 0) {
+          final radishBottom = position.y + size.y;
+          final blockTop = block.y;
+          if (radishBottom > blockTop && radishBottom - blockTop < size.y * 0.5) {
+            velocity.y = 0;
+            position.y = blockTop - size.y;
+            break;
+          }
+        }
+      }
+    }
   }
 
   void _fly(double dt) async {
@@ -113,6 +142,7 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
 
     velocity.x = moveDirection * flySpeed * speedFactor;
     position.x += velocity.x * dt;
+
     /// TODO: investigate this
     //_spawnFlightParticle();
 
@@ -130,8 +160,7 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
   }
 
   void _spawnFlightParticle() {
-    final double radius = Random().nextDouble() * 2 + 2; // entre 2 y 4 px de radio
-
+    final double radius = Random().nextDouble() * 2 + 2;
     final particle = ParticleSystemComponent(
       position: position + Vector2(size.x / 2, size.y - 2),
       particle: Particle.generate(
@@ -152,29 +181,24 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
 
   void _checkHorizontalCollisions() {
     for (final block in collisionBlocks) {
-      //   if (!block.isPlatform) {
-      //     if (checkCollisionChicken(this, block)) {
-      //       if (velocity.x > 0) {
-      //         position.x = block.x;
-      //       }
-      //       if (velocity.x < 0) {
-      //         position.x = block.x + block.width;
-      //       }
-      //       velocity.x = 0;
-      //     }
-      //   }
-      // }
+      if (!block.isPlatform && checkCollisionRadish(this, block)) {
+        if (velocity.x > 0) {
+          position.x = block.x;
+          turnBack(-1);
+        } else if (velocity.x < 0) {
+          position.x = block.x + block.width;
+          turnBack(1);
+        }
+        velocity.x = 0;
+        break;
+      }
     }
   }
 
   void _movement(double dt) {
-    velocity.x = moveDirection * flySpeed;
+    velocity.x = moveDirection * groundSpeed;
     position.x += velocity.x * dt;
-    if (position.x < rangeNeg) {
-      turnBack(1);
-    } else if (position.x > rangePos) {
-      turnBack(-1);
-    }
+    current = RadishState.run;
   }
 
   void turnBack(double direction) {
@@ -182,14 +206,25 @@ class Radish extends SpriteAnimationGroupComponent with CollisionCallbacks, HasG
     flipHorizontallyAroundCenter();
   }
 
+  void _applyGravity(double dt) {
+    velocity.y += _gravity;
+    velocity.y = velocity.y.clamp(-_maximunVelocity, _terminalVelocity);
+    position.y += velocity.y * dt;
+  }
+
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       if (game.settings.isSoundEnabled) SoundManager().playBounce(game.settings.gameVolume);
-      gotStomped = true;
-      current = RadishState.hit;
       player.velocity.y = -_bounceHeight;
-      await animationTicker?.completed;
-      removeFromParent();
+      if (!isFlying) {
+        current = RadishState.hit;
+        gotStomped = true;
+        await animationTicker?.completed;
+        removeFromParent();
+      } else {
+        current = RadishState.idle;
+        isFlying = false;
+      }
     } else {
       player.collidedWithEnemy();
     }

@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/bee.dart';
+import 'package:fruit_collector/components/game/content/enemies/radish.dart';
 import 'package:fruit_collector/components/game/level/loadingBanana.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/components/game/util/custom_hitbox.dart';
@@ -144,6 +145,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Stars) other.collidedWithPlayer();
       if (other is Bee) other.collidedWithPlayer();
       if (other is Snail) other.collidedWithPlayer();
+      if (other is Radish) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }
