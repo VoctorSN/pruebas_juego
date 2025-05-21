@@ -23,6 +23,7 @@ import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
+import '../content/enemies/rock.dart';
 import '../content/enemies/snail.dart';
 import '../content/levelExtras/stars.dart';
 import '../content/traps/fan.dart';
@@ -66,6 +67,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     Stars,
     Rockhead,
     Snail,
+    Rock,
   ];
 
   GameLevel? levelData;
@@ -259,6 +261,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
               spawnIn: spawnPoint.properties.getValue('spawnIn'),
             );
             add(ghost);
+            break;
+          case 'Rock':
+            final rock = Rock(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              collisionBlocks: collisionBlocks,
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+            );
+            add(rock);
             break;
           case 'Trampoline':
             final trampoline = Trampoline(

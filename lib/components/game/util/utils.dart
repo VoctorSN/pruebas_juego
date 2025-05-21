@@ -1,9 +1,11 @@
 import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/player.dart';
 
 import '../content/enemies/bee.dart';
+import '../content/enemies/rock.dart';
 import '../content/enemies/snail.dart';
 
 bool checkCollisionSnail(Snail player, block) {
@@ -152,6 +154,15 @@ double getPlayerXPosition(Player player) {
   final playerWidth = hitbox.width;
 
   final fixedX = player.scale.x < 0 ? playerX - (hitbox.offsetX * 2) - playerWidth : playerX;
+
+  return fixedX;
+}
+
+double getEnemyXPosition(SpriteAnimationGroupComponent enemy) {
+  final playerX = enemy.position.x;
+  final playerWidth = enemy.size.x;
+
+  final fixedX = enemy.scale.x < 0 ? playerX - playerWidth : playerX;
 
   return fixedX;
 }

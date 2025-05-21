@@ -17,6 +17,7 @@ import '../../content/blocks/trampoline.dart';
 import '../../level/level.dart';
 import '../../util/utils.dart';
 import '../enemies/chicken.dart';
+import '../enemies/rock.dart';
 import '../enemies/snail.dart';
 import '../levelExtras/stars.dart';
 import '../traps/fan.dart';
@@ -137,6 +138,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is Saw) _respawn();
       if (other is Checkpoint && !hasReached) _reachedCheckpoint(other);
       if (other is Chicken) other.collidedWithPlayer();
+      if (other is Rock) other.collidedWithPlayer();
       if (other is Trampoline) other.collidedWithPlayer();
       if (other is LootBox) other.collidedWithPlayer();
       if (other is Stars) other.collidedWithPlayer();
