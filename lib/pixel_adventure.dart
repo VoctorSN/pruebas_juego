@@ -36,6 +36,7 @@ import 'components/bbdd/models/settings.dart';
 import 'components/bbdd/services/game_service.dart';
 import 'components/game/achievements/achievement_manager.dart';
 import 'components/game/content/levelBasics/player.dart';
+import 'components/game/content/levelExtras/confetti.dart';
 import 'components/game/content/traps/fire_block.dart';
 import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
@@ -519,4 +520,15 @@ class PixelAdventure extends FlameGame
       setWindowMaxSize(Size.infinite);
     }
   }
+
+  Future<void> spawnConfetti(Vector2 atPosition) async {
+
+    final confetti = ConfettiEmitterComponent(
+      origin: atPosition,
+      count: 40,
+    );
+
+    level.add(confetti);
+  }
+
 }
