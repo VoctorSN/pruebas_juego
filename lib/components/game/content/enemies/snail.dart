@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
@@ -40,12 +41,13 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   double accumulatedTime = 0;
   int hp = 5;
   final double _gravity = 9.8;
-  final double _jumpForce = 240;
+  final double _jumpForce = 320;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   int timeToJump = 0;
   int timeToTransformShell = 0;
   int timeToTransformSnail = 0;
+  final double _noFlipDifference = 5;
 
   async.Timer? transformSnailTimer;
   late async.Timer transformShellTimer;
@@ -64,10 +66,8 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
 
   @override
   FutureOr<void> onLoad() {
-    debugMode = true;
-    debugColor = const Color(0xFF00FF00);
     player = game.player;
-    add(hitbox..debugMode = true);
+    add(hitbox);
     _loadAllAnimations();
     _calculateRange();
     _startJumpTimer();
@@ -79,7 +79,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   void onRemove() {
     jumpTimer.cancel();
     transformShellTimer.cancel();
-    if(transformSnailTimer != null){
+    if (transformSnailTimer != null) {
       transformSnailTimer!.cancel();
     }
     super.onRemove();
@@ -162,7 +162,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
           velocity.x = 0;
           if (current == SnailState.shellIdle) {
             current = SnailState.shellWallHit;
-              targetDirection = -targetDirection;
+            targetDirection = -targetDirection;
             animationTicker?.completed.then((_) {
               current = SnailState.shellIdle;
             });
@@ -206,17 +206,19 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   }
 
   void _transformSnail() {
+    if (current == SnailState.walk) return;
     current = SnailState.walk;
     runSpeed = 60;
   }
 
   void _transformShell() {
-      current = SnailState.shellIdle;
-      runSpeed = 120;
+    if (current == SnailState.shellIdle) return;
+    current = SnailState.shellIdle;
+    runSpeed = 120;
   }
 
   void _jump() {
-    if(isSnail()) return;
+    if (isSnail()) return;
     if (game.settings.isSoundEnabled) SoundManager().playJump(game.settings.gameVolume);
 
     velocity.y = -_jumpForce;
@@ -231,13 +233,22 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   void _movement(double dt) async {
     velocity.x = 0;
 
-    double chickenOffset = (scale.x > 0) ? 0 : -width;
+    double snailOffset = (scale.x > 0) ? 0 : -width;
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
 
     if (!isSnail()) {
+      if(targetDirection == 0) targetDirection = 1;
       velocity.x = targetDirection * runSpeed;
     } else if (playerInRange()) {
-      targetDirection = player.x + playerOffset > position.x + chickenOffset ? 1 : -1;
+      targetDirection = 0;
+      /// is left
+      if(!(player.x + playerOffset > position.x + snailOffset)){
+        targetDirection = -1;
+      } else
+        /// is right
+        if (player.x + playerOffset - _noFlipDifference > position.x + snailOffset){
+          targetDirection = 1;
+      }
       if ((moveDirection > 0 && scale.x > 0) || (moveDirection < 0 && scale.x < 0)) {
         flipHorizontallyAroundCenter();
       }
@@ -251,9 +262,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
 
     return player.x + playerOffset >= rangeNeg &&
-        player.x + playerOffset <= rangePos &&
-        player.y + player.height > position.y &&
-        player.y < position.y + height;
+        player.x + playerOffset <= rangePos;
   }
 
   void collidedWithPlayer() async {

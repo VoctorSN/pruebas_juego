@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="205">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="210">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -14,12 +14,12 @@
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
+113,0,0,0,0,0,0,0,62,63,63,63,64,0,0,0,0,62,63,63,63,64,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,63,63,63,64,0,0,0,126,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,118,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,118,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,62,63,63,63,63,64,0,118,0,0,0,0,0,0,0,62,63,64,0,0,0,126,0,0,0,0,0,0,0,0,111,
-113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,118,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
+113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
+113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
+113,0,0,0,62,63,63,63,64,0,0,0,0,0,62,63,64,0,0,0,0,0,62,63,63,63,64,0,0,0,126,0,0,0,0,0,0,0,0,111,
+113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,126,0,0,0,0,0,0,0,0,111,
 113,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,148,0,0,0,0,0,0,0,0,111,
 113,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,178,111,
@@ -56,18 +56,27 @@
   <object id="10" x="16" y="352" width="608" height="16"/>
   <object id="198" x="16" y="256" width="608" height="96"/>
   <object id="199" x="480" y="16" width="16" height="240"/>
-  <object id="201" x="256" y="160" width="16" height="64"/>
-  <object id="202" type="Platform" x="144" y="192" width="96" height="16">
+  <object id="202" type="Platform" x="64" y="192" width="80" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="203" type="Platform" x="352" y="144" width="80" height="16">
+  <object id="206" type="Platform" x="352" y="192" width="80" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="204" type="Platform" x="384" y="192" width="48" height="16">
+  <object id="207" type="Platform" x="224" y="192" width="48" height="16">
+   <properties>
+    <property name="falls" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="208" type="Platform" x="128" y="128" width="80" height="16">
+   <properties>
+    <property name="falls" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="209" type="Platform" x="272" y="128" width="80" height="16">
    <properties>
     <property name="falls" type="bool" value="false"/>
    </properties>

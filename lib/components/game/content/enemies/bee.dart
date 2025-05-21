@@ -131,7 +131,7 @@ class Bee extends SpriteAnimationGroupComponent
     if (isAtacking) return;
     velocity.x = 0;
 
-    double chickenOffset = (scale.x > 0) ? 0 : -width;
+    double beeOffset = (scale.x > 0) ? 0 : -width;
     double playerOffset = (player.scale.x > 0) ? 0 : -player.width;
 
     if (playerInRange()) {
@@ -141,7 +141,7 @@ class Bee extends SpriteAnimationGroupComponent
         return;
       }
       targetDirection =
-          (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
+          (player.x + playerOffset > position.x + beeOffset) ? 1 : -1;
       velocity.x = targetDirection * runSpeed;
     }
     moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
