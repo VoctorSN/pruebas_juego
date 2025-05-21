@@ -8,11 +8,17 @@ import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import '../../../../pixel_adventure.dart';
 
 class DeathScreen extends RectangleComponent {
-
   final Function gameAdd;
   final Function gameRemove;
   final PixelAdventure game;
-  DeathScreen({required this.gameAdd,required this.gameRemove,required super.size, required this.game, required super.position});
+
+  DeathScreen({
+    required this.gameAdd,
+    required this.gameRemove,
+    required super.size,
+    required this.game,
+    required super.position,
+  });
 
   final random = Random();
 
@@ -23,7 +29,6 @@ class DeathScreen extends RectangleComponent {
   late List<TextComponent> xComponents = []; // Store "X" components
 
   Future<void> addBlackScreen(int deaths) async {
-
     if (game.settings.isSoundEnabled) {
       SoundManager().playGlitch(game.settings.gameVolume);
     }
@@ -85,10 +90,7 @@ class DeathScreen extends RectangleComponent {
           ),
         ),
         anchor: Anchor.center,
-        position: Vector2(
-          random.nextDouble() * size.x,
-          random.nextDouble() * size.y,
-        ),
+        position: Vector2(random.nextDouble() * size.x, random.nextDouble() * size.y),
         priority: 999,
       );
       xComponents.add(xComponent);
@@ -112,42 +114,33 @@ class DeathScreen extends RectangleComponent {
       blackScreen.paint.color = const Color(0xFF000000).withAlpha(alpha);
 
       // Update "DEFEATED" text opacity
-      final defeatedTextColor = Colors.red.withAlpha(
-        (255 * t).round().clamp(0, 255),
-      );
-      final defeatedShadowColor = Colors.white.withAlpha(
-        (255 * t).round().clamp(0, 255),
-      );
+      final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
+      final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
 
-      defeatedTextComponent!.textRenderer = TextPaint(
-        style: TextStyle(
-          color: defeatedTextColor,
-          fontSize: 48,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'ArcadeClassic',
-        ),
-      );
-      defeatedTextShadow!.textRenderer = TextPaint(
-        style: TextStyle(
-          color: defeatedShadowColor,
-          fontSize: 48,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'ArcadeClassic',
-        ),
-      );
-
-      // Update "X" text opacity
-      for (var xComponent in xComponents) {
-        final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha(
-          (255 * t).round().clamp(0, 255),
-        );
-        xComponent.textRenderer = TextPaint(
+      if (defeatedTextComponent != null) {
+        defeatedTextComponent!.textRenderer = TextPaint(
           style: TextStyle(
-            color: xTextColor,
-            fontSize: 32,
+            color: defeatedTextColor,
+            fontSize: 48,
             fontWeight: FontWeight.bold,
             fontFamily: 'ArcadeClassic',
           ),
+        );
+        defeatedTextShadow!.textRenderer = TextPaint(
+          style: TextStyle(
+            color: defeatedShadowColor,
+            fontSize: 48,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'ArcadeClassic',
+          ),
+        );
+      }
+
+      // Update "X" text opacity
+      for (var xComponent in xComponents) {
+        final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha((255 * t).round().clamp(0, 255));
+        xComponent.textRenderer = TextPaint(
+          style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'ArcadeClassic'),
         );
       }
 
@@ -156,33 +149,34 @@ class DeathScreen extends RectangleComponent {
 
     // Ensure final state
     blackScreen.paint.color = Colors.black;
-    defeatedTextComponent!.textRenderer = TextPaint(
-      style: const TextStyle(
-        color: Colors.red,
-        fontSize: 48,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'ArcadeClassic',
-      ),
-    );
-    defeatedTextShadow!.textRenderer = TextPaint(
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 48,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'ArcadeClassic',
-      ),
-    );
-    for (var xComponent in xComponents) {
-      xComponent.textRenderer = TextPaint(
+    if (defeatedTextComponent != null) {
+      defeatedTextComponent!.textRenderer = TextPaint(
         style: const TextStyle(
-          color: Color.fromARGB(255, 224, 119, 119),
-          fontSize: 32,
+          color: Colors.red,
+          fontSize: 48,
           fontWeight: FontWeight.bold,
           fontFamily: 'ArcadeClassic',
         ),
       );
+      defeatedTextShadow!.textRenderer = TextPaint(
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 48,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'ArcadeClassic',
+        ),
+      );
+      for (var xComponent in xComponents) {
+        xComponent.textRenderer = TextPaint(
+          style: const TextStyle(
+            color: Color.fromARGB(255, 224, 119, 119),
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'ArcadeClassic',
+          ),
+        );
     }
-
+    }
   }
 
   Future<void> removeBlackScreen() async {
@@ -197,9 +191,7 @@ class DeathScreen extends RectangleComponent {
 
       // Update "DEFEATED" text opacity
       if (defeatedTextComponent != null) {
-        final defeatedTextColor = Colors.red.withAlpha(
-          (255 * t).round().clamp(0, 255),
-        );
+        final defeatedTextColor = Colors.red.withAlpha((255 * t).round().clamp(0, 255));
         defeatedTextComponent!.textRenderer = TextPaint(
           style: TextStyle(
             color: defeatedTextColor,
@@ -212,9 +204,7 @@ class DeathScreen extends RectangleComponent {
 
       // Update "DEFEATED" text opacity
       if (defeatedTextShadow != null) {
-        final defeatedShadowColor = Colors.white.withAlpha(
-          (255 * t).round().clamp(0, 255),
-        );
+        final defeatedShadowColor = Colors.white.withAlpha((255 * t).round().clamp(0, 255));
         defeatedTextShadow!.textRenderer = TextPaint(
           style: TextStyle(
             color: defeatedShadowColor,
@@ -228,16 +218,9 @@ class DeathScreen extends RectangleComponent {
       // Update "X" text opacity
       for (var xComponent in xComponents) {
         if (xComponent != null) {
-          final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha(
-            (255 * t).round().clamp(0, 255),
-          );
+          final xTextColor = const Color.fromARGB(255, 224, 119, 119).withAlpha((255 * t).round().clamp(0, 255));
           xComponent.textRenderer = TextPaint(
-            style: TextStyle(
-              color: xTextColor,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'ArcadeClassic',
-            ),
+            style: TextStyle(color: xTextColor, fontSize: 32, fontWeight: FontWeight.bold, fontFamily: 'ArcadeClassic'),
           );
         }
       }
@@ -246,8 +229,7 @@ class DeathScreen extends RectangleComponent {
     }
 
     // Clean up
-    if (defeatedTextComponent != null)
-      defeatedTextComponent!.removeFromParent();
+    if (defeatedTextComponent != null) defeatedTextComponent!.removeFromParent();
     if (defeatedTextShadow != null) defeatedTextShadow!.removeFromParent();
 
     for (var xComponent in xComponents) {

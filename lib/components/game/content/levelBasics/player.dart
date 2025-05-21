@@ -352,12 +352,14 @@ class Player extends SpriteAnimationGroupComponent
     isOnSand = false;
     current = PlayerState.hit;
     await _animationRespawn();
-    game.children.query<Level>().first.respawnObjects();
+    for(final level in game.children.query<Level>()){
+      level.respawnObjects();
+    }
     velocity = Vector2.zero();
     position = statringPosition;
     _updatePlayerState();
 
-    Future.delayed(const Duration(milliseconds: 1400), () => gotHit = false);
+    Future.delayed(const Duration(milliseconds: 2000), () => gotHit = false);
     await game.removeBlackScreen();
 
     _jumpForce = 260;

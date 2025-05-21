@@ -30,6 +30,28 @@ bool checkCollisionSnail(Snail player, block) {
       fixedX + playerWidth > blockX);
 }
 
+bool checkCollisionRock(Rock player, block) {
+  final hitbox = player.hitbox;
+
+  final playerX = player.position.x;
+  final playerY = player.position.y;
+  final playerWidth = hitbox.width;
+  final playerHeight = hitbox.height;
+
+  final blockX = block.x;
+  final blockY = block.y;
+  final blockWidth = block.width;
+  final blockHeight = block.height;
+
+  final fixedX = player.scale.x < 0 ? playerX - playerWidth : playerX;
+  final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
+
+  return (fixedY < blockY + blockHeight &&
+      playerY + playerHeight > blockY &&
+      fixedX < blockX + blockWidth &&
+      fixedX + playerWidth > blockX);
+}
+
 bool checkCollision(Player player, block) {
   final hitbox = player.hitbox;
 

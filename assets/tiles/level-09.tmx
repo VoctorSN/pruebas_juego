@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="59">
  <tileset firstgid="1" source="Pixel Adventure.tsx"/>
  <layer id="1" name="Background" width="40" height="23">
   <properties>
@@ -32,7 +32,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="SpawnPoints">
-  <object id="38" name="Player" type="Player" x="112" y="224" width="27" height="30"/>
+  <object id="38" name="Player" type="Player" x="128" y="224" width="27" height="30"/>
   <object id="48" type="deathZone" x="-48" y="368" width="736" height="48"/>
   <object id="49" type="deathZone" x="-48" y="-48" width="736" height="48"/>
   <object id="50" type="deathZone" x="-48" y="0" width="48" height="368"/>
@@ -42,10 +42,16 @@
     <property name="isLastLevel" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="56" type="Rock" x="272" y="272" width="32" height="32">
+  <object id="56" type="Rock" x="256" y="256" width="38" height="34">
    <properties>
-    <property name="offNeg" type="int" value="7"/>
-    <property name="offPos" type="int" value="7"/>
+    <property name="offNeg" type="float" value="5.9"/>
+    <property name="offPos" type="float" value="7.8"/>
+   </properties>
+  </object>
+  <object id="58" name="Chicken" type="Chicken" x="80" y="224" width="32" height="32">
+   <properties>
+    <property name="offNeg" type="float" value="4.75"/>
+    <property name="offPos" type="float" value="2.75"/>
    </properties>
   </object>
  </objectgroup>

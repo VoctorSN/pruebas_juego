@@ -7,20 +7,33 @@ import 'package:fruit_collector/components/game/level/sound_manager.dart';
 import 'package:fruit_collector/pixel_adventure.dart';
 
 import '../../content/blocks/collision_block.dart';
+import '../../util/custom_hitbox.dart';
 import '../../util/utils.dart';
 import '../levelBasics/player.dart';
 
 enum RockState { idle, run, hit }
+
 enum RockType { big, medium, mini }
 
 class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGameReference<PixelAdventure> {
-
   // Constructor and attributes
   final List<CollisionBlock> collisionBlocks;
-  final int offNeg;
-  final int offPos;
+  final double offNeg;
+  final double offPos;
   final RockType type;
-  Rock({super.position, super.size, required this.offNeg, required this.offPos, required this.collisionBlocks, this.type = RockType.big});
+  Function(dynamic) addSpawnPoint;
+  final Vector2 spawnPosition;
+
+  Rock({
+    super.position,
+    super.size,
+    required this.offNeg,
+    required this.offPos,
+    required this.collisionBlocks,
+    this.type = RockType.big,
+    required this.addSpawnPoint,
+    required this.spawnPosition,
+  });
 
   // Animations info
   final Vector2 spriteSizeRock1 = Vector2(38, 34);
@@ -33,13 +46,18 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
 
   // Movement logic
   static const tileSize = 16;
-  late final rangeNeg = position.x - offNeg * tileSize;
-  late final rangePos = position.x + 32 + offPos * tileSize;
+  late final rangeNeg = spawnPosition.x - offNeg * tileSize;
+  late final rangePos = spawnPosition.x + 32 + offPos * tileSize;
   bool isTurningBack = false;
   Vector2 velocity = Vector2.zero();
   static const runSpeed = 40;
   static const stepTime = .05;
   double moveDirection = -1;
+  final double _gravity = 9.8;
+  final double _maximunVelocity = 1000;
+  final double _terminalVelocity = 300;
+
+  RectangleHitbox hitbox = RectangleHitbox();
 
   // Division logic
   late final Player player = game.player;
@@ -53,19 +71,21 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
   @override
   FutureOr<void> onLoad() {
     priority = -1;
-    add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
+    add(hitbox);
     _loadAllAnimations();
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
-    if (!gotStomped && !isTurningBack) {
-      accumulatedTime += dt;
-      while (accumulatedTime >= fixedDeltaTime) {
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime) {
+      if (!gotStomped && !isTurningBack) {
         _movement(fixedDeltaTime);
-        accumulatedTime -= fixedDeltaTime;
+        _applyGravity(fixedDeltaTime);
+        _checkVerticalCollisions();
       }
+      accumulatedTime -= fixedDeltaTime;
     }
     super.update(dt);
   }
@@ -89,11 +109,7 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
         break;
     }
 
-    animations = {
-      RockState.idle: _idleAnimation,
-      RockState.run: _runAnimation,
-      RockState.hit: _hitAnimation,
-    };
+    animations = {RockState.idle: _idleAnimation, RockState.run: _runAnimation, RockState.hit: _hitAnimation};
 
     current = RockState.run;
   }
@@ -109,13 +125,31 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
     velocity.x = moveDirection * runSpeed;
     position.x += velocity.x * dt;
     if (position.x < rangeNeg) {
-      turningback(1);
+      turnBack(1);
     } else if (position.x > rangePos) {
-      turningback(-1);
+      turnBack(-1);
     }
   }
 
-  void turningback(double direction) {
+  void _applyGravity(double dt) {
+    velocity.y += _gravity;
+    velocity.y = velocity.y.clamp(-_maximunVelocity, _terminalVelocity);
+    position.y += velocity.y * dt;
+  }
+
+  void _checkVerticalCollisions() {
+    for (final block in collisionBlocks) {
+      if (checkCollisionRock(this, block)) {
+        if (velocity.y > 0) {
+          velocity.y = 0;
+          position.y = block.y - hitbox.height;
+          break;
+        }
+      }
+    }
+  }
+
+  void turnBack(double direction) {
     moveDirection = direction;
     isTurningBack = true;
     flipHorizontallyAroundCenter();
@@ -126,6 +160,64 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
     };
   }
 
+  void splitRock() {
+    if (type == RockType.mini) return;
+    if (type == RockType.medium) {
+      final miniRock1 = Rock(
+        position: Vector2(position.x, position.y),
+        size: spriteSizeRock3,
+        offNeg: offNeg,
+        offPos: offPos,
+        collisionBlocks: collisionBlocks,
+        type: RockType.mini,
+        addSpawnPoint: addSpawnPoint,
+        spawnPosition: spawnPosition,
+      );
+      final miniRock2 =
+          Rock(
+              position: Vector2(position.x, position.y),
+              size: spriteSizeRock3,
+              offNeg: offNeg,
+              offPos: offPos,
+              collisionBlocks: collisionBlocks,
+              type: RockType.mini,
+              addSpawnPoint: addSpawnPoint,
+              spawnPosition: spawnPosition,
+            )
+            ..moveDirection = 1
+            ..flipHorizontallyAroundCenter();
+      addSpawnPoint(miniRock1);
+      addSpawnPoint(miniRock2);
+    }
+    if (type == RockType.big) {
+      final mediumRock1 = Rock(
+        position: Vector2(position.x, position.y),
+        size: spriteSizeRock2,
+        offNeg: offNeg,
+        offPos: offPos,
+        collisionBlocks: collisionBlocks,
+        type: RockType.medium,
+        addSpawnPoint: addSpawnPoint,
+        spawnPosition: spawnPosition,
+      );
+      final mediumRock2 =
+          Rock(
+              position: Vector2(position.x, position.y),
+              size: spriteSizeRock2,
+              offNeg: offNeg,
+              offPos: offPos,
+              collisionBlocks: collisionBlocks,
+              type: RockType.medium,
+              addSpawnPoint: addSpawnPoint,
+              spawnPosition: spawnPosition,
+            )
+            ..moveDirection = 1
+            ..flipHorizontallyAroundCenter();
+      addSpawnPoint(mediumRock1);
+      addSpawnPoint(mediumRock2);
+    }
+  }
+
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
       /// TODO: añadir sonido rocas
@@ -134,6 +226,7 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
       player.velocity.y = -_bounceHeight;
       current = RockState.hit;
       await animationTicker?.completed;
+      splitRock();
       removeFromParent();
     } else {
       player.collidedWithEnemy();

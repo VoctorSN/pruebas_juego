@@ -103,7 +103,7 @@ class PixelAdventure extends FlameGame
       add(component);
     },
     gameRemove: (component) {
-      remove(component);
+      removeWhere((component) => component is DeathScreen);
     },
     size: size,
     position: Vector2(0, 0),

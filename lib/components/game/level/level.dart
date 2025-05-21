@@ -269,6 +269,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
               collisionBlocks: collisionBlocks,
               offNeg: spawnPoint.properties.getValue('offNeg'),
               offPos: spawnPoint.properties.getValue('offPos'),
+              addSpawnPoint: addSpawnPoint,
+              spawnPosition: Vector2(spawnPoint.x, spawnPoint.y),
             );
             add(rock);
             break;
