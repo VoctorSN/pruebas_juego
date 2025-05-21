@@ -6,16 +6,16 @@ class LevelSummaryOverlay extends StatelessWidget {
   final VoidCallback onContinue;
   final PixelAdventure game;
 
-  LevelSummaryOverlay({super.key, required this.onContinue, required this.game});
+  LevelSummaryOverlay({
+    super.key,
+    required this.onContinue,
+    required this.game,
+  });
 
   String get levelName => game.level.levelName;
-
   int get difficulty => game.levels[game.gameData!.currentLevel]['level'].difficulty;
-
   int get deaths => game.level.minorDeaths;
-
   int get stars => game.level.starsCollected;
-
   int get time => game.level.minorLevelTime;
 
   final Map<int, String> difficultyMap = {
@@ -33,6 +33,15 @@ class LevelSummaryOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+
+    // Responsive dimensions
+    final double contentWidth = screenSize.width * 0.70;
+    final double contentHeight = screenSize.height * 0.60;
+
+    final double clampedWidth = contentWidth.clamp(320.0, 600.0);
+    final double clampedHeight = contentHeight.clamp(360.0, 500.0);
+
     final TextStyle titleStyle = const TextStyle(
       color: Colors.white,
       fontSize: 30,
@@ -52,69 +61,92 @@ class LevelSummaryOverlay extends StatelessWidget {
       children: [
         Container(color: Colors.black.withOpacity(0.85)),
         Center(
-          child: Container(
-            width: 420,
-            margin: const EdgeInsets.all(24),
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.white, width: 2),
-              boxShadow: [BoxShadow(color: Colors.white.withOpacity(0.1), blurRadius: 12, spreadRadius: 2)],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(levelName.toUpperCase(), style: titleStyle, textAlign: TextAlign.center),
-                const SizedBox(height: 32),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Container(
+              width: clampedWidth,
+              constraints: BoxConstraints(maxHeight: clampedHeight),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.1),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Left column (Difficulty, Stars)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Text(
+                      levelName.toUpperCase(),
+                      style: titleStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _iconValue(icon: FontAwesomeIcons.fire, value: _difficultyText(difficulty), style: valueStyle),
-                        const SizedBox(height: 20),
-                        _starsRow(stars),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _iconValue(
+                              icon: FontAwesomeIcons.fire,
+                              value: _difficultyText(difficulty),
+                              style: valueStyle,
+                            ),
+                            const SizedBox(height: 20),
+                            _starsRow(stars),
+                          ],
+                        ),
+                        const SizedBox(width: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _iconValue(
+                              icon: FontAwesomeIcons.clock,
+                              value: _formatTime(time),
+                              style: valueStyle,
+                            ),
+                            const SizedBox(height: 20),
+                            _iconValue(
+                              icon: FontAwesomeIcons.skull,
+                              value: '$deaths',
+                              style: valueStyle,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-
-                    const SizedBox(width: 40), // Menor separación horizontal
-                    // Right column (Time, Deaths)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _iconValue(icon: FontAwesomeIcons.clock, value: _formatTime(time), style: valueStyle),
-                        const SizedBox(height: 20),
-                        _iconValue(icon: FontAwesomeIcons.skull, value: '$deaths', style: valueStyle),
-                      ],
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      onPressed: onContinue,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'CONTINUE',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'ArcadeClassic',
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 40),
-
-                ElevatedButton(
-                  onPressed: onContinue,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text(
-                    'CONTINUE',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'ArcadeClassic',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -122,11 +154,19 @@ class LevelSummaryOverlay extends StatelessWidget {
     );
   }
 
-  Widget _iconValue({required IconData icon, required String value, required TextStyle style}) {
+  Widget _iconValue({
+    required IconData icon,
+    required String value,
+    required TextStyle style,
+  }) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [FaIcon(icon, color: Colors.white, size: 22), const SizedBox(width: 12), Text(value, style: style)],
+      children: [
+        FaIcon(icon, color: Colors.white, size: 22),
+        const SizedBox(width: 12),
+        Text(value, style: style),
+      ],
     );
   }
 
@@ -138,7 +178,11 @@ class LevelSummaryOverlay extends StatelessWidget {
       stars.add(
         Padding(
           padding: const EdgeInsets.only(right: 6),
-          child: FaIcon(FontAwesomeIcons.solidStar, color: i < count ? Colors.white : Colors.white24, size: 20),
+          child: FaIcon(
+            FontAwesomeIcons.solidStar,
+            color: i < count ? Colors.white : Colors.white24,
+            size: 20,
+          ),
         ),
       );
     }

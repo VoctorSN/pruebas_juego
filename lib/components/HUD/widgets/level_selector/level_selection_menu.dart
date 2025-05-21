@@ -77,8 +77,8 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final double maxWidth = constraints.maxWidth * 0.8;
-              final double maxHeight = constraints.maxHeight * 0.8;
+              final double maxWidth = (constraints.maxWidth * 0.8).clamp(0.0, 800.0);
+              final double maxHeight = (constraints.maxHeight * 0.8).clamp(0.0, 600.0);
 
               final double availableWidth = maxWidth - 96;
               final double calculatedCardsPerRow = (availableWidth / (_minCardSize + _cardSpacing)).floorToDouble();
