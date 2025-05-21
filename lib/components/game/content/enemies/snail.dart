@@ -21,8 +21,9 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   final double offNeg;
   final double offPos;
   final List<CollisionBlock> collisionBlocks;
+  final int doorId;
 
-  Snail({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks});
+  Snail({super.position, super.size, this.offPos = 0, this.offNeg = 0, required this.collisionBlocks, required this.doorId});
 
   static const stepTime = 0.1;
   static const tileSize = 16;
@@ -275,6 +276,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
       if (hp <= 0) {
         gotStomped = true;
         game.spawnConfetti(position);
+        game.level.openDoor(doorId);
         removeFromParent();
       }
       _transformShell();

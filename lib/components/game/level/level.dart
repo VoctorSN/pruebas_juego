@@ -20,6 +20,7 @@ import 'package:fruit_collector/pixel_adventure.dart';
 import '../../bbdd/models/game_level.dart';
 import '../content/blocks/alterning_block.dart';
 import '../content/blocks/collision_block.dart';
+import '../content/blocks/door.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
@@ -68,6 +69,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     Rockhead,
     Snail,
     Rock,
+    Door,
   ];
 
   GameLevel? levelData;
@@ -155,7 +157,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     );
 
     for (CollisionBlock block in collisionBlocks) {
-      if (block.parent != null) {
+      if (block.parent != null && block.parent == this) {
         remove(block);
       }
     }
@@ -251,6 +253,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
               offNeg: spawnPoint.properties.getValue('offNeg'),
               offPos: spawnPoint.properties.getValue('offPos'),
               collisionBlocks: collisionBlocks,
+              doorId: spawnPoint.properties.getValue('doorId'),
             );
             add(snail);
             break;
@@ -317,6 +320,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(lootBox);
             break;
+          case 'Door':
+            final door = Door(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              addCollisionBlock: addCollisionBlock,
+              removeCollisionBlock: removeCollisionBlock,
+              id: spawnPoint.properties.getValue('id'),
+            );
+            add(door);
+            break;
           case 'FireBlock':
             final fireBlock = FireBlock(
               position: Vector2(spawnPoint.x, spawnPoint.y),
@@ -370,6 +383,15 @@ class Level extends World with HasGameReference<PixelAdventure> {
       );
     }
     game.evaluateAchievements();
+  }
+
+  void openDoor(int doorId) {
+    for (final component in children) {
+      if (component is Door && component.id == doorId) {
+        component.openDoor();
+        break;
+      }
+    }
   }
 
   void starCollected() {

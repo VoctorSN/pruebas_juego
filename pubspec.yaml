@@ -70,6 +70,7 @@ flutter:
     - assets/images/Traps/Trampoline/
     - assets/images/Traps/Fan/
     - assets/images/Traps/Fire/
+    - assets/images/Traps/Door/
     - assets/images/Trophys/
     - assets/images/Other/
     - assets/icon/
