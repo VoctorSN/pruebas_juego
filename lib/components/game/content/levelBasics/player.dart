@@ -359,7 +359,7 @@ class Player extends SpriteAnimationGroupComponent
     position = statringPosition;
     _updatePlayerState();
 
-    Future.delayed(const Duration(milliseconds: 2000), () => gotHit = false);
+    Future.delayed(const Duration(milliseconds: 2000 ), () => gotHit = false);
     await game.removeBlackScreen();
 
     _jumpForce = 260;

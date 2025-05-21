@@ -1,27 +1,25 @@
+import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fruit_collector/pixel_adventure.dart';
 
 /// TODO: centrar bien los datos
 /// TODO: cargar los datos correctamente
-/// TODO: hacer q también funcione cuando se selecciona un nivel
-/// TODO: no se supone que tiene que cargar el siguiente level? o simplemente es un resumen?, yo lo haría como cambio de nivel y ya
 class LevelSummaryOverlay extends StatelessWidget {
-  final String levelName;
-  final int difficulty;
-  final int deaths;
-  final int stars;
-  final int time; // En milisegundos
   final VoidCallback onContinue;
+  final PixelAdventure game;
 
-  const LevelSummaryOverlay({
-    super.key,
-    required this.levelName,
-    required this.difficulty,
-    required this.deaths,
-    required this.stars,
-    required this.time,
-    required this.onContinue,
-  });
+  const LevelSummaryOverlay({super.key, required this.onContinue, required this.game});
+
+  get levelName => game.level.levelName;
+
+  get difficulty => game.levels[game.gameData!.currentLevel]['level'].difficulty;
+
+  get deaths => game.level.minorDeaths;
+
+  get stars => game.level.starsCollected;
+
+  get time => game.level.minorLevelTime;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +103,7 @@ class LevelSummaryOverlay extends StatelessWidget {
     );
   }
 
-  String _formatTime(int milliseconds) {
-    final int seconds = (milliseconds / 1000).round();
+  String _formatTime(int seconds) {
     final int minutes = seconds ~/ 60;
     final int remainingSeconds = seconds % 60;
     final String paddedSeconds = remainingSeconds.toString().padLeft(2, '0');

@@ -245,11 +245,7 @@ class PixelAdventure extends FlameGame
       'level_summary',
           (context, game) =>
           LevelSummaryOverlay(
-            levelName: level.levelName,
-            difficulty: levels[gameData!.currentLevel]['level'].difficulty,
-            deaths: level.minorDeaths,
-            stars: level.starsCollected,
-            time: level.minorLevelTime,
+            game: this,
             onContinue: () {
               overlays.remove('level_summary');
               changeLevelScreen.startExpand();
