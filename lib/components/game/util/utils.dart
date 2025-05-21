@@ -11,8 +11,6 @@ import '../content/enemies/snail.dart';
 bool checkCollisionSnail(Snail player, block) {
   final hitbox = player.hitbox;
 
-  final playerX = player.position.x + hitbox.offsetX;
-  final playerY = player.position.y + hitbox.offsetY;
   final playerWidth = hitbox.width;
   final playerHeight = hitbox.height;
 
@@ -21,11 +19,11 @@ bool checkCollisionSnail(Snail player, block) {
   final blockWidth = block.width;
   final blockHeight = block.height;
 
-  final fixedX = player.scale.x < 0 ? playerX - (hitbox.offsetX * 2) - playerWidth : playerX;
-  final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
+  final fixedX = player.scale.x < 0 ? player.position.x - playerWidth : player.position.x;
+  final fixedY = block.isPlatform ? player.position.y + playerHeight : player.position.y;
 
   return (fixedY < blockY + blockHeight &&
-      playerY + playerHeight > blockY &&
+      player.position.y + playerHeight > blockY &&
       fixedX < blockX + blockWidth &&
       fixedX + playerWidth > blockX);
 }
@@ -168,6 +166,16 @@ bool checkPlayerOnBlock(Player player, RectangleHitbox blockHitbox) {
       player.position.y + player.hitbox.offsetY + player.hitbox.height == blockHitbox.position.y;
 
   return isVerticalAlign && isPlayerOnPlatform;
+}
+
+double getSnailXPosition(Snail player) {
+  final hitbox = player.hitbox;
+  final playerX = player.position.x;
+  final playerWidth = hitbox.width;
+
+  final fixedX = player.scale.x < 0 ? playerX - playerWidth : playerX;
+
+  return fixedX;
 }
 
 double getPlayerXPosition(Player player) {

@@ -221,6 +221,7 @@ class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGam
 
   void collidedWithPlayer() async {
     if (player.velocity.y > 0 && player.y + player.height > position.y) {
+      /// TODO: arreglar offsets
       /// TODO: añadir sonido rocas
       if (game.settings.isSoundEnabled) SoundManager().playBounce(game.settings.gameVolume);
       gotStomped = true;

@@ -40,14 +40,18 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   double accumulatedTime = 0;
   int hp = 5;
   final double _gravity = 9.8;
-  final double _jumpForce = 400;
+  final double _jumpForce = 240;
   final double _maximunVelocity = 1000;
   final double _terminalVelocity = 300;
   int timeToJump = 0;
+  int timeToTransformShell = 0;
+  int timeToTransformSnail = 0;
 
-  late final async.Timer jumpTimer;
+  async.Timer? transformSnailTimer;
+  late async.Timer transformShellTimer;
+  late async.Timer jumpTimer;
 
-  CustomHitbox hitbox = CustomHitbox(offsetX: 10, offsetY: 4, width: 14, height: 28);
+  RectangleHitbox hitbox = RectangleHitbox(position: Vector2.zero(), size: Vector2(48, 48));
 
   // Animations logic
   late final SpriteAnimation _idleAnimation;
@@ -60,17 +64,24 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
 
   @override
   FutureOr<void> onLoad() {
+    debugMode = true;
+    debugColor = const Color(0xFF00FF00);
     player = game.player;
-    add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
+    add(hitbox..debugMode = true);
     _loadAllAnimations();
     _calculateRange();
     _startJumpTimer();
+    _startTransformShellTimer();
     return super.onLoad();
   }
 
   @override
   void onRemove() {
     jumpTimer.cancel();
+    transformShellTimer.cancel();
+    if(transformSnailTimer != null){
+      transformSnailTimer!.cancel();
+    }
     super.onRemove();
   }
 
@@ -114,7 +125,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
           if (velocity.y > 0) {
             isOnGround = true;
             velocity.y = 0;
-            position.y = block.y - hitbox.height - hitbox.offsetY;
+            position.y = block.y - hitbox.height;
 
             break;
           }
@@ -123,7 +134,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
         if (checkCollisionSnail(this, block)) {
           if (velocity.y > 0) {
             velocity.y = 0;
-            position.y = block.y - hitbox.height - hitbox.offsetY;
+            position.y = block.y - hitbox.height;
             isOnGround = true;
             break;
           }
@@ -143,10 +154,10 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
       if (!block.isPlatform) {
         if (checkCollisionSnail(this, block)) {
           if (velocity.x > 0) {
-            position.x = block.x - width;
+            position.x = block.x - width - (scale.x.clamp(-1, 0) * width);
           }
           if (velocity.x < 0) {
-            position.x = block.x + block.width;
+            position.x = block.x + block.width - (scale.x.clamp(-1, 0) * width);
           }
           velocity.x = 0;
           if (current == SnailState.shellIdle) {
@@ -169,11 +180,39 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   }
 
   void _startJumpTimer() {
-    timeToJump = random.nextInt(5) + 1;
+    timeToJump = random.nextInt(5) + 3;
     jumpTimer = async.Timer.periodic(Duration(seconds: timeToJump), (_) {
       _jump();
-      timeToJump = random.nextInt(3) + 1;
+      timeToJump = random.nextInt(5) + 3;
     });
+  }
+
+  void _startTransformShellTimer() {
+    timeToTransformShell = random.nextInt(10) + 4;
+    transformShellTimer = async.Timer.periodic(Duration(seconds: timeToTransformShell), (_) {
+      _transformShell();
+      transformShellTimer.cancel();
+      _startTransformSnailTimer();
+    });
+  }
+
+  void _startTransformSnailTimer() {
+    timeToTransformSnail = random.nextInt(20) + 4;
+    transformSnailTimer = async.Timer.periodic(Duration(seconds: timeToTransformSnail), (_) {
+      _transformSnail();
+      transformSnailTimer!.cancel();
+      _startTransformShellTimer();
+    });
+  }
+
+  void _transformSnail() {
+    current = SnailState.walk;
+    runSpeed = 60;
+  }
+
+  void _transformShell() {
+      current = SnailState.shellIdle;
+      runSpeed = 120;
   }
 
   void _jump() {
@@ -198,25 +237,14 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
     if (!isSnail()) {
       velocity.x = targetDirection * runSpeed;
     } else if (playerInRange()) {
-      targetDirection = (player.x + playerOffset > position.x + chickenOffset) ? 1 : -1;
+      targetDirection = player.x + playerOffset > position.x + chickenOffset ? 1 : -1;
+      if ((moveDirection > 0 && scale.x > 0) || (moveDirection < 0 && scale.x < 0)) {
+        flipHorizontallyAroundCenter();
+      }
       velocity.x = targetDirection * runSpeed;
     }
     moveDirection = lerpDouble(moveDirection, targetDirection, 0.1) ?? 1;
     position.x += velocity.x * dt;
-  }
-
-  Future<void> attack() async {
-    // isAtacking = true;
-    // current = SnailState.attack;
-    // await animationTicker?.completed;
-    // animationTicker?.reset();
-    // shootProjectile();
-    // current = SnailState.idle;
-    // isAtacking = false;
-    // isDuringCoolDown = true;
-    // Future.delayed(const Duration(milliseconds: attackCouldDown), () {
-    //   isDuringCoolDown = false;
-    // });
   }
 
   bool playerInRange() {
@@ -239,8 +267,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
         gotStomped = true;
         removeFromParent();
       }
-      current = SnailState.shellIdle;
-      runSpeed = 120;
+      _transformShell();
     } else {
       player.collidedWithEnemy();
     }
