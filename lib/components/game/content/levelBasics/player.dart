@@ -17,6 +17,7 @@ import '../../content/blocks/trampoline.dart';
 import '../../level/level.dart';
 import '../../util/utils.dart';
 import '../enemies/chicken.dart';
+import '../enemies/snail.dart';
 import '../levelExtras/stars.dart';
 import '../traps/fan.dart';
 import '../traps/saw.dart';
@@ -140,6 +141,7 @@ class Player extends SpriteAnimationGroupComponent
       if (other is LootBox) other.collidedWithPlayer();
       if (other is Stars) other.collidedWithPlayer();
       if (other is Bee) other.collidedWithPlayer();
+      if (other is Snail) other.collidedWithPlayer();
     }
     super.onCollisionStart(intersectionPoints, other);
   }

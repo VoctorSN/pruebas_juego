@@ -218,7 +218,8 @@ class DatabaseManager {
       {'name': 'level-06', 'difficulty': 6},
       {'name': 'level-07', 'difficulty': 7},
       {'name': 'level-08', 'difficulty': 8},
-      {'name': 'level-99', 'difficulty': 10},
+      {'name': 'level-99', 'difficulty': 9},
+      {'name': 'level-100', 'difficulty': 10},
     ];
 
     for (final level in levels) {

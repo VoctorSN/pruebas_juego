@@ -469,6 +469,7 @@ class PixelAdventure extends FlameGame
   }
 
   addBlackScreen() {
+    deathScreen.size = size;
     final gameDeaths = gameData?.totalDeaths ?? 0;
     deathScreen.addBlackScreen(gameDeaths + level.deathCount);
   }

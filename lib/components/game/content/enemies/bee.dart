@@ -46,9 +46,9 @@ class Bee extends SpriteAnimationGroupComponent
   double accumulatedTime = 0;
   bool isAtacking = false;
   bool isDuringCoolDown = false;
-  static const attackCouldDown = 2500;
+  static const attackCouldDown = 1000;
   final projectileSize = Vector2.all(16);
-  final Vector2 projectileVelocity = Vector2(0, 100);
+  final Vector2 projectileVelocity = Vector2(0, 200);
 
   // Animations logic
   late final SpriteAnimation _idleAnimation;

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// TODO: centrar bien los datos
+/// TODO: cargar los datos correctamente
+/// TODO: hacer q también funcione cuando se selecciona un nivel
+/// TODO: no se supone que tiene que cargar el siguiente level? o simplemente es un resumen?, yo lo haría como cambio de nivel y ya
 class LevelSummaryOverlay extends StatelessWidget {
   final String levelName;
   final int difficulty;
@@ -29,12 +34,10 @@ class LevelSummaryOverlay extends StatelessWidget {
 
     return Stack(
       children: [
-        // Fondo semitransparente para mayor contraste
-        Container(
-          color: Colors.black.withOpacity(0.7),
-        ),
+        Container(color: Colors.black.withOpacity(0.7)),
         Center(
           child: Container(
+            width: 420,
             margin: const EdgeInsets.all(24),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
@@ -45,16 +48,12 @@ class LevelSummaryOverlay extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  levelName,
-                  style: textStyle.copyWith(fontSize: 24),
-                  textAlign: TextAlign.center,
-                ),
+                Text(levelName, style: textStyle.copyWith(fontSize: 24), textAlign: TextAlign.center),
                 const SizedBox(height: 24),
-                _infoRow(Icons.whatshot, 'Dificultad', '★' * difficulty, textStyle),
-                _infoRow(Icons.sell, 'Muertes', '$deaths', textStyle),
-                _infoRow(Icons.star, 'Estrellas', '$stars', textStyle),
-                _infoRow(Icons.timer, 'Tiempo', '$time', textStyle),
+                _infoRow(icon: Icons.whatshot, label: 'Difficulty', value: '★' * difficulty, style: textStyle),
+                _infoRow(icon: FontAwesomeIcons.skullCrossbones, label: 'Deaths', value: '$deaths', style: textStyle),
+                _infoRow(icon: Icons.timer, label: 'Time', value: _formatTime(time), style: textStyle),
+                _infoRow(icon: Icons.star, label: 'Stars', value: '$stars', style: textStyle),
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: onContinue,
@@ -65,11 +64,7 @@ class LevelSummaryOverlay extends StatelessWidget {
                   ),
                   child: const Text(
                     'Continuar',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'ArcadeClassic',
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'ArcadeClassic'),
                   ),
                 ),
               ],
@@ -80,18 +75,41 @@ class LevelSummaryOverlay extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(IconData icon, String label, String value, TextStyle style) {
+  Widget _infoRow({required IconData icon, required String label, required String value, required TextStyle style}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.white, size: 24),
-          const SizedBox(width: 8),
-          Text('$label: ', style: style),
-          Text(value, style: style),
+          // Columna izquierda: icono + etiqueta, alineado a la derecha
+          SizedBox(
+            width: 160,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(icon, color: Colors.white, size: 24),
+                const SizedBox(width: 8),
+                Text('$label:', style: style, textAlign: TextAlign.right),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
+          // Columna derecha: valor alineado a la izquierda
+          SizedBox(
+            width: 120,
+            child: Text(value, style: style, textAlign: TextAlign.left, overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
     );
+  }
+
+  String _formatTime(int milliseconds) {
+    final int seconds = (milliseconds / 1000).round();
+    final int minutes = seconds ~/ 60;
+    final int remainingSeconds = seconds % 60;
+    final String paddedSeconds = remainingSeconds.toString().padLeft(2, '0');
+    return '$minutes:$paddedSeconds';
   }
 }

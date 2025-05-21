@@ -23,6 +23,7 @@ import '../content/blocks/collision_block.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
+import '../content/enemies/snail.dart';
 import '../content/levelExtras/stars.dart';
 import '../content/traps/fan.dart';
 import '../content/traps/spike.dart';
@@ -64,6 +65,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
     FireBlock,
     Stars,
     Rockhead,
+    Snail,
   ];
 
   GameLevel? levelData;
@@ -239,6 +241,16 @@ class Level extends World with HasGameReference<PixelAdventure> {
               addSpawnPoint: addSpawnPoint,
             );
             add(bee);
+            break;
+          case 'Snail':
+            final snail = Snail(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+              collisionBlocks: collisionBlocks,
+            );
+            add(snail);
             break;
           case 'Ghost':
             final ghost = Ghost(
