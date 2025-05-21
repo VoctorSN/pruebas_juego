@@ -11,8 +11,8 @@ import '../content/enemies/snail.dart';
 bool checkCollisionSnail(Snail snail, block) {
   final hitbox = snail.hitbox;
 
-  final playerX = snail.position.x + hitbox.offsetX;
-  final playerY = snail.position.y + hitbox.offsetY;
+  final playerX = snail.position.x;
+  final playerY = snail.position.y;
   final playerWidth = hitbox.width;
   final playerHeight = hitbox.height;
 
@@ -21,7 +21,7 @@ bool checkCollisionSnail(Snail snail, block) {
   final blockWidth = block.width;
   final blockHeight = block.height;
 
-  final fixedX = snail.scale.x < 0 ? playerX - (hitbox.offsetX * 2) - playerWidth : playerX;
+  final fixedX = snail.scale.x < 0 ? playerX - playerWidth : playerX;
   final fixedY = block.isPlatform ? playerY + playerHeight : playerY;
 
   return (fixedY < blockY + blockHeight &&
