@@ -42,7 +42,7 @@
     <property name="isLastLevel" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="56" type="Rock" x="256" y="256" width="38" height="34">
+  <object id="56" name="Rock" type="Rock" x="256" y="256" width="38" height="34">
    <properties>
     <property name="offNeg" type="float" value="5.9"/>
     <property name="offPos" type="float" value="7.8"/>

@@ -7,7 +7,7 @@ import 'package:fruit_collector/components/bbdd/services/level_service.dart';
 import 'package:fruit_collector/components/game/content/blocks/loot_box.dart';
 import 'package:fruit_collector/components/game/content/enemies/bee.dart';
 import 'package:fruit_collector/components/game/content/enemies/chicken.dart';
-import 'package:fruit_collector/components/game/content/enemies/rockhead.dart';
+import 'package:fruit_collector/components/game/content/enemies/spikeHead.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/checkpoint.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/death_zone.dart';
 import 'package:fruit_collector/components/game/content/levelBasics/fruit.dart';
@@ -24,6 +24,7 @@ import '../content/blocks/door.dart';
 import '../content/blocks/falling_block.dart';
 import '../content/blocks/trampoline.dart';
 import '../content/enemies/ghost.dart';
+import '../content/enemies/radish.dart';
 import '../content/enemies/rock.dart';
 import '../content/enemies/snail.dart';
 import '../content/levelExtras/stars.dart';
@@ -66,9 +67,10 @@ class Level extends World with HasGameReference<PixelAdventure> {
     Ghost,
     FireBlock,
     Stars,
-    Rockhead,
+    SpikeHead,
     Snail,
     Rock,
+    Radish,
     Door,
   ];
 
@@ -293,13 +295,13 @@ class Level extends World with HasGameReference<PixelAdventure> {
             );
             add(deathZone);
             break;
-          case 'rockHead':
-            final rockHead = Rockhead(
+          case 'spikeHead':
+            final spikeHead = SpikeHead(
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),
               isReversed: spawnPoint.properties.getValue('isReversed'),
             );
-            add(rockHead);
+            add(spikeHead);
             break;
           case 'Spike':
             final spike = Spike(
@@ -308,6 +310,17 @@ class Level extends World with HasGameReference<PixelAdventure> {
               wallPosition: spawnPoint.properties.getValue('position'),
             );
             add(spike);
+            break;
+          case 'Radish':
+            final radish = Radish(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),
+              offNeg: spawnPoint.properties.getValue('offNeg'),
+              offPos: spawnPoint.properties.getValue('offPos'),
+              collisionBlocks: collisionBlocks,
+              spawnPosition: Vector2(spawnPoint.x, spawnPoint.y),
+            );
+            add(radish);
             break;
           case 'lootBox':
             final lootBox = LootBox(
@@ -348,27 +361,27 @@ class Level extends World with HasGameReference<PixelAdventure> {
   }
 
   int get minorLevelTime {
-   final int lastTime = levelTime;
-   if (levelData != null) {
-     if (levelData!.time != null) {
-       if (lastTime < levelData!.time!) {
-         levelData!.time = lastTime;
-       }
-     } else {
-       levelData!.time = lastTime;
-     }
-   }
-   return lastTime;
+    final int lastTime = levelTime;
+    if (levelData != null) {
+      if (levelData!.time != null) {
+        if (lastTime < levelData!.time!) {
+          levelData!.time = lastTime;
+        }
+      } else {
+        levelData!.time = lastTime;
+      }
+    }
+    return lastTime;
   }
 
   int get minorDeaths {
-   final int lastDeathCount = deathCount;
-   if (levelData != null) {
-     if (lastDeathCount < levelData!.deaths) {
-       levelData!.deaths = lastDeathCount;
-     }
-   }
-   return lastDeathCount;
+    final int lastDeathCount = deathCount;
+    if (levelData != null) {
+      if (lastDeathCount < levelData!.deaths) {
+        levelData!.deaths = lastDeathCount;
+      }
+    }
+    return lastDeathCount;
   }
 
   Future<void> saveLevel() async {
@@ -411,9 +424,7 @@ class Level extends World with HasGameReference<PixelAdventure> {
                 position: Vector2(collision.x, collision.y),
                 size: Vector2(collision.width, collision.height),
                 isPlatform: true,
-                fallingDuration: collision.properties.getValue(
-                  'fallingDurationMillSec',
-                ),
+                fallingDuration: collision.properties.getValue('fallingDurationMillSec'),
                 isSideSensible: collision.properties.getValue('isSideSensible'),
               );
               collisionBlocks.add(fallingPlatform);
@@ -486,13 +497,8 @@ class Level extends World with HasGameReference<PixelAdventure> {
   void _scrollingBackground() {
     final backgroundLayer = level.tileMap.getLayer('Background');
     if (backgroundLayer != null) {
-      final backgroundColor = backgroundLayer.properties.getValue(
-        'BackgroundColor',
-      );
-      final backgroundTile = BackgroundTile(
-        color: backgroundColor ?? 'Gray',
-        position: Vector2(0, 0),
-      );
+      final backgroundColor = backgroundLayer.properties.getValue('BackgroundColor');
+      final backgroundTile = BackgroundTile(color: backgroundColor ?? 'Gray', position: Vector2(0, 0));
       add(backgroundTile);
     }
   }
