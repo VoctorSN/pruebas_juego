@@ -111,10 +111,6 @@ class PixelAdventure extends FlameGame
     ..priority = 1000;
 
   late var changeLevelScreen = ChangeLevelScreen(
-    onCollapseEnd: () {
-      overlays.add('level_summary');
-      removeWhere((component) => component is Level);
-    },
     onExpandEnd: () {
       gameData!.currentLevel++;
       _loadActualLevel(); // o lo que uses para cargar el siguiente
@@ -256,7 +252,7 @@ class PixelAdventure extends FlameGame
             time: level.minorLevelTime,
             onContinue: () {
               overlays.remove('level_summary');
-              changeLevelScreen.startExpand(); // Animación inversa
+              changeLevelScreen.startExpand();
             },
           ),
     );
@@ -288,7 +284,7 @@ class PixelAdventure extends FlameGame
               overlays.remove(LevelSelectionMenu.id);
               resumeEngine();
               gameData?.currentLevel = level;
-              _loadActualLevel();
+              addLevelAnimation();
             },
           ),
     );
@@ -476,15 +472,22 @@ class PixelAdventure extends FlameGame
 
   addLevelSummaryScreen() {
     changeLevelScreen = ChangeLevelScreen(
-      onCollapseEnd: () {
-        overlays.add('level_summary');
-        removeWhere((component) => component is Level);
-      },
       onExpandEnd: () {
         gameData!.currentLevel++;
-        _loadActualLevel(); // o lo que uses para cargar el siguiente
+        _loadActualLevel();
       },
     );
+    changeLevelScreen.showLevelSummary = true;
+    add(changeLevelScreen);
+  }
+
+  addLevelAnimation(){
+    changeLevelScreen = ChangeLevelScreen(
+      onExpandEnd: () {
+        _loadActualLevel();
+      },
+    );
+    changeLevelScreen.showLevelSummary = false;
     add(changeLevelScreen);
   }
 

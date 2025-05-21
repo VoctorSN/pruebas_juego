@@ -16,6 +16,7 @@ enum RockState { idle, run, hit }
 enum RockType { big, medium, mini }
 
 class Rock extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGameReference<PixelAdventure> {
+
   // Constructor and attributes
   final List<CollisionBlock> collisionBlocks;
   final double offNeg;

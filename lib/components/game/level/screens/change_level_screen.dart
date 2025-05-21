@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 import '../../../../pixel_adventure.dart';
+import '../../../bbdd/models/levelModel.dart';
 
 enum TransitionPhase { contracting, expanding, idle }
 
 class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdventure> {
   final double durationMs;
-  final VoidCallback onCollapseEnd;
   final VoidCallback onExpandEnd;
 
   late double radius;
@@ -18,12 +18,9 @@ class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdv
   late final double maxRadius;
   late final Vector2 center;
   bool endFunctionExecuted = false;
+  bool showLevelSummary = true;
 
-  ChangeLevelScreen({
-    required this.onCollapseEnd,
-    required this.onExpandEnd,
-    this.durationMs = 800,
-  }) : super(priority: 3000);
+  ChangeLevelScreen({required this.onExpandEnd, this.durationMs = 800}) : super(priority: 3000);
 
   @override
   Future<void> onLoad() async {
@@ -57,13 +54,15 @@ class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdv
       if (progress >= 1.0) {
         radius = 0.0;
         _phase = TransitionPhase.idle;
-        onCollapseEnd();
+        showLevelSummary ? game.overlays.add('level_summary') : game.changeLevelScreen.startExpand();
+        game.removeWhere((component) => component is Level);
       }
     } else if (_phase == TransitionPhase.expanding) {
-      if(!endFunctionExecuted){
+      if (!endFunctionExecuted) {
+
         onExpandEnd();
         endFunctionExecuted = true;
-    }
+      }
       radius = maxRadius * eased;
 
       if (progress >= 1.0) {
