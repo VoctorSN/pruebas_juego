@@ -57,14 +57,13 @@ class SettingsMenu extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
-
-
         child: Center(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
+                side: BorderSide(color: borderColor, width: 2),
               ),
               color: baseColor.withOpacity(0.85),
               child: FittedBox(

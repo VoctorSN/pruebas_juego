@@ -74,15 +74,17 @@ class _AchievementDetailsState extends State<AchievementDetails> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                        child: SingleChildScrollView(
-                          child: Text(
-                            widget.achievement.description,
-                            textAlign: TextAlign.center,
-                            style: TextStyleSingleton().style.copyWith(
-                              fontSize: 16,
-                              color: textColor,
-                              height: 1.4,
-                              shadows: const [Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 1)],
+                        child: Center (
+                          child: SingleChildScrollView(
+                            child: Text(
+                              widget.achievement.description,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: textColor,
+                                height: 1.4,
+                                shadows: [Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 1)],
+                              ),
                             ),
                           ),
                         ),
