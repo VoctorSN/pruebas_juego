@@ -76,8 +76,8 @@ class _CharacterSelectionState extends State<CharacterSelection> {
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              final double maxWidth = (constraints.maxWidth * 0.6).clamp(0.0, 800.0);
-              final double maxHeight = (constraints.maxHeight * 0.8).clamp(0.0, 600.0);
+              final double maxWidth = (constraints.maxWidth * 0.6).clamp(0.0, 400.0);
+              final double maxHeight = (constraints.maxHeight * 0.8).clamp(0.0, 350.0);
               final double avatarSize = (maxWidth / 3).clamp(80.0, 180.0);
 
               return Container(
