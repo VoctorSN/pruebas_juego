@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_collector/components/HUD/widgets/main_menu/main_menu.dart';
+
 import '../../../../pixel_adventure.dart';
 
 class CreditsScreen extends Component {
@@ -11,31 +11,19 @@ class CreditsScreen extends Component {
   final Function gameRemove;
   final PixelAdventure game;
 
-  CreditsScreen({
-    required this.gameAdd,
-    required this.gameRemove,
-    required this.game,
-  });
+  CreditsScreen({required this.gameAdd, required this.gameRemove, required this.game});
 
   final List<_ScrollingCreditLine> creditLines = [];
   late Vector2 screenSize;
   late RectangleComponent _fadeOverlay;
   late _FadeUpdateComponent _fadeUpdateComponent;
-  late _BlockingRectangle _interactionBlocker;
 
   bool _hasFinished = false;
 
   Future<void> show() async {
     screenSize = game.size;
-    game.toggleBlockWindowResize(true);
-
-    _interactionBlocker = _BlockingRectangle(
-      size: screenSize.clone(),
-      position: Vector2.zero(),
-    )..priority = 9999;
-
-    gameAdd(_interactionBlocker);
-
+    game.toggleBlockWindowResize(false);
+    game.toggleBlockButtons(false);
     _startFadeOverlay();
     _spawnCreditLines();
   }
@@ -50,7 +38,7 @@ class CreditsScreen extends Component {
 
     gameAdd(_fadeOverlay);
 
-    const double durationInSeconds = 2.5;
+    final double durationInSeconds = 2.5;
     double elapsed = 0;
 
     _fadeUpdateComponent = _FadeUpdateComponent(
@@ -160,7 +148,7 @@ class CreditsScreen extends Component {
       'NOW   THE   REAL   END   GOODBYE   FELLAS!',
     ];
 
-    const double spacing = 60.0;
+    final double spacing = 60.0;
     final double startY = screenSize.y + 50;
 
     final TextStyle baseStyle = const TextStyle(
@@ -171,15 +159,18 @@ class CreditsScreen extends Component {
     );
 
     final TextStyle titleStyle = baseStyle.copyWith(fontSize: 24, color: Colors.yellow);
+
     final TextStyle finalStyle = baseStyle.copyWith(fontSize: 28, color: Colors.green);
-    const double titleFontSize = 36;
+
+    final double titleFontSize = 36;
 
     bool _isFinalLine(String line) => line.trim().endsWith('!');
     bool _isSectionTitle(String line) => line.trim().endsWith(':');
     bool _isBigTitle(String line) => line.trim().startsWith('<') && line.trim().endsWith('>');
 
     for (int i = 0; i < lines.length; i++) {
-      final String trimmed = lines[i].trim();
+      final String rawText = lines[i];
+      final String trimmed = rawText.trim();
       final bool isFinal = _isFinalLine(trimmed);
       final bool isSectionTitle = _isSectionTitle(trimmed);
       final bool isBigTitle = _isBigTitle(trimmed);
@@ -189,14 +180,20 @@ class CreditsScreen extends Component {
         final String clean = trimmed.substring(1, trimmed.length - 1);
         final double yOffset = startY + i * spacing;
         final List<Color> rainbow = [
-          Colors.red, Colors.orange, Colors.yellow, Colors.green,
-          Colors.cyan, Colors.blue, Colors.purple, Colors.pink,
+          Colors.red,
+          Colors.orange,
+          Colors.yellow,
+          Colors.green,
+          Colors.cyan,
+          Colors.blue,
+          Colors.purple,
+          Colors.pink,
         ];
 
         for (int j = 0; j < clean.length; j++) {
           final String char = clean[j];
-          final Color color = rainbow[j % rainbow.length];
-          final _ScrollingCreditLine letter = _ScrollingCreditLine(
+          final color = rainbow[j % rainbow.length];
+          final letter = _ScrollingCreditLine(
             text: char,
             startPosition: Vector2(screenSize.x / 2 - (clean.length * 12) + j * 24, yOffset),
             screenHeight: screenSize.y,
@@ -208,10 +205,12 @@ class CreditsScreen extends Component {
         }
       } else {
         final String clean = isFinal ? trimmed.substring(0, trimmed.length - 1) : trimmed;
+
         final double yOffset = startY + i * spacing;
+
         final TextStyle style = isFinal ? finalStyle : (isSectionTitle ? titleStyle : baseStyle);
 
-        final _ScrollingCreditLine creditLine = _ScrollingCreditLine(
+        final creditLine = _ScrollingCreditLine(
           text: clean,
           startPosition: Vector2(screenSize.x / 2, yOffset),
           screenHeight: screenSize.y,
@@ -235,10 +234,10 @@ class CreditsScreen extends Component {
 
     _fadeOverlay.removeFromParent();
     _fadeUpdateComponent.removeFromParent();
-    _interactionBlocker.removeFromParent();
 
     creditLines.clear();
-    game.toggleBlockWindowResize(false);
+    game.toggleBlockWindowResize(true);
+    game.toggleBlockButtons(true);
     game.overlays.add(MainMenu.id);
   }
 }
@@ -280,17 +279,5 @@ class _FadeUpdateComponent extends Component {
   @override
   void update(double dt) {
     onUpdate(dt);
-  }
-}
-
-class _BlockingRectangle extends RectangleComponent with TapCallbacks {
-  _BlockingRectangle({
-    required super.size,
-    required super.position,
-  }) : super(paint: Paint()..color = Colors.transparent);
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    // Absorb interaction — do nothing
   }
 }
