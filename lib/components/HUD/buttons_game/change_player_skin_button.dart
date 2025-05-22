@@ -27,6 +27,7 @@ class ChangePlayerSkinButton extends SpriteComponent with HasGameReference<Pixel
     if (!isAvaliable) {
       return;
     }
+    game.soundManager.pauseAll();
     game.overlays.add(CharacterSelection.id);
     game.pauseEngine();
     super.onTapDown(event);

@@ -28,6 +28,7 @@ class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdve
     if (!isAvaliable) {
       return;
     }
+    game.soundManager.pauseAll();
     game.pauseEngine();
     game.overlays.add(AchievementMenu.id);
     super.onTapDown(event);

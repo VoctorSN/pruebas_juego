@@ -48,6 +48,7 @@ class _LevelSelectionMenuState extends State<LevelSelectionMenu> {
   }
 
   void onBack() {
+    widget.game.soundManager.resumeAll();
     widget.game.overlays.remove(LevelSelectionMenu.id);
     widget.game.resumeEngine();
   }

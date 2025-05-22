@@ -46,6 +46,7 @@ class _CharacterSelectionState extends State<CharacterSelection> {
   }
 
   void selectCharacter() {
+    game.soundManager.resumeAll();
     game.overlays.remove(CharacterSelection.id);
     game.resumeEngine();
     game.selectedCharacterIndex(selectedIndex);

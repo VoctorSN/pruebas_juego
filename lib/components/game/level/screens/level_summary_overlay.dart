@@ -37,7 +37,7 @@ class LevelSummaryOverlay extends StatelessWidget {
     // Define max and min size constraints for the overlay
     const double minWidth = 450.0;
     const double maxWidth = 500.0;
-    const double minHeight = 450.0;
+    const double minHeight = 350.0;
     const double maxHeight = 500.0;
 
     final TextStyle titleStyle = const TextStyle(

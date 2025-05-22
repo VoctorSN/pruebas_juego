@@ -36,6 +36,7 @@ class _AchievementMenuState extends State<AchievementMenu> {
   }
 
   void _onBack() {
+    widget.game.soundManager.resumeAll();
     widget.game.overlays.remove(AchievementMenu.id);
     widget.game.resumeEngine();
   }

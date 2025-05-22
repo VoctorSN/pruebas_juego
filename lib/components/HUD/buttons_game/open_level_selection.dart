@@ -28,6 +28,7 @@ class LevelSelection extends SpriteComponent with HasGameReference<PixelAdventur
     if (!isAvaliable) {
       return;
     }
+    game.soundManager.pauseAll();
     game.overlays.add(LevelSelectionMenu.id);
     game.pauseEngine();
     super.onTapDown(event);
