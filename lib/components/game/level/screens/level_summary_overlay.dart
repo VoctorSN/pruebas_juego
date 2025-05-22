@@ -33,14 +33,12 @@ class LevelSummaryOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
 
-    // Responsive dimensions
-    final double contentWidth = screenSize.width * 0.70;
-    final double contentHeight = screenSize.height * 0.60;
-
-    final double clampedWidth = contentWidth.clamp(320.0, 600.0);
-    final double clampedHeight = contentHeight.clamp(360.0, 500.0);
+    // Define max and min size constraints for the overlay
+    const double minWidth = 450.0;
+    const double maxWidth = 500.0;
+    const double minHeight = 450.0;
+    const double maxHeight = 500.0;
 
     final TextStyle titleStyle = const TextStyle(
       color: Colors.white,
@@ -57,100 +55,110 @@ class LevelSummaryOverlay extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
 
-    return Stack(
-      children: [
-        Container(color: Colors.black.withOpacity(0.85)),
-        Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Container(
-              width: clampedWidth,
-              constraints: BoxConstraints(maxHeight: clampedHeight),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white.withOpacity(0.1),
-                    blurRadius: 12,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      levelName.toUpperCase(),
-                      style: titleStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _iconValue(
-                              icon: FontAwesomeIcons.fire,
-                              value: _difficultyText(difficulty),
-                              style: valueStyle,
-                            ),
-                            const SizedBox(height: 20),
-                            _starsRow(stars),
-                          ],
-                        ),
-                        const SizedBox(width: 40),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _iconValue(
-                              icon: FontAwesomeIcons.clock,
-                              value: _formatTime(time),
-                              style: valueStyle,
-                            ),
-                            const SizedBox(height: 20),
-                            _iconValue(
-                              icon: FontAwesomeIcons.skull,
-                              value: '$deaths',
-                              style: valueStyle,
-                            ),
-                          ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Stack(
+          children: [
+            Container(color: Colors.black.withOpacity(0.85)),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: minWidth,
+                  maxWidth: maxWidth,
+                  minHeight: minHeight,
+                  maxHeight: maxHeight,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: Colors.white, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.1),
+                          blurRadius: 12,
+                          spreadRadius: 2,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
-                    ElevatedButton(
-                      onPressed: onContinue,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'CONTINUE',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'ArcadeClassic',
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
-                        ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            levelName.toUpperCase(),
+                            style: titleStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 32),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _iconValue(
+                                    icon: FontAwesomeIcons.fire,
+                                    value: _difficultyText(difficulty),
+                                    style: valueStyle,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _starsRow(stars),
+                                ],
+                              ),
+                              const SizedBox(width: 40),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _iconValue(
+                                    icon: FontAwesomeIcons.clock,
+                                    value: _formatTime(time),
+                                    style: valueStyle,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _iconValue(
+                                    icon: FontAwesomeIcons.skull,
+                                    value: '$deaths',
+                                    style: valueStyle,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 30),
+                          ElevatedButton(
+                            onPressed: onContinue,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'CONTINUE',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'ArcadeClassic',
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
