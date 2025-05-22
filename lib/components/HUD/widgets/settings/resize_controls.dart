@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 import '../../../../pixel_adventure.dart';
@@ -52,27 +53,29 @@ class _ResizeControlsState extends State<ResizeControls> {
   late bool isLeftHanded = game.settings.isLeftHanded;
   late bool showControls = game.settings.showControls;
 
-  Image get eyeImage {
-    return showControls
-        ? Image.asset(
-      'assets/images/GUI/HUD/openEye.png',
-      fit: BoxFit.cover,
-    )
-        : Image.asset(
-      'assets/images/GUI/HUD/closeEye.png',
-      fit: BoxFit.cover,
+  bool get isDesktop => !(Platform.isAndroid || Platform.isIOS);
+
+  Widget get eyeIcon {
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.rotationY(3.1416),
+      child:
+          showControls
+              ? Image.asset('assets/images/GUI/HUD/openEye.png', fit: BoxFit.cover)
+              : Image.asset('assets/images/GUI/HUD/closeEye.png', fit: BoxFit.cover),
     );
   }
 
-  Image get arrowImage {
-    return isLeftHanded
-        ? Image.asset(
-      'assets/images/GUI/HUD/arrowsFacingEachother.png',
-      fit: BoxFit.cover,
-    )
-        : Image.asset(
-      'assets/images/GUI/HUD/arrowsFacingEachotherInversed.png',
-      fit: BoxFit.cover,
+  Widget get arrowIcon {
+    final String asset =
+        isLeftHanded
+            ? 'assets/images/GUI/HUD/arrowsFacingEachother.png'
+            : 'assets/images/GUI/HUD/arrowsFacingEachotherInversed.png';
+
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.rotationY(3.1416),
+      child: Image.asset(asset, fit: BoxFit.cover),
     );
   }
 
@@ -86,30 +89,11 @@ class _ResizeControlsState extends State<ResizeControls> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(width: textPositionX),
-          Text(
-            'Controls Size',
-            style: TextStyleSingleton().style,
-          ),
+          Text('Controls Size', style: TextStyleSingleton().style),
           const SizedBox(width: sliderPositionX),
           SizedBox(
             width: sliderWidth,
-            child: NumberSlider(
-              game: game,
-              value: value,
-              onChanged: onChanged,
-              isActive: showControls,
-              minValue: 15.0,
-            ),
-          ),
-          const SizedBox(width: iconSpacing),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                showControls = !showControls;
-                updateShowControls(showControls);
-              });
-            },
-            icon: eyeImage,
+            child: NumberSlider(game: game, value: value, onChanged: onChanged, isActive: showControls, minValue: 15.0),
           ),
           const SizedBox(width: iconSpacing),
           IconButton(
@@ -119,8 +103,20 @@ class _ResizeControlsState extends State<ResizeControls> {
                 updateIsLeftHanded(isLeftHanded);
               });
             },
-            icon: arrowImage,
+            icon: arrowIcon,
           ),
+          if (isDesktop) ...[
+            const SizedBox(width: iconSpacing),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  showControls = !showControls;
+                  updateShowControls(showControls);
+                });
+              },
+              icon: eyeIcon,
+            ),
+          ],
         ],
       ),
     );

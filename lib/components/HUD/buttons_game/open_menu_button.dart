@@ -4,12 +4,15 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
+import '../widgets/pause_menu.dart';
 
 class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
 
   final double buttonSize;
 
   OpenMenuButton({required this.buttonSize});
+
+  bool isAvaliable = true;
 
   @override
   FutureOr<void> onLoad() {
@@ -24,15 +27,18 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    // Update the position of the button when the game is resized
     position = Vector2(game.size.x - 10, 10);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Stop the game engine and pause the game
+    if (!isAvaliable) {
+      return;
+    }
+    game.soundManager.pauseAll();
     game.pauseEngine();
-    game.pauseGame();
+    game.overlays.add(PauseMenu.id);
+    game.pauseEngine();
 
     super.onTapDown(event);
   }

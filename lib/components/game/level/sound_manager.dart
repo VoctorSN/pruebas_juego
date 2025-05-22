@@ -1,73 +1,70 @@
 import 'dart:async';
-
-import 'package:flame_audio/flame_audio.dart';
+import 'package:flame_audio/flame_audio.dart' as flame;
+import 'package:just_audio/just_audio.dart';
 
 class SoundManager {
-
-  // Unique instance singleton
   static final SoundManager _instance = SoundManager._internal();
-
-  // Private constructor
+  factory SoundManager() => _instance;
   SoundManager._internal();
 
-  // Function to access the singleton instance
-  factory SoundManager() => _instance;
-
-  late AudioPool collectFruitPool;
-  late AudioPool disappearPool;
-  late AudioPool hitPool;
-  late AudioPool jumpPool;
-  late AudioPool bouncePool;
-  late AudioPool smashPool;
-  late AudioPool rockheadAttackingPool;
-  late AudioPool appearGhostPool;
-  late AudioPool disappearGhostPool;
-  late AudioPool firePool;
-  late AudioPool glitchPool;
-
+  final Map<String, AudioPlayer> _players = {};
+  final Duration _jumpCooldown = const Duration(milliseconds: 100);
+  DateTime? _lastJump;
+  Timer? _rockheadLoopTimer;
   bool _initialized = false;
 
-  // Timers to control sounds in loop
-  Timer? _rockheadLoopTimer;
+  int mutedVolume = 1;
 
   Future<void> init() async {
     if (_initialized) return;
     _initialized = true;
 
-    collectFruitPool = await AudioPool.createFromAsset(path: 'audio/collect_fruit.wav', maxPlayers: 8);
-    disappearPool = await AudioPool.createFromAsset(path: 'audio/disappear.wav', maxPlayers: 2);
-    jumpPool = await AudioPool.createFromAsset(path: 'audio/jump.wav', maxPlayers: 2);
-    hitPool = await AudioPool.createFromAsset(path: 'audio/hit.wav', maxPlayers: 2);
-    bouncePool = await AudioPool.createFromAsset(path: 'audio/bounce.wav', maxPlayers: 2);
-    smashPool = await AudioPool.createFromAsset(path: 'audio/explosion.wav', maxPlayers: 2);
-    rockheadAttackingPool = await AudioPool.createFromAsset(path: 'audio/rockHeadAttacking.wav', maxPlayers: 2);
-    appearGhostPool = await AudioPool.createFromAsset(path: 'audio/appearGhost.mp3', maxPlayers: 4);
-    disappearGhostPool = await AudioPool.createFromAsset(path: 'audio/disappearGhost.mp3', maxPlayers: 4);
-    firePool = await AudioPool.createFromAsset(path: 'audio/fire.wav', maxPlayers: 8);
-    glitchPool = await AudioPool.createFromAsset(path: 'audio/glitchedSound.wav', maxPlayers: 2);
+    await _load('collect_fruit', 'assets/audio/collect_fruit.wav');
+    await _load('disappear', 'assets/audio/disappear.wav');
+    await _load('jump', 'assets/audio/jump.wav');
+    await _load('hit', 'assets/audio/hit.wav');
+    await _load('bounce', 'assets/audio/bounce.wav');
+    await _load('smash', 'assets/audio/explosion.wav');
+    await _load('rockhead', 'assets/audio/rockHeadAttacking.wav');
+    await _load('appearGhost', 'assets/audio/appearGhost.mp3');
+    await _load('disappearGhost', 'assets/audio/disappearGhost.mp3');
+    await _load('fire', 'assets/audio/fire.wav');
+    await _load('glitch', 'assets/audio/glitchedSound.wav');
   }
 
-  void playCollectFruit(volume) => collectFruitPool.start(volume: volume);
+  Future<void> _load(String key, String assetPath) async {
+    final player = AudioPlayer();
+    flame.FlameAudio.bgm.initialize();
+    await player.setAsset(assetPath);
+    _players[key] = player;
+  }
 
-  void playHit(volume) => hitPool.start(volume: volume);
+  void play(String key, double volume) {
+    final player = _players[key];
+    if (player == null) return;
+    player.setVolume(volume.clamp(0.0, 1.0));
+    player.seek(Duration.zero);
+    player.play();
+  }
 
-  void playBounce(volume) => bouncePool.start(volume: volume);
+  void playCollectFruit(double volume) => play('collect_fruit', volume * mutedVolume);
+  void playHit(double volume) => play('hit', volume * mutedVolume);
+  void playBounce(double volume) => play('bounce', volume * mutedVolume);
+  void playDisappear(double volume) => play('disappear', volume * mutedVolume);
+  void playSmash(double volume) => play('smash', volume * mutedVolume);
+  void playRockheadAttacking(double volume) => play('rockhead', volume * mutedVolume);
+  void playAppearGhost(double volume) => play('appearGhost', volume * mutedVolume);
+  void playDisappearGhost(double volume) => play('disappearGhost', volume * mutedVolume);
+  void playFire(double volume) => play('fire', volume * mutedVolume);
+  void playGlitch(double volume) => play('glitch', volume * mutedVolume);
 
-  void playDisappear(volume) => disappearPool.start(volume: volume);
-
-  void playJump(volume) => jumpPool.start(volume: volume);
-
-  void playSmash(volume) => smashPool.start(volume: volume);
-
-  void playRockheadAttacking(volume) => rockheadAttackingPool.start(volume: volume);
-
-  void playAppearGhost(volume) => appearGhostPool.start(volume: volume);
-
-  void playDisappearGhost(volume) => disappearGhostPool.start(volume: volume);
-
-  void playFire(volume) => firePool.start(volume: volume);
-
-  void playGlitch(volume) => glitchPool.start(volume: volume);
+  void playJump(double volume) {
+    final now = DateTime.now();
+    if (_lastJump == null || now.difference(_lastJump!) >= _jumpCooldown) {
+      play('jump', volume);
+      _lastJump = now;
+    }
+  }
 
   void startRockheadAttackingLoop(double volume, {Duration interval = const Duration(milliseconds: 500)}) {
     stopRockheadAttackingLoop();
@@ -80,5 +77,38 @@ class SoundManager {
   void stopRockheadAttackingLoop() {
     _rockheadLoopTimer?.cancel();
     _rockheadLoopTimer = null;
+  }
+
+  Future<void> dispose() async {
+    stopRockheadAttackingLoop();
+    for (final player in _players.values) {
+      await player.dispose();
+    }
+    _players.clear();
+    _initialized = false;
+  }
+
+  void startDefaultBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_default.mp3', volume: volumeToPlay);
+  }
+
+  void startBossBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_boss.mp3', volume: volumeToPlay);
+  }
+
+  void startCreditsBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_credits.mp3', volume: volumeToPlay);
+  }
+
+  void stopBGM() {
+    flame.FlameAudio.bgm.stop();
+  }
+
+  void pauseAll() {
+    mutedVolume = 0;
+  }
+
+  void resumeAll() {
+    mutedVolume = 1;
   }
 }

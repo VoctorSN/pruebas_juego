@@ -81,6 +81,8 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final double topPadding = MediaQuery.of(context).padding.top + 18;
 
+    widget.game.soundManager.pauseAll();
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -113,7 +115,7 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                           _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
                           const SizedBox(height: 12),
                           _menuButton('QUIT', Icons.exit_to_app, () {
-                            FlameAudio.bgm.stop();
+                            widget.game.soundManager.stopBGM();
                             SystemNavigator.pop();
                           }),
                         ],
@@ -146,7 +148,7 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                             _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
                             const SizedBox(height: 12),
                             _menuButton('QUIT', Icons.exit_to_app, () {
-                              FlameAudio.bgm.stop();
+                              widget.game.soundManager.stopBGM();
                               SystemNavigator.pop();
                             }),
                           ],

@@ -36,107 +36,109 @@ class AchievementDetails extends StatelessWidget {
       elevation: 8,
     );
 
-    return Stack(
-      children: [
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Center(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: baseColor.withOpacity(0.95),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: borderColor, width: 2),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Achievement title
-                      Text(
-                        achievement.title,
-                        style: TextStyleSingleton().style.copyWith(
-                          fontSize: 28,
-                          color: textColor,
-                          shadows: const [
-                            Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)
-                          ],
-                        ),
-                      ),
 
-                      // Achievement description
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(32.0),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final double maxWidth = (constraints.maxWidth * 0.6).clamp(320.0, 600.0);
+              final double maxHeight = (constraints.maxHeight * 0.6).clamp(300.0, 500.0);
+    const Color cardColor = Color(0xFF3A3750);
+              final double imageSize = maxWidth * 0.15;
+
+              final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+                backgroundColor: cardColor,
+                foregroundColor: textColor,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  side: const BorderSide(color: borderColor, width: 2),
+                ),
+                elevation: 6,
+              );
+
+              return Container(
+                width: maxWidth,
+                height: maxHeight,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: baseColor.withOpacity(0.95),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: borderColor, width: 2),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      achievement.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyleSingleton().style.copyWith(
+                        fontSize: 24,
+                        color: textColor,
+                        shadows: const [Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)],
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                        child: Center (
+                          child: SingleChildScrollView(
                             child: Text(
                               achievement.description,
                               textAlign: TextAlign.center,
-                              style: TextStyleSingleton().style.copyWith(
-                                fontSize: 18,
+                              style: const TextStyle(
+                                fontSize: 16,
                                 color: textColor,
-                                shadows: const [
-                                  Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 1)
-                                ],
+                                height: 1.4,
+                                shadows: [Shadow(color: Colors.black, offset: Offset(1, 1), blurRadius: 1)],
                               ),
                             ),
                           ),
                         ),
                       ),
-
-                      // Difficulty and status icons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            child: Image.asset(
-                              'assets/images/difficulty/difficulty${achievement.difficulty.clamp(1, 10)}-Photoroom.png',
-                              width: MediaQuery.of(context).size.width * 0.0625,
-                              height: MediaQuery.of(context).size.width * 0.0625,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            child: Image.asset(
-                              gameAchievement.achieved
-                                  ? 'assets/images/Trophys/Achieved.png'
-                                  : 'assets/images/Trophys/Not Achieved.png',
-                              width: MediaQuery.of(context).size.width * 0.0625,
-                              height: MediaQuery.of(context).size.width * 0.0625,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // Back button
-                      ElevatedButton.icon(
-                        style: buttonStyle,
-                        onPressed: () {
-                          game.overlays.remove(AchievementDetails.id);
-                        },
-                        icon: const Icon(Icons.arrow_back, color: textColor),
-                        label: Text(
-                          'BACK',
-                          style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Image.asset(
+                          'assets/images/difficulty/difficulty${achievement.difficulty.clamp(1, 10)}-Photoroom.png',
+                          width: imageSize,
+                          height: imageSize,
+                          fit: BoxFit.contain,
                         ),
-                      ),
-                    ],
-                  ),
+                        ElevatedButton.icon(
+                          style: buttonStyle,
+                          onPressed: _onBack,
+                          icon: const Icon(Icons.arrow_back, color: textColor),
+                          label: Text(
+                            'BACK',
+                            style: TextStyleSingleton().style.copyWith(fontSize: 14, color: textColor),
+                          ),
+                        ),
+                        Image.asset(
+                          gameAchievement.achieved
+                              ? 'assets/images/Trophys/Achieved.png'
+                              : 'assets/images/Trophys/Not Achieved.png',
+                          width: imageSize,
+                          height: imageSize,
+                          fit: BoxFit.contain,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
-      ],
+      ),
     );
+  }
+
+  void _onBack() {
+    game.overlays.remove(AchievementDetails.id);
   }
 }

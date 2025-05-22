@@ -42,7 +42,6 @@ import 'components/game/level/level.dart';
 import 'components/game/level/screens/change_level_screen.dart';
 import 'components/game/level/screens/credits_screen.dart';
 import 'components/game/level/screens/level_summary_overlay.dart';
-import 'components/game/level/screens/credits_screen.dart';
 
 class PixelAdventure extends FlameGame
     with
@@ -175,6 +174,8 @@ class PixelAdventure extends FlameGame
     _loadActualLevel();
   }
 
+  final soundManager = SoundManager();
+
   @override
   FutureOr<void> onLoad() async {
     FlameAudio.bgm.initialize();
@@ -212,7 +213,6 @@ class PixelAdventure extends FlameGame
     changeSkinButton =
         changeSkinButton ??
             ChangePlayerSkinButton(
-              changeCharacter: openChangeCharacterMenu,
               buttonSize: settings.hudSize,
             );
     menuButton = menuButton ?? OpenMenuButton(buttonSize: settings.hudSize);
@@ -220,7 +220,6 @@ class PixelAdventure extends FlameGame
         levelSelectionButton ??
             LevelSelection(
               buttonSize: settings.hudSize,
-              onTap: openLevelSelectionMenu,
             );
     achievementsButton =
         achievementsButton ?? AchievementsButton(buttonSize: settings.hudSize);
@@ -373,6 +372,8 @@ class PixelAdventure extends FlameGame
         print('Level ${currentLevel + 1} unlocked!');
         addLevelSummaryScreen();
       } else {
+        soundManager.stopBGM();
+        soundManager.startCreditsBGM(settings.musicVolume);
         await creditsScreen.show();
       }
     }
@@ -393,6 +394,7 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadActualLevel() async {
+    soundManager.resumeAll();
     final service = await GameService.getInstance();
     service.saveGameBySpace(game: gameData);
     removeAudios();
@@ -437,15 +439,7 @@ class PixelAdventure extends FlameGame
     player.updateCharacter(characters[index]);
   }
 
-  void openChangeCharacterMenu() {
-    overlays.add(CharacterSelection.id);
-    pauseEngine();
-  }
 
-  void openLevelSelectionMenu() {
-    overlays.add(LevelSelectionMenu.id);
-    pauseEngine();
-  }
 
   void pauseGame() {
     overlays.add(PauseMenu.id);
@@ -521,6 +515,13 @@ class PixelAdventure extends FlameGame
     }
   }
 
+  void toggleBlockButtons(bool isLocked) {
+    changeSkinButton?.isAvaliable = isLocked;
+    levelSelectionButton?.isAvaliable = isLocked;
+    achievementsButton?.isAvaliable = isLocked;
+    menuButton?.isAvaliable = isLocked;
+  }
+
   Future<void> spawnConfetti(Vector2 atPosition) async {
 
     final confetti = ConfettiEmitterComponent(
@@ -529,6 +530,21 @@ class PixelAdventure extends FlameGame
     );
 
     level.add(confetti);
+  }
+
+
+
+  void toggleBlockWindowResize(bool isLocked) {
+    if ((Platform.isWindows || Platform.isLinux || Platform.isMacOS) && !isLocked) {
+      final double width = size.x;
+      final double height = size.y;
+      final Size fixedSize = Size(width, height);
+      setWindowMinSize(fixedSize);
+      setWindowMaxSize(fixedSize);
+    } else {
+      setWindowMinSize(const Size(800, 600));
+      setWindowMaxSize(Size.infinite);
+    }
   }
 
 }

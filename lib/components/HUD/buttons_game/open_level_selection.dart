@@ -4,17 +4,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
+import '../widgets/levels/page/level_selection_menu.dart';
 
-class LevelSelection extends SpriteComponent
-    with HasGameReference<PixelAdventure>, TapCallbacks {
-
+class LevelSelection extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
   final double buttonSize;
-  final Function onTap;
-  LevelSelection({
-    required this.onTap,
-    required this.buttonSize,
-  });
 
+  LevelSelection({required this.buttonSize});
+
+  bool isAvaliable = true;
 
   @override
   FutureOr<void> onLoad() {
@@ -28,7 +25,12 @@ class LevelSelection extends SpriteComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    onTap();
+    if (!isAvaliable) {
+      return;
+    }
+    game.soundManager.pauseAll();
+    game.overlays.add(LevelSelectionMenu.id);
+    game.pauseEngine();
     super.onTapDown(event);
   }
 }

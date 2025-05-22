@@ -12,6 +12,8 @@ class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdve
 
   AchievementsButton({required this.buttonSize});
 
+  bool isAvaliable = true;
+
   @override
   FutureOr<void> onLoad() {
     priority = 102;
@@ -23,6 +25,10 @@ class AchievementsButton extends SpriteComponent with HasGameReference<PixelAdve
 
   @override
   void onTapDown(TapDownEvent event) {
+    if (!isAvaliable) {
+      return;
+    }
+    game.soundManager.pauseAll();
     game.pauseEngine();
     game.overlays.add(AchievementMenu.id);
     super.onTapDown(event);

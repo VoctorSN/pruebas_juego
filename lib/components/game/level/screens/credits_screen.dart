@@ -22,7 +22,8 @@ class CreditsScreen extends Component {
 
   Future<void> show() async {
     screenSize = game.size;
-    game.lockWindowResize();
+    game.toggleBlockWindowResize(false);
+    game.toggleBlockButtons(false);
     _startFadeOverlay();
     _spawnCreditLines();
   }
@@ -235,7 +236,8 @@ class CreditsScreen extends Component {
     _fadeUpdateComponent.removeFromParent();
 
     creditLines.clear();
-    game.unlockWindowResize();
+    game.toggleBlockWindowResize(true);
+    game.toggleBlockButtons(true);
     game.overlays.add(MainMenu.id);
   }
 }
@@ -252,12 +254,12 @@ class _ScrollingCreditLine extends TextComponent {
     required TextStyle textStyle,
     this.onRemoved,
   }) : super(
-         text: text,
-         position: startPosition.clone(),
-         anchor: Anchor.center,
-         priority: 1001,
-         textRenderer: TextPaint(style: textStyle),
-       );
+    text: text,
+    position: startPosition.clone(),
+    anchor: Anchor.center,
+    priority: 1001,
+    textRenderer: TextPaint(style: textStyle),
+  );
 
   @override
   void update(double dt) {

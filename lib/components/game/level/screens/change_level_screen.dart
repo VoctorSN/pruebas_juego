@@ -27,7 +27,7 @@ class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdv
     center = game.size / 2;
     maxRadius = game.size.length;
     radius = maxRadius;
-    startContract(); // Al cargarse, comienza el cierre
+    startContract();
   }
 
   @override
@@ -74,6 +74,8 @@ class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdv
   }
 
   void startContract() {
+    game.toggleBlockButtons(false);
+    game.toggleBlockWindowResize(false);
     _elapsed = 0.0;
     radius = maxRadius;
     _phase = TransitionPhase.contracting;
@@ -83,6 +85,8 @@ class ChangeLevelScreen extends PositionComponent with HasGameReference<PixelAdv
     _elapsed = 0.0;
     radius = 0.0;
     _phase = TransitionPhase.expanding;
+    game.toggleBlockButtons(true);
+    game.toggleBlockWindowResize(true);
   }
 
   @override
