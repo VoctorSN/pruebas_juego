@@ -38,7 +38,7 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
   late final Player player;
   double fixedDeltaTime = 1 / 60;
   double accumulatedTime = 0;
-  int hp = 5;
+  int hp = 1; // TODO: Change to 5
   final double _gravity = 9.8;
   final double _jumpForce = 400;
   final double _maximunVelocity = 1000;
@@ -60,6 +60,8 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
 
   @override
   FutureOr<void> onLoad() {
+    game.soundManager.stopBGM();
+    game.soundManager.startBossBGM(game.settings.gameVolume);
     player = game.player;
     add(RectangleHitbox(position: Vector2(4, 6), size: Vector2(24, 26)));
     _loadAllAnimations();
@@ -237,6 +239,8 @@ class Snail extends SpriteAnimationGroupComponent with CollisionCallbacks, HasGa
       hp--;
       if (hp <= 0) {
         gotStomped = true;
+        game.soundManager.stopBGM();
+        game.soundManager.startDefaultBGM(game.settings.gameVolume);
         removeFromParent();
       }
       current = SnailState.shellIdle;

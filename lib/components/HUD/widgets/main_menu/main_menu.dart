@@ -115,7 +115,7 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                           _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
                           const SizedBox(height: 12),
                           _menuButton('QUIT', Icons.exit_to_app, () {
-                            FlameAudio.bgm.stop();
+                            widget.game.soundManager.stopBGM();
                             SystemNavigator.pop();
                           }),
                         ],
@@ -148,7 +148,7 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                             _menuButton('LOAD GAME', Icons.save, _onLoadGamePressed),
                             const SizedBox(height: 12),
                             _menuButton('QUIT', Icons.exit_to_app, () {
-                              FlameAudio.bgm.stop();
+                              widget.game.soundManager.stopBGM();
                               SystemNavigator.pop();
                             }),
                           ],

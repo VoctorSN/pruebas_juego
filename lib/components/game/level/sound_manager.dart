@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flame_audio/flame_audio.dart' as flame;
 import 'package:just_audio/just_audio.dart';
 
 class SoundManager {
@@ -33,6 +34,7 @@ class SoundManager {
 
   Future<void> _load(String key, String assetPath) async {
     final player = AudioPlayer();
+    flame.FlameAudio.bgm.initialize();
     await player.setAsset(assetPath);
     _players[key] = player;
   }
@@ -84,6 +86,22 @@ class SoundManager {
     }
     _players.clear();
     _initialized = false;
+  }
+
+  void startDefaultBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_default.mp3', volume: volumeToPlay);
+  }
+
+  void startBossBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_boss.mp3', volume: volumeToPlay);
+  }
+
+  void startCreditsBGM(double volumeToPlay) {
+    flame.FlameAudio.bgm.play('bgm_credits.mp3', volume: volumeToPlay);
+  }
+
+  void stopBGM() {
+    flame.FlameAudio.bgm.stop();
   }
 
   void pauseAll() {

@@ -154,8 +154,6 @@ class PixelAdventure extends FlameGame
 
   @override
   FutureOr<void> onLoad() async {
-    FlameAudio.bgm.initialize();
-
     // Load all the images and sounds in cache
     await images.loadAllImages();
     await soundManager.init();
@@ -324,6 +322,8 @@ class PixelAdventure extends FlameGame
         print('Level ${currentLevel + 1} unlocked!');
         addLevelSummaryScreen();
       } else {
+        soundManager.stopBGM();
+        soundManager.startCreditsBGM(settings.musicVolume);
         await creditsScreen.show();
       }
     }
@@ -349,12 +349,11 @@ class PixelAdventure extends FlameGame
     service.saveGameBySpace(game: gameData);
     removeAudios();
     removeWhere((component) => component is Level);
-    if (settings.isMusicActive) {
-      FlameAudio.bgm.stop();
-      FlameAudio.bgm.play('background_music.mp3', volume: settings.musicVolume);
+    if (settings.isMusicActive && gameData!.currentLevel != 15) {
+      soundManager.startDefaultBGM(settings.musicVolume);
       print('Playing music with volume: ${settings}');
     } else {
-      FlameAudio.bgm.stop();
+      soundManager.stopBGM();
     }
     level = Level(levelName: levels[gameData?.currentLevel ?? 0]['level'].name, player: player);
 
