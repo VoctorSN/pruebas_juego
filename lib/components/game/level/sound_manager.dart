@@ -12,6 +12,8 @@ class SoundManager {
   Timer? _rockheadLoopTimer;
   bool _initialized = false;
 
+  int mutedVolume = 1;
+
   Future<void> init() async {
     if (_initialized) return;
     _initialized = true;
@@ -39,20 +41,20 @@ class SoundManager {
     final player = _players[key];
     if (player == null) return;
     player.setVolume(volume.clamp(0.0, 1.0));
-    player.seek(Duration.zero); // Rewind if already playing
+    player.seek(Duration.zero);
     player.play();
   }
 
-  void playCollectFruit(double volume) => play('collect_fruit', volume);
-  void playHit(double volume) => play('hit', volume);
-  void playBounce(double volume) => play('bounce', volume);
-  void playDisappear(double volume) => play('disappear', volume);
-  void playSmash(double volume) => play('smash', volume);
-  void playRockheadAttacking(double volume) => play('rockhead', volume);
-  void playAppearGhost(double volume) => play('appearGhost', volume);
-  void playDisappearGhost(double volume) => play('disappearGhost', volume);
-  void playFire(double volume) => play('fire', volume);
-  void playGlitch(double volume) => play('glitch', volume);
+  void playCollectFruit(double volume) => play('collect_fruit', volume * mutedVolume);
+  void playHit(double volume) => play('hit', volume * mutedVolume);
+  void playBounce(double volume) => play('bounce', volume * mutedVolume);
+  void playDisappear(double volume) => play('disappear', volume * mutedVolume);
+  void playSmash(double volume) => play('smash', volume * mutedVolume);
+  void playRockheadAttacking(double volume) => play('rockhead', volume * mutedVolume);
+  void playAppearGhost(double volume) => play('appearGhost', volume * mutedVolume);
+  void playDisappearGhost(double volume) => play('disappearGhost', volume * mutedVolume);
+  void playFire(double volume) => play('fire', volume * mutedVolume);
+  void playGlitch(double volume) => play('glitch', volume * mutedVolume);
 
   void playJump(double volume) {
     final now = DateTime.now();
@@ -82,5 +84,13 @@ class SoundManager {
     }
     _players.clear();
     _initialized = false;
+  }
+
+  void pauseAll() {
+    mutedVolume = 0;
+  }
+
+  void resumeAll() {
+    mutedVolume = 1;
   }
 }

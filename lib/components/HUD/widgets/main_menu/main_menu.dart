@@ -81,6 +81,8 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     final double topPadding = MediaQuery.of(context).padding.top + 18;
 
+    widget.game.soundManager.pauseAll();
+
     return Stack(
       fit: StackFit.expand,
       children: [

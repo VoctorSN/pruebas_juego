@@ -147,7 +147,6 @@ class PixelAdventure extends FlameGame
 
     loadButtonsAndHud();
 
-    ///load first level with data
     _loadActualLevel();
   }
 
@@ -344,6 +343,7 @@ class PixelAdventure extends FlameGame
   }
 
   void _loadActualLevel() async {
+    soundManager.resumeAll();
     final service = await GameService.getInstance();
     service.saveGameBySpace(game: gameData);
     removeAudios();
@@ -383,11 +383,6 @@ class PixelAdventure extends FlameGame
     if (gameData == null) return;
     gameData!.currentCharacter = index;
     player.updateCharacter(characters[index]);
-  }
-
-  void pauseGame() {
-    overlays.add(PauseMenu.id);
-    pauseEngine();
   }
 
   void switchHUDPosition() {

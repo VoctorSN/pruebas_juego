@@ -66,7 +66,7 @@ class PauseMenu extends StatelessWidget {
                   game.resumeEngine();
                   if (game.settings.isMusicActive) {
                     FlameAudio.bgm.play('background_music.mp3', volume: game.settings.musicVolume);
-                    print('Playing music with volume: ${game.settings}');
+                    game.soundManager.resumeAll();
                   } else {
                     FlameAudio.bgm.stop();
                   }
@@ -94,8 +94,8 @@ class PauseMenu extends StatelessWidget {
                   game.overlays.remove(PauseMenu.id);
                   game.overlays.add(MainMenu.id);
                   game.pauseEngine();
-                  /// no music for the main menu, uncomment de code below to make it sound
                   FlameAudio.bgm.stop();
+                  game.soundManager.pauseAll();
                   // if (game.settings.isMusicActive) {
                   //   FlameAudio.bgm.play('background_music.mp3', volume: game.settings.musicVolume);
                   //   print('Playing music with volume: ${game.settings}');
