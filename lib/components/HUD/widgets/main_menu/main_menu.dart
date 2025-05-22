@@ -1,4 +1,4 @@
-import 'dart:io' show Platform;
+import 'dart:io' show Platform, exit;
 
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -116,7 +116,12 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                           const SizedBox(height: 12),
                           _menuButton('QUIT', Icons.exit_to_app, () {
                             widget.game.soundManager.stopBGM();
-                            SystemNavigator.pop();
+                            if (Platform.isWindows) {
+                              /// TODO: FIX THIS
+                              exit(0);
+                            } else {
+                              SystemNavigator.pop();
+                            }
                           }),
                         ],
                       ),
@@ -149,7 +154,11 @@ class _MainMenuState extends State<MainMenu> with SingleTickerProviderStateMixin
                             const SizedBox(height: 12),
                             _menuButton('QUIT', Icons.exit_to_app, () {
                               widget.game.soundManager.stopBGM();
-                              SystemNavigator.pop();
+                              if (Platform.isWindows) {
+                                exit(0);
+                              } else {
+                                SystemNavigator.pop();
+                              }
                             }),
                           ],
                         ),

@@ -400,11 +400,11 @@ class PixelAdventure extends FlameGame
     removeAudios();
     removeWhere((component) => component is Level);
     if (settings.isMusicActive) {
-      FlameAudio.bgm.stop();
-      FlameAudio.bgm.play('background_music.mp3', volume: settings.musicVolume);
+      /// TODO: check this audio
+      soundManager.startDefaultBGM(settings.gameVolume);
       print('Playing music with volume: ${settings}');
     } else {
-      FlameAudio.bgm.stop();
+      soundManager.stopBGM();
     }
     level = Level(levelName: levels[gameData?.currentLevel ?? 0]['level'].name,
         player: player);
