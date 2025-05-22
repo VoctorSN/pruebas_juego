@@ -173,13 +173,15 @@ class PixelAdventure extends FlameGame
     _loadActualLevel();
   }
 
+  final soundManager = SoundManager();
+
   @override
   FutureOr<void> onLoad() async {
     FlameAudio.bgm.initialize();
 
     // Load all the images and sounds in cache
     await images.loadAllImages();
-    await SoundManager().init();
+    await soundManager.init();
 
     // Load the player skin
     player = Player(character: characters[gameData?.currentCharacter ?? 0]);
