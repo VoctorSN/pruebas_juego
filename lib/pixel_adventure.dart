@@ -207,6 +207,7 @@ class PixelAdventure extends FlameGame
       (context, game) => LevelSummaryOverlay(
         game: this,
         onContinue: () {
+          achievementManager.evaluate();
           overlays.remove('level_summary');
           changeLevelScreen.startExpand();
         },
@@ -362,10 +363,6 @@ class PixelAdventure extends FlameGame
     cam.priority = 10;
     cam.viewfinder.anchor = Anchor.topLeft;
     addAll([cam, level]);
-  }
-
-  void evaluateAchievements() {
-    achievementManager.evaluate();
   }
 
   void addJoystick() {

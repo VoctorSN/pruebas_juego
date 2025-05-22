@@ -372,7 +372,6 @@ class Level extends World with HasGameReference<PixelAdventure> {
         deaths: deathCount,
       );
     }
-    game.evaluateAchievements();
   }
 
   void starCollected() {
