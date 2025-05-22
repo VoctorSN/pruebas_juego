@@ -4,12 +4,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../../../pixel_adventure.dart';
+import '../widgets/character_selection.dart';
 
 class ChangePlayerSkinButton extends SpriteComponent with HasGameReference<PixelAdventure>, TapCallbacks {
-  final Function() changeCharacter;
   final double buttonSize;
 
-  ChangePlayerSkinButton({required this.changeCharacter, required this.buttonSize});
+  ChangePlayerSkinButton({required this.buttonSize});
+
+  bool isAvaliable = true;
 
   @override
   FutureOr<void> onLoad() {
@@ -22,7 +24,11 @@ class ChangePlayerSkinButton extends SpriteComponent with HasGameReference<Pixel
 
   @override
   void onTapDown(TapDownEvent event) {
-    changeCharacter();
+    if (!isAvaliable) {
+      return;
+    }
+    game.overlays.add(CharacterSelection.id);
+    game.pauseEngine();
     super.onTapDown(event);
   }
 }

@@ -27,7 +27,7 @@ class CreditsScreen extends Component {
 
   Future<void> show() async {
     screenSize = game.size;
-    game.lockWindowResize();
+    game.toggleBlockWindowResize(true);
 
     _interactionBlocker = _BlockingRectangle(
       size: screenSize.clone(),
@@ -238,7 +238,7 @@ class CreditsScreen extends Component {
     _interactionBlocker.removeFromParent();
 
     creditLines.clear();
-    game.unlockWindowResize();
+    game.toggleBlockWindowResize(false);
     game.overlays.add(MainMenu.id);
   }
 }

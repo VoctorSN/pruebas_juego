@@ -9,7 +9,7 @@ class Stars extends SpriteAnimationComponent with HasGameReference<PixelAdventur
 
   // Constructor and attributes
   final String name;
-  Stars({this.name = '3', super.position, super.size});
+  Stars({this.name = '1', super.position, super.size});
 
   // Animations logic
   final double stepTime = 0.05;

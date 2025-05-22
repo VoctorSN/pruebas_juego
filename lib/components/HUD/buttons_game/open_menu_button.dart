@@ -11,6 +11,8 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
 
   OpenMenuButton({required this.buttonSize});
 
+  bool isAvaliable = true;
+
   @override
   FutureOr<void> onLoad() {
     priority = 102;
@@ -30,6 +32,9 @@ class OpenMenuButton extends SpriteComponent with HasGameReference<PixelAdventur
 
   @override
   void onTapDown(TapDownEvent event) {
+    if (!isAvaliable) {
+      return;
+    }
     // Stop the game engine and pause the game
     game.pauseEngine();
     game.pauseGame();
